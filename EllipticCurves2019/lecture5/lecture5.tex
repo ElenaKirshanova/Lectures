@@ -1,0 +1,338 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode} 
+\usepackage{enumitem}
+
+\usepackage{graphicx}
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc} 
+\usepackage[russian]{babel}
+
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+\usepackage{pgfplots, subfigure}
+
+\usepackage{biblatex}
+
+% MACROS 
+% PROBABILITY SYMBOLS
+\newcommand*\PROB\Pr 
+\DeclareMathOperator*{\EXPECT}{\mathbb{E}}
+
+
+% GROUPS/DISTRIBUTIONS/SETS/LISTS
+\newcommand{\N}{{{\mathbb N}}}
+\newcommand{\Z}{{{\mathbb Z}}}
+\newcommand{\Q}{{{\mathbb Q}}}
+\newcommand{\R}{{{\mathbb R}}}
+\newcommand{\F}{{{\mathbb F}}}
+\newcommand{\Fqd}{{{\F_{q^{d_i}}}}}
+\newcommand{\PP}{{{\mathbb P}}}
+\newcommand*{\IZ}{\ensuremath{\mathbb{Z}}}
+\newcommand*{\IN}{\ensuremath{\mathbb{N}}}
+\newcommand*{\IR}{{{\mathbb R}}}
+\newcommand{\Zp}{\ints_p} % Integers modulo p
+\newcommand{\Zq}{\ints_q} % Integers modulo q
+\newcommand{\Zn}{\ints_N} % Integers modulo N
+\newcommand{\Zr}{\ensuremath{\mathbb{Z}/r\mathbb{Z}}} % Integers modulo N
+\newcommand*{\dDR}{\mathrm{d}} %de-Rham-Differential (the d in dx, dy, dz and so on)
+\newcommand{\transpose}{\mkern0.1mu^{\mathsf{t}}}
+\newcommand*{\union}{\mathbin{\cup}}
+
+% Landau 
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand*{\OLandau}{\bigO}
+\newcommand*{\WLandau}{\Omega}
+\newcommand*{\xOLandau}{\widetilde{\OLandau}}
+\newcommand*{\xWLandau}{\widetilde{\WLandau}}
+\newcommand*{\TLandau}{\Theta}
+\newcommand*{\xTLandau}{\widetilde{\TLandau}}
+\newcommand{\smallo}{o} %technically, an omicron
+\newcommand{\softO}{\widetilde{\bigO}}
+\newcommand{\wLandau}{\omega}
+\newcommand{\negl}{\mathrm{negl}} 
+
+% Misc
+\newcommand{\eps}{\varepsilon}
+\newcommand{\inprod}[1]{\left\langle #1 \right\rangle}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+
+%proper overline reduced by some mu's, re-adjust if needed
+\newcommand{\overbar}[1]{\overline{\mkern-0.0mu#1\mkern-4.0mu}}
+
+ 
+\newcommand{\handout}[5]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf  } \hfill #2 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{#3}{Оформил #4}{Лекция #1}}
+
+\newtheorem{theorem}{Теорема}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Предложение}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Определение}
+
+\newtheorem{claim}[theorem]{Утверждение}
+\newtheorem{fact}[theorem]{Факт}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\theoremstyle{definition}
+\newtheorem{examples}[theorem]{Примеры}
+
+\theoremstyle{definition}
+\newtheorem{example}[theorem]{Пример}
+\newtheorem{remark}[theorem]{Замечание}
+
+% 1-inch margins
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 6.5in
+
+\parindent 0in
+\parskip 1.5ex
+
+%\addbibresource{books.bib}
+
+\begin{document}
+    % $(\frac{\cdot}{\F_q^{d_i}})$
+\lecture{№5 — 11.10.19}{Осень 2019}{Лектор: Елена Киршанова}{Филипп Максимов}
+
+\section{Вычисление символа Лежандра $\left(\frac{\cdot}{\Fqd}\right)$}
+В алгоритме вычисление $d = [K_{E, n} : K = \F_q]$ (Лекция №4) вызывается алгоритм вычисления символа $\left( \dfrac{x_i^3 + ax_i + b}{\Fqd} \right)$. 
+$$
+	\left( \frac{x}{\Fqd} \right) =
+	\begin{cases}
+		1,& \exists t \in (\Fqd)^\times : t^2  = x \bmod q^{d_i} \\
+		-1,& \not\exists t \in (\Fqd)^\times : t^2  = x \bmod q^{d_i} \\
+		0, & x = 0.
+	\end{cases}
+$$
+Покажем, что вычисление $\left( \dfrac{\cdot}{\Fqd} \right)$ сводится к вычислению $\left( \dfrac{\cdot}{\F_q} \right)$. \\
+В наших примерах $q$ — простое $\Rightarrow \left( \dfrac{\cdot}{\F_q} \right) = \left( \dfrac{\cdot}{q} \right) $ — символ Лежандра $\Rightarrow \exists$ эффективный алгоритм, т. ч. $\left(\dfrac{x}{q}\right) = x^{\frac{q-1}{2}} \bmod q$.
+
+\underline{Напоминание:} $L/K$ — конечное расширение, $G=\operatorname{Gal}(L/K)$. 
+
+\textit{Норма} $d: N_{L/K}(\alpha) = \displaystyle\prod_{\sigma \in G} \sigma(\alpha) \in K$ \\ 
+для $L = \F_{q^d}, K = \F_q: N_{\F_{q^d}/ \F_q}(\alpha) = \prod_{i=0}^d \alpha^{q^i} = \alpha^{\prod_{i=0}^d q^i} = \alpha^\frac{q^d - 1}{q - 1}$
+
+\begin{lemma}
+	\label{lemm_01}
+	Пусть $L/K$ — конечное расширение степени $d$, 
+	$[ {L:K} ] = d$, $\abs{K} = q$ $( {char K,\;char L \ne 2} )$. Для $x \in L$ справедливо 
+	$$
+	\left( {\frac{x}{L}} \right) \cdot \left( \frac{N_{L/K}( x )}{k} \right),{\text{ где }} N_{L/K} ( x ) = x^{\frac{q^d - 1}{q - 1}}. 
+	$$
+\end{lemma}
+
+\begin{proof}
+    Положим $( {\frac{x}{L}} ) = 1 \Rightarrow \exists y \in L: y^2 = x.$ Тогда 
+    \[
+    {N_{L/K}}( x ) = {N_{L/K}}( {{y^2}} ) = {( {N'_{L/K}( y )} )^2},
+    \]
+    т.к. 
+    \[
+    N_{L/K}( y ) \in K \Rightarrow \left( {\frac{N_{L/K}( y )}{k}} \right) = 1.
+    \]
+    
+    Положим обратное $\left( {\dfrac{{{N_{L/K}}( x )}}{K}} \right) = 1$.
+    
+    Запишем $x = gt$ для $g$ — образующий $L$. Покажем, что $t$ — чётно ($ \Rightarrow x $ — квадратичный вычет в $L$).
+    
+    Т.к. $\left( {\dfrac{N_{L/K}( x )}{K}} \right) = 1 \Rightarrow \exists y \in K: {y^2} = {N_{L/K}}( x ) = x^{\dfrac{{{q^d} - 1}}{{q - 1}}}  \Leftrightarrow $
+    
+    % $$
+    % \underbrace {1 = {y^{q - 1}}}_{{\text{ т-ма Ферма }}} = {X^{\frac{{{q^d} - 1}}{2}}} \Rightarrow 
+    % $$
+    $ \Leftrightarrow 1 = {g^{t \cdot \frac{{q^d} \pm 1}{2}}} \Rightarrow $ т. к. $g$ — образующий $( {{\text{ord }} g = {q^d} - 1} )$, то $2\ |\ t$.
+\end{proof}
+
+В случае алгоритма вычисления $d$:
+$$
+\left( \dfrac{N_{\Fqd/\F_q} (x_i^3 + ax_i + b)}{\F_q} \right) = \left( \dfrac{(x_i^3 + ax_i + b)^{\frac{q^{d_i} - 1}{q^d - 1}} [q]}{\F_q} \right)
+$$
+Для вычисления $q^{d_i}$ пользоваться быстрым возведением в степень. \\
+Последняя скобка в равенстве — символ Лежандра, т.к. $\F_q$ — простое.
+
+\section{Вычисление порядка группы точек эллиптической кривой}
+
+\subsection{Эндоморфизм Фробениуса}
+
+${\varphi_q}: \overbar {{\F_q}}  \to \overbar {\F_q}, x \mapsto x^q $ — эндоморфизм (отображение) Фробениуса.
+
+Действие ${\varphi _q}$ на кривую $E$ над ${\F_q}$:\; ${\varphi _q}(x, y) = (x^q, y^q)$. ${\varphi _q}( 0 ) = \bigO$. 
+
+Свойства ${\varphi _q}:$
+
+$E$ — кривая над ${\F_q}, x, y \in E(\overbar{\F_q})$
+
+\textbf{1.} ${\varphi _q}( {x,y} ) \in E( \overbar{\F_q} )$. 
+
+Используя ${( {a + b} )^q} = {a^q} + {b^q}$ ($q$ — степень характеристики роля) и ${a^q} = a$ $\forall a \in {\F_q}:$
+$$
+{( y^2 )^q} = (x^3 + ax + b)^q\Leftrightarrow 
+$$
+$$
+( y^q )^2 = (x^q)^3 + a{x^q} + b \Leftrightarrow ( {x^q, y^q} ) \in E ( \overline{\F}_q )
+$$. 
+
+\textbf{2.} $( {x,y} ) \in E(\F_q) \Leftrightarrow {\varphi _q}( {x,y} ) = ( {x,y} )$
+
+$( {x \in {\F_q} \Leftrightarrow {\varphi _q}( x ) = x} )$
+
+
+\textbf{3.} $\mathop{\ker}(\varphi^n_q - 1) = E(\F_{q^n})$ \\
+Отображение $( x, y ) \mapsto ( x^q, y^q ) - ( {x,y} )$, где «$-$» это вычитание на $E$.
+
+\textbf{4.} $\# E( \F_q ) = \deg ( \varphi_q^n - 1 )$
+
+Из свойств (1)--(4) для ${\varphi _q}$ можно доказать (см. Washington \S~4.2) следующую теорему. 
+
+\begin{theorem}[Теорема Хассе]
+	(Описывает границы $\# E( {{\F_q}} )$)
+	
+	Пусть $E$ — кривая над ${\F_q}$. Тогда справедливо
+	$$
+	    | {q + 1 - \# E( {{\F_q}} )} | \leqslant 2\sqrt q 
+	$$
+\end{theorem}
+
+(Неформально: асимптотически $\# E( {{\F_q}} )\sim q$). 
+
+Положим $a  = q + 1 - \# E( {{\F_q}} ) = q + 1 - \deg ( {{\varphi _q} - 1} )$. Число $a$ — след эндоморфизма Фробениуса.
+
+\begin{theorem}
+	\label{theor_01}
+	$E$ — эллиптическая кривая над ${\F_q}$, число $a = q + 1 + \# E(\F_q)$. Тогда 
+	$$
+	    \varphi _q^2 - a{\varphi _q} + q = 0
+	$$
+	— эндоморфизм на $E$ и $a$ определено уникально. То есть $\forall ( {x,y} ) \in F( \bar{\F}_q ):$
+	\begin{equation}\label{F_01}
+	( {{x^{{q^2}}},\;{y^{{q^2}}}} ) - a ( x^q, y^q ) + q( {x,y} ) = \bigO,
+	\end{equation}
+	и $a \in \Z$ — уникально определено, что выражение \eqref{F_01} справедливо $\forall ( {x,y} ) \in E(\F_q)$. 
+\end{theorem} 
+
+Число $a$ можно определить как
+$$
+    \boxed{\begin{gathered}
+    a = \mathop{Tr}{( {{\varphi _q}} )_m}\bmod m \hfill \\
+    q = \det {( {{\varphi _q}} )_m}\bmod m \hfill \\ 
+    \end{gathered}} \quad \forall m:\:( {m,q} ) = 1,
+$$
+
+Обозначение <<${( {{\varphi _q}} )_m}$>>: 
+
+${\varphi _q}$ действует на $E \Rightarrow $ на $E[ m ]$.
+
+$E[ m ] \simeq {\Z_n} \oplus {\Z_n} \Rightarrow \forall $ элементы из $E[ m ]$ можно представить в виде ${m_1}{\beta _1} + {m_2}{\beta _2}$, где ${m_i} \in \Z$, 
+
+$\{ {{\beta _1},{\beta _2}} \}$ — базис ${\Z_n} \oplus {\Z_n}$. тогда $\forall $ эндоморфизмов $d: E[ n ] \to E[ n ]$ действует на $E[ m ]$ через действие на $\{ {{\beta _1},{\beta _2}} \}$:  
+$$
+    \begin{array}{*{20}{c}}
+    {d( \beta _1 ) = a{\beta _1} + b{\beta _2}} \\ 
+    {d( \beta _2 ) = c{\beta _1} + d{\beta _2}} 
+    \end{array} \Rightarrow 
+$$
+$ \Rightarrow $ для $\forall $ элементов из $E[ m ]$ действие $d$ описывается матрицей
+$${d_m} = \left[ {\begin{array}{*{20}{c}}
+	a&b \\ 
+	c&d 
+	\end{array}} \right]
+$$
+
+\subsection{Неэффективные асимптотически алгоритмы подсчета точек}
+
+\textbf{A.} Кривые в подполе: кривая $E$ задана над ${\F_q}$, мы можем выразить $\# E( \F_{q^n} )$ через $\# E( \F_q )$. 
+
+\begin{theorem}
+	Пусть $\# E( {{\F_q}} ) = q + 1 - a$. Запишем ${X^2} - aX + q = ( {X - \alpha} )( {X - \beta } )$. Тогда 
+	$$
+	\# E(\F_q ) = {q^n} + 1 - ( \alpha^n+ \beta ^n )\quad \forall n \geqslant 1.
+	$$
+\end{theorem}
+
+\begin{proof}
+$ $\\
+\textbf{1. } Покажем, что ${\alpha^n} + {\beta ^n} \in \Z$ через рекуррентные соотношения.
+
+Пусть ${s_n} = {\alpha ^n} + {\beta ^n}$, ${s_0} = 2$, ${s_1} = 0$. Тогда $s_{n + 1} = a{s_n} - qs_{n - 1}.$
+
+Доказательство. $\alpha $ — корень $x^2 - ax + q \Rightarrow $
+
+${\alpha ^2} - a \alpha + q = 0 \ |\ \cdot {\alpha^{n - 1}}$. 
+
+${\alpha ^{n + 1}} - a{\alpha ^n} + q{\alpha ^{n - 1}} = 0$
+
+Аналогично для $\beta $: 
+
+${\beta ^{n+1}} - a {\beta ^n} + q{\beta ^{n - 1}} = 0$. 
+
+Сложим: $\underbrace {{\alpha ^{n + 1}} + \beta ^{n + 1}}_{s_{n + 1}} = a ( {\underbrace {{\alpha^n} + {\beta ^n}}_{{s_n}}} ) - q( {{\alpha ^{n - 1}} + {\beta ^{n - 1}}} ).$
+
+\textbf{2.} $f( x ) = ( {{x^n} - {\alpha^n}} ){( {{x^n} - {\beta ^n}} )}$
+
+$ = {x^{2n}} - ( \alpha^n + \beta^n ){x^n} + {q^n}\quad ( \alpha\beta  = q )$
+
+Тогда ${x^2} - ax + q = ( {x - \alpha } )( {x - \beta } )$ делит $f( x )$ (т.к. $\alpha, \beta $ — корни $f(x)$). 
+
+$Q( x )$ — частное от деление. Подставим вместо $x$ \ $\varphi_q$
+$$
+( {\varphi _q^n} )^2 - ( {{\alpha^n} + {\beta ^n}} )\varphi _q^n + {q^n} = f( {{\varphi_q}} ) = Q( {{\varphi _q}} )( {\varphi _q^2 - a{\varphi _q} + q} ) = 0
+$$
+
+По теореме~\ref{lemm_01} число: $(\alpha^n + \beta^n )$. А т.к. $\varphi _{{q^n}}^2 - {a\varphi _{q^n}} + {q^n} = 0$  определно единственным образом $ \Rightarrow a = {\alpha ^n} + {\beta ^n}$ и ${\alpha ^n} + {\beta ^n} = {q^n} + 1 - \# E( {{\F_{q^n}}} )$. 
+\end{proof}
+
+\textbf{B.} Метод вычисления $\# E( \F_q )$ через обобщенный символ Лехандра $\left( {\frac{ \cdot }{{{\F_q}}}} \right)$
+
+\begin{lemma}
+	\label{lemm_03}
+	$E:{y^2} = {x^3} + ax + b$ над ${\F_q}$. Тогда
+	$$
+	\# E( \F_q ) = q + 1 + \sum\limits_{X \in {\F_q}} {\left( {\frac{{{x^3} + ax + b}}{{{\F_q}}}} \right)} 
+	$$
+\end{lemma}
+
+\begin{proof}Для  $x_0 \in \F_q $ существуют либо \\2 точки на $E$ $( {x,y} )$ с $x = {x_0}$ т.ч. $x_0^3 + a{x_0} + b \ne 0$ и является кв. вычетов в ${\F_q}$, либо
+
+1 точка на $E$ с $x = {x_0}$ т.ч.  $x_0^3 + a{x_0} + b = 0$, либо
+
+$0$ точек на $E$ с $x = {x_0}$ т.ч. $x_0^3 + a{x_0} + b$ — не квадратичный вычет в ${\F_q}$
+
+$$
+\Rightarrow \# E( \F_q ) = 1 + \sum\limits_{x \in {\F_q}} {\left( {1 + \left( {\frac{{x^3} + ax + b}{\F_q}} \right)} \right)}
+$$
+\end{proof}
+
+Сложность вычисления $\# E( \F_q )$  через квадратичные характеры: $\bigO( {q \cdot {\text{poly}} \log q} )$,
+где ${\text{poly}} \log q$ — вычисление $\left( {\dfrac{ \cdot }{\F_q}} \right)$.
+
+\end{document}

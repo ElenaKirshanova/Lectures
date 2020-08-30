@@ -1,0 +1,342 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode} 
+\usepackage{enumitem}
+
+\usepackage{graphicx}
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc} 
+\usepackage[russian]{babel}
+
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+\usepackage{pgfplots, subfigure}
+
+\usepackage{biblatex}
+
+% MACROS 
+% PROBABILITY SYMBOLS
+\newcommand*\PROB\Pr 
+\DeclareMathOperator*{\EXPECT}{\mathbb{E}}
+
+
+% GROUPS/DISTRIBUTIONS/SETS/LISTS
+\newcommand{\N}{{{\mathbb N}}}
+\newcommand{\Z}{{{\mathbb Z}}}
+\newcommand{\Q}{{{\mathbb Q}}}
+\newcommand{\R}{{{\mathbb R}}}
+\newcommand{\F}{{{\mathbb F}}}
+\newcommand{\PP}{{{\mathbb P}}}
+\newcommand*{\IZ}{\ensuremath{\mathbb{Z}}}
+\newcommand*{\IN}{\ensuremath{\mathbb{N}}}
+\newcommand*{\IR}{{{\mathbb R}}}
+\newcommand{\Zp}{\ints_p} % Integers modulo p
+\newcommand{\Zq}{\ints_q} % Integers modulo q
+\newcommand{\Zn}{\ints_N} % Integers modulo N
+\newcommand{\Zr}{\ensuremath{\mathbb{Z}/r\mathbb{Z}}} % Integers modulo N
+\newcommand*{\dDR}{\mathrm{d}} %de-Rham-Differential (the d in dx, dy, dz and so on)
+\newcommand{\transpose}{\mkern0.1mu^{\mathsf{t}}}
+\newcommand*{\union}{\mathbin{\cup}}
+
+% Landau 
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand*{\OLandau}{\bigO}
+\newcommand*{\WLandau}{\Omega}
+\newcommand*{\xOLandau}{\widetilde{\OLandau}}
+\newcommand*{\xWLandau}{\widetilde{\WLandau}}
+\newcommand*{\TLandau}{\Theta}
+\newcommand*{\xTLandau}{\widetilde{\TLandau}}
+\newcommand{\smallo}{o} %technically, an omicron
+\newcommand{\softO}{\widetilde{\bigO}}
+\newcommand{\wLandau}{\omega}
+\newcommand{\negl}{\mathrm{negl}} 
+
+% Misc
+\newcommand{\eps}{\varepsilon}
+\newcommand{\inprod}[1]{\left\langle #1 \right\rangle}
+\newcommand*\abs[1]{\left\lvert#1\right\rvert}
+\newcommand*\norm[1]{\left\lVert#1\right\rVert}
+\renewcommand{\char}[1]{\ensuremath{\mathrm{char}(#1)}}
+\newcommand{\overbar}[1]{\overline{\mkern-1.0mu#1\mkern-1.0mu}}
+
+
+
+
+ 
+\newcommand{\handout}[5]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf  } \hfill #2 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{#3}{Оформил #4}{Лекция #1}}
+
+\newtheorem{theorem}{Теорема}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Предложение}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Определение}
+
+\newtheorem{claim}[theorem]{Утверждение}
+\newtheorem{fact}[theorem]{Факт}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\theoremstyle{definition}
+\newtheorem{examples}[theorem]{Примеры}
+
+\theoremstyle{definition}
+\newtheorem{example}[theorem]{Пример}
+\newtheorem{remark}[theorem]{Замечание}
+
+% 1-inch margins
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 6.5in
+
+\parindent 0in
+\parskip 1.5ex
+
+%\addbibresource{books.bib}
+
+\begin{document}
+    
+\lecture{№4 Алгоритм вычисления $E\left[ n \right]$ }{Осень 2019}{Лектор: Елена Киршанова}{Филипп Максимов}
+
+$E$--эллиптическая кривая над полем $K = {\F_q}$, $\char{K} \ne 2,3$
+
+В Лекции \#~3 мы определили
+
+\begin{itemize}
+	\item точки $n$-крученая $E[n] = \left\{ {P \in E\left( {\overbar{ K} } \right) : nP = \mathcal{O}} \right\}$
+	
+	\item $E\left[ n \right] \cong \Z/n\Z \times \Z/n\Z \Rightarrow E\left[ n \right]$ можно записать 
+	$$
+	E\left[ n \right] = \left\{ {\bigO,\;\left( {{x_1},\;{y_1}} \right),... \left( {{x_m},\;{y_m}} \right)} \right\} \text{ где } m=n^2-1
+	$$
+	$$ 
+	\Rightarrow \text{поле, где лежит } E\left[ n \right], \text{( расширение }  K \text{) можно записать}
+	$$
+	$$
+	{K_{E,n}} = K\left( {{x_1},{y_1}\quad {x_m}{y_m}} \right),
+	$$
+	$$
+	\left[ {{K_{E,n}}:\:K} \right] = d < \infty 
+	$$
+\end{itemize}
+
+В этой лекции мы построим алгоритм вычисления $E\left[ n \right]$, основанный на факторизации \underline{многочленов деления}
+
+\begin{itemize}
+	\item ${\psi _m} \in \Z\left[ {x,y,A,B} \right]$~---~многочлены деления, заданные рекуррентными соотношениями (см. лекцию 3)
+	
+	\item ${\varphi _m} = x \cdot \psi _m^2 - {\psi _{m + 1}}{\psi _{m - 1}}$ \\
+	${\omega _m} = \dfrac{1}{{4y}}\left( {{\psi _{m + 2}}\psi _{m - 1}^2 - {\psi _{m - 2}}\psi _{m + 1}^2} \right)$
+	
+	\item Сложениие точки P с самой собой n раз:
+	\begin{equation}\label{F_01}
+	nP = \left( {\frac{{{\varphi _n}(x)}}{{\psi _n^2(x)}},\;\frac{{{\omega _n}( x )}}{{\psi _n^3(x,y)}}} \right) 
+	\end{equation}
+\end{itemize}
+
+\begin{lemma}[Доказательство см. в Serge Lang "Elliptic Curves Diophantine analysis" II 2.3]
+	\label{lemm_01}
+	Многочлены ${\varphi _n}$ и $\psi _n^2 \in K\left[ x \right]$~---~взаимно просты, если $\Delta ( E) \ne \bigO$. \\
+	Т.е. для $E$~---~эллиптической кривой, ${\phi _n}, \psi _n^2$~---~взаимно просты. 
+\end{lemma}
+
+\begin{corollary}
+	\label{corol_02}
+	Пусть $P \in ( {x,y}) \in E( {\overbar{K} } )$. Тогда $nP = \bigO \Leftrightarrow \psi _n^2(x) = 0$.
+\end{corollary}
+\begin{proof}
+    Из \eqref{F_01} $x$~---~координата $P$ задается $\dfrac{{{\varphi _n}( x)}}{{\psi _n^2( x)}} \in K(x)$ \\
+    (из Лекции 3: ${\varphi _n}(x),\;\psi _n^2( x) \in K[x]$  для фиксированной кривой $E$).
+    
+    $ \Rightarrow nP = \bigO \Leftrightarrow \dfrac{{{\varphi _n}( x )}}{{\psi _n^2( x )}}$ имеет полюс в $x$, $Z$~---~координата в проективных координатах. 
+    
+    Так как $\gcd( {{\varphi _n}( x ),\;\psi _n^2( x ))}  = 1 \Rightarrow \dfrac{{{\varphi _n}( x ) }}{{\psi _n^2( x )}}$ имеет полюс в  $\psi _n^2( x ) = 0$
+\end{proof}
+
+$$
+\psi _n^2( x ) \in K[ X ] = {n^2}{x^{{n^2} - 1}} +  \ldots {\text{ мономы меньших степеней (см. Wash. \S 3.2) }}
+$$
+
+Если $n$~---~нечетно, то и ${\psi _n}( x ) \in K[ X ]$ (см. степень $x$ в $\psi _n^2( x $).
+
+Факторизуем ${\psi _n}$ над ${\F_q}[ x ]$. 
+
+\begin{equation}\label{F_02}
+\psi_n = f_1 ... f_r, f_i \text{ -- неприводимые над } \F_q
+\end{equation}
+
+\begin{remark}
+	Все ${f_i}$~---~различные (т.~е. все ${f_i}$ встречаются в разложении с степенью 1)
+\end{remark}
+
+\begin{itemize}
+	\item Всего ${n^2} - 1$ точек $E[ n] \ne \bigO$
+	
+	\item Для фиксированного ${x_i} \in \underbrace {\{ {{x_1} \ldots {x_{{n^2} - s}}}\}}_{\mathclap { x - {\text{координаты точек }}n - {\text{кручения}}} }$, существует две точки $P$, $P' \in E[ n ]$ с координатой $x_i$ (т.к. $E:\:{y^2} = {x^3} + Ax + B$). 
+	
+	\item Так как $\deg {\psi _n}( x ) = \dfrac{{{n^2} - 1}}{2} \Rightarrow {\psi _n}( x )$ имеет $\dfrac{{{n^2} - 1}}{2}$ корней в ${\overbar{ \F_q} }$ и каждый корень кратности 1 (иначе мы имели бы меньше чем ${n^2} - 1$ точек $ \ne 0$ в $E[ n ]$). 
+\end{itemize}
+
+Покажем, что мы можем определить $d = [ {{K_{E,n}}:\:K} ] \ne 0$ фактора 2 из разложения \ref{F_02}. 
+
+\begin{theorem}
+	Пусть $n$~---~простое $> 2$, $K = {\F_q}$, $n \ne char( K )$.
+	
+	${d_i} = \deg {f_i}$ в разложении~\eqref{F_02}.
+	
+	$\ell = \mathrm{lcm}( {\{ {{d_i}} \}_{i = 1}^m} )$
+	
+	$K'_{E,n} = K( {{x_1} \ldots {x_{{n^2} - 1}}}) $, ${x_i} - x$-координаты точек $n$-кручения. Тогда 
+	$$[ {K'_{E,n}:\:K} ] = \ell
+	$$
+	
+	Кроме того, $[ {{K_{E,n}}:\:K'_{E,n}} ] = 1$ либо $2$. То есть $d = \ell$ либо $2\ell$. 
+\end{theorem}
+\begin{proof}
+    Из следствия~\ref{corol_02}: $x_i$~---~корни ${\psi _n} \Rightarrow K'_{E,n}$~---~поле разложения ${\psi _n}$ над $K$
+    
+    $ \Rightarrow $ $[ {K{'_{E,n}}:\:K} ] = \mathrm{lcm}( {{d_i}} )$.
+    
+    (Поле разложения $f_i$ над ${\F_q}:\:\F_{q^{d_i}}$. \\
+    Поле разложения $f$ над ${\F_q}$~---~наименьшие расширение ${\F_q}$, содержащие все ${\F_{q^{d_i}}}$. \\
+    $\F_{q^a} \subset {\F_{q^b}} \Leftrightarrow a | b $)
+    
+    Для второй части теоремы, положим ${K_{E,n}} \ne K'_{E,n}$
+    
+    $ \Rightarrow \exists \; {x_i}:\:{y_i} = \sqrt {x_i^3 + A{x_i} + B}  \notin K'_{E,n} = {\F_{{q^\ell}}}$
+    
+    $ \Rightarrow K{'_{E,n}}(y_i) = \F_{q^{2\ell}}$ и $\forall x \in \F_{q^\ell}$ $\mathop {{\text{ имеет квадратный корень в }}} \F_{q^\ell}$
+    
+    $ \Rightarrow \forall {y_i} \in \F_{q^{2\ell}}$.
+    
+    $d = [ {{K_{E,n}}:\:\bar K'_{E,n}} ] \cdot [ {K'_{E,n}:\:K} ].$
+\end{proof}
+
+Значит, чтобы определить $d = \ell$, нужно показать что 
+
+$\forall {x_i} \in \bar K$~---~корень $\psi _n^2$, ${y_i} = \sqrt {x_i^3 + A{x_i} + b} \in  \F_{q^\ell}$. 
+
+Если существует хотя бы один ${x_j}$ т. ч. ${y_j} \notin \F_{q^\ell}$, делаем вывод, что $d = 2\ell$.
+
+Следующее определение обобщает символ Лежандра.
+
+\begin{definition}
+	$K = {\F_q}$, $x \in K$. Квадратичный характер $( {\frac{ \cdot }{K}} ) $~---~это 
+	$$
+	\left( \frac{x}{K} \right ) =
+	\begin{cases}
+		1,&{\text{ если }}\exists y \in K:\:{y^2} = x \\
+		-1,& {\text{ если }}\not\exists y \in K:\:{y^2} = 0 \\
+		0, & {\text{ если }}x = 0.
+	\end{cases}
+	$$
+\end{definition}
+
+Таким образом, чтобы определить $d = \ell$ или $d = 2\ell$, необходимо вычислить 
+$$
+\left(  {\frac{x_i^3 + A{x_i} + B}{\F_{q^\ell}}} \right )
+$$
+$\forall {x_i}$~---~корни $\psi _n^2$.
+
+Так как ${x_i}$~---~корень какого-то ${f_i}$ из~\eqref{F_02}, ${d_1} = \deg {f_i}$, то \\
+$y_i^2 = x_i^3 + A{x_i} + b \in \F_{q^{d_i}}$,\\
+т.к. $f_i - \min$ многочлен $x_i$ над $K$, $ {d_i}|\ell \Rightarrow {x_i} \in \F_{q^{d_i}} $ -- кв. в $\F_{q^\ell} \Rightarrow $ ${y_i} \in \F_{q^\ell}$,\\
+т.е. $x_i$~---~корень $f_i$, т.ч. ${2{d_i}}|\ell$, то ${y_i} \in \F_{q^\ell}$. Т.е. нам достаточно считать квадратные характеры тех $x_i$, которые являются корнями $f_i$ с $\deg {f_i}$, т.ч. $2d_i \not | \; \ell$. 
+
+\begin{lemma}
+	
+Если $K = {\F_q}$ и $d = [ {{K_{E,n}}:\:K}]$, то ${q^d} \equiv 1\bmod n$. В частности, ${\operatorname{ord} ( {q,n} }) | c$
+\end{lemma}
+
+\begin{lemma}[A.L.\ van Tuyl ``The shield of N-Torsion Points of an Elliptic Curve over a Finite Field'']
+
+Пусть $f_i$~---~неприводимый многочлен в разложении ${\psi _n}$ \eqref{F_02}, т.ч. $2d_i | \ell$, ${d_i} = \deg f$. Положим
+$$
+{d^*} = \mathrm{lcm}( {\operatorname{ord} ( {q,n} ),\;{d_i}} ),
+$$
+$$
+с = \left(\frac{x_i^3 + Ax + B}{\F_{q^{d_i}}} \right),{\text{ где }}f( x_i ) = \bigO.$$
+Тогда
+$$
+d = 
+\begin{cases}
+\ell, &\text{ если } с=1 \text{ и } . d*|l  \\
+2\ell & \text{ иначе. }
+\end{cases}
+$$
+\end{lemma}
+
+Эта лемма позволяет рассмотреть лишь один $f_i$ (и его корень $x_i$) для определения $d$. 
+
+\section*{Алгоритм вычисления $d$ -- степени расширения $[{K_{E,n}}:K]$}
+
+Вход: $n \geqslant 3$ -- нечётное, $q$, $A, B$ $( E:\:{y^2} = {x^3} + Ax + B,\;\;A,B \in \F_q )$
+
+Выход: $d$. 
+
+\begin{enumerate}
+	\item Построить ${\psi _n} \in {\F_q}[x]$
+	
+	\item Факторизовать ${\psi _n} = {f_1} \ldots {f_r}$ над ${\F_q}[x]$
+	
+	\item $\ell: = \mathrm{lcm}( {{{\{ {\deg f}\}}_{i = 1,5}}} )$
+	
+	\item Выбрать ${f_i}$ т.ч. $2 \cdot \deg {f_i} \not | \; l$
+	
+	\item Вычислить $c = \left(\dfrac{x_i^3 + A{x_i} + B}{\F_{q^{d_i}}}\right)$, где $x_i$--корень $f_i$.
+	
+	\item if $c_i = - 1$:
+	
+	\quad return $d = 2\ell$
+	
+	\item ${d^*} = \mathrm( {\operatorname{ord} ( {q,n}),{d_i}})$
+	
+	if ${d^*} = \ell$ or $\ell = n \cdot {d^*}$:
+	
+	\quad return $d = \ell$
+	
+	return $d = 2\ell$ 
+\end{enumerate}
+
+\subsection*{Оценка сложности} 
+Шаг $1$. $\deg \psi_n = n^2 - 1$. Грубо: $\operatorname{poly}(n)$. \\
+Шаг $2$. В Sage Berlakamp-Zessenhaus: $\bigO( (\deg \psi_n)^3 + (\deg \psi_n)^2 \cdot \operatorname{lg}(n^2) \cdot \operatorname{lg}q  )$.\\
+Шаг $5$. Наивно (baby step / giant step): $\bigO(\sqrt{q^{d_i}})$. Можно привести к вычислению символа Лежандра над $\F_q$.
+
+Итого: $\operatorname{poly}(n) \;/\; \bigO(\operatorname{poly}(n) + \sqrt{q^{d_i}})$
+
+\begin{remark}
+	Алгоритм может быть адаптирован для вычисления самой группы точек $n$-кручения $E[ n]$, если $\forall {x_i}$ -- корень ${f_i}$, вычислить соответствующие ${y_i}$:\\
+	для $n = 2, E[n]$ вычисляется разложением многочлена ${x^3} + Ax + B$ (см. лекцию~\#~3) \\
+	для $n = 1, E[n] = \{ \bigO \}$. 
+\end{remark}
+\end{document}
+
