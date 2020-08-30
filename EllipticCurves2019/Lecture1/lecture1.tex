@@ -1,0 +1,466 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode} 
+\usepackage{enumitem}
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+\usepackage{pgfplots, subfigure}
+
+
+% MACROS 
+% PROBABILITY SYMBOLS
+\newcommand*\PROB\Pr 
+\DeclareMathOperator*{\EXPECT}{\mathbb{E}}
+
+
+% GROUPS/DISTRIBUTIONS/SETS/LISTS
+\newcommand{\N}{{{\mathbb N}}}
+\newcommand{\Z}{{{\mathbb Z}}}
+\newcommand{\Q}{{{\mathbb Q}}}
+\newcommand{\R}{{{\mathbb R}}}
+\newcommand{\F}{{{\mathbb F}}}
+\newcommand{\PP}{{{\mathbb P}}}
+\newcommand*{\IZ}{\ensuremath{\mathbb{Z}}}
+\newcommand*{\IN}{\ensuremath{\mathbb{N}}}
+\newcommand*{\IR}{{{\mathbb R}}}
+\newcommand{\Zp}{\ints_p} % Integers modulo p
+\newcommand{\Zq}{\ints_q} % Integers modulo q
+\newcommand{\Zn}{\ints_N} % Integers modulo N
+\newcommand{\Zr}{\ensuremath{\mathbb{Z}/r\mathbb{Z}}} % Integers modulo N
+\newcommand*{\dDR}{\mathrm{d}} %de-Rham-Differential (the d in dx, dy, dz and so on)
+\newcommand{\transpose}{\mkern0.1mu^{\mathsf{t}}}
+\newcommand*{\union}{\mathbin{\cup}}
+
+% Landau 
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand*{\OLandau}{\bigO}
+\newcommand*{\WLandau}{\Omega}
+\newcommand*{\xOLandau}{\widetilde{\OLandau}}
+\newcommand*{\xWLandau}{\widetilde{\WLandau}}
+\newcommand*{\TLandau}{\Theta}
+\newcommand*{\xTLandau}{\widetilde{\TLandau}}
+\newcommand{\smallo}{o} %technically, an omicron
+\newcommand{\softO}{\widetilde{\bigO}}
+\newcommand{\wLandau}{\omega}
+\newcommand{\negl}{\mathrm{negl}} 
+
+% Misc
+\newcommand{\eps}{\varepsilon}
+\newcommand{\inprod}[1]{\left\langle #1 \right\rangle}
+
+ 
+\newcommand{\handout}[5]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf  } \hfill #2 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{#3}{Оформил #4}{Лекция #1}}
+
+\newtheorem{theorem}{Теорема}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Предложение}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Определение}
+
+\newtheorem{claim}[theorem]{Утверждение}
+\newtheorem{fact}[theorem]{Факт}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\theoremstyle{definition}
+\newtheorem{examples}[theorem]{Примеры}
+
+\theoremstyle{definition}
+\newtheorem{example}[theorem]{Пример}
+
+% 1-inch margins
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 6.5in
+
+\parindent 0in
+\parskip 1.5ex
+
+\begin{document}
+    
+    \lecture{1 --- 06.09.2019}{Осень 2019}{Лектор: Елена Киршанова}{Филипп Максимов}
+    
+    
+    \textbf{Литература.}
+        \begin{enumerate}
+            \item A. Menezes "Elliptic curve public key cryptosystems"
+            \item D. Hankerson, A. Menezes, S. Vanstone "Guide to elliptic curve cryptography"
+            \item J. Silverman "Arithmetic of Elliptic Curves"
+        \end{enumerate}
+    
+    \section{Введение}
+    
+        $\F_q$ — конечное поле, $|\F_q|=q=p^k$, $p$ — простое, $K$ — поле, $\overline{K}$ — алгебраическое замыкание.
+        
+        \subsection{Определения}
+        
+            \begin{definition}[Уравнение Вейерштрасса] Уравнение Вейерштрасса в проективных координатах 
+            — уравнение степени 3 вида 
+                \begin{equation}
+                    F: Y^2Z + a_1 X Y Z + a_3 Y Z^2 = X^3 + a_2 X^2 Z + a_4 X Z^2 + a_6 Z^3
+                \end{equation}
+                где $a_i \in K$.
+                Уравнение Вейерштрасса \textbf{гладкое} (или несингулярное), если для любых проективных точек $P=(X:Y:Z) \in \PP^2(K)$ \footnotemark[1], удовлетворяющих условию (1), хотя бы одна из частных производных $\frac{dF}{dX},\frac{dF}{dY},\frac{dF}{dZ}$ не обращается в $0$ на $P$. Если все три частных производные обращаются в $0$ хотя бы на одной точке $P$ (точке сингулярности), (1) — сингулярное уравнение.
+                \footnotetext[1]{проективная плоскость над $K$ — множество классов эквивалентности на $K^3\setminus \{0,0,0\}$, т.е. $\overrightarrow{X} \sim \overrightarrow{Y}$, если $x_1=u*y_1,x_2=u*y_2,x_3=u*y_3$ }
+            \end{definition}
+            
+            \begin{definition} 
+                \textbf{Эллиптическая кривая} $E$ (алгебраическая кривая рода 1) — множество всех точек в $\PP^2(K)$, удовлетворяющих гладкой кривой (1). 
+                
+                Существует всего одна точка в $E$ с координатой $Z= (0:1:0)$. Обозначаем эту точку $\bigO$, называем точкой в бесконечности. 
+            \end{definition}
+            
+            \begin{definition} 
+                Уравнение Вейерштрасса в аффинных координатах $(x=X/Z, y=Y/Z)$:
+                \begin{equation}\label{eq:weierstrassequation}
+                    f: y^2+a_1xy + a_3y = x^3 + a_2x^2 + a_4x + a_6
+                \end{equation}
+                Тогда $F(K) = \{ (x,y) \in K \times K: f(x,y)=0 \} \union \{\bigO\}$.
+                
+                Если $a_i \in K \  \forall i$, то будем говорить, что кривая $E$ определена над $K$.
+            \end{definition}
+            
+            \begin{definition}
+                Обозначим
+                \begin{align}
+                    d_2 &= a_1^2 + 4a_2 \\ \nonumber
+                    d_4 &= 2a_4 + a_1a_3 \\ \nonumber
+                    d_6 &= a_3^2 + 4a_6 \\ \nonumber
+                    d_8 &= a_1^2a_6 + 4a_2a_6 - a_1a_3a_4 + a_2a_3^2 - a_4^2 \\ \nonumber
+                    c_4 &= d_2^2 - 24d_4 \\ \nonumber
+                    \text{Для проверки: } 4d_8 &= d_2d_6 - d_4^2
+                \end{align}
+                Тогда \textbf{дискриминант} уравнения (2) определяется как 
+                \[
+                    \Delta = -d_2^2d_8 - 8d_4^3-27d_6^2+9d_2d_4d_6,
+                \]
+                А j-инвариант эллиптической кривой $E$, $j(E)$, определяется как 
+                \[
+                    j(E) = \frac{c_4^2}{\Delta}
+                \]
+            \end{definition}
+            
+            \begin{theorem}[Sil, Thm. 1.4]
+                Кривая, заданная уравнением Вейерштрасса, может быть классифицирована как:
+                \begin{enumerate}[itemsep=0pt, topsep=0pt, partopsep=0pt]
+                    \item Несингулярная $\iff \Delta \neq 0$ ($\implies$ задаёт эллиптическую кривую) 
+                    \item Кривая, обладающая узлом (node) $\iff \Delta = 0, c_4 \neq 0$ 
+                    \item Кривая, обладающая точкой перегиба (cusp) $\iff \Delta = c_4 = 0$
+                \end{enumerate}
+            \end{theorem}
+            % 
+            \begin{figure}[h!]
+                \centering
+                \subfigure[$\Delta < 0$]{
+                   \begin{tikzpicture}
+                        \begin{axis}[
+                            xmin=-5,
+                            xmax=5,
+                            ymin=-7,
+                            ymax=7,
+                            xlabel={$x$},
+                            ylabel={$y$},
+                            scale only axis,
+                            axis lines=middle,
+                            domain=-2.1038:3,
+                            samples=200,
+                            smooth,
+                            clip=false,
+                            axis equal image=true,
+                        ]
+                            \addplot [red] {sqrt(x^3-3*x+3)}
+                                node[right] {$y^2=x^3-3x+3$};
+                            \addplot [red] {-sqrt(x^3-3*x+3)};
+                        \end{axis}
+                    \end{tikzpicture}
+                }
+                \subfigure[$\Delta > 0$]{
+                    \begin{tikzpicture}
+                        \begin{axis}[
+                            xmin=-1.5,
+                            xmax=1.5,
+                            ymin=-2,
+                            ymax=2,
+                            xlabel={$x$},
+                            ylabel={$y$},
+                            scale only axis,
+                            axis lines=middle,
+                            domain=-1:0, 
+                            samples=200,
+                            smooth,
+                            clip=false,
+                            axis equal image=true,
+                        ]
+                            \addplot [red] {sqrt(x^3-x)};
+                            \addplot [red] {-sqrt(x^3-x)};
+                        \end{axis}
+                        \begin{axis}[
+                            xmin=-1.5,
+                            xmax=1.5,
+                            ymin=-2,
+                            ymax=2,
+                            xlabel={$x$},
+                            ylabel={$y$},
+                            scale only axis,
+                            axis lines=middle,
+                            domain=0.1:1.5, 
+                            samples=200,
+                            smooth,
+                            clip=false,
+                            axis equal image=true,
+                        ]
+                            \addplot [red] {sqrt(x^3-x)}
+                                node[right] {$y^2=x^3-x$};
+                            \addplot [red] {-sqrt(x^3-x)};
+                        \end{axis}
+                    \end{tikzpicture}
+                } 
+            \end{figure}
+            \begin{figure}[h!]
+                \centering
+                \subfigure[Одна касательная]{
+                    \begin{tikzpicture}
+                        \begin{axis}[
+                            xmin=-1.5,
+                            xmax=5,
+                            ymin=-5,
+                            ymax=5,
+                            xlabel={$x$},
+                            ylabel={$y$},
+                            scale only axis,
+                            axis lines=middle,
+                            domain=0:3, 
+                            samples=200,
+                            smooth,
+                            clip=false,
+                            axis equal image=true,
+                        ]
+                            \addplot [red] {sqrt(x^3)}
+                                node[right] {$y^2=x^3$};
+                            \addplot [red] {-sqrt(x^3)};
+                        \end{axis}
+                    \end{tikzpicture}
+                }
+                \subfigure[$\Delta < 0$]{
+                    \begin{tikzpicture}
+                        \begin{axis}[
+                            xmin=-1.5,
+                            xmax=1.5,
+                            ymin=-1.5,
+                            ymax=1.5,
+                            xlabel={$x$},
+                            ylabel={$y$},
+                            scale only axis,
+                            axis lines=middle,
+                            domain=0:1, 
+                            samples=200,
+                            smooth,
+                            clip=false,
+                            axis equal image=true,
+                        ]
+                            \addplot [red] {sqrt(x^3+x)}
+                                node[right] {$y^2=x^3+x$};
+                            \addplot [red] {-sqrt(x^3+x)};
+                        \end{axis}
+                    \end{tikzpicture}
+                }               
+                \caption{Эллиптические кривые над $\R$} 
+            \end{figure}
+            
+            \clearpage
+            
+        \subsection{Особые формы уравнения (2)}
+            \paragraph{$char K \neq 2$:}
+            \begin{equation*}
+                f: y^2+a_1xy + a_3y = x^3 + a_2x^2 + a_4x + a_6 \tag{\ref{eq:weierstrassequation}}
+            \end{equation*}
+            %
+            \[
+            \text{Дополним до полного квадрата: } y^2 + 2y(a_1x+a_3)+(a_1x+a_3))^2- \frac{1}{4}(a_1x+a_3)^2
+            \]
+            \[
+            \implies 4(2y + \frac{a_1x+a_3}{2})^2 = 4 + \frac{1}{4}(a_1x+a_3)^2 + (a_2x^2 + a_4x + a_6) \quad| \cdot 4
+            \]
+            \[
+            \implies (2y + a_1x+a_3)^2 = 4x^3 + (a_1^2 + 4a_3)x^2 + (2a_1a_3 + 4a_2)x^2 + a_3^2 + 4a_6
+            \]
+            \[
+            \implies y = \frac{1}{2}(y' - a_1x - a_3)
+            \]
+            \[
+            \implies y^2 = 4x^3 + d_2x^2 + 2d_4 + d_6
+            \]
+            \textit{Вывод: } $(x, y)\mapsto(x, \frac{1}{2}(y-a_1x-a_3))$ для $E/K, char K \neq 2$, преобразует кривую вида (2) к кривой
+            \begin{equation}
+                E/K: y^2 = 4x^3 + d_2x^2 + 2d_4 + d_6.
+            \end{equation}
+            
+            \paragraph{$char K \neq 2, 3$:} 
+            Дополним правую часть (4) до полного куба. Замена переменных
+            \[
+            (x, y) \mapsto (\frac{x-3d_2}{36}, \frac{y}{216})
+            \]
+            Преобразует (4) в 
+            \begin{align}
+                E/K: y^2 = x^3 + ax + b
+            \end{align}
+            \[
+                a = -27c_4
+            \]
+            \[
+                b = -56(d_2^3 + 36d_2d_4 - 216d_6) 
+            \]
+            В этом случае, 
+            \begin{align*}
+                \Delta &= -16(4a^3 + 27b^2) \\ \nonumber
+                j(E) &= -1728 \frac{4a^3}{\Delta}. \nonumber
+            \end{align*}
+                  
+            \paragraph{$char K = 2$:} 
+            \[
+            j(E)\neq0 \, (a_1\neq0) \implies (x, y) \mapsto (a_1^2x+\frac{a_3}{a_1}; \, a_1^3y + \frac{a_1^2a_4+a_3^2}{a_1^3})
+            \]
+            \begin{equation}
+                E/K: y^2+xy=x^3+a_2'x^2+a_6'
+            \end{equation}
+            
+            \[
+            j(E)\neq0 \, (a_1\neq0) \implies (x, y) \mapsto (x+a_2, y)
+            \]
+            \begin{equation}
+                E/K: y^2+a_3y = x^3+a_4x+a_6
+            \end{equation}
+            
+        \subsection{Изоморфизм эллиптических кривых}
+            \begin{definition} 
+                $E_1/K, E_2/K$ изоморфны, если они изоморфны как проективные многообразия, т.е. $\exists$ морфизмы $\phi: E_1/K \to E_2/K, \psi: E_2/K \to E_1/K$ (определённые над $K$), такие что $\psi \circ \phi = id_{E_1}, \phi \circ \psi = id_{E_2}$.
+            \end{definition}
+            
+            \begin{theorem}
+                Пусть $E_1/K, E_2/K$ — две эллиптические кривые, заданные уравнениями 
+                \begin{align}
+                    E_1&: y^2+a_1xy + a_3y = x^3 + a_2x^2 + a_4x + a_6 \\ \nonumber
+                    E_2&: y^2+a_1'xy + a_3'y = x^3 + a_2'x^2 + a_4'x + a_6'
+                \end{align}
+                \begin{equation*}
+                E_1 \cong E_2 \iff \exists u,r,s,t \in K, u\neq0, \text{такие что замена}
+                \end{equation*}
+                \begin{equation}
+                    (x,y) \mapsto (u^2x+r, u^3y+ u^2sx+t)
+                \end{equation}
+                преобразует уравнение кривой $E_1$ в уравнение кривой $E_2$. Изоморфизм кривых задаёт отношение эквивалентности.
+                \begin{align*}
+                    \phi : (x,y)&\mapsto (u^{-2}(x-r), \,u^{-3}(y-sx-t+rs))\,\text{— точки $E_1$ в $E_2$} \\
+                    \psi : (x,y)&\mapsto (u^2x+r, \,u^3y+u^2sx+t))\, \text{— точки $E_2$ в $E_1$} \\
+                    \phi \circ \psi = i&d_{E_2}, \psi \circ \phi = id_{E_1}.
+                \end{align*}
+            \end{theorem}
+            
+            \begin{examples} $ $\newline
+                Кривая $E$ из (4) $\cong$ (2), если $char K \neq 2$.\newline
+                (5) $\cong$ (4) $\cong$ (2), если $char K \neq 2,3$.\newline
+                (6) $\cong$ (2), если $char K = 2, j(E_1)\neq0$.\newline
+                (7) $\cong$ (2), если $char K = 2, j(E_1)=0$
+            \end{examples}
+            
+            \begin{corollary}
+                Если $E_1, E_2$ определены над $K$ с $char(K) \neq 2,3$, то (9) можно упростить:
+                \[
+                    (x,y) \mapsto (u^2x, u^3y), u \neq 0
+                \]
+            \end{corollary}
+            
+            С помощью преобразования (9), можно вывести коэффициенты кривой $E_2$:
+            \begin{align}
+                a_1' &= \frac{1}{u}(a_1+2s) \\  \nonumber
+                a_2' &= \frac{1}{u^2}(a_2-sa_1+3r-s^2) \\ \nonumber
+                a_3' &= \frac{1}{u^3}(a_3+ra_1+2t) \\ \nonumber
+                a_4' &= \frac{1}{u^4}(a_4 = sa_3 + 2ra_2 = (t+rs)a_1 + 3r^2 - 2st) \\ \nonumber
+                a_6' &= \frac{1}{u^6}(a_6 + ra_4 + r^2a_2 + r^3 - ta_3 - t^2 - rta_1) \\ \nonumber
+            \end{align}
+            
+            Аналогично, можно получить уравнения для $d_i, j$:
+            \begin{align*}
+                \Delta' &= \frac{1}{u^{12}}\Delta \\
+                j' &= j
+            \end{align*}
+            
+            \begin{theorem}
+                $E_1 \cong E_2$ над $\Bar{K} \iff j(E_1)=j(E_2)$
+            \end{theorem}
+            \begin{proof}
+                Докажем для случая $char(K)\neq 2,3$ (см. Silverman для общего случая).
+                
+                $\implies$ следует из формул (10).
+                
+                $\Longleftarrow$ Рассмотрим
+                \begin{align*}
+                    E_1&:y^2=x^3+ax+b \\
+                    E_2&=(y')^2 = (x')^3+a'x'+b'
+                \end{align*}
+                Тогда из $j(E_1)=j(E_2) \Rightarrow$
+                \begin{align*}
+                    \frac{(4a)^3}{4a^3+27b^2} &= \frac{(4a')^3}{4(a')^3+27(b')^2} \\
+                    4^4a^3(a')^3 + 4^3a^327(b')^2 &= 4^4 a'^3a^3 + 4^3(a')^327b^2 \\
+                    a^3b^{12} &= a^{13}b^2 \tag{*}
+                \end{align*}
+                Нас интересуют только изоморфизмы вида $(x,y)\mapsto(u^2x', u^3y')$ (следствие 3).
+                
+                Рассмотрим 3 случая: \newline
+                \textbf{Случай 1.} $a = 0 \,(\Rightarrow j=0)$. Тогда $b\neq0$ (т.к. $\Delta \neq0$), $a'=0$;
+                \begin{equation*}
+                    y^2=x^3+b, \quad \quad y^{12} = x'^3 + b', \quad \quad u=(\frac{b}{b'})^{\frac{1}{6}}
+                \end{equation*}
+                
+                \textbf{Случай 2.} $b=0$ (Тогда $a \neq 0, b' = 0$).
+                \[
+                     u = (\frac{a}{a'})^{\frac{1}{4}}
+                \]
+                
+                \textbf{Случай 3.} $b\neq0 \implies a'b' \neq0$ 
+                \[
+                    u = (\frac{a}{a'})^{\frac{1}{4}} = (\frac{b}{b'})^{\frac{1}{6}}
+                \]
+            \end{proof}
+            
+            \textbf{Результаты}
+            \begin{enumerate}
+                \item Получить уравнение изоморфных для $E$ кривых над $K$, надо взять $(u,r,s,t)\in K$ и получить коэффициенты изоморфной кривой из (10). \newline
+                Сложность: $\bigO$ операций деления/умножения в $K$.
+                \item Проверить, являются ли две кривые $E_1/K, E_2/K$ изоморфными: решить (10) для неизвестных $(u,r,s,t)$. Если решение в $K$ существует, значит $E_1\cong E_2$. \newline
+                Сложность: полиномиальная -- решение системы уравнений в $K$.
+                \item Определить, над каким полем $L \subseteq K$ изоморфны кривые $E_1, E_2$: в каком расширении $K$ лежат решения системы (10).
+            \end{enumerate}
+\end{document}
