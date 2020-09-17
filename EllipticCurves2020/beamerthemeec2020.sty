@@ -1,6 +1,4 @@
-
 \ProvidesPackage{beamerthemeec2020}
-
 
 \RequirePackage{tikz}
 \usetikzlibrary{arrows,decorations.pathmorphing,backgrounds,calc}
@@ -13,7 +11,8 @@
 \usepackage{cmap}
 \usepackage{euler}
 \usepackage{fontspec}
-\usepackage{fontawesome}
+%\usepackage{fontawesome}
+\usepackage{fontawesome5}
 
 \usepackage{ragged2e}
 \usepackage{hyphenat}
@@ -40,14 +39,23 @@
 \usepackage{varwidth}
 \usepackage{tabularx}
 
-\definecolor{text-color}  {RGB}{0,0,0} %%% text color
-\definecolor{subsection-color}  {RGB}{40, 166, 103} %%% subsection color
-\definecolor{title-and-section-color}  {RGB}{61, 147, 221} %%% title and section color
-\definecolor{bg-color}  {RGB}{254, 255, 244} %%% background color
-\definecolor{struct-color}  {RGB}{224, 62, 73} %%% structure
+\definecolor{text-color}{RGB}{0,0,0} %%% text color
+\definecolor{subsection-color}{RGB}{40, 166, 103} %%% subsection color
+\definecolor{title-and-section-color}{RGB}{61, 147, 221} %%% title and section color
+\definecolor{bg-color}{RGB}{254, 255, 244} %%% background color
+\definecolor{struct-color}{RGB}{224, 62, 73} %%% structure
 
-\definecolor{color-cont-bg}  {RGB}{204, 239, 171}
+\definecolor{color-cont-bg}{RGB}{204, 239, 171}
 \definecolor{block-green-color-bg}{RGB}{204, 239, 171}
+
+\definecolor{plot-red-color}{RGB}{224, 62, 73}
+\definecolor{plot-green-color}{RGB}{77, 158, 99}
+\definecolor{plot-blue-color}{RGB}{61, 147, 221}
+
+\definecolor{box-red-color}{RGB}{224, 62, 73}
+\definecolor{box-green-color}{RGB}{77, 158, 99}
+\definecolor{box-blue-color}{RGB}{61, 147, 221}
+
 
 \setbeamercolor{structure}{fg=struct-color}
 \setbeamercolor{titlelike}{fg=title-and-section-color}
