@@ -1,0 +1,458 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode} 
+\usepackage{enumitem}
+
+\usepackage{graphicx}
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc} 
+\usepackage[russian]{babel}
+
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+\usepackage{pgfplots, subfigure}
+
+\usepackage{biblatex}
+
+% MACROS 
+% PROBABILITY SYMBOLS
+\newcommand*\PROB\Pr 
+\DeclareMathOperator*{\EXPECT}{\mathbb{E}}
+
+
+% GROUPS/DISTRIBUTIONS/SETS/LISTS
+\newcommand{\N}{{{\mathbb N}}}
+\newcommand{\Z}{{{\mathbb Z}}}
+\newcommand{\Q}{{{\mathbb Q}}}
+\newcommand{\R}{{{\mathbb R}}}
+\newcommand{\F}{{{\mathbb F}}}
+\newcommand{\Fqd}{{{\F_{q^{d_i}}}}}
+\newcommand{\PP}{{{\mathbb P}}}
+\newcommand*{\IZ}{\ensuremath{\mathbb{Z}}}
+\newcommand*{\IN}{\ensuremath{\N}}
+\newcommand*{\IR}{{{\mathbb R}}}
+\newcommand{\Zp}{\ints_p} % Integers modulo p
+\newcommand{\Zq}{\ints_q} % Integers modulo q
+\newcommand{\Zn}{\ints_N} % Integers modulo N
+\newcommand{\Zr}{\ensuremath{\mathbb{Z}/r\mathbb{Z}}} % Integers modulo N
+\newcommand*{\dDR}{\mathrm{d}} %de-Rham-Differential (the d in dx, dy, dz and so on)
+\newcommand{\transpose}{\mkern0.1mu^{\mathsf{t}}}
+\newcommand*{\union}{\mathbin{\cup}}
+
+% Landau 
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand*{\OLandau}{\bigO}
+\newcommand*{\WLandau}{\Omega}
+\newcommand*{\xOLandau}{\widetilde{\OLandau}}
+\newcommand*{\xWLandau}{\widetilde{\WLandau}}
+\newcommand*{\TLandau}{\Theta}
+\newcommand*{\xTLandau}{\widetilde{\TLandau}}
+\newcommand{\smallo}{o} %technically, an omicron
+\newcommand{\softO}{\widetilde{\bigO}}
+\newcommand{\wLandau}{\omega}
+\newcommand{\negl}{\mathrm{negl}} 
+
+% Misc
+\newcommand{\eps}{\varepsilon}
+\newcommand{\inprod}[1]{\left\langle #1 \right\rangle}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+
+%proper overline reduced by some mu's, re-adjust if needed
+\newcommand{\overbar}[1]{\overline{\mkern-0.0mu#1\mkern-4.0mu}}
+
+ 
+\newcommand{\handout}[5]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf  } \hfill #2 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{#3}{Оформил #4}{Лекция #1}}
+
+\newtheorem{theorem}{Теорема}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Предложение}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Определение}
+
+\newtheorem{claim}[theorem]{Утверждение}
+\newtheorem{fact}[theorem]{Факт}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\theoremstyle{definition}
+\newtheorem{examples}[theorem]{Примеры}
+
+\theoremstyle{definition}
+\newtheorem{example}[theorem]{Пример}
+\newtheorem{remark}[theorem]{Замечание}
+
+% 1-inch margins
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 6.5in
+
+\parindent 0in
+\parskip 1.5ex
+
+%\addbibresource{books.bib}
+
+\begin{document}
+\lecture{№7 — 1.11.19}{Осень 2019}{Лектор: Елена Киршанова}{Филипп Максимов}
+
+\section{Алгоритм факторизации на эллиптических кривых}
+
+\subsection{(p-1)-метод Полларда}
+
+Не умалаяя общности, $N = pq$ (легко обобщается на случай нескольких простых множителей)\\
+$p-1$ факторизуется на «малые» простые\\
+$q-1$ \underline{не} факторизуется на «малые» простые
+
+Точнее, $p-1 = \prod p_i^{e_i},\ p_i \leq B_1, p_i^{e_i} \leq B_2$ (такие $p$ называются "$B_1$-гладкими")
+
+\underline{Идея метода:}
+\begin{itemize}
+    \item $\forall a \in \Z_n^*$ и $\forall K$ - кратное $p-1$:
+    \[
+        a^k = (a^l)^{p-1} \equiv 1\ mod\ p
+    \]
+    \item (Теорема Ферма) Если $a^k \not\equiv 1\ mod\ q$, то $GCD(N, a^K -1) = p$
+\end{itemize}
+
+\subsubsection{Алгоритм}
+
+Вход: $N = p \cdot q$
+
+Выход: $p,q = \frac{N}{p}$, или «делители не найдены».
+
+\begin{enumerate}
+	\item Выбрать ${B_1},{B_2}$ — границы.
+	
+	\[
+	    a\mathop  \leftarrow \limits^\$  \Z_N^*
+	\]
+	
+	\item Для всех простых ${p_i} \leqslant {B_1}$: 
+	
+	\hspace{3em} $a \leftarrow a^{p_i^{e_i}}\bmod N$, где $e_i$ — макс., удовлетворяющее $p_i^{e_i} \leqslant {B_2}$.
+	
+	\item Если $\gcd ( a - 1,N )\not  \in \left\{ {1,N} \right\}$
+	
+	\hspace{3em} вернуть $\gcd ( a - 1,N ),\quad \dfrac{N}{\gcd ( a - 1,\;N )}$. 
+	
+	иначе 
+	
+	\hspace{3em} вернуть "делители не найдены".
+\end{enumerate}
+
+\underline{Корректность}
+
+\begin{lemma}
+	Пусть $N = p \cdot q$, $B_1,B_2 \in \N$, т.ч. $( p - 1 )$ — $B_i$-гладкое и 
+
+	$p - 1 = \Pi p_i^{e_i}$, $\ \varphi _i^{e_i} \leqslant B_2$. A $(q-1)$ — не $B_i$-гладкое. 
+
+	Тогда алгоритм $(p-1)$ Полларда находит $p$ за время $\bigO( B_1 \lg^3 N)$ с вероятностью $1  - \frac{1}{B_1}$.
+\end{lemma}
+
+\begin{proof}
+    Положим $K = \prod\limits_{\begin{subarray}{c} 
+            p_i \leqslant B_1 \\ 
+            p_i - \text{простые}
+    \end{subarray}}  p_i^{e_i} $
+
+    Так как $( q - 1 )$ — не $B_1$-гладкое $\exists $ $r$ — простое, $r > B_1 : r|q - 1$. 
+    
+    Если $r|\operatorname{ord}_{\Z_q^*}( a )$, то ${\operatorname{ord} _{\Z_q^*}}( a ) \not |\ K \Rightarrow {a^K} \ne 1\bmod q$.
+    
+    С другой стороны, $k$ — кратно $p - 1 \Rightarrow {a^K} = 1\bmod p$ и $\text{gcd}(a^k - 1,N) = p$. 
+    
+    Т.е.  необходимо показать, что $r|{\operatorname{ord} _{\Z_q^*}}( a )$ с большой вероятностью для $a\mathop  \leftarrow \limits^\$  \Z_N^*$. 
+    
+    $\Z_q^* = \{ \alpha ^1 \ldots \alpha ^{q - 1}\}$ — циклическая группа, т.е.  $a\bmod q = \alpha ^i$ для $i \in ( 1,q-1 )$. 
+    
+    Кроме того, ${\operatorname{ord} _{\Z_q^N}}( {\alpha ^i} ) = \dfrac{q - 1}{\gcd (i,\;q - 1)}$
+\end{proof}
+
+\begin{lemma}
+	Покажем, что ${\operatorname{ord} _{\Z_q^*}}( {\alpha'} ) = \dfrac{q - 1}{\gcd ( {i,\;q - 1} )}$; Пусть $t = \operatorname{ord} ( \alpha' )$
+	\[
+    	\left. \begin{gathered}
+    	( \alpha ^i )^t = 1 \hfill \\
+    	\operatorname{ord} ( \alpha  )^0 = q - 1 \hfill \\ 
+    	\end{gathered}  \right\} \Leftrightarrow ( q - 1 )|i \cdot t;
+	\]
+\end{lemma}
+
+\begin{proof}
+Положим $( q - 1)m = i \cdot t$ $(m \in \Z)$. 
+
+\[
+	\begin{gathered}
+	\gcd ( q - 1,\;i ) |\ q - 1, \text{ положим }( q - 1 ) = q' \cdot \gcd ( q - 1,i ) \hfill\\
+	\gcd ( q - 1,\;i ) |\ i, \text{ положим } i = i' \cdot \gcd ( q - 1,i ) \hfill
+	\end{gathered}
+	 \Rightarrow \gcd ( q',i' ) = 1. 
+\]
+
+Заметим, что $q' = \dfrac{q - 1}{\gcd ( q - 1,i )}$; покажем, что $t = q'$. 
+
+$( q - 1 )m = i \cdot t$
+
+$q' \cdot \gcd ( q - 1,i ) \cdot m = i' \cdot \gcd ( q - 1,i ) \cdot t$
+
+$q' \cdot m = i' \cdot t\ \Rightarrow\ q'|i' \cdot t$, т.к.  $\gcd ( q',i' ) = 1$, $q'|t\ \Rightarrow\ $ $q' \leqslant t$. 
+
+Покажем обратное неравенство: 
+\[
+    ( \alpha ^i )^{q_i} = \alpha ^i \cdot \frac{q - 1}{\gcd ( {i,q - 1} )} = \alpha ^{(q - 1) \cdot i'} = ( 1 )^{i'} = 1\bmod q
+\]
+\[ 
+    \Rightarrow \text{Вывод: }\frac{{t \leqslant q'}}{{t = q'}}
+\]
+\[
+    r \not |\  \operatorname{ord} ( {{\alpha ^i}} ) \Leftrightarrow r|i
+\] 
+т.к.  $i$ — случайное число $[ 1 \ldots q - 1 ]$, $i$ — кратно $r$ с вероятностью $\dfrac{q}{r} \cdot \dfrac{1}{q} = \dfrac{1}{r} \Rightarrow r|\operatorname{ord} ( \alpha ^i )$ с вероятностью $1 - \frac{1}{r} > 1   - \frac{1}{B_1}\ ( r > B_1 )$.
+
+\end{proof}
+
+\underline{Сложность} Существует не более $B_1$ простых $p_i$, таких что $p_i < B_1$ (точнее $\exists \sim \dfrac{B_1}{\lg ( B_1 )}$)
+
+Шаг 2: $\bigO( \lg^3 N )$
+
+Шаг 3: $\bigO( \lg^2 N )$
+
+$ \Rightarrow \bigO( B_1 \cdot \lg^3 N )$.
+
+\underline{Замечание}. Вероятность успеха и сложность алгоритма зависят от $|\Z_p^*| = p - 1:$ Если $\frac{p - 1}{2}$ — простое (т.е.  $p - 1 = 2 \cdot p'$) $ \Rightarrow {B_1} \approx p \Rightarrow $ сложность $\bigO( p \cdot \lg^3 N )$ — не лучше наивного брутфорса. 
+
+Решение использовать эллиптические кривые, т.к.  $\# E( \Z_p ) \in [ p + 1 - 2\sqrt p ,\;p + 1 + 2\sqrt p ]$, и в этом интервале существует много гладких чисел. 
+
+\subsection{Эллиптические кривые $\bmod\ N$}
+
+\[
+    \begin{gathered}
+    E( \Z_N ) = \left\{ {( {x,y} ) \in {\Z_N} \times {\Z_N}:\:{y^2} = {x^3} + a x + b\bmod N} \right. \hfill \\
+    \left. {\text{для }\gcd ( \N,\;4a^3 + 27 b^2 ) = 1} \right\} \cup \left\{ 0 \right\} \hfill 
+    \end{gathered} 
+\]
+
+\underline{Важно!} Точки на $E( \Z_N )$ не образуют аддитивную группу!
+
+(Пример: $E:\:y^2 = x^3 + 1\bmod 55$, $P = ( 10,11 ) \in E$, \\
+для вычисления $2P$, необходимо найти $( 2y )^{-1} =  2 \cdot 11 )^{-1} \bmod 55$, но $\gcd (22,25) = 1$\\
+$\Rightarrow $ обратного $\not\exists$).
+
+\subsubsection{Закон "+"\ на $E( \Z_N )$:}
+
+\underline{Вход} $P,Q \in E( \Z_N )$ $( {P,Q \ne \bigO} )$; 
+
+\underline{Выход} либо $P + Q = ( x_3,y_3 )$,
+
+\hspace{6ex} либо $d|N$. 
+
+\begin{enumerate}
+	\item Если $x_1 \equiv x_2\bmod N$ и $y_1 =  - y_2\bmod N$
+	
+	\hspace{5ex} Вернуть $\bigO$
+	
+	\item $d = \gcd (x_1 - x_2,N)$
+	
+	\hspace{5ex} Если $d\not  \in \left\{1,N\right\}$
+
+	\hspace{10ex} Вернуть $d$
+	
+	\item Если $x_1 \equiv x_2\bmod N$
+	
+	\hspace{5ex} $d = \gcd (y_1 + y_2,\;N)$
+	
+	\hspace{5ex} Если $d > 1$
+	
+	\hspace{10ex} Вернуть $d$
+	
+	\item 
+    \[
+    	\alpha  = \left\{ \begin{gathered}
+    	\frac{y_2 - y_1}{x_2 - x_1},\quad x_1 \ne x_2 \hfill \\
+    	\frac{3x_1^2 + a}{y_1 + y_2},\quad x_1 = x_2 \hfill \\ 
+    	\end{gathered}  \right.
+	\]
+	\[
+    	\beta  = y_1 - \alpha x_1
+	\]
+	
+	\item $x_3 = \alpha ^2 - x_1 - x_2\bmod N$
+	
+	$x_3 =  - ( \alpha x_3 + \beta  )\bmod N$
+	
+	Вернуть $( x_3, y_3 )$
+	
+\end{enumerate}
+
+\begin{theorem}
+	Пусть $P,Q \in E( \Z_N )$. 
+	
+	Тогда $P + Q$ на $E( \Z_N )$ либо идентично сложению на $E( \F_p ), E( \F_q )$,\\
+	либо дает делитель $N$. 
+\end{theorem}
+\begin{proof}
+$P = ( x_1 , y_1 ), Q( x_2, y_2 )$.
+
+\underline{Случай 1.} $P + Q = \bigO$ на $E( \F_p )$ и на $E( \F_q )$
+\[
+    \begin{gathered}
+    \Rightarrow \left\{ 
+        \begin{gathered}
+        \left| 
+            \begin{gathered}
+            x \equiv x_1 \hfill \\
+            {y_1} \equiv y_2 \hfill \\ 
+            \end{gathered} 
+        \right.\bmod p \hfill \\
+        \left| 
+            \begin{gathered}
+            x \equiv x_1 \hfill \\
+            {y_1} \equiv y_2 \hfill \\ 
+            \end{gathered} 
+        \right.\bmod q \hfill \\ 
+        \end{gathered}  
+    \right\} \Rightarrow 
+        \begin{array}{*{20}{c}}
+        {x = x_1} \\ 
+        {x = {y_1}} 
+        \end{array}
+    \bmod N \Rightarrow \hfill \\
+    \Rightarrow P + Q = \bigO{\text{ на }}E( {{\F_N}} ) \hfill \\ 
+    \end{gathered} 
+\]
+
+\underline{Случай 2.} $P + Q \ne \bigO$ на $E( \F_p )$, $E( \F_q )$. 
+
+2.1. $x_1\not  \equiv x_2\bmod p$ и $x_1\not  \equiv x_2\bmod q$ \\
+$ \Rightarrow $ формулы сложения $E( \F_p ), E( \F_q )$, $E( N )$ идентичны. 
+
+2.2. $x_1 \not\equiv x_2\bmod p$, $x_1 \equiv x_2\bmod q \Rightarrow $ 
+
+\hspace{5ex} Шаг 2:  $\gcd ( {x_1 - x_2,N} ) = q$
+
+(Аналогично $x_1 = x_2\bmod p$, $x_1 \ne x_2\bmod q$)\\
+
+2.3. $\left\{ \begin{gathered}
+    x_1 = x_2\bmod N \hfill \\
+    {y_1} \ne -y_2\bmod p \hfill \\ 
+    \end{gathered}  \right. 
+\Rightarrow $ уравнение $y^2 = x_1^3 + ax_1 + b$ (для $y$) имеет в точности 2 решения.
+
+$y_{1,2} = \pm y\bmod p$, т.ч. ${y_1} \ne  - y_2\bmod p \Leftrightarrow y_1 = y_2\bmod p$.
+
+В таком случае ${y_1} + y_2 = 2{y_1}\bmod p$, формулы сложения идентичны (то же самое при $q \leftrightarrow p$).
+\end{proof}
+
+\begin{corollary}
+	Пусть $P + Q = \bigO$ на $E( \F_p )$ и $P + Q \ne \bigO$ на $E( \F_q )$. Тогда $P + Q$ на $E(\F_N)$ даст делитель $N$. 
+\end{corollary}
+
+\begin{proof}
+    $P + Q = \bigO$ на $E( \F_p ) \Leftrightarrow \left\{ \begin{gathered}
+    x_1 \equiv x_2\bmod p \hfill \\
+    y_1 \equiv y_2\bmod p \hfill \\ 
+    \end{gathered}  \right.$
+
+    $P + Q \ne \bigO$ на $E\left( \F_q \right) \Leftrightarrow \left[ \begin{gathered}
+    x_1\not  \equiv x_2\bmod q \Rightarrow \gcd \left( x_1 - x_2,N \right) = p\left( \text{Шаг 2} \right) \hfill \\
+    y_1\not  \equiv  - y_2\bmod q \Rightarrow \gcd \left( y_1 + y_2,N \right) = q. \hfill \\ 
+    \end{gathered}  \right.$
+\end{proof}
+
+\underline{Алгоритм факторизации ЕСМ}
+
+Вход: $N = p \cdot q\quad ( p\sim q )$
+
+Выход: $p, q$ или "делители не найдены"
+
+\begin{enumerate}
+	\item Выберем границы ${B_1},{B_2}$
+	
+	\item Выберем $( a,x,y ) \leftarrow \Z_N \times \Z_N \times \Z_N$
+	
+	\hspace{3ex} $b = y^2 - x^3 - ax\bmod N$ // Таким образом, мы выбираем точку с координатами $(x,y)$ на кривой $y^2 = x^3 + ax + b$.
+	
+	\item Если $\gcd ( 4a^3 + 27 b^2,\;N) = \left\{ \begin{gathered}
+	1,\quad {\text{положим}}\quad P = (x,y) \hfill \\
+	N,\quad {\text{идем на шаг 2}} \hfill \\
+	{\text{иное}}{\text{, вернуть }}p,q \in \left\{p,q\right\} \hfill \\ 
+	\end{gathered}  \right.$
+	
+	\item Для всех простых $p_1 < B_1$: 
+	\[
+	    P = p_i^{e_i} \cdot P{\text{ на }}E( \Z_N ){\text{ т.е. }}p_i^{e_i} < {B_i}
+	\]
+	
+	Если какое-либо вычисление "+"\ на $E( \Z_N )$ позволяет делитель $N$, вернуть его.
+	
+	\item Либо повторить с Шаг 2, либо вернуть "делитель не найден". 
+\end{enumerate}
+
+\underline{Корректность}
+\begin{lemma}
+	Пусть $N = p \cdot q$, $E( \Z_N )$ — эллиптическая кривая, т. е. $| E( \F_p )|$ — $B_1$ — гладкое и $|E( \F_q )|$ — не $B_i$-гладкое. Тогда алгоритм ЕСМ возвращает $p,q$ за время $\bigO( B_1 \lg^3 N )$ с вероятностью $ \geqslant 1 - \frac{1}{B_1}$. 
+\end{lemma}
+
+\begin{proof}
+ Пусть $K = \prod\limits_{\begin{subarray}{c} 
+{p_i} - {\text{простое}} \\ 
+{p_i} \leqslant {B_1} 
+\end{subarray}}  p_i^{e_i} $
+
+Так как $E( \F_q )$ — не $B_i$-гладкое, то $\exists r > B_1$, т. ч. 
+
+Если $r|\operatorname{ord}_{E( \F_q )}( P )$, то $kP \ne \bigO$ на $E( \F_q )$.
+
+С другой стороны, $K$ — кратно $\# E( \F_p ) \Rightarrow k \cdot P = \bigO$ на $E( \F_q )$. 
+
+Т. е. когда мы вычисляем $kP$ на $E( \Z_N )$ мы получаем 
+\[
+    \begin{gathered}
+    P' + Q' = \bigO\text{ на }E( \F_p ) \hfill \\
+    P' + Q' = \bigO\text{ на }E( \F_q ) \hfill \\ 
+    \end{gathered}  
+\Rightarrow \text{по следствию 5 алгоритм вернет }( p,q ). 
+\]
+сложность и вероятность — аналогично $( p - 1 )$-методу. 
+\end{proof}
+
+\underline{Замечание} Баланс выбора $B_1$:
+
+\hspace{5em} малое $B_1 \Rightarrow $ быстрый алгоритм, малая вероятность успеха 
+
+\hspace{5em} большое $B \Rightarrow $ медленный алгоритм, большая вероятность успеха. 
+
+Оптимально: ${B_1} \approx {L_p}[ \frac{1}{2},\;\frac{1}{\sqrt 2 }] = e^{\frac{1}{\sqrt 2 }(\log p)^\frac{1}{2}(\log\log p)^\frac{1}{2}} \Rightarrow $ время работы алгоритма: ${L_p}[ \frac{1}{2},\;\frac{1}{\sqrt 2 }]$ при предположении о гладкости чисел в интервале 
+$[ {p + 1 - 2\sqrt p ,\;p + 1 + 2\sqrt p } ]$. 
+
+ЕСМ — лучший на сегодня алгоритм для нахождения делителей $< 100$ бит. 
+\end{document}

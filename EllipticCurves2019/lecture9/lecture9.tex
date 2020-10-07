@@ -1,0 +1,276 @@
+\documentclass[12pt, final]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode} 
+\usepackage{enumitem}
+
+\usepackage{graphicx}
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc} 
+\usepackage[russian]{babel}
+
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+\usepackage{pgfplots, subfigure}
+\usepackage{tikz-cd} 
+
+\usepackage{biblatex}
+
+% MACROS 
+% PROBABILITY SYMBOLS
+\newcommand*\PROB\Pr 
+\DeclareMathOperator*{\EXPECT}{\mathbb{E}}
+
+
+% GROUPS/DISTRIBUTIONS/SETS/LISTS
+\newcommand{\N}{{{\mathbb N}}}
+\newcommand{\Z}{{{\mathbb Z}}}
+\newcommand{\Q}{{{\mathbb Q}}}
+\newcommand{\R}{{{\mathbb R}}}
+\newcommand{\F}{{{\mathbb F}}}
+\newcommand{\Fqd}{{{\F_{q^{d_i}}}}}
+\newcommand{\PP}{{{\mathbb P}}}
+\newcommand*{\IZ}{\ensuremath{\mathbb{Z}}}
+\newcommand*{\IN}{\ensuremath{\N}}
+\newcommand*{\IR}{{{\mathbb R}}}
+\newcommand{\Zp}{\ints_p} % Integers modulo p
+\newcommand{\Zq}{\ints_q} % Integers modulo q
+\newcommand{\Zn}{\ints_N} % Integers modulo N
+\newcommand{\Zr}{\ensuremath{\mathbb{Z}/r\mathbb{Z}}} % Integers modulo N
+\newcommand*{\dDR}{\mathrm{d}} %de-Rham-Differential (the d in dx, dy, dz and so on)
+\newcommand{\transpose}{\mkern0.1mu^{\mathsf{t}}}
+\newcommand*{\union}{\mathbin{\cup}}
+
+% Landau 
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand*{\OLandau}{\bigO}
+\newcommand*{\WLandau}{\Omega}
+\newcommand*{\xOLandau}{\widetilde{\OLandau}}
+\newcommand*{\xWLandau}{\widetilde{\WLandau}}
+\newcommand*{\TLandau}{\Theta}
+\newcommand*{\xTLandau}{\widetilde{\TLandau}}
+\newcommand{\smallo}{o} %technically, an omicron
+\newcommand{\softO}{\widetilde{\bigO}}
+\newcommand{\wLandau}{\omega}
+\newcommand{\negl}{\mathrm{negl}} 
+
+% Misc
+\newcommand{\eps}{\varepsilon}
+\newcommand{\inprod}[1]{\left\langle #1 \right\rangle}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+
+%proper overline reduced by some mu's, re-adjust if needed
+\newcommand{\overbar}[1]{\overline{\mkern-0.0mu#1\mkern-4.0mu}}
+
+ 
+\newcommand{\handout}[5]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf  } \hfill #2 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{#3}{Оформил #4}{Лекция #1}}
+
+\newtheorem{theorem}{Теорема}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Предложение}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Определение}
+
+\newtheorem{claim}[theorem]{Утверждение}
+\newtheorem{fact}[theorem]{Факт}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\theoremstyle{definition}
+\newtheorem{examples}[theorem]{Примеры}
+
+\theoremstyle{definition}
+\newtheorem{example}[theorem]{Пример}
+\newtheorem{remark}[theorem]{Замечание}
+
+% 1-inch margins
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 7in
+
+\parindent 0in
+\parskip 1.5ex
+
+
+\begin{document}
+\lecture{№9}{Осень 2019}{Лектор: Елена Киршанова}{Филипп Максимов}
+
+\section{Изогении. Протокол обмена ключами SIKE}
+
+\subsection{Изогении}
+\definition{}
+Пусть $E_1, E_2$ — эллиптические кривые. \\
+\textbf{Изогения} $\phi : E_1 \rightarrow E_2$ — морфизм, т.ч. $\phi(\bigO_{E_1}) = \bigO_{E_2}$
+
+«Морфизм» означает, что $\phi$ задаётся рациональными многочленами, т.е.
+\[
+    \phi(x,y) = \left(\frac{f_1(x,y)}{f_2(x,y)}, \frac{g_1(x,y)}{g_2(x,y)} \right) = \left(\frac{p(x)}{q(x)}, y\cdot r(x)\right)
+\]
+Изогения — гомоморфизм групп
+
+\textbf{Степень изогении} — степень $\phi$, т.е. $\deg\phi = \max\{\deg p(x), \deg q(x)\}$.\\
+Если $E_1 = E_2, \phi$ — эндоморфизм. 
+
+\subsubsection{Примеры}
+1. «Умножение на $m$» — описывается многочленами деления
+\begin{align*}
+     [m] : E &\rightarrow E\\
+     p &\mapsto m\cdot P
+\end{align*}
+$E: y^2 = x^3 + x$ над $\Q$
+\[
+    [2]\cdot P = \left(\frac{(x^2-1)^2}{4(x^3+x)},\; \frac{y\cdot (y^6 + 5x^4 + 5x^2 - 1}{8(x^3+x)^2} \right)
+\]
+\[  
+    \ker[2] = \{\bigO, (x_P, 0)\ :\ x_P^3+x=0\}
+\]
+\[
+    \#\ker[2] = 4 = \deg [2] 
+\]
+Это совпадение не случайно (для сепарабельных изогений $\ker\phi = \deg\phi$).
+
+2. Frobenius:
+\begin{align*}
+    E_1: y^2 &= x^3+Ax+B\\
+    E_2: y^2 &= x^3+A^Px+B^P
+\end{align*}
+\[
+    \phi(x_1, y_1) = (x_1^P, y_1^P) \text{ — изогения между } E_1, E_2
+\]
+\[
+    \phi = (x^P, (x^3 + Ax + B)^{\frac{p-1}{2}})
+\]
+\[
+    \ker\phi = \bigO_E, \deg\phi = p \text{ (несепарабельая изогения) }
+\]
+
+\subsubsection{Факт 1: Теорема Тэйта об изогениях}
+$E_1, E_2$ изогенны над $\F_q \Leftrightarrow \#E_1(\F_q) = \#E(\F_q)$, т.е. рациональные многочлены определены над $\F_q$
+
+Т.е. существует эффективный метод определения, изогенны ли кривые
+
+\subsubsection{Факт 2: Vélu}
+\textit{Доказательство: Galbraith «Mathematics of Public Key Cryptography», Chapter 25}
+
+Пусть $E$ — эллиптическая кривая над $\F_q, G$ — конечная группа $E(\overbar{\F_q})$.\\
+Тогда существует элл. кривая $E'$ над $\F_q$ и сепарабельная изогения $\phi: E \rightarrow E' $, определённая над $\F_q$, степени $\#G$, т.ч. \boxed{$\ker\phi = G$}.
+
+Кроме того, если $\psi: E \rightarrow E''$ — другая сепарабельная изогения степени $\#G$ с $\ker\psi = G$, то $j(E')=j(E'')$, т.е. кривые изоморфны.\\
+Значит, образ $E$ корректно определён до изоморфизма.
+
+Обозначение: $E' = E/G$. Это не фактор группа, а кривая, отличная от (но изогенная) $E$.
+
+Vélu описал явные формулы для $E', \phi$
+
+\subsubsection{Факт 3}
+\textit{Доказательство в L. de Feo «Algorithmes Rapides pour les Tours de Corps Finis et let Isogénies»}
+
+Пусть $E: y^2 = x^3 + ax + b$ — эллиптическая кривая над полем $K$,\; $G \subset E(\overbar{K})$ — конечная подгруппа.
+
+Сеперабельная изогения $\phi: E \rightarrow E'$ с ядром $G$ может быть записана 
+\[
+    \phi(P) = [x(P) + \sum_{Q\in G \backslash \{0\}} (x(P+Q) - x(Q)),\;\; y(P) + \sum_{Q\in G \backslash \{0\}}(y(P+Q) - y(Q))],
+\]
+а изогенная кривая $E/G$ задаётся уравнением $y^2 = x^3 + a'x+b'$, где 
+\[
+    a' = a - 5\cdot \sum_{Q\in G \backslash \{0\}} (3 x(Q)^2 + a)
+\]
+\[
+    b' = b - 7\cdot \sum_{Q\in G \backslash \{0\}}(5x(Q)^3 + 3ax + 2b)
+\]
+Сложность вычисления $E/G: \bigO(|G|)$
+
+Если $G$ — подгруппая большого порядка вычисления $E/G$ является трудной задачей
+
+\subsubsection{SIDH — Supersingular Isogeny Diffie--Hellman}
+1. «Станадртный» протокол обмена ключами DH в абстрактной группе $G$: \\ 
+$G$ — группа, $\langle g\rangle = G$\\
+$\phi_A(x) = [a]\cdot x$ — групповой гомоморфизм
+
+\[
+\begin{tikzcd}
+    Alice & & Bob \\
+    & \arrow{ld}[swap]{\phi_a} g \arrow{rd}{\phi_b}  \\
+    \phi_a(g) & \arrow[yshift=-0.7ex]{r}{\phi_b(g)} \arrow[yshift=0.7ex]{l}{\phi_a(g)}  & \phi_b(g)\\
+\end{tikzcd}
+\]
+\[
+\phi_a(\phi_b(g)) = \phi_b(\phi_a(g)) = [ab]\cdot g
+\]
+
+2. В качестве группового гомоморфизма можно взять изогении $\Rightarrow$ протокол SIKE (de Feo \& Jao 2011)
+ 
+\[
+\begin{tikzcd}
+    &\arrow{ld}[swap]{\phi_{Alice}} E  \arrow{rd}{\phi_{Bob}} &\\
+    E/\langle P\rangle\arrow{rd}[swap]{\phi_{Alice}}  &  & \arrow{ld}{\phi_{Bob}}  E/\langle Q\rangle\\
+    & E/\langle P,Q\rangle &\\
+\end{tikzcd}
+\]
+$E$ — суперсингулярная кривая, т.е. $\#E(\F_q)=1\bmod  (\operatorname{char} \F_q) \Leftrightarrow E[char\F_q] = \{\bigO_E\}$
+
+$\ker(\phi_{Bob})=\langle Q\rangle$
+
+$\ker(\phi^{'}_{Alice})=\langle\phi_{Bob}(P)\rangle$
+$\ker(\phi^{'}_{Bob})=\langle\phi_{Alice}(P)\rangle$
+
+Детальнее:
+
+$E[\ell_A] = (\Z/e_a\Z) \oplus (\Z/e_a\Z)$ — группа точек $\ell_A$-кручения \\
+$E[\ell_B] = (\Z/e_b\Z) \oplus (\Z/e_b\Z)$ — группа точек $\ell_B$-кручения
+
+$E[\ell_A]=\langle R_A, S_A\rangle$ — образующие\\
+$E[\ell_B]=\langle R_B, S_B\rangle$ — образующие
+
+(!) В лабораторной №8 даны подгруппы $E[\ell_A]$, $E[\ell_B]$ с одной образующей
+
+\begin{center}
+\begin{tabular}{ c c c }
+ \boxed{Alice} & $(E,R_A,S_A,R_B,S_B)$ & \boxed{Bob} \\ 
+ 1. $a\leftarrow (0, \ell_A]$ &  & 1. $b\leftarrow (0, \ell_B]$  \\  
+ $T_a=R_A+aS_A \in E[\ell_A]$ &  & $T_b=R_B+bS_B \in E[\ell_B]$\\
+ $\phi_A=R\rightarrow E/\langle T_a\rangle$ & $(\phi_A(R_B),\phi_A(S_B), E/\langle T_a\rangle)\rightarrow$ & $\phi_B=R\rightarrow E/\langle T_b\rangle$\\
+ & $\leftarrow(\phi_B(R_A),\phi_B(S_A), E/\langle T_b\rangle)$ &\\
+ 2. $T^{'}_a=\phi_B(R_A) + a\phi_B(S_A)$ & & 2. $T^{'}_b=\phi_A(R_B) + b\phi_B(S_B)$\\
+ $=\phi_B(R_a+aS_A)=\phi_B(T_a)$ & & $=\phi_A(R_B+bS_B)=\phi_A(T_b)$\\
+ & & \\
+ 3.$T_a^{'}=\phi_B(R_A)+a\phi_B(S_A)$ & & 3.$T_b^{'}=\phi_A(R_B)+b\phi_A(S_B)$\\
+ $=\phi_B(R_A+aS_a)=\phi_B(T_a)$ & & $=\phi_A(R_B+bS_B)=\phi_A(T_b)$\\
+ & & \\
+ $\phi_a^{'}:E/\langle T_b\rangle \rightarrow (E/\langle T_b\rangle)/\langle T_a'\rangle$ & & $\phi_b^{'}:E/\langle T_a\rangle \rightarrow (E/\langle T_a\rangle)/\langle T_b'\rangle$
+\end{tabular}
+\end{center}
+\[
+    E_{A,B}:=\phi_a^{'}\circ \phi_B(E)= \phi_b^{'}\circ \phi_a(E)=E/\langle T_a, T_b\rangle
+\]
+
+Уравнения кривых, полученные \textbf{A} и \textbf{B} могут быть не идентичны, но обязательно измофорными $\Leftrightarrow$ j-инвариант одинаков $\Rightarrow j(E_{A,B})$ — общий секретный ключ.
+\end{document}
