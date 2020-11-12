@@ -5,6 +5,7 @@
 \RequirePackage{lmodern}
 \RequirePackage{textcomp}
 \RequirePackage{amsmath,amssymb}
+\usepackage{biblatex}
 
 \usepackage{xcolor}
 
@@ -83,7 +84,43 @@
 \beamertemplatenavigationsymbolsempty
 
 %set bibliography style
-\setbeamertemplate{bibliography item}{\faBook}
+%\setbeamertemplate{bibliography item}{\faBook}
+
+%\setbeamertemplate{bibliography item}{%
+%    \ifboolexpr{ test {\ifentrytype{book}} or test {\ifentrytype{mvbook}}
+%        or test {\ifentrytype{collection}} or test {\ifentrytype{mvcollection}}
+%        or test {\ifentrytype{reference}} or test {\ifentrytype{mvreference}} }
+%    {\setbeamertemplate{bibliography item}[book]}
+%    {\ifentrytype{online}
+%        {\setbeamertemplate{bibliography item}[online]}
+%        {\setbeamertemplate{bibliography item}[article]}}%
+%    \usebeamertemplate{bibliography item}}
+
+\setbeamertemplate{bibliography item}{%
+    \ifentrytype{book}
+    {\setbeamertemplate{bibliography item}{\faBook}
+    }
+    {\ifentrytype{online}
+        {\setbeamertemplate{bibliography item}{\faGlobe}
+        }
+        {\setbeamertemplate{bibliography item}[article]
+        }
+        }%
+    \usebeamertemplate{bibliography item}
+}
+
+\defbibenvironment{bibliography}
+{\list{}
+    {\settowidth{\labelwidth}{\usebeamertemplate{bibliography item}}%
+        \setlength{\leftmargin}{\labelwidth}%
+        \setlength{\labelsep}{\biblabelsep}%
+        \addtolength{\leftmargin}{\labelsep}%
+        \setlength{\itemsep}{\bibitemsep}%
+        \setlength{\parsep}{\bibparsep}}}
+{\endlist}
+{\item}
+
+
 \setbeamercolor{bibliography item}{fg=struct-color,bg=bg-color}
 \setbeamercolor{bibliography entry author}{fg=text-color,bg=bg-color}
 \setbeamercolor{bibliography entry note}{fg=text-color,bg=bg-color}
