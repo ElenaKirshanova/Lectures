@@ -1,0 +1,239 @@
+% !TeX program = xelatex
+% !BIB TS-program = biber
+
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+\usepackage{pgfplots, subfigure}
+\usepackage{extarrows}
+\usepackage{tikz-cd} 
+
+\usepackage[backend=biber,firstinits=true,hyperref=true,style=numeric-comp]{biblatex}
+
+\usepackage{../beamerthemeec2020}
+{\footnotesize\bibliography{../biblio}}
+
+\title{Эллиптические кривые}
+\subtitle{Лекция 10. Изогении. Протокол обмена ключами}
+\author{Семён Новосёлов\\
+\footnotesize{на основе курса Елены Киршановой}}
+\institute{БФУ им. И. Канта}
+\date{2020}
+
+\begin{document}
+
+\frame{\titlepage}
+
+%\begin{frame}{Мотивация}
+%\begin{itemize}
+%    \item
+%\end{itemize}
+%\end{frame}
+
+\begin{frame}{I. Изогении}
+Пусть $E_1, E_2$ -- эллиптические кривые.
+
+\begin{itemize}
+    \item В общем случае абелевых многообразий, \structure{изогения} -- гомоморфизм с конечным ядром, сюръективный над замыканием поля.
+    \item Для эллиптических кривых определение упрощается: \structure{изогения} -- ненулевой гомоморфизм.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+В явном виде изогению можно задать следующими рац. функциями (для кривых в краткой форме):
+\[
+\phi(x, y) = \left( \frac{f_1(x,y)}{f_2(x,y)}, \frac{g_1(x,y)}{g_2(x,y)} \right)
+=
+\left(
+\frac{p(x)}{q(x)}, y r(x)
+\right)
+\]
+
+Такая форма называется стандартной.
+
+\structure{Степень изогении:} $\deg\phi = \max\{\deg{p(x)}, \deg{q(x)}\}$.
+
+Для сепарабельных изогений $\deg\phi = \#ker\phi$.
+
+Если $E_1 = E_2$, то $\phi$ -- эндоморфизм.
+\end{frame}
+
+\begin{frame}{Пример 1: Умножение на $m$}
+    \[[m]: E \rightarrow E,\]
+    \[P \mapsto m \cdot P.\]
+Задаётся многочленами деления.
+\[E/\mathbb{Q}: y^2 = x^3 + x\]
+\[
+[2]P = \left( \frac{(x^2-1)^2}{4 (x^3 + x)}, y \frac{x^6 + 5 x^4 - 5 x - 1}{8 (x^3 + x)^2} \right)
+\]
+\[
+\ker[2] = \{ \mathcal{O}; (x_P,0): x_P^3 + x = 0\}
+\]
+\[\#ker[2] = 4 = \deg[2],\]
+Для сепарабельных изогений степень совпадает с $\#ker$.
+\end{frame}
+
+\begin{frame}{Пример 2: Эндоморфизм Фробениуса}
+\[\phi: E \rightarrow E,\]
+\[(x,y) \mapsto (x^q, y^q),\]
+\[
+\phi = (x^q, y (x^3 + a x + b)^{\frac{q-1}{2}})
+\]
+\[
+\ker{\phi} = \mathcal{O}_E, \deg{\phi} = q
+\]
+\begin{center}
+(изогения не сепарабельная)
+\end{center}
+\end{frame}
+
+\begin{frame}{Теорема Тейта о изогениях эллиптических кривых}
+    \begin{center}
+        Эллиптические кривые $E_1, E_2$ изогенны над $\mathbb{F}_q$ \structure{$\iff$} $\#E_1(\mathbb{F}_q) = \#E_2(\mathbb{F}_q)$
+    \end{center}
+    \begin{itemize}
+        \item Следствие: Проверка кривых на изогенность имеет сложность $O(\log^4{q})$ при использовании SEA.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Формулы V\'{e}lu}
+Пусть $E/\mathbb{F}_q$ -- эллиптическая кривая, $G$ -- подгруппа $E(\overline{\mathbb{F}}_q)$. Тогда:
+\begin{enumerate}
+    \item $\exists E'/\mathbb{F}_q$ и сепарабельная изогения $\phi: E \rightarrow E'$ определённая над $\mathbb{F}_q$ степени $\#G$ т.ч. $\ker\phi = G$.
+    \item если $\psi: E \rightarrow E''$ -- другая сепарабельная изогения степени $\#G$ т.ч. $G = \ker\psi$, то $j(E') = j(E'')$.
+\end{enumerate}
+Обозначение: $E/G := E'$ -- фактор-кривая. Не путать с фактор-группой.
+\end{frame}
+
+\begin{frame}
+V\'{e}lu описал явные формулы для $E'$, $\phi$. Для $E: y^2 = x^3 + a x + b$ имеем
+\[
+\phi(P)
+=
+\left(
+  x_P + \sum_{Q \in G \setminus \{\mathcal{O}\}} \left( x_{P+Q} - x_Q \right),
+  y_P + \sum_{Q \in G \setminus \{ \mathcal{O} \}} \left( y_{P+Q} - y_Q \right)
+\right).
+\]
+А изогенная кривая $E/G$ задаётся уравнением $y^2 = x^3 + a' x + b'$, где
+\[
+a' = a - 5 \sum_{Q \in G \setminus \{ \mathcal{O} \}} \left( 3 x_Q^2 + a \right),
+\]
+\[
+b' = b - 7 \sum_{Q \in G \setminus \{\mathcal{O}\}} \left(
+5 x_Q^3 + 3 a x + 2 b
+\right).
+\]
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+  \item Сложность вычисления $E/G$: $O(|G|)$. 
+  \item Если $G$ -- подгруппа большого порядка вычисление $E/G$ является трудной задачей.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{1. ``Стандартный'' протокол $DH$ в абстрактной группе}
+$G$ -- группа, $\left<g\right> = G$, $\phi_A(x) = [A] \cdot x$ -- гомоморфизм групп.
+\[
+\begin{tikzcd}
+  \text{\structure{Alice}} & & \text{\structure{Bob}} \\
+  & \arrow{ld}[swap]{\phi_A} g \arrow{rd}{\phi_B}  \\
+  \phi_A(g) & \arrow[yshift=-0.7ex]{r}{\phi_B(g)} \arrow[yshift=0.7ex]{l}{\phi_B(g)}  & \phi_B(g)\\
+\end{tikzcd}
+\]
+\[
+\phi_A(\phi_B(g)) = \phi_B(\phi_A(g)) = [A B]\cdot g
+\]
+\begin{itemize}
+\item изогении суперсингулярных кривых в качестве гомоморфизмов \structure{$\Rightarrow$} протокол SIDH (de Feo \& Jao 2011)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{2. SIDH (Supersingular Isogeny Diffie-Hellman)}
+    \[
+    \begin{tikzcd}
+        &\arrow{ld}[swap]{\phi_{A}} E  \arrow{rd}{\phi_{B}} & \\
+        E/\left<P\right>\arrow{rd}[swap]{\phi'_{A}}  &  & \arrow{ld}{\phi'_{B}}  E/\left< Q \right> \\
+        & E/\left< P, Q \right> &\\
+    \end{tikzcd}
+    \]
+    Краткое описание:
+    \begin{enumerate}
+        \item Публичные параметры: $E$ -- суперсингулярная кривая.
+        \item Alice выбирает секретное ядро $\left<P\right>$, строит изогению и отсылает Bob кривую
+        $E/\left<P\right>$
+        \item Bob выбирает своё секретное ядро $\left<Q\right>$, строит изогению и отсылает Alice кривую
+        $E/\left<Q\right>$
+        \item Общий секретный ключ: $E/\left<P,Q\right> = (E/\left<P\right>)/\phi_A(Q) = (E/\left<Q\right>)/\phi_B(P)$
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Детальное описание}
+\structure{Публичные параметры:}
+    \begin{enumerate}
+        \item простое
+        $p = \ell_A^{e_A} \ell_B^{e_B} \cdot f \pm 1$, где $\ell_A, \ell_B$ -- малые простые
+        \item $E$ -- суперсингулярная кривая над $\mathbb{F}_{p^2}$ т.ч. $\#E(\mathbb{F}_{p^2}) = (\ell_A^{e_A} \ell_{B}^{e_B} f)^2$
+        \item $\left<P_A, Q_A\right>$ -- базис $E[\ell_A^{e_A}]$, $\left<P_B, Q_B\right>$ -- базис $E[\ell_B^{e_B}]$
+    \end{enumerate}
+\structure{Секретные параметры:}
+    \begin{enumerate}
+        \item \structure{Alice:} $m_A, n_A \in \mathbb{Z}/\ell_A^{e_A} \mathbb{Z}$, изогения $\phi_A$ с ядром $\left< [m_A]P_A + [n_A]Q_A \right>$
+        \item \structure{Bob:} $m_B, n_B \in \mathbb{Z}/\ell_B^{e_B} \mathbb{Z}$, изогения $\phi_B$ с ядром $\left< [m_B]P_B + [n_B]Q_B \right>$
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+\structure{Выработка общего ключа:}
+    \begin{enumerate}
+        \item
+        Alice \structure{$\implies$} Bob: $(E_A, \phi_A(P_B), \phi_A(Q_B))$
+        \item
+        Bob~~ \structure{$\implies$} Alice: $(E_B, \phi_B(P_A), \phi_B(Q_A))$
+        \item Alice: $E_{AB} := E_B/\left< [m_A]\phi_B(P_A) + [n_A]\phi_B(Q_A) \right>$
+        \item Bob: $E_{BA} := E_A/\left< [m_B]\phi_A(P_B) + [n_B]\phi_A(Q_B) \right>$
+        \item Общий секретный ключ: $j(E_{AB}) = j(E_{BA})$
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Замечания}
+    \begin{itemize}
+        \item сложность атаки: $O(\sqrt[4]{p})$ на классическом компьютере и $O(\sqrt[6]{p})$ для квантового компьютера
+        \item гладкое число точек необходимо для быстрого вычисления изогений в точке.
+        \item сложность атаки на квантовом компьютере равна 
+        \item в качестве кривой $E$ можно выбрать обычную кривую с гладким числом точек, однако сложность атаки на квантовом компьютере становится субэкспоненциальной, т.к. кольцо эндоморфизмов является коммутативным в этом случае.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Литература}
+    %\nocite{Menezes1993}
+    %\nocite{Lenstra1987}
+    %\nocite{Blake1999}
+    \nocite{CohenFrey+2005}
+    %\nocite{Washington2008}
+    %\nocite{GoldwasserKilian1999}
+    %\nocite{CohenLenstra1984}
+    \nocite{JaoDeFeo2011}
+    \nocite{Galbraith2012}
+    \nocite{Costello2019}
+    \nocite{SIKE}
+    %\nocite{SafeCurves}
+    \printbibliography
+    
+    \begin{center}
+        \begin{tcolorbox}[enhanced,hbox,colback=block-green-color-bg,colframe=subsection-color!120,title=Контакты,center title]
+            \begin{varwidth}{\textwidth}
+                \begin{center}
+                    \href{mailto:snovoselov@kantiana.ru}{snovoselov@kantiana.ru}
+                \end{center}
+            \end{varwidth}
+        \end{tcolorbox}	
+    \end{center}\end{frame}
+
+\end{document}
