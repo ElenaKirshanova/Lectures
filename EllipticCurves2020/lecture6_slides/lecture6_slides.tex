@@ -1,0 +1,158 @@
+% !TeX program = xelatex
+% !BIB TS-program = biber
+
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+\usepackage{pgfplots, subfigure}
+\usepackage{extarrows}
+
+\usepackage[backend=biber,firstinits=true,hyperref=true,style=numeric-comp]{biblatex}
+
+\usepackage{../beamerthemeec2020}
+{\footnotesize\bibliography{../biblio}}
+
+\title{Эллиптические кривые}
+\subtitle{Лекция 6. Алгоритмы подсчета $\mathbb{F}_q$-рациональных точек кривой. Часть II}
+\author{Семён Новосёлов\\
+\footnotesize{на основе курса Елены Киршановой}}
+\institute{БФУ им. И. Канта}
+\date{2020}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Алгоритм Схоофа\footnote{\textit(гол.) Schoof = Схооф, в рус. лит. больше известен как Шуф.}}
+\[
+E/\mathbb{F}_q: y^2 = x^3 + a x + b,
+\]
+\begin{itemize}
+    \item $|E(\mathbb{F}_q)| = q + 1 - t$
+\end{itemize}
+
+\structure{Идея:} найти $t~(\bmod~\ell_i)$ для малых простых чисел $\ell_1, ..., \ell_n$ и восстановить $t$ по КТО.
+
+\begin{itemize}
+    \item $|t| \leq 2 \sqrt{q}$ \structure{$\implies$} $\prod_{i=1}^{n} \ell_i > 4 \sqrt{q}$ \structure{$\implies$} $\ell_r = O(\log{q})$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Число точек по модулю $\ell = 2$}
+    \begin{itemize}
+        \item $\#E(\mathbb{F}_q)$ -- чётно \structure{$\iff$} $E(\mathbb{F}_q)$ содержит точку ($\neq \mathcal{O}$) порядка $2$
+        \item точка $P$ порядка $2$ имеет $y_P=0$ \structure{$\iff$} $x_P^3 + a x_P + b = 0$ в $\mathbb{F}_q$
+        \item Проверка наличия точек порядка $2$: $\gcd(x^q - x, x^3 + a x + b) \neq 1$ в $\mathbb{F}_q[x]$
+        \begin{itemize}
+            \item[$\implies$] $O(\log^3{q})$, быстрое возведение в степень в $\mathbb{F}_q[x]/(x^3 + a x + b)$
+         \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Число точек по модулю $\ell > 2$}
+\[
+E[\ell] = \{P \in E(\overline{\mathbb{F}}_q)~|~[\ell] P = \mathcal{O}\} \simeq \mathbb{Z}/\ell\mathbb{Z} \times \mathbb{Z}/\ell \mathbb{Z}
+\]
+\begin{itemize}
+    \item $\varphi_q: (x, y) \mapsto (x^q, y^q)$ -- эндоморфизм Фробениуса,
+    \[
+    \varphi_q^2 - [t] \varphi_q + [q] = 0
+    \]
+    или
+    \[
+    (x^{q^2}, y^{q^2}) - [t] (x^{q}, y^{q}) + [q](x,y) = P_\infty.
+    \]
+    \item для ограничения $\varphi_q$ на $E[\ell]$ имеем:
+    \[
+    (x^{q^2}, y^{q^2}) - [t'] (x^{q}, y^{q}) + [q'](x,y) = P_\infty,
+    \]
+    где $t', q' \in \{0, ..., \ell-1\}$ и $t = t' \pmod{\ell}$, $q = q' \pmod{\ell}$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{equation}
+    \label{eq:char_poly_mod_l}
+(x^{q^2}, y^{q^2}) - [t'] (x^{q}, y^{q}) + [q'](x,y) = P_\infty
+\end{equation}
+\begin{itemize}
+    \item $\psi_\ell(x) \in \mathbb{F}_q[x]$, $\ell$-многочлен деления (может быть эффективно вычислен по рек. формуле)
+    \item $P = (x_P, y_P) \in E[\ell]$ \structure{$\iff$} $\psi_\ell(x_P) = 0$
+    \item из \eqref{eq:char_poly_mod_l} получаем
+    \[(x^{q^2}, y^{q^2}) + [q'](x,y) = [t'] (x^{q}, y^{q})\]
+    по модулю $\psi_\ell(x)$ и $E(x,y) = y^2 - x^3 - a x - b$
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+    \begin{equation}
+    \label{eq:chi_mod_l_2}
+    (x^{q^2}, y^{q^2}) + [q'](x,y) = [t'] (x^{q}, y^{q}) 
+    ~\bmod (\psi_\ell(x), E(x,y))
+    \end{equation}
+    \begin{itemize}
+        \item $x^q, y^q, x^{q^2}, y^{q^2} \pmod{\psi_\ell} $ \structure{$\implies$} быстрое возведение в степень 
+        \item $[q'](x,y)$ и $[t'](x^q, y^q)$ $\pmod{\psi_\ell(x)}$ \structure{$\implies$} многочлены $q'$ и $t'$-деления
+    \end{itemize}
+    Значение $t' = t\bmod{\ell}$ и соответственно $\#E(\mathbb{F}_q)~\bmod{\ell}$ находим перебором возможных вариантов для $(t',q')$ пока не выполнится \eqref{eq:chi_mod_l_2}.
+\end{frame}
+
+\begin{frame}{Алгоритм Схоофа}
+\structure{Вход}: $E/\mathbb{F}_q$\\
+\structure{Выход:} $\#E(\mathbb{F}_q)$\\
+\begin{enumerate}
+    \item $M = 2, \ell = 3, S = \{(t \bmod{2}, 2)\}$
+    \item \structure{while} $M < 4 \sqrt{q}$ \structure{do:}
+    \item \quad \structure{for} $t' = 0, ..., \ell-1$ \structure{do:}
+    \item \quad \quad \structure{if} $\varphi_q^2(P) + [q'] P = [t']\varphi_q(P)$ \structure{do:} \structure{break}
+    \item \quad $S = S \cup \{ (t',\ell) \}$
+    \item \quad $M = M \cdot \ell$
+    \item \quad $\ell = next\_prime(\ell)$
+    \item найти $t$ по КТО используя $S$
+    \item \structure{return} $q + 1 - t$
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Анализ сложности}
+\begin{itemize}
+    \item $\ell = O(\log{q})$
+    \item $(x^q, y^q), (x^{q^2}, y^{q^2}) \pmod{\psi_\ell} $ \structure{$\implies$} быстрое возведение в степень, $\deg{\psi_\ell} = \frac{\ell^2 - 1}{2} = O(\ell^2)$ \structure{$\implies$} $O((\log{q}) (\ell^2 \log{q})^2)$
+    \item $[t'](x^q, y^q)$ $\pmod{\psi_\ell(x)}$ \structure{$\implies$} макс. $\ell$ раз, $O(\ell (\ell^2 \log{q})^2)$
+\end{itemize}
+\structure{Итого:} $O(\log{q} \cdot (\log{q} (\ell^2 \log{q})^2 + \ell (\ell^2 \log{q})^2)) = O(\log^8{q})$
+\end{frame}
+
+\begin{frame}{Алгоритм Схоофа: дальнейшие улучшения}
+    \structure{Schoof-Elkies-Atkin (SEA)}:
+    \begin{itemize}
+        \item замена многочленов деления на многочлены $g_\ell$, задающие изогении (степени: $O(\ell^2)$ \structure{$\implies$} $O(\ell)$)
+        \item факторизация модулярных многочленов для нахождения ядер изогений (нулей $g_\ell$)
+        \item сложность: $O(\log^4{q})$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Литература}
+    %\nocite{Menezes1993}
+    \nocite{Blake1999}
+    \nocite{Schoof1985}
+    \nocite{CohenFrey+2005}
+    \nocite{Washington2008}
+    \printbibliography
+
+    \begin{center}
+        \begin{tcolorbox}[enhanced,hbox,colback=block-green-color-bg,colframe=subsection-color!120,title=Контакты,center title]
+            \begin{varwidth}{\textwidth}
+                \begin{center}
+                    \href{mailto:snovoselov@kantiana.ru}{snovoselov@kantiana.ru}
+                \end{center}
+            \end{varwidth}
+        \end{tcolorbox}	
+    \end{center}
+\end{frame}
+
+\end{document}
