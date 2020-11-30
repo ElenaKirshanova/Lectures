@@ -5,15 +5,15 @@ p = 3
 n = 2
 f_cycl = R.cyclotomic_polynomial(p**n - 1)
 
-k = 4
+k = 2
 d = (p**n - 1) - k + 1
 
 F = GF(p)
 Fx = PolynomialRing(F, 'x')
 decomp = (Fx(f_cycl)).factor()
 #print(decomp)
-#defining_poly = decomp[0][0]
-defining_poly = x^2 + x + 2
+defining_poly = decomp[0][0]
+#defining_poly = x^2 + 2*x + 1
 print('defining_poly:', defining_poly)
 ff.<a> = FiniteField(p**n, modulus = defining_poly)
 S = [0]*(p**n - 1)
@@ -107,25 +107,68 @@ def WB_decode(k, S, y, ff):
 
 	npoly = sum([ sol[i]*(x**(i-deg_E))  for i in range(deg_E,deg_E+deg_N+1)])
 
-	f = npoly / epoly
-
+	#f = npoly / epoly
+	f, r = npoly.quo_rem(epoly)
 	print('epoly:', epoly)
 	print('npoly:', npoly)
 	print('f:', f)
 	flist = list(R(f))
 	print('y:', y)
 	#c = vector([eval_poly(flist,S[i]) for i in range(len(S))])
-	c = vector([2*a + 1, 2*a, a + 2, 0, 2*a, 2*a+1, 1, a + 2])
-	print('c:', c)
+	#c = vector([2*a + 1, 2*a, a + 2, 0, 2*a, 2*a+1, 1, a + 2])
+	#print('c:', c)
 
-	Hmat = gen_h(k, S, ff)
-	print('H:')
-	print(Hmat)
-	print('syndrom:', Hmat*vector(y))
-	print('check:', Hmat*c)
+	#Hmat = gen_h(k, S, ff)
+	#print('H:')
+	#print(Hmat)
+	#print('syndrom:', Hmat*vector(y))
+	#print('check:', Hmat*c)
 
 
 	return f
+
+
+def PetersonDecode(k, S, y, ff):
+	assert len(S)==len(y)
+	n = len(S)
+
+	deg_E = floor((n - k + 1)/2)
+	deg_G = deg_E-1
+	print('deg_E:', deg_E, 'deg_G:', deg_G)
+
+	Hmat = gen_h(k, S, ff)
+	syndrom = Hmat*vector(y)
+	print('syndrom:', syndrom)
+
+	AMat = matrix(ff, deg_E+deg_G, n - k - 1)
+	for i in range(deg_E):
+		AMat[i]  = [0]*i + list(syndrom[:n-k-i-1])
+	for i in range(deg_G):
+		AMat[i+deg_E,i] = - 1 
+
+	print('AMat:')
+	print(AMat)
+
+	target_vec = vector(ff, -syndrom[1:])
+	print('target_vec:', target_vec)
+	sol = AMat.solve_left(target_vec)
+
+	evec = [1]+list(sol[:deg_E])
+	gammavec = sol[deg_E:]
+
+	print('evec:', evec, 'gammavec:', gammavec)
+
+	R.<x> = PolynomialRing(ff, 'x')
+	epoly = sum([evec[i]*x^i for i in range(len(evec))])
+	print('epoly:', epoly, epoly.factor())
+
+	#find roots
+	for root in S:
+		if(eval_poly(evec, root) == 0):
+			print('root:', root)
+
+	return 1 
+
 
 
 """
@@ -137,12 +180,21 @@ e = gen_error(1, d, S)
 print('e = ', e)
 y = c + e
 """
-y = (2*a + 1, 0, a + 2, 0, 2*a, 0, 1, a + 2)
+
+#m = [2*a+1, 2]
+#c = encode(m, S)
+#print('c = ', c)
+ 
+y = (a, a + 1, 2, 0, a + 1, 0, 2*a + 2, 1)
 print('y = ', y)
 
-dec = WB_decode(k, S, y, ff)
-print('dec:', dec)
-	
+decP = PetersonDecode(k, S, y, ff)
+print('decP:', decP)
+
+decWB = WB_decode(k, S, y, ff)
+print('dec:', decWB, decWB.coefficients())
+print(encode(decWB.coefficients(), S))
+
 
 
 
