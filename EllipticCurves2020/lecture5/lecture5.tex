@@ -122,7 +122,7 @@
 
 \begin{document}
     % $(\frac{\cdot}{\F_q^{d_i}})$
-\lecture{№5 — 11.10.19}{Осень 2019}{Лектор: Елена Киршанова}{Филипп Максимов}
+\lecture{№5 — 11.10.19}{Осень 2019}{Лектор: Семён Новоселов}{}
 
 \section{Вычисление символа Лежандра $\left(\frac{\cdot}{\Fqd}\right)$}
 В алгоритме вычисление $d = [K_{E, n} : K = \F_q]$ (Лекция №4) вызывается алгоритм вычисления символа $\left( \dfrac{x_i^3 + ax_i + b}{\Fqd} \right)$. 
@@ -184,13 +184,13 @@ $$
 
 \subsection{Эндоморфизм Фробениуса}
 
-${\varphi_q}: \overbar {{\F_q}}  \to \overbar {\F_q}, x \mapsto x^q $ -- эндоморфизм (отображение) Фробениуса.
+${\varphi_q}: \overbar {{\F_q}}  \to \overbar {\F_q}, x \mapsto x^q $ — эндоморфизм (отображение) Фробениуса.
 
-Действие ${\varphi _q}$ на кривую $E$ над ${\F_q}$:\; ${\varphi _q}(x, y) = (x^q, y^q)$. ${\varphi _q}( 0 ) = \bigO$.
+Действие ${\varphi _q}$ на кривую $E$ над ${\F_q}$:\; ${\varphi _q}(x, y) = (x^q, y^q)$. ${\varphi _q}( 0 ) = \bigO$. 
 
 Свойства ${\varphi _q}:$
 
-$E$ -- кривая над ${\F_q}, x, y \in E(\overbar{\F_q})$
+$E$ — кривая над ${\F_q}, x, y \in E(\overbar{\F_q})$
 
 \textbf{1.} ${\varphi _q}( {x,y} ) \in E( \overbar{\F_q} )$. 
 
@@ -233,7 +233,7 @@ $( {x \in {\F_q} \Leftrightarrow {\varphi _q}( x ) = x} )$
 	$$
 	    \varphi _q^2 - a{\varphi _q} + q = 0
 	$$
-	— эндоморфизм на $E$ и $a$ определено уникально. То есть $\forall ( {x,y} ) \in E( \overline{\F}_q ):$
+	— эндоморфизм на $E$ и $a$ определено уникально. То есть $\forall ( {x,y} ) \in F( \bar{\F}_q ):$
 	\begin{equation}\label{F_01}
 	( {{x^{{q^2}}},\;{y^{{q^2}}}} ) - a ( x^q, y^q ) + q( {x,y} ) = \bigO,
 	\end{equation}
@@ -275,7 +275,7 @@ $$
 \begin{theorem}
 	Пусть $\# E( {{\F_q}} ) = q + 1 - a$. Запишем ${X^2} - aX + q = ( {X - \alpha} )( {X - \beta } )$. Тогда 
 	$$
-	\# E(\F_q ) = {q^n} + 1 - ( \alpha^n+ \beta ^n )\quad \forall n \geqslant 1.
+	\# E(\F_{q^n}) = {q^n} + 1 - ( \alpha^n+ \beta ^n )\quad \forall n \geqslant 1.
 	$$
 \end{theorem}
 
@@ -311,13 +311,13 @@ $$
 По теореме~\ref{lemm_01} число: $(\alpha^n + \beta^n )$. А т.к. $\varphi _{{q^n}}^2 - {a\varphi _{q^n}} + {q^n} = 0$  определно единственным образом $ \Rightarrow a = {\alpha ^n} + {\beta ^n}$ и ${\alpha ^n} + {\beta ^n} = {q^n} + 1 - \# E( {{\F_{q^n}}} )$. 
 \end{proof}
 
-\textbf{B.} Метод вычисления $\# E( \F_q )$ через обобщенный символ Лехандра $\left( {\frac{ \cdot }{{{\F_q}}}} \right)$
+\textbf{B.} Метод вычисления $\# E( \F_q )$ через обобщенный символ Лежандра $\left( {\frac{ \cdot }{{{\F_q}}}} \right)$
 
 \begin{lemma}
 	\label{lemm_03}
 	$E:{y^2} = {x^3} + ax + b$ над ${\F_q}$. Тогда
 	$$
-	\# E( \F_q ) = q + 1 + \sum\limits_{X \in {\F_q}} {\left( {\frac{{{x^3} + ax + b}}{{{\F_q}}}} \right)} 
+	\# E( \F_q ) = q + 1 + \sum\limits_{x \in {\F_q}} {\left( {\frac{{{x^3} + ax + b}}{{{\F_q}}}} \right)} 
 	$$
 \end{lemma}
 

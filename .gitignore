@@ -12,6 +12,11 @@
 *.cb2
 .*.lb
 
+lecture*_slides.pdf
+*.sage.py
+TP*.pdf
+lecture*.pdf
+
 ## Intermediate documents:
 *.dvi
 *.xdv
