@@ -11,7 +11,7 @@
 \usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
 \usepackage{pgfplots, subfigure}
 \usepackage{extarrows}
-\usepackage{tikz-cd} 
+\usepackage{tikz-cd}
 
 \usepackage[backend=biber,firstinits=true,hyperref=true,style=numeric-comp]{biblatex}
 
@@ -126,14 +126,14 @@ a' = a - 5 \sum_{Q \in G \setminus \{ \mathcal{O} \}} \left( 3 x_Q^2 + a \right)
 \]
 \[
 b' = b - 7 \sum_{Q \in G \setminus \{\mathcal{O}\}} \left(
-5 x_Q^3 + 3 a x + 2 b
+5 x_Q^3 + 3 a x + b
 \right).
 \]
 \end{frame}
 
 \begin{frame}
 \begin{itemize}
-  \item Сложность вычисления $E/G$: $O(|G|)$. 
+  \item Сложность вычисления $E/G$: $O(|G|)$.
   \item Если $G$ -- подгруппа большого порядка вычисление $E/G$ является трудной задачей.
 \end{itemize}
 \end{frame}
@@ -206,7 +206,7 @@ $G$ -- группа, $\left<g\right> = G$, $\phi_A(x) = [A] \cdot x$ -- гомо
     \begin{itemize}
         \item сложность атаки: $O(\sqrt[4]{p})$ на классическом компьютере и $O(\sqrt[6]{p})$ для квантового компьютера
         \item гладкое число точек необходимо для быстрого вычисления изогений в точке.
-        \item сложность атаки на квантовом компьютере равна 
+        \item сложность атаки на квантовом компьютере равна
         \item в качестве кривой $E$ можно выбрать обычную кривую с гладким числом точек, однако сложность атаки на квантовом компьютере становится субэкспоненциальной, т.к. кольцо эндоморфизмов является коммутативным в этом случае.
     \end{itemize}
 \end{frame}
@@ -221,11 +221,12 @@ $G$ -- группа, $\left<g\right> = G$, $\phi_A(x) = [A] \cdot x$ -- гомо
     %\nocite{CohenLenstra1984}
     \nocite{JaoDeFeo2011}
     \nocite{Galbraith2012}
+    \nocite{DeFeo2018}
     \nocite{Costello2019}
     \nocite{SIKE}
     %\nocite{SafeCurves}
     \printbibliography
-    
+
     \begin{center}
         \begin{tcolorbox}[enhanced,hbox,colback=block-green-color-bg,colframe=subsection-color!120,title=Контакты,center title]
             \begin{varwidth}{\textwidth}
@@ -233,7 +234,7 @@ $G$ -- группа, $\left<g\right> = G$, $\phi_A(x) = [A] \cdot x$ -- гомо
                     \href{mailto:snovoselov@kantiana.ru}{snovoselov@kantiana.ru}
                 \end{center}
             \end{varwidth}
-        \end{tcolorbox}	
+        \end{tcolorbox}
     \end{center}\end{frame}
 
 \end{document}
