@@ -5,15 +5,15 @@ p = 3
 n = 2
 f_cycl = R.cyclotomic_polynomial(p**n - 1)
 
-k = 2
+k = 6
 d = (p**n - 1) - k + 1
 
 F = GF(p)
 Fx = PolynomialRing(F, 'x')
 decomp = (Fx(f_cycl)).factor()
 #print(decomp)
-defining_poly = decomp[0][0]
-#defining_poly = x^2 + 2*x + 1
+#defining_poly = decomp[0][0]
+defining_poly = x^2 + x + 2
 print('defining_poly:', defining_poly)
 ff.<a> = FiniteField(p**n, modulus = defining_poly)
 S = [0]*(p**n - 1)
@@ -171,22 +171,23 @@ def PetersonDecode(k, S, y, ff):
 
 
 
-"""
-m = gen_message(k, S)
-print('m = ', m)
-c = encode(m, S)
-print('c = ', c)
-e = gen_error(1, d, S)
-print('e = ', e)
-y = c + e
-"""
+
+#m = gen_message(k, S)
+#print('m = ', m)
+#m = [a+1, 0, a]
+#c = encode(m, S)
+#print('c = ', c)
+#e = gen_error(2, d, S)
+#print('e = ', e)
+#y = c + e
+
 
 #m = [2*a+1, 2]
 #c = encode(m, S)
 #print('c = ', c)
  
-y = (a, a + 1, 2, 0, a + 1, 0, 2*a + 2, 1)
-print('y = ', y)
+y = (a, 2*a + 2, 2*a + 2, 0, 2, a, 2, 2*a + 1)
+#print('y = ', y)
 
 decP = PetersonDecode(k, S, y, ff)
 print('decP:', decP)

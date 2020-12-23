@@ -296,12 +296,24 @@ syn_table = construct_syndrom_table(H,err_max_weight)
 
 
 # scrumbled code-word
+"""
 y = copy.deepcopy(c_in)
 for i in range(n_out):
 	y[i]+= e[i*n_in:(i+1)*n_in]
 	#print(i, e[i*n_in:(i+1)*n_in])
 	#assert (sum(ZZ(e[i*n_in:(i+1)*n_in][j]) for j in range(n_in) ))<=3
 print('y:', y, '\n')
+print(type(y))
+print(type(y[0]))
+"""
+
+y = [vector(GF(2),(0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0)), 
+	vector(GF(2),(0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0)), 
+			vector(GF(2),(0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0)), 
+			vector(GF(2),(1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0)), 
+			vector(GF(2),(1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0)), 
+			vector(GF(2),(0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0)), 
+			vector(GF(2),(0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0))]
 
 
 w_prime = [0]*n_out
