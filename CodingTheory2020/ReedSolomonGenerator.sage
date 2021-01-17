@@ -1,8 +1,8 @@
 
 
 R = ZZ['x']
-p = 3
-n = 2
+p = 2
+n = 3
 f_cycl = R.cyclotomic_polynomial(p**n - 1)
 
 k = 6
@@ -12,8 +12,8 @@ F = GF(p)
 Fx = PolynomialRing(F, 'x')
 decomp = (Fx(f_cycl)).factor()
 #print(decomp)
-#defining_poly = decomp[0][0]
-defining_poly = x^2 + x + 2
+defining_poly = decomp[0][0]
+#defining_poly = x^2 + x + 2
 print('defining_poly:', defining_poly)
 ff.<a> = FiniteField(p**n, modulus = defining_poly)
 S = [0]*(p**n - 1)
