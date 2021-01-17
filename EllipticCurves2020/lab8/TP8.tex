@@ -1,0 +1,123 @@
+\documentclass[11pt]{exam}
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+
+
+\usepackage[margin=0.73in]{geometry}
+%\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{amscd,amsmath,amsthm}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+
+\usepackage{algorithmicx, enumitem, algpseudocode, algorithm, caption}
+\usepackage{tikz}
+\usetikzlibrary{automata}
+
+\usepackage{textcomp}
+
+
+%%%%%%%%%%%%%%%%%%%%%
+% Handling comments and versions %%%
+%%%%%%%%%%%%%%%%%%%%%
+
+%\renewcommand{\comment}[1]{\texttt{[#1]}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{proposition}[theorem]{Proposition}
+
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+
+\newcommand{\nc}{\newcommand}
+\nc{\eps}{\varepsilon}
+\nc{\RR}{{{\mathbb R}}}
+\nc{\CC}{{{\mathbb C}}}
+\nc{\FF}{{{\mathbb F}}}
+\nc{\NN}{{{\mathbb N}}}
+\nc{\ZZ}{{{\mathbb Z}}}
+\nc{\PP}{{{\mathbb P}}}
+\nc{\QQ}{{{\mathbb Q}}}
+\nc{\UU}{{{\mathbb U}}}
+\nc{\OO}{{{\mathbb O}}}
+\nc{\EE}{{{\mathbb E}}}
+
+\newcommand{\val}{\operatorname{val}}
+\newcommand{\wt}{\ensuremath{\mathit{wt}}}
+\newcommand{\Id}{\ensuremath{I}}
+\newcommand{\transpose}{\mkern0.7mu^{\mathsf{ t}}}
+\newcommand*{\ScProd}[2]{\ensuremath{\langle#1\mathbin{,}#2\rangle}} %Scalar Product
+\renewcommand{\char}{\ensuremath{\mathsf{char}}}
+
+\DeclareMathOperator{\Vol}{Vol}
+
+%\pretolerance=1000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT STARTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}	
+	{\noindent
+		\textsc{БФУ им. И. Канта -- Компьютерный практикум по криптографии на эллиптических кривых }\\[5pt]
+		Преподаватель {С. Новоселов}   \hfill{2020\\}
+	\hrule
+	\begin{center}
+		{\LARGE\textbf{
+				Лабораторная работа № 8 \\[5pt]
+		}} 
+			Опубликована \textbf{03.12.2020} \\[5pt] 
+			Дэдлайн \textbf{21.12.2020}
+		
+	\end{center}
+	\hrule \vspace{5mm}
+	
+	\thispagestyle{empty}
+	
+	Разработать программу в системе компьютерной алгебры Sage, реализующую следующие функции:
+	
+	\begin{enumerate}
+		\item \texttt{Velu\_curve($G, a, b$)}, где $G \subset E(\FF_q)$ -- подгруппа, $a, b \in \FF_q$ -- коэффициенты эллиптической кривой $E$.  Функция реализует алгоритм Велу для вычисления кривой $E'$, изогенной $E$, с ядром $G$ и возвращает коэффициенты $E'$. 
+		
+		\item \texttt{Velu\_point($G, a, b, P$)}, где $G \subset E(\FF_q)$ -- подгруппа, $a, b \in \FF_q$ -- коэффициенты эллиптической кривой $E$, $P \in E$ -- точка на кривой.  Функция реализует алгоритм Велу вычисления образа точки $P$ в изогенной кривой $E'$, полученной в алгоритме \texttt{Velu\_curve($G, a, b$)}.
+		
+		\item  \texttt{SIDH()} -- функция, имитирующая протокол обмена ключами SIDH. Исходные параметры (кривую и образующие подгрупп) можно взять отсюда:\\\url{https://crypto-kantiana.com/semyon.novoselov/teaching/curves_2020/SIDH_params.sage} 
+	\end{enumerate}
+\normalsize
+\section*{Требования к сдаче}
+\begin{itemize}
+	\item Лабораторную следует выполнять модификацией файла с тестами (TP8\_tests.sage), заменяя строку ``\texttt{\# your code here.}'' на код, реализующий функцию.
+    \item Функции должны работать на всех примерах, что проверяется запуском команды:
+    \\\texttt{sage -t TP8\_tests.sage}
+    \item Исходный код должен содержать комментарии к каждой из функций с описанием входных и выходных параметров
+\end{itemize}
+\end{document}

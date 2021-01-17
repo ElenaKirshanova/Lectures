@@ -1,4 +1,6 @@
-
+def test_Prove_prime(p):
+    Cert = Prove_prime(p)
+    return Check_prime(p, Cert) == 'Accept'
 
 def Miller_RabinTest(q):
   return True
@@ -33,6 +35,15 @@ def FindPoint(E, q):
   return L
 
 def Prove_prime(p):
+  """
+  TESTS::
+    sage: test_Prove_prime(1000003)
+    True
+    
+    sage: test_Prove_prime(100000000003)
+    True
+
+  """
   flag_outer = true
   while flag_outer:
     i = 0
@@ -57,50 +68,50 @@ def Prove_prime(p):
     if p_list[i].is_prime() == false : # TODO: change to deterministic
       continue
     break
-  return p_list, Curve_list, Point_list
+  return [p_list, Curve_list, Point_list]
 
 
-def certify(p_list, Curve_list, Point_list):
+def Check_prime(p, C):
+  p_list, Curve_list, Point_list = C
   assert(len(p_list) == len(Curve_list)+1)
   assert(len(Curve_list) == len(Point_list))
 
   l = len(p_list)-1
   for j in range(l):
     if (p_list[j] % 2 ==0):
-      print "p[", j,"] is divisible by 2 "
+      print("p[", j,"] is divisible by 2 ")
       return "Reject"
-    
+
     if (p_list[j] % 2 ==0):
-      print "p[", j,"] is divisible by 3 "
+      print("p[", j,"] is divisible by 3 ")
       return "Reject"
-    
+
     if(gcd(Curve_list[j].discriminant(), p_list[j]) != 1):
-      print "disc check fail at", j
+      print("disc check fail at", j)
       return "Reject"
-    
-    if(p_list[j+1] <= (pow(p_list[j], 1/4)+1)*(pow(p_list[j], 1/4)+1)):
-      print "p size fail at", j
+
+    #if(p_list[j+1] <= (pow(p_list[j], 1/4)+1)*(pow(p_list[j], 1/4)+1)):
+    if (p_list[j+1] <= (pow(p_list[j], 1/4)+1)^2) and (p_list[j] > 37):
+      print("p size fail at", j, "p[j] =", p_list[j])
       return "Reject"
-    
+
     if (Point_list[j] == Curve_list[j](0)):
-     print "infinity check fail at", j
-     return "Reject"
+      print("infinity check fail at", j)
+      return "Reject"
 
     if (p_list[j+1]*Point_list[j] != Curve_list[j](0)):
-      print "scalar mult check fail at ", j
+      print("scalar mult check fail at ", j)
       return "Reject"
 
   return "Accept"
 
-           
-           
-p = Primes().next(1000000)
-E, q = GenCurve(p)
-L = FindPoint(E, q)
-Cert = Prove_prime(p)
-print Cert
-           
-verif = certify(Cert[0], Cert[1], Cert[2])
-print verif
+#p = Primes().next(1000000)
+#E, q = GenCurve(p)
+#L = FindPoint(E, q)
+#Cert = Prove_prime(p)
+#print Cert
+#           
+#verif = certify(Cert[0], Cert[1], Cert[2])
+#print verif
 
 
