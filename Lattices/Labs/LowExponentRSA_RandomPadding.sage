@@ -1,15 +1,22 @@
 
 P = Primes()
-p = P.next(80)	#1511 #number.getPrime(11)
-q = P.next(97)  #181001#
+i = 3
+while True:
+	p = P.next(2^(650+i))	#1511 #number.getPrime(11)
+	q = P.next(2^(769+2*i))  #181001#
+	if (not (p-1)%3 == 0) and (not (q-1)%3 == 0):
+		break;
+	i = i+1
+	print(i)
 
 print('p, q = ', p, q)
 
 N = p*q
 
+print('N = ', N)
+
 #N = 9919284241247416948920551543278465872063230099610071763843336525689287934287926659255893398485432749689411356850582336939178442974545767722304129599329174472361750041060558296949269916243558819874445225035313606914816169307264051142707130580795527292695553859452458370197835276370801722192437370254489378754565675719517578364469392424265725148742846212089048643823356143303462198117746187760967164082409835695489435409357346880757104271587469236814872781657096591977250482489965960884579181622511200668877840950497591893224791531052004185881076981903
 
-print('N =', N)
 
 def egcd(a, b):
     if a == 0:
@@ -40,24 +47,32 @@ d = modinv(e,phiN)
 print('d = ', d)
 print('is 1? ', d*e % phiN)
 
-r = 3
-m1 = 10
+r = 112358
+m1 = 25235246464564#N-31415926535897932
 m2 = m1 + r
+
+print('gcds:', gcd(N,m1), gcd(N,m2))
 
 c1 = ZZ(pow(m1, e, N))
 c2 = ZZ(pow(m2, e, N))
 
-Xbound = 6#floor(pow(N,(1./e)))
+print('c1 = ', c1)
+print('c2 = ', c2)
+
+Xbound = floor(0.5*pow(N,(1./9)))
 print('Xbound = ', Xbound)
 
 var('z')
 R = PolynomialRing(ZZ, 'z')
-res = z^9 + (3*c1 - 3*c2)*z^6 + 3*c2^2*z^3 + (c1-c2)^3
-resX = (Xbound*z)^9 + (3*c1 - 3*c2)*(Xbound*z)^6 + 3*c2^2*(Xbound*z)^3 + (c1-c2)^3
+res = z^9 + (3*c1 - 3*c2)*z^6 + 3*z^3*(c1^2+7*c1*c2+c2^2) + (c1-c2)^3
+resX = (Xbound*z)^9 + (3*c1 - 3*c2)*(Xbound*z)^6 + 3*(Xbound*z)^3*(c1^2+7*c1*c2+c2^2) + (c1-c2)^3
 
-m = 4
+m = 5
 
-# only for e = 3
+def gpoly(u,v):
+	global m,Xbound,fXbound,N
+	return N^(m-v)*z^u*res^v
+
 def gpolyXbound(u,v):
 	global m,Xbound,fXbound,N
 	return N^(m-v)*Xbound^u*z^u*resX^v
@@ -68,23 +83,35 @@ def eval(polycoeffs,a,N,m):
 		tmp+=mod(item[0]*a^item[1],(N^m))
 	return tmp % (N^m)
 
-w = e*(m+1) #lattice dimension
+deg = res.degree(z)
+w = deg*(m+1) #lattice dimension
+print('lattice dim:', w)
+
+
+#print('test res:',eval(res.coefficients(),r,N,1))
+assert(eval(res.coefficients(),r,N,1)==0)
+for v in range(m+1):
+	for u in range(deg):
+		polycoeff = gpoly(u,v)
+		assert(eval(polycoeff.coefficients(),r,N,m)==0)
+		#print('test:', u,v,eval(polycoeff.coefficients(),r,N,m))
+
 
 indrow = 0
 A = matrix(ZZ, w,w)
 for v in range(m+1):
-	for u in range(e):
+	for u in range(deg):
 		polycoeff = gpolyXbound(u,v).coefficients()
 		for item in polycoeff:
 			A[indrow,item[1]] = item[0]
 		indrow+=1
 
-print(A)
+#print(A)
 
 ALLL = A.LLL(delta=0.9999, eta=0.5001, algorithm='fpLLL:proved')
-print(ALLL[0])
-for i in range(ALLL.nrows()):
-	print(ALLL[i].norm().n())
+#print(ALLL[0])
+#for i in range(ALLL.nrows()):
+#	print(ALLL[i].norm().n())
 check = 0
 hpoly = 0
 for i in range(w):
@@ -92,6 +119,12 @@ for i in range(w):
 	hpoly+=(ALLL[0][i]/(Xbound^i)*z^i)
 print('hpoly = ', hpoly)
 print('roots = ', hpoly.roots(ring=ZZ))
+
+#finding m
+
+print(( (z-r)^3 - c1 ).gcd( ( (z)^3 - c2 )))
+
+
 """
 FPLLL.set_precision(120)
 M = GSO.Mat(A, float_type="mpfr")
