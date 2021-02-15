@@ -1,0 +1,77 @@
+\documentclass[tikz,border=10pt]{standalone}
+
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+
+\begin{document}
+	
+\pagecolor{CharCoalDark}
+\pgfdeclarelayer{dome floor}
+\pgfdeclarelayer{dome}
+\pgfdeclarelayer{dome surface}
+\pgfsetlayers{dome floor,main,dome,dome surface}
+
+\def\addcircle#1#2#3#4{%
+    \begingroup%
+        \pgfmathparse{#1}\let\R=\pgfmathresult
+        \pgfmathparse{#2}\let\cx=\pgfmathresult
+        \pgfmathparse{#3}\let\cy=\pgfmathresult
+        \pgfmathparse{#4}\let\r=\pgfmathresult
+        %\begin{pgfonlayer}{dome floor}
+        %    \draw [blue!45!black, fill = blue!45, fill opacity = 0.25]
+        %        plot [domain = 0:360, samples = 40, variable = \i] 
+        %            (\cx+\r*cos \i, \cy+\r*sin \i, 0) -- cycle;
+        %\end{pgfonlayer}
+        \begin{pgfonlayer}{dome surface}
+            \draw [Orange, fill = Orange, fill opacity = 0.25] 
+                plot [domain = 0:360, samples = 60, variable = \t] 
+                    (\cx+\r*cos \t,\cy+\r*sin \t,
+                    {sqrt(max(\R^2-(\cx+\r*cos(\t))^2-(\cy+\r*sin(\t))^2, 0))})
+                    -- cycle;
+        \end{pgfonlayer}
+    \endgroup%
+}
+\begin{tikzpicture}[x = (-30:1cm), y = (30:1cm), z = (90:1cm)]
+\def\R{6}
+
+%\begin{pgfonlayer}{dome floor}
+%    \draw (-\R,0,0) -- (\R,0,0);
+%    \draw (0,-\R,0) -- (0,\R,0);
+%    \draw plot [domain = 0:360, samples = 90, variable = \i]
+%        (\R*cos \i, \R*sin \i, 0) -- cycle;
+%\end{pgfonlayer}
+
+\draw (0,0,0) node[below, color=white]{$0$} -- (0,0,\R);
+\draw[-stealth, color=white, thick, densely dashed] (0,0,0) -- (-1,2.5,2.2) node[midway, xshift=-10pt]{};
+\draw[-stealth, color=white, thick, densely dashed] (0,0,0) -- (-1,4.2,-2.0) node[midway, yshift=-12pt]{};
+%\draw[dashed, color=white, densely dashed] (-1,2.5,2.2) -- (-1,4.2,-2.0) node[midway, xshift=20pt]{};
+
+
+\draw[-stealth, color=white, thick, densely dashed] (0,0,0) -- (-1,-3.2,-2.0) node[midway, yshift=-12pt]{};
+\draw[-stealth, color=white, thick, densely dashed ] (0,0,0) -- (1,3.2,-2.0) node[midway, yshift=-12pt]{};
+\draw[-stealth, color=white, thick, densely dashed] (0,0,0) -- (1,3.2,4.0) node[midway, yshift=-12pt]{};
+\draw[-stealth, color=white, thick, densely dashed] (0,0,0) -- (-7,2.4,1.0) node[midway, yshift=-12pt]{};
+\draw[-stealth, color=white, thick, densely dashed] (0,0,0) -- (-3,3.4,2.2) node[midway, yshift=-12pt]{};
+\draw[-stealth, color=white, thick, densely dashed] (0,0,0) -- (-5,-1.2,1.0) node[midway, yshift=-12pt]{};
+\draw[-stealth, color=white, thick, densely dashed] (0,0,0) -- (5,-1.2,1.0) node[midway, yshift=-12pt]{};
+
+
+%\draw[solid, color=white] (0,0.3,0.6) to [bend left=40] (0.6,0.3,0.3) node[above right, yshift=5pt, xshift=-3pt] {\LARGE $\pi/3$};
+
+\begin{pgfonlayer}{dome surface}
+    \foreach \i in {0, 30,...,150}
+            \draw [color=blue!10, opacity=0.5] plot [domain = -90:90, samples = 60, variable = \j]
+                (\R*cos \i*sin \j,\R*sin \i*sin \j, \R*cos \j);
+    \foreach \j in {0, 15,...,90}
+            \draw [color=blue!10, opacity=0.5] plot [domain = 0:360, samples = 60, variable = \i]
+                    (\R*cos \i*sin \j,\R*sin \i*sin \j, \R*cos \j);
+\end{pgfonlayer}
+
+\def\r{1.2}
+\def\m{4}
+\def\n{-1}
+%{\addcircle{\R}{\m*sin 60}{\n-mod(abs(\m),2)*\r}{\r}}
+
+%\draw[] (1.0, -2.0) node{ \Huge \color{white}$\frac{S_{\mathsf{ { \color{Orange}surface}  }} }{  S_{\mathsf{sphere}}}  = \sin\left(\frac{\pi}{3}\right)^{n} = \left(\sqrt{\frac{3}{4}}\right)^{n}$};
+\end{tikzpicture}
+\end{document}

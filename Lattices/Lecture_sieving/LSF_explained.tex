@@ -1,0 +1,95 @@
+\documentclass[tikz,border=10pt]{standalone}
+
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 125,100}
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+
+\begin{document}
+	
+\pagecolor{CharCoalDark}
+\pgfdeclarelayer{dome floor}
+\pgfdeclarelayer{dome}
+\pgfdeclarelayer{dome surface}
+\pgfsetlayers{dome floor,main,dome,dome surface}
+\def\addcircle#1#2#3#4{%
+	\begingroup%
+	\pgfmathparse{#1}\let\R=\pgfmathresult
+	\pgfmathparse{#2}\let\cx=\pgfmathresult
+	\pgfmathparse{#3}\let\cy=\pgfmathresult
+	\pgfmathparse{#4}\let\r=\pgfmathresult
+	%\begin{pgfonlayer}{dome floor}
+	%	\draw [blue!45!white, fill=white!45, fill opacity=0.25]
+	%	plot [domain=0:360, samples=40, variable=\i] 
+	%	(\cx+\r*cos \i, \cy+\r*sin \i, 0) -- cycle;
+	%\end{pgfonlayer}
+	\begin{pgfonlayer}{dome surface}
+		\draw [Orange, fill = Orange, fill opacity=0.25] 
+		plot [domain=0:360, samples=60, variable=\t] 
+		(2.3*\cx+\r*cos \t,2.3*\cy+\r*sin \t, {sqrt(max(\R^2-(\cx+\r*cos(\t))^2-(\cy+\r*sin(\t))^2, 0))})
+		-- cycle;
+		
+	\end{pgfonlayer}
+	\endgroup%
+}
+\begin{tikzpicture}[x=(-30:1cm),y=(30:1cm),z=(90:1cm)]
+
+\def\R{6}
+
+	%\begin{pgfonlayer}{dome floor}
+	%\draw (-\R,0,0) -- (\R,0,0);
+	%\draw (0,-\R,0) -- (0,\R,0);
+	%\draw plot [domain=0:360, samples=90, variable=\i] 
+	%(\R*cos \i, \R*sin \i, 0) -- cycle;
+	%\end{pgfonlayer}
+	
+	\draw (0,0,0) node[below, color=white]{} -- (0,0,\R);
+	\begin{pgfonlayer}{dome surface}
+	\foreach \i in {0, 30,...,150}
+		\draw [color=blue!10, opacity=0.5] plot [domain=-90:90, samples=60, variable=\j]        
+		(\R*cos \i*sin \j,\R*sin \i*sin \j, \R*cos \j);
+	\foreach \j in {0, 15,...,90}
+		\draw [color=blue!10, opacity=0.5] plot [domain=0:360, samples=60, variable=\i]  
+		(\R*cos \i*sin \j,\R*sin \i*sin \j, \R*cos \j);
+	\end{pgfonlayer}
+	
+	\def\r{1.4}
+	\foreach \m [evaluate={\N=max(-2, \m-7);}]in {0,...,2}{
+		\foreach \n in {0,-1,...,\N}
+		{\addcircle{\R}{1.5*\m*sin 60}{\n-mod(abs(\m),2)*\r}{\r}
+		%	let \n1 = \n-mod(abs(\m),2)*\r
+		%\draw[color=white] (1.5*\m*sin 60, \n1/2) node{$u$};
+		}
+	}
+
+	% centers
+	\draw[color=DarkOrange] (0.9, 5.3)  node[circle,fill,inner sep=1.5pt, label={\Huge $u_1$}]{};
+	\draw[color=DarkOrange] (1.1, 2.8)  node[circle,fill,inner sep=1.5pt, label={\Huge $u_2$}]{};
+	\draw[color=DarkOrange] (1.2, 0.3)  node[circle,fill,inner sep=1.5pt, label={\Huge $u_3$}]{};
+	
+	
+	\draw[color=DarkOrange] (-2.1, -0.5)  node[circle,fill,inner sep=1.5pt, label={\Huge $u_4$}]{};
+	\draw[color=DarkOrange] (-1.6, -3.5)  node[circle,fill,inner sep=1.5pt, label={\Huge $u_5$}]{};
+	\draw[color=DarkOrange] (-2.6, 2.4)  node[circle,fill,inner sep=1.5pt, label={\Huge $u_6$}]{};
+	
+	\draw[color=DarkOrange] (-5.8, 3.5)  node[circle,fill,inner sep=1.5pt, label={\Huge $u_7$}]{};
+	\draw[color=DarkOrange] (-6.0, 6.0)  node[circle,fill,inner sep=1.5pt, label={\Huge $u_8$}]{};
+	\draw[color=DarkOrange] (-5.7, 1.0)  node[circle,fill,inner sep=1.5pt, label={\Huge $u_9$}]{};
+	
+	% random points
+%	\draw[color=white] (-1.9, 0.2)  node[circle,fill,inner sep=1.0pt, label={\Large $x_1$}]{};
+%	\draw[color=white] (-3.9, 2.2)  node[circle,fill,inner sep=1.0pt, label={\Large $x_2$}]{};
+%	\draw[color=white] (1.9, 1.2)  node[circle,fill,inner sep=1.0pt, label={\Large $x_3$}]{};
+%	\draw[color=white] (2.9, -0.6)  node[circle,fill,inner sep=1.0pt, label={\Large $x_4$}]{};
+%	\draw[color=white] (2.2, 3.2)  node[circle,fill,inner sep=1.0pt, label={\Large $x_5$}]{};
+%	\draw[color=white] (-1.9, -1.2)  node[circle,fill,inner sep=1.0pt, label={\Large $x_6$}]{};
+%	
+%	\draw[color=white] (-4.9, 5.2)  node[circle,fill,inner sep=1.0pt, label={\Large $x_7$}]{};
+%	\draw[color=white] (-5.9, 1.7)  node[circle,fill,inner sep=1.0pt, label={\Large $x_8$}]{};
+%	\draw[color=white] (-6.0, 4.2)  node[circle,fill,inner sep=1.0pt, label={\Large $x_9$}]{};
+%	\draw[color=white] (-2.6, 3.2)  node[circle,fill,inner sep=1.0pt, label={\Large $x_{10}$}]{};
+%	\draw[color=white] (-1.1, -3.2)  node[circle,fill,inner sep=1.0pt, label={\Large $x_{11}$}]{};
+
+\end{tikzpicture}
+
+\end{document}
