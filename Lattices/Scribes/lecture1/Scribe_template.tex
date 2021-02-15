@@ -1,0 +1,144 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode} 
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+
+%----newcommands (math)----
+\input{header} 
+
+
+%-----newcommands specific to the scribe template 
+\newcommand{\handout}[5]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf  } \hfill #2 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{#3}{Выполнил(а): #4}{#1}}
+
+
+\newtheorem{theorem}{Теорерма}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{definition}[theorem]{Определение}
+\newtheorem{claim}[theorem]{Утверждение}
+\newtheorem{fact}[theorem]{Факт}
+\newtheorem{assumption}[theorem]{Предположение}
+
+% 1-inch margins
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 6.5in
+
+\parindent 0in
+\parskip 1.5ex
+
+\begin{document}
+
+\lecture{Название Лекции}{\today}{Лектор: Елена Киршанова}{ВАШЕ ИМЯ}
+
+\section{Название первого раздела}
+
+Правила оформления лекции:
+
+\begin{enumerate}
+	\item Оформляются лекции в соответствии с этим шаблоном
+	\item Добавлять новый макроса через \verb|newcommand| следует в файл \texttt{header.tex}
+	\item Оформление лемм, теорем, нумерованных и ненумерованных список. алгоритмов, рисунков, списка литераторы следует выполнять так, как это сделано в этом файле
+\end{enumerate}
+
+
+\begin{theorem} \label{thm:nameOfTheTheorem}
+	Утверждение теоремы
+\end{theorem}
+
+
+\begin{proof}
+	Доказательство
+\end{proof}
+
+Ссылка на Теорему~\ref{thm:nameOfTheTheorem} оформляется с помощью команды \verb|ref|. Аналогично для лемм, следствий и т.д.
+
+
+Короткую формулу можно включить в текст, например,  $\log_2{4} = 2$. Более громоздкую формулу лучше оформить на новой строке с помощью оператора \verb+\[+\dots\verb+\]+:
+\[
+\int_{0}^{\infty} \frac{x}{e^x - 1 } dx = \frac{\pi^2}{6}
+\]
+
+Многострочные ненумерованный формулы оформляются с помощью окружения \verb+\begin{align}*+
+\begin{align*}
+(x+y)^2 &= x^2 + 2xy + y^2 \\
+F&=  G \frac{m_1 m_2}{d^2}
+\end{align*}
+
+Нумерованные формулы оформляются либо через \verb+align+, либо через \verb+equation+:
+\begin{equation} \label{eq:potential_energy}
+E_p = mgh
+\end{equation}
+
+Ссылка на Уравнение~\eqref{eq:potential_energy} выполняется с помощью \verb+\eqref{}+ (в случае использования \verb+equation+), либо с помощью \verb+(\ref{})+ в случае использования  \verb+align+. Ссылка задаётся оператором  \verb+label{}+. 
+
+
+\section{Оформление алгоритма}
+
+
+
+\begin{algorithm}[h]
+	\caption{Алгоритм Евклида}\label{alg:euclid}
+	\begin{algorithmic}[1]
+		\Require $a,b \in \mathbb{Z}$
+		\Ensure $\text{НОД}(a,b)$
+		\State $r\gets a\bmod b$
+		\While{$r\not=0$} 
+		\State $a\gets b$
+		\State $b\gets r$
+		\State $r\gets a\bmod b$
+		\EndWhile 
+		\State Return $b$
+	\end{algorithmic}
+
+\end{algorithm}
+
+
+\section{Анализ}
+\subsection{Blah blah blah}
+Текст лекции
+
+\subsubsection{Blah blah blah}
+Текст лекции
+
+
+
+
+\paragraph{Литература.}
+Ссылки на литературу, упомянутую в лекции. Если используется BibTeX, необходимо  .bbl file into your .tex
+source. 
+
+\end{document}

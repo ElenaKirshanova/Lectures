@@ -1,0 +1,145 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode} 
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+
+%----newcommands (math)----
+\input{header} 
+
+
+%-----newcommands specific to the scribe template 
+\newcommand{\handout}[5]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf  } \hfill #2 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{#3}{Выполнил(а): #4}{#1}}
+
+
+\newtheorem{theorem}{Теорема}
+\newtheorem{corollary}{Следствие}
+\newtheorem{lemma}{Лемма}
+\newtheorem{observation}{Observation}
+\newtheorem{proposition}{Предложение}
+\newtheorem{definition}{Определение}
+\newtheorem{remark}{Замечание}
+\newtheorem{claim}{Утверждение}
+\newtheorem{fact}{Факт}
+\newtheorem{assumption}{Предположение}
+
+% 1-inch margins
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 6.5in
+
+\parindent 0in
+\parskip 1.5ex
+
+\begin{document}
+
+\lecture{Редукция базиса решетки}{25 января 2021 г.}{Лектор: Елена Киршанова}{ГЛАДКИЙ ДЕНИС}
+
+
+\section{HNF (Hermite Normal Form): Эрмитова нормальная форма}
+
+\[
+	\forall B \in \mathbb{Z}^{n \times k} \; \exists \; U \in GL_k(\mathbb{Z}): \; B \cdot U =
+	\begin{pmatrix}
+		\begin{matrix} 
+		0 & 0 & \dots & 0 \\
+		x \\
+		* & x \\ 
+		\vdots & \hdots & \ddots & \\
+		* & \hdots & * & x 
+		\end{matrix}
+		\quad
+		\vline	
+	    & \hbox{\Huge0}
+	\end{pmatrix},
+\]
+и коэффициенты в строке с элементом $ x $ на главной диагонали лежат в интервале $ [0,x) $.
+
+Полученная матрица уникальна для $ B $ и носит название HNF формы $ B $.
+
+Находится HNF аналогично "Гауссовому преобразованию" (Gaussian elimination), где деление заменено на НОД.
+
+\textit{Приложение}: $ B_1, B_2 $ - базисы $ L_1, L_2 \subseteq \mathbb{Z}^n $, HNF позволяет вычислить базис $ L_1 + L_2 = B_1 \cdot \mathbb{Z}^n + B_2 \cdot \mathbb{Z}^n $, а именно HNF($ B_1 \parallel B_2 $).
+
+Сложность вычисления HNF:
+$ \mathcal{O}(\max(n,k)^{\omega + 1} \cdot \lg{ \max{ \norm{b_i} } } ) $ - битовая сложность.
+
+
+\section{QR - факторизация}
+
+\begin{definition} \label{def:QRFactorization}
+	Пусть $ B \in \mathbb{Z}^{n \times n}, \; \det{B} \neq 0. \; \exists Q $ - ортогональная ($ Q^T \cdot Q = Q \cdot Q^T = Id $) и R - треугольная матрица: $ B = Q \cdot R, \; r_{ii} > 0 \; \forall \; i $. \\
+	Такая декомпозиция уникальна. \\
+	QR-факторизация связана с ортогонализацией Грам-Шмидта:
+	\begin{align*}
+	&b_1^* = b_1 \\
+	&b_1^* = b_1 - \sum_{j<i} \mu_{i,j}b_i^*, \; \mu_{i,j} = \frac{\ScProd{b_i}{b_j^*}}{\norm{b_j^*}^{2}} \\
+	&B = Q \cdot R = \underbrace{Q \cdot diag(r_{ii})}_{B^*} \cdot \underbrace{diag(r_{ii})^{-1} \cdot R}_{\left( \mu_{i,j} \right)^T_{i,j} }
+	\end{align*}
+\end{definition}
+
+\begin{remark} \label{rem1}
+	QR-факторизация и ортогонализация Грам-Шмидта несут одну и ту же информацию о решётке. \\
+	1) Q, R не обязаны быть рациональными; $ B^*, \mu $ - рациональны для $ B \in  \mathbb{Z}^{n \times n} $, и битовая длина числителя и знаменателя элементов  $ B^*, \mu $ полиномиальна от $ \lg (b_{i,j}) $.
+\end{remark}
+
+Сложность: $ \mathcal{O}(n^3) $ арифметическихз операций.
+
+\begin{lemma} \label{lem:1}
+	$ \forall x: \; \norm{ Bx } = \norm{ Rx }, \; B = QR $
+\end{lemma}
+\begin{proof}
+	$  \norm{ Bx } = \norm{ QRx} = \norm{ Qy } = \sqrt{\ScProd{Qy}{Qy}} = \sqrt{\ScProd{y^TQ^T}{Qy}} = \\
+	= \sqrt{y^T \cdot \underbrace{Q^T \cdot Q}_{Id} \cdot y} = \sqrt{y^T \cdot y} = \norm{ y } = \norm{ Rx } $.
+\end{proof}
+
+\begin{lemma} \label{lem:2}
+	\[
+	L = L(B), \; B = QR; \qquad \lambda_1(L) \geq \min_i (r_{ii});
+	\]
+\end{lemma}
+\begin{proof}
+	\begin{align*}
+	&b = B \cdot x, \; x \in \mathbb{Z}^n, \; b = \lambda_1(L) \\
+	&\hbox{Лемма 7} \Rightarrow \norm{ b } = \norm{ QRx } = \norm{ Rx } = \norm{ (..., \; r_{n-1,n-1} \cdot X_{n-1} + r_{n-1,n} \cdot X_n, \; r_{n,n} \cdot X_n) }
+	\end{align*}
+	\begin{itemize}
+		\item $ X_n \neq 0, \hbox{ тогда} \norm{ (..., \; ..., \; \underbrace{r_{n,n} \cdot X_n}_{\neq 0}) } \; \geq r_{n,n}$;
+		\item $ X_n = 0, \; X_{n-1} \neq 0, \hbox{ тогда} \norm{ (..., \; r_{n-1,n-1} \cdot X_{n-1}, \; 0) } \; \geq r_{n-1,n-1}$;
+		\item $ X_{n-1} = X_n = 0, \; X_{n-2} \neq 0, \hbox{ тогда} \norm{ (..., \;  r_{n-2,n-2} \cdot X_{n-2}, \; 0, \; 0) } \; \geq r_{n-2,n-2}$;
+	\end{itemize}
+	Рассматриваем $ max \; i: x_i \neq 0 $.
+\end{proof}
+ 
+
+\end{document}

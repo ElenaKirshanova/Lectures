@@ -1,0 +1,184 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode} 
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+
+%----newcommands (math)----
+\input{header} 
+
+
+%-----newcommands specific to the scribe template 
+\newcommand{\handout}[5]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf  } \hfill #2 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{#3}{Выполнил(а): #4}{#1}}
+
+
+\newtheorem{theorem}{Теорема}
+\newtheorem{corollary}{Следствие}
+\newtheorem{lemma}{Лемма}
+\newtheorem{observation}{Observation}
+\newtheorem{proposition}{Предложение}
+\newtheorem{definition}{Определение}
+\newtheorem{remark}{Замечание}
+\newtheorem{claim}{Утверждение}
+\newtheorem{fact}{Факт}
+\newtheorem{assumption}{Предположение}
+
+% 1-inch margins
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 6.5in
+
+\parindent 0in
+\parskip 1.5ex
+
+\begin{document}
+
+\lecture{Теорема Минковского}{25 января 2021 г.}{Лектор: Елена Киршанова}{ГЛАДКИЙ ДЕНИС}
+
+\section{Теорема Минковского}
+
+\begin{theorem}[Минковского] \label{thm:theoremMinkowski}
+	Для решётки $ L \subseteq \mathbb{R}^d $ ранга d справедливо:
+	
+	\begin{equation} \label{eq1}
+	\lambda_1(L) \leq \sqrt{d}\cdot(\det{L})^{1/d} \qquad 
+	\lambda_1(L) = \min_{\substack{b \in L \\ b \neq 0}} \norm{ b }
+	\end{equation}
+	\begin{equation} \label{eq2}
+	\lambda_1^{\infty}(L) \leq (\det{L})^{1/d} \qquad 
+	\lambda_1^{\infty}(L) = \min_{\substack{b \in L \\ b \neq 0}} \norm{ b }_{\infty} \qquad
+	\norm{ \cdot }_{\infty} = \max_i \abs{ b_i }
+	\end{equation}
+\end{theorem}
+
+Для доказательства Теоремы Минковского рассмотрим 2 другие теоремы.
+
+\begin{theorem} \label{thm:theorem2}
+	Пусть $ S \subseteq \mathbb{R}^d $ - симметрическое, выпуклое множество, т.ч. $ \vol{S} > 2^d \cdot \det{L} $.
+	Тогда S содержит ненулевой вектор L.
+	Если S компактно, достаточно условия \\
+	$ \vol{S} \geq 2^d \cdot \det{L} $ 
+\end{theorem}
+
+Из Теоремы~\ref{thm:theorem2} следует Теорема Минковского:
+\begin{align*}
+S &= [\; \text{-}(\det{L})^{1/d}, (\det{L})^{1/d} \;] \\
+\vol{S} &= 2^d \cdot ((\det{L})^{1/d})^d = 2^d \cdot \det{L} \\
+\hbox{В } S \; \exists b \in L\backslash\{0\} \hbox{ и}
+\norm{ b }_{\infty} &\leq (\det{L})^{1/d} \Rightarrow \hbox{выполняется } \eqref{eq2} \\
+\norm{ b }_2 &\leq \sqrt{d} \cdot \norm{ b }_{\infty} \leq \sqrt{d} \cdot (\det{L})^{1/d} \Rightarrow \hbox{выполняется } \eqref{eq1}
+\end{align*}
+
+\begin{theorem}[Блихфельд] \label{thm:theoremBlichfeld}
+	Пусть $ L \subseteq \mathbb{R}^d $ - решётка, $ E \subseteq \mathbb{R}^d $, т.ч. $ \vol{E} > \det{L} $.
+	Тогда $ \exists \; z_1 \neq z_2 \in E $, т.ч. $ z_1 - z_2 \in L $.	
+\end{theorem}
+
+Из Теоремы~\ref{thm:theoremBlichfeld} Блихфельда следует Теорема~\ref{thm:theorem2}:
+\begin{align*}
+\hbox{В качестве } E = S/2. \hbox{ Тогда }  \vol{E} > \det{L} \Rightarrow \exists \; z_1 \neq z_2 \in E: \; z_1 - z_2 \in L; \\
+z_1 - z_2 = 2 \cdot \dfrac{z_1 - z_2}{2} \Rightarrow \dfrac{z_1 - z_2}{2} \in \dfrac{S}{2} = E \Rightarrow z_1 - z_2 \in E \Rightarrow \exists \; z_1 - z_2 \neq 0 \in L.
+\end{align*}
+
+\begin{proof}
+Рассмотрим $ \displaystyle \bigcup_{b \in L} \{\mathcal{P} + b\} $ - это разбиение $ \mathbb{R}^d $.
+\[
+E = \coprod_{b \in L} \{E \cap \mathcal{P} + b\}; \qquad \coprod - \hbox{ неперескающееся объединение}.
+\]
+\[
+\vol{\mathcal{P}} = \vol{L} < \vol{E} = \sum_{b \in L}\vol{(E \cap (\mathcal{P} + b))} = \sum_{b \in L}\vol{((E - b) \cap \mathcal{P})}; \qquad (E - b) \cap \mathcal{P} \in \mathcal{P}
+\]
+\[
+\exists \; b_1 \neq b_2 \in L: \; ( (E - b_1) \cap \mathcal{P}) \cap  ((E - b_2) \cap \mathcal{P}) \neq \emptyset
+\]
+\[
+\hbox{Возьмём } z \in ( (E - b_1) \cap \mathcal{P}) \cap  ((E - b_2) \cap \mathcal{P}), \; z_1 = (z + b_1) \in E, \; z_2 = (z + b_2) \in E, \; z_1 - z_2 = b_1 - b_2 \in L.
+\]
+\end{proof}
+
+
+\section{Построение решёток из кодов}
+
+\begin{definition}["Конструкция А"] \label{def:constructionA}
+	C - линейный $[m,n,q]$-код, где m - длина кода, n - размерность кода, q - простой модуль, т.е. $ C = G \cdot x, \; x \in \mathbb{Z}_q^n $ \\
+	Определим $ L(C) = L(G) = C + q \cdot \mathbb{Z}^m = G \cdot \mathbb{Z}_q^n + q \cdot \mathbb{Z}^m $ \\
+	\[
+	C=\left[
+	\begin{array}{cc}
+	G_{top} \\ \hline
+	G_{bot}
+	\end{array}\right],
+	G_{top} \in \mathbb{Z}_q^{n \times n},
+	G_{bot} \in \mathbb{Z}_q^{m-n \times m-n}
+	\]
+	Положим $ G_{top} \in \mathbb{Z}_q^{n \times n} $ - обратима. Тогда
+	\[
+	G \cdot G_{top}^{-1} = 
+	\left[\begin{array}{ c | c }
+	Id_n & \mbox{\Large 0} \\
+	\hline
+	G_{bot} \cdot G_{top}^{-1} & q \cdot Id_{m-n}
+	\end{array}\right] \in \mathbb{Z}_q^{m \times m},
+	\]
+	столбцы этой матрицы образуют базис $ L(C) = L(G) $.
+	\begin{itemize}
+		\item $ \dim{L} = m $;
+		\item $ \det{L} = q^{m-n} $;
+	\end{itemize}
+	По теореме Минковского:
+	$
+	\lambda_1^{\infty}(L(C)) \leq (\det{L})^{1/d} = q^{\frac{m-n}{m}} = q^{1 - \frac{n}{m}}
+	$.
+\end{definition}
+
+\begin{theorem}[Минковского-Хлавки] \label{thm:theoremMinkowskiKhlavka}
+	С вероятностью $ \geq 1 - 2^{-m} $ над случайным выбором  \\
+	$ G \in \mathbb{Z}_q^{m \times n} $ имеем 
+	$
+	\lambda_1^{\infty}(L(G)) \geq 1/4 \cdot q^{1 - \frac{n}{m}}
+	$.
+\end{theorem}
+
+\begin{proof}
+Зафиксируем $ B = 1/4 \cdot q^{1 - \frac{n}{m}} $
+\begin{align*}
+	&G \leftarrow \mathbb{Z}_q^{m \times n}: \Pr{ \left[ \lambda_1^{\infty}(L(G)) < B \right] }  = \Pr{ \left[ \exists s \in \mathbb{Z}_q^n, \; y \in \mathbb{Z}_q^m: 0 <  \norm{ y }_{\infty} < B, \; y = G \cdot s \; (mod \; q) \right] } \leq \\  &\leq \sum_{s \in \mathbb{Z}_q^n} \sum_{\substack{y \in \mathbb{Z}_q^m \\ 
+	0 <  \norm{ y }_{\infty} < B}} \Pr{ \left[ y = G \cdot s \; (mod \; q) \right] }
+	\leq \sum_{s \in \mathbb{Z}_q^n \backslash\{0\}} \sum_{\substack{y \in \mathbb{Z}_q^m \\ 
+	0 <  \norm{ y }_{\infty} < B}} \left[ \prod_{i=1}^{m} \ScProd{g_i}{s} = y_i \; (mod \; q) \right] = \\
+	&= q^n \cdot (2(B-1) + 1)^m \cdot q^{-m} = \frac{(2B-1)^m}{q^{m-n}} = \left( \frac{2B-1}{q^{1-\frac{n}{m}}}\right)^m < 2^{-m}.
+\end{align*}
+\end{proof}
+
+
+\end{document}

@@ -1,0 +1,213 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode} 
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+
+%----newcommands (math)----
+\input{header} 
+
+
+%-----newcommands specific to the scribe template 
+\newcommand{\handout}[5]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf  } \hfill #2 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{#3}{Выполнил: #4}{#1}}
+
+
+\newtheorem{theorem}{Теорерма}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{lemma}{Лемма} % убрал [theorem] для нумерации как в лекции
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{definition}[theorem]{Определение}
+\newtheorem{claim}[theorem]{Утверждение}
+\newtheorem{fact}[theorem]{Факт}
+\newtheorem{assumption}[theorem]{Предположение}
+
+% 1-inch margins
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 6.5in
+
+\parindent 0in
+\parskip 1.5ex
+
+\begin{document}
+
+\lecture{Лекция 1}{}{Лектор: Елена Киршанова}{Гончаров Юра}
+
+\section{Евклидовы решётки}
+\subsection{Определения}
+
+\begin{definition} \label{thm:Lattice}
+	Пусть $\{b_i\}_{i \leq d}$ - линейно независимые вектора в $\R^n$ ($d$ < $n$). \underline{Решётка}, порождённая $\{b_i\}$ - множество вида
+\[
+	L(\{b_i\}_{i \leq d}) = \sum_i \Z \cdot b_i = \Big\{\sum x_i b_i , x_i \in \Z \Big\}
+\]
+\end{definition}
+
+\textbf{Альтернативное определение:} \textit{\underline{Решётка} - дискретная, конечно порождённая, аддитивная подгруппа в \big($\R^n, +$\big)}
+
+\textbf{Примеры:}\\
+1) $\Z^n$, $n \geq 1$; $\{b_i = e_i\}$; $e_i = (0, 0, ..., 1_i, ..., 0)$\\
+2) $\forall$ погруппа $\Z^n$, например 2$\Z^n$\\
+3) a$\Z$ + b$\Z$, a,b $\in \IQ$\\
+\textcolor{red}{(!) $\Z$ + $\sqrt{2}\Z$ не является решёткой (см. упражнения)}\\
+
+\begin{definition} \label{thm:Basis}
+	Пусть $L$ = $L(\{b_i\})$ для линейно независимых $b_i \in \R^n$. Тогда $\{b_i\}$ образуют базис $L$.
+\[
+	B = \begin{bmatrix}
+		1 & ... & 1 \\
+		b_1 & ... & b_d \\
+		1 & ... & 1
+	\end{bmatrix} \in \R^{n \cdot d} \mbox{, } L\big(B\big) \mbox{ - решётка, порождённая } \{b_i\}_{i \leq d}
+\]
+\end{definition}
+
+\begin{lemma} \label{lem:Lemma1}
+	Пусть $\{b_i\}_{i \leq d}$ и $\{b'_i\}_{i \leq d'}$ - два множества линейно независимых векторов в $\R^n$. Тогда
+	$L(\{b_i\}_{i \leq d}) = L(\{b'_i\}_{i \leq d'}) \Leftrightarrow \mbox{выполняются оба пункта:}$\\
+	\begin{itemize}
+	\item $d = d'$\\
+	\item $\exists$ $U \in Gl_d(\Z)$ (называют унимодулярной матрицей с определителем = 1), такая что 
+	\end{itemize}
+\[B = B' \cdot U \mbox{ , где }
+	B =
+	\begin{bmatrix}
+	1 & ... & 1 \\
+	b_1 & ... & b_d \\
+	1 & ... & 1
+	\end{bmatrix}, 
+	B' =
+	\begin{bmatrix}
+	1 & ... & 1 \\
+	b'_1 & ... & b'_d \\
+	1 & ... & 1
+	\end{bmatrix}
+\]
+\end{lemma}
+
+\begin{proof}
+	"$\Leftarrow$" (см. упражнения)\\
+	"$\Rightarrow$"\\
+	1)  $d$ = dim\Big(Span$_\R(\{b_i\}_{i \leq d})$\Big) (это оболочка = $\sum_i \R \cdot b_i$) = dim\Big(Span$_\R(\{b'_i\}_{i \leq d'})$\Big) = $d'$\\
+	2) Распишем каждую координату\\
+	$b'_1 \in L(\{b_i\})$ $\Rightarrow$ $b'_1$ = $\sum_{j = 1}^d u_{j_1} \cdot b_i$\\
+	$b'_2 \in L(\{b_i\})$ $\Rightarrow$ $b'_2$ = $\sum_{j = 2}^d u_{j_2} \cdot b_i$\\
+	.\\
+	.\\
+	.\\
+	$b'_d \in L(\{b_i\})$ $\Rightarrow$ $b'_d$ = $\sum_{j = d}^d u_{j_d} \cdot b_i$\\
+	Отсюда получаем, что $B'$ = $B \cdot U$; аналогичными рассуждениями мы можем выразить $B$ = $B' \cdot U$, где $U, V \in \Z^{d \cdot d}$\\
+	$B$ = $B' \cdot V$ = $B \cdot U \cdot V$ $\Leftrightarrow$ $B \Big( Id \cdot U \cdot V \Big)$ = 0\\
+	$\Rightarrow$ так как матрица $B$ состоит их линейно независимых векторов, то $U \cdot V$ = $Id$\\
+	$\det{U} \cdot \det{V}$ = 1
+\end{proof}
+
+
+\textbf{Замечание:} для $d \geq$ 2, $\forall$ фиксированная решётка имеет $\infty$ много различных базисов
+
+
+\textbf{"Простые" задачи на решётках:}\\
+1) Для $\nu \in \R^n$ и $L = L(B)$, определить $\nu \in L(B)$\\
+Решить уравнение $\nu$ = $B \cdot X$\\
+
+2) Определить, задают ли $B, B'$ одну и ту же решётку\\
+Аналогично
+
+\subsection{Инварианты решётки}
+
+\begin{definition} \label{thm:Invariant}
+	(Первый) минимум решётки $L$ (длина кратчайшего ненулевого вектора):
+\[
+	\lambda_1(L) = min \{ r : \exists b \in L \backslash \{0\} : ||b|| \leq r\}
+\]
+	Здесь $||\cdot||$ - Евклидова норма; $||x||$ = $\sqrt{\sum x_i^2}$;  $||x||_\infty$ = max\big($|x_i|$\big)
+\end{definition}
+
+\begin{lemma} \label{lem:Lemma2}
+	$\lambda_1$ достигается не менее 2-х раз и не более 3$^d$ раз
+\end{lemma}
+
+\begin{proof}
+	1) $||b_1||$ = $\lambda_1$ $\Rightarrow$ $-||b_1||$ = $\lambda_1$\\
+	2) $\forall$ $b \in L$ такого, что $||b_1||$ = $\lambda_1$, нарисуем шар B\Bigg($b$ (центр), $\frac{\lambda_1}{2}$ (радиус) \Bigg); эти шары не пересекаются, иначе противоречие  $\lambda_1$\\
+	С другой стороны, все эти шары лежат в другом шаре, который нарисован вокруг 0, но с радиусом $\frac{3\lambda_1}{2}$; B\Bigg(0, $\frac{3\lambda_1}{2}$ \Bigg) $\Rightarrow$ количество шаров $\leq$ $\frac{VolB\Big(0, \frac{3\lambda_1}{2}\Big)}{VolB\Big(0, \frac{\lambda_1}{2}\Big)}$ = $\frac{(\frac{3\lambda_1}{2})^d \cdot VolB\Big(0, 1 \Big)}{(\frac{\lambda_1}{2})^d \cdot VolB\Big(0, 1 \Big)}$ = $3^d$
+\end{proof}
+
+\begin{definition} \label{thm:Minimum}
+	Последовательные минимумы решётки: для $i \leq d$ определим
+\[
+	\lambda_i(L) = min \{ r : dim \big( B(0,1) \cap L \big) \geq i \}
+\]
+\end{definition}
+
+\begin{lemma} \label{lem:Lemma3}
+	$\forall L$ $\exists c_1, ..., c_d \in L$ - линейно независимые, такие что $||c_i||$ = $\lambda_i(L)$ $\forall i \leq d$
+	($\lambda_i$ достигаются $\forall L$)
+\end{lemma}
+
+\textcolor{red}{(!) $\exists$ решётки, ждя которых $\not\exists$ базиса, вектора которого достигают $\lambda_i$ одновременно}\\
+Например, $	B = \begin{bmatrix}
+	2 & 0 & 0 & 0 & 1 \\
+	0 & 2 & 0 & 0 & 1 \\
+	0 & 0 & 2 & 0 & 1 \\
+	0 & 0 & 0 & 2 & 1 \\
+	0 & 0 & 0 & 0 & 1 \\
+	\end{bmatrix}; \begin{array}{rcl}
+	\lambda_1 & = & 2 \\
+	\lambda_2 & = & 2 \\
+	\lambda_3 & = & 2 \\
+	\lambda_4 & = & 2 \\
+	\lambda_5 & = & 2
+	\end{array};$\\
+	(2,2,2,2,2) - (2,0,0,0,0) - (0,2,0,0,0) - (0,0,2,0,0) - (0,0,0,2,0) =  (0,0,0,0,2)
+
+\begin{definition} \label{thm:Determinant}
+	Пусть $B \in \R^{n \cdot d}$ - базисная матрица решётки $L$ (то есть столбцы образуют базис $L$)\\
+	\underline{Определитель} $L$, $\det{(L)}$ - это $\sqrt{\det{(B^\intercal \cdot B)}}$ = $\sqrt{\det{(B^\intercal)} } \cdot \sqrt{\det{(B)}}$ = $\sqrt{\det{(B)^2}}$ = $|\det{(B)}$|\\
+	Для $B \in \R^{n \cdot d}$, $\det{(L)}$ = |$\det{B}$|
+\end{definition}
+
+\begin{lemma} \label{lem:Lemma4}
+	Если $B, B'$ - два базиса одной и той же решётки, то \\
+	$\det{(B^\intercal \cdot B)}$ = $\det{(B'^\intercal \cdot B')}$\\
+	($B$ = $B' \cdot U$ (\ref{lem:Lemma1}) $\Rightarrow$ $\det{(B^\intercal \cdot B)}$ = $\det{((B' \cdot U)}$ $^\intercal \cdot B' \cdot U$) = $\det{U^\intercal}$ $\cdot$ $\det{B'^\intercal}$ $\cdot$ $\det{B'}$ $\cdot$ $\det{U}$ = $\det{(B'^\intercal \cdot B'}$).)\\
+	Определитель решётки задаёт "плотность": чем меньше определитель, тем "плотнее" решётка
+\end{lemma}
+
+\begin{definition} \label{thm:Par}
+	$\mathcal{P}$\big($\{b_i\}_{i \leq d}$\big) = $\big\{ \sum y_i \cdot b_i ; y_i \in [0,1] \big\}$ - фундаментальный параллелепипед $L$.
+	$\det{L}$ = Vol\big($\mathcal{P}$\big)
+\end{definition}
+
+\end{document}
