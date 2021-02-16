@@ -1,0 +1,640 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{stackengine}
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+%\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+
+%\institute{ENS Lyon}
+\title{Лекция №5 \\[10pt]
+
+Протокол обмена ключами Диффи-Хэллмана
+}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}{До сих пор...}
+	\Large 
+	\begin{itemize}
+		\item  {\color{Orange}Псевдослучайные генераторы} 
+		\item {\color{Orange} Потоковые шифры} 
+		\item {\color{Orange} Блок-шифры } 
+		\item {\color{Orange} Коды Аутентификации сообщений (MAC)}
+		\item {\color{Orange} Хэш-функции}  
+		\item {\color{Orange} Шифрование с аутентификацией }  
+	\end{itemize}
+
+\vspace{10pt}
+\centering
+ 
+Кроме псевдослучайных генераторов, \textbf{все} примитивы подразумевают наличие {\color{Orange} общего секретного  ключа.}\\[10pt]
+Как двум сторонам сгенерировать секретный ключ? \\[10pt]
+
+
+
+\end{frame}
+
+\begin{frame}{Обмен ключами Диффи-Хэллмана (Diffie-Hellman Key Exchange)}
+\centering
+\begin{columns}
+	\begin{column}{0.5\textwidth}
+		\includegraphics[width=0.65\linewidth]{Whit_Diffie}\\
+		Whitfield Diffie  \textcopyright Wikipedia
+	\end{column}
+	\begin{column}{0.5\textwidth}
+	\includegraphics[width=0.6\linewidth]{Martin-Hellman}\\
+	Martin Hellman  	\small \textcopyright Wikipedia
+\end{column}
+\end{columns}
+\vspace{15pt}
+\large
+	\begin{itemize}
+		\item протокол предложен  Whitfield Diffie, Martin Hellman в 1976 \\
+		\textit{``New Directions in Cryptography''}
+		\item используется в современных протоколах (TLS, Signal)
+		\item в основе  трудность {\color{Orange} задачи дискретного логарифма}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Обмен ключами: определение}
+\Large
+\vspace{-40pt}
+{\color{Orange} Сценарий:} Алиса и Боб имеют общий канал связи. Их цель: сгенерировать общий секретный ключ \\[10pt]
+
+{\color{Orange} Злоумышленник } -- пассивный участник, просматривающий канал связи \\[20pt]
+
+
+Протокол {\color{Orange} обмена ключами} -- ppt интерактивный алгоритм, состоящий из двух алгоритмов: \\
+\begin{enumerate}
+	\item $\mathtt{GenParam}(1^\lambda) \rightarrow \mathtt{param}$ 
+	\item $\mathtt{KeyGen}(\mathtt{param}) \rightarrow k \in \keyS$ -- интерактивный протокол. \\
+	
+\end{enumerate} 
+
+Передаваемая информация по каналу -- $\mathtt{trans}$
+	
+\end{frame}
+
+\begin{frame}{Обмен ключами: безопасность}
+\Large
+
+		\begin{center}
+	$\Pi = (\mathtt{GenParam}, \mathtt{KeyGen})$ --  протокол обмена ключами \\[20pt]
+	
+
+		
+		\begin{tabular}{c c c}
+			{\color{Orange} Челленджер $\mathcal{C}$ } & & {\color{Orange} Атакующий $\mathcal{A}$ }\\ [5pt]
+			$k_0, \mathtt{trans} \leftarrow \Pi(1^\lambda)$ & &\\ [2pt]
+			$k_1 \xleftarrow{\$} \keyS$ &  &\\ 
+			$b \xleftarrow{\$} \{0,1\}  $&$\xrightarrow{(k_b, \mathtt{trans} )}$  &\\ 
+			& $\xleftarrow{\quad \hat{b} \quad}$ & \\ [5pt]
+		\end{tabular}
+		\begin{tikzpicture}[overlay]
+		\draw[fill=none, draw=white, opacity=0.5] (-8.8,-2.) rectangle (-5.0,2.0); 
+		\draw[fill=none, draw=white, opacity=0.5] (-3.0,-2.) rectangle (0.0,2.0); 
+		\end{tikzpicture}
+	\end{center}
+
+\vspace{10pt}
+
+$\mathtt{W_{\Pi, \adv}}$ -- событие $\hat{b} == b$. \\ [4pt]
+$\mathtt{Adv} = \abs{\Pr[\mathtt{W_{\Pi, \adv}}]  - \frac{1}{2}}$ -- выигрыш  $\adv$. \\ [4pt]
+\color{Orange} Протокол обмена ключами $\Pi$ безопасен относительно \\ пассивного атакующего, если для любого ppt $\adv:$  \[\mathtt{Adv} = \negl(\lambda).\]
+
+\end{frame}
+
+\begin{frame}
+Часть II \\ [10pt]
+\begin{LARGE}
+	
+	\color{Orange}
+	\Huge  Крэш-курс по конечным полям.
+	
+\end{LARGE}
+\end{frame}
+
+\begin{frame}{Модульная арифметика}
+\Large 
+{\color{Orange} Возьмем $p$ -- большое простое число ($\sim$\ 2000 бит)}
+\begin{itemize}
+	\item $\Zp = \left\{ 0, 1, \ldots, p-1 \right\}$ -- конечное поле
+	\item умножение/сложение в $\Zp$ производится по модулю $p$, т.е.\ для $x, y \in \Zp$
+	\begin{align*}
+	x+y \bmod p &= \rem(x+y, p) \\
+	x\cdot y \bmod p &= \rem(x\cdot y, p)
+	\end{align*}
+	{\hspace{90pt} \large $\rem $ -- остаток от целочисл.\ деления}\\[10pt]
+	\pause
+	
+	Пример: $p  = 7, \Zp = \{0, 1, 2, 3, 4, 5, 6\}$
+	\begin{align*}
+	5+6 \bmod p &= \rem(11, 7) = 4 \\
+	3\cdot 3  \bmod p &= \rem(9, 7) = 2
+	\end{align*}
+	\pause
+	\item Для ненулевого $x \in \Zp$, $\exists x^{-1} \in \Zp$: $x \cdot x^{-1} = 1 \bmod p$\\
+	Пример.:  $1^{-1} = 1$, $2^{-1} = 4$, $3^{-1} = 5$,  $4^{-1} = 2$, $5^{-1} = 3$, $6^{-1} = 6$ в $\Z_7$
+	\item Множество обратимых элементов $\Zp^{\ast} = \Zp \setminus \{0\}$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Структура $\Zp^\ast$ }
+\Large
+\begin{itemize}
+\itemsep 10pt
+\item {\color{Orange} Теорма Ферма:} $g^{p-1} = 1 \bmod p \; \; \forall 0 \neq g \in \Zp$\\[5pt]
+Пример.: $2^6 = 64 = 1 \bmod 7$
+\item $\Zp^\ast$ --  {\color{Orange} циклическая группа}, т.e., \\
+$\exists g \in \Zp$ s.t.\ $\Zp^\ast = \{1 = g^0, g^1, g^2, \ldots, g^{p-2}\}$ \\[5pt]
+Пример: $\Z_7^\ast = \{1, 3, 3^2 = 2, 3^3 = 6, 3^4 = 4, 3^5 = 5\}$ 
+
+\item Не каждый элемент является образующим  $\Zp$, но мы знаем, как его эффективно отыскать
+
+\item {\color{Orange} Порядок} $g \in \Zp$, $\ord(g)$ -- {\color{Orange} наименьшее} положительное $a$ т.ч.\ $g^a = 1$ \\[5pt]
+Для любого образующего $g$, $\ord(g) = p-1$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Вычисления в $\Zp$ }
+\large
+Эффективность арифметики в $\Zp$ измеряется в $n = \lceil \log p \rceil$
+\begin{itemize}
+\itemsep 5pt
+\item Сложение: $\bigO(n)$ битовых операций
+\item Умножение: $\bigO(n^2)$ (или $\bigO(n^{1.7})$) битовых операций
+\item Нахождение обратного: $\bigO(n^2)$ битовых операций
+\pause
+\item Возведение в степень, $x^r$:  $\bigO(\log r)$ умножений в $\Zp$ (быстрое возведение в степень)\\
+\begin{itemize}
+\Large
+\item $y \leftarrow g$, $z \leftarrow 1$
+\item \texttt{for $i$ in $[0, n]$:}
+\item \hspace{10pt}  \texttt{if $r[i]==1$ :} $z \leftarrow z \cdot y$
+\item \hspace{10pt}  $y \leftarrow y^2$
+\item \texttt{return} $z$
+\end{itemize}
+\pause 
+Пример: вычислим $g^r$ для $r = 23 = (10111)_2$. I.e., $g^{23} = g^{16+4+2+1}$. \\
+\[
+g^1 \rightarrow g^{1+2} \rightarrow g^{1+2+4} \rightarrow  g^{1+2+4} \rightarrow g^{1+2+4+16} 
+\]
+
+\end{itemize}
+
+\vspace{15pt}
+\centering
+\Large
+Эти операции {\color{Orange} {эффективны}} в $\Zp$
+\end{frame}
+
+\begin{frame}
+Часть III \\ [10pt]
+\begin{LARGE}
+	
+	\color{Orange}
+	\Huge  Задача Диффи-Хэллмана. \\ Протокол Диффи-Хэллмана
+	
+\end{LARGE}
+\end{frame}
+
+
+\begin{frame}{Трудные (сегодня) задачи в $\Zp$}
+\large
+\begin{enumerate}
+	\itemsep 10pt
+	\item {\color{Orange}{Задача дискретного логарифма} (dlog):} \\[3pt]
+	Для $g$ -- образующего $\Zp^\ast$ и $x \in \Zp^\ast$, найти $r$ т.ч.\ $g^r = x \bmod p$ \\[5pt]
+	Пример: Для $\langle 3 \rangle =  \Z_7^\ast$ и $5$ найти $r = 5$ ($3^5 = 5$).
+	
+	\item  {\color{Orange}{Задача Diffie-Hellman (вычислительная версия)} (CDH):} \\[3pt]
+	Для $g$ -- образующего $\Zp^\ast$,  $x = g^r \in \Zp^\ast$, $y = g^t \in \Zp^\ast$ найти $z = g^{r\cdot t} \bmod p$. \\[5pt]
+	Пример: Для $\langle 3 \rangle  = \Z_7^\ast$ и $x = 2, y = 6 $ найти $z = 3^5 = 5 \bmod p$.
+	
+	\item {\color{Orange}{Задача принятия решения  Diffie-Hellman} (DDH):} \\
+	Для $g$ -- образующего $\Zp^\ast$, $a, b, c \xleftarrow{\$} \Zp^\ast$, отличить тройки
+	\[
+	(g^a, g^b, g^{ab}) \quad \quad (g^a, g^b, g^c)
+	\]
+	%\pause
+	%\item If one can solve dlog, one can also solve CDH
+	%\item The other direction is not known in general
+	
+	
+	%\item {\color{Orange}{The hardness of both problems depend on the choice of $p$!} Not every prime gives a hard instance of dlog/CDH. }
+\end{enumerate}
+\Large
+\centering
+\pause
+\vspace{20pt}
+{\color{Orange}
+	DDH $\leq$ CDH $\leq$ DLOG \\[5pt]
+}
+A $\leq$ B = ``решение для $B$ дает решение для $A$'' \\[5pt]
+
+В общем случае редукции в обратную сторону не известны.
+\end{frame}
+
+\begin{frame}{Сложность задач DLOG/CHD/DDH?}
+\Large 
+Лучший из известных на сегодня алгоритмов для вычисления DLOG в $\Zp^\ast$ для $n=\lceil\log p\rceil$: {\color{Orange}General Number Field Sieve}  работает за суб-экспоненциальное время  {\Huge \color{Orange}\[e^{n^{1/3}}\]}
+
+Для уровня безопасности {\color{Orange} $\lambda=128$} бит, необходимо взять
+\[
+n \approx {\color{Orange}3072} \text{ бит}
+\]
+%\vspace{10pt}
+
+Вместо группы $\Zp^\star$ на практике используется группа рациональных \\ точек эллиптической кривой. \\[5pt]
+{\color{Orange}Преимущество:}  известны лишь {\color{Orange} экспоненциальные} (от порядка \\ группы) алгоритмы для задачи dlog.
+\end{frame}
+
+\begin{frame}{Обмен ключами Диффи-Хэллмана}
+\Large
+\begin{center}
+%Зафиксируем большое простое $p$, и $\langle g \rangle = \Zp^\ast$
+$\mathtt{GenParam} \rightarrow (g, p)$, где $p$ -- большое простое число и $\langle g \rangle = \Zp^\ast$
+\large 
+\begin{center}
+\begin{tabular}{l c c c l}
+	& Алиса  & & Боб &  \\
+	& \multirow{5}{*}{\includegraphics[scale=0.15]{Alice}} & & 
+	\multirow{5}{*}{\includegraphics[scale=0.15]{Bob}} &    \\
+	\pause
+	$a \leftarrow \{2, \ldots, p-2 \}$ & & &  &  $b \leftarrow \{2, \ldots, p-2 \}$ \\
+	\pause
+	$k_\text{A} = g^a \bmod p$ & & $\xrightarrow{ \hspace{10pt } \Huge k_\text{A} \hspace{10pt } }$  &  & $k_\text{B} = g^b \bmod p$ \\
+	\pause
+	& & $\xleftarrow{ \hspace{10pt } \Huge k_\text{B} \hspace{10pt } }$  &  & \\
+	\pause
+	$k_\text{AB} =   k_\text{B}^a$ & &  &  & $k_\text{AB} =   k_\text{A}^b$ 
+\end{tabular}
+\end{center}
+\vspace{15pt}
+{\color{Orange}$k_\text{AB}$} -- общий ключ \\[10pt]
+\end{center}
+{\color{Orange}Корректность:} $k_\text{B}^a = (g^b)^a = g^{ab} = (g^a)^b=  k_\text{A}^b$.\\[5pt]
+
+{\color{Orange}Безопасность (неформально): } атакующий видит траскрипт $g^a, g^b$. \\
+Для того, чтобы различить $g^{ab}$ от случайного элемента $\Zp^\ast$, он \\ должен решить  задачу  {\color{Orange}DHH.}
+\end{frame}
+
+\begin{frame}{Безопасность протокола Диффи-Хэллмана}
+\Large
+\vspace{-35pt}
+
+{\color{Orange} Теорема.} Протокол Диффи-Хэллмана безопасен относительно пассивного атакующего под предположением сложности задачи {\color{Orange}DHH.}
+
+\vspace{15pt}
+
+\begin{center}
+
+\begin{tabular}{c c c}
+{\color{Orange} Челленджер $\mathcal{C}$ } & & {\color{Orange} Атакующий $\mathcal{A}$ }\\ [5pt]
+$\mathtt{trans}  = (g^a, g^b), k_0 = g^{ab}$ & &\\ [2pt]
+$k_1 = g^c \rightarrow \Zp^\ast$ &  &\\ 
+$b \xleftarrow{\$} \{0,1\}  $&$\xrightarrow{(k_b, \mathtt{trans} )}$  &\\ 
+& $\xleftarrow{\quad \hat{b} \quad}$ & \\ [5pt]
+\end{tabular}
+\begin{tikzpicture}[overlay]
+\draw[fill=none, draw=white, opacity=0.5] (-10.0,-2.) rectangle (-5.0,2.0); 
+\draw[fill=none, draw=white, opacity=0.5] (-3.0,-2.) rectangle (0.0,2.0); 
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}{Активная атака ``человек по середине'' (Man-in-the-middle attack)}
+\Large
+Протокол Диффи-Хэллмана в ``чистом виде'' подвержен {\color{Orange} активным} атакам.
+
+
+\large
+\begin{center}
+\begin{tabular}{l c c c c c l}
+& Alice  & & Eve & & Bob &  \\
+& \multirow{5}{*}{\includegraphics[scale=0.10]{Alice}} & & 
+\multirow{5}{*}{\includegraphics[scale=0.10]{Eve}} & &
+\multirow{5}{*}{\includegraphics[scale=0.10]{Bob}} &    \\
+
+$k_\text{A} = g^a \bmod p$ & & $\xrightarrow{ \hspace{5pt } \Huge k_\text{A} \hspace{5pt } }$  &  & $\xrightarrow{ \hspace{5pt } \Huge g^{a'} \hspace{5pt} }$ &  &$k_\text{B} = g^b \bmod p$ \\
+
+& & $\xleftarrow{ \hspace{5pt } \Huge g^{b'} \hspace{5pt } }$  &  & $\xleftarrow{ \hspace{5pt } \Huge k_\text{B} \hspace{5pt} }$ &  &\\[20pt]
+
+&\Huge  $g^{ab'}$ & \multicolumn{3}{c} {\Huge $g^{ab'}$, $g^{a'b}$} & \Huge $g^{a'b}$ &\\
+\end{tabular}
+\end{center}
+\centering
+\vfill
+Фикс: использовать (ассиметрическую) аутентификацию.  \\ См. следующую лекцию
+\end{frame}
+
+\begin{frame}{Протокол Диффи-Хэллмана на практике}
+\Large
+\begin{itemize}
+\itemsep 10pt
+\item Атака ``человек по середине'' предотвращается с помощью цифровой подписи
+\item В реальных приложениях протокол ДХ вместо группы $\Zp^*$ использует группу рац, точек эллиптической кривой. Соответствующая задача:  {\color{Orange}{EDDH.}} 
+\item Построить подходящую группу для задач DLOG, CDH, DDH {\color{Orange}{нетривиальна!}}  Не придумывайте свою, используйте стандарты.
+\item См. \url{https://safecurves.cr.yp.to/} для выбора хорошей кривой
+\item ГОСТа для протокола обмена ключами нет, есть RFC \url{https://www.ietf.org/rfc/rfc5246.txt} и рекомендации.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+Часть IV \\ [10pt]
+\begin{LARGE}
+	
+	\color{Orange}
+	\Huge  PAKE. Парольный обмен ключами с аутентификацией
+	
+\end{LARGE}
+\end{frame}
+
+\begin{frame}{Password Authenticated Key Exchange (PAKE): мотивация}
+\Large
+\begin{itemize}
+	\itemsep 10pt
+	\item Классический Диффи-Хэллмана (ДХ) протокол уязвим к активной атаке
+	\item Безопасная реализация ДХ подразумевает аутентифицированный канал 
+	\item Аутентификация:  либо { \color{Orange}доверенная сторона}, либо  {\color{Orange} парольные решения }
+\end{itemize}
+%\centering 
+
+\vspace{20pt}
+
+{\color{Orange} Сценарий}: две стороны, сервер и клиент, знают пароль $pwd$ \\[10pt]
+{\color{Orange} Задача}: обезопасить клиента от атакующего, представляющегося \\ сервером. 
+\end{frame}
+
+\begin{frame}{Упрощенная версия $\text{PAKE}_0$}
+\vspace{-20pt}
+\Large
+\begin{center}
+%Зафиксируем большое простое $p$, и $\langle g \rangle = \Zp^\ast$
+$\Hash$-- криптографическая хэш-функция. $R, S$--множество нонсов \\[5pt]
+$\mathtt{id}_{A}$ -- идентификатор Алисы, $\mathtt{id}_{B}$ -- идентификатор Боба\\[10pt]
+
+\large 
+\begin{center}
+	\begin{tabular}{l c c c l}
+		& Алиса (клиент)  & & Боб (сервер) &  \\
+		& \multirow{5}{*}{\includegraphics[scale=0.15]{Alice}} & {\huge $pwd$} &  \hspace{-20pt}
+		\multirow{5}{*}{\includegraphics[scale=0.15]{Bob}} &    \\[10pt]
+		$r \xleftarrow{\$} R$ & & {\huge $\xrightarrow{\quad r \quad }$}&  & \\
+		& &  {\huge $\xleftarrow{\quad s \quad }$}&  & \hspace{-30pt} $s \xleftarrow{\$} S$ \\
+		${\color{Orange}k} =\Hash(\mathtt{id}_{A}, \mathtt{id}_{B}, r, s, pwd) $ & &  &  & \hspace{-30pt} ${\color{Orange}k} =\Hash(\mathtt{id}_{A}, \mathtt{id}_{B}, r, s, pwd) $ \\
+	\end{tabular}
+\end{center}
+\vspace{15pt}
+{\color{Orange}$k$} -- общий ключ \\[10pt]
+\end{center}
+
+{\color{Orange}Проблема: } Если $pwd$ легко угадывается, пассивный злоумышленник  \\ может легко провести атаку перебором на {\color{Orange}$k$}
+
+\end{frame}
+\begin{frame}{Упрощенная версия $\text{PAKE}_1$}
+\Large
+\vspace{-20pt}
+\begin{center}
+$\Hash$-- криптографическая хэш-функция \\[2pt]
+$\mathtt{id}_{A}$ -- идентификатор Алисы, $\mathtt{id}_{B}$ -- идентификатор Боба\\[2pt]
+$\mathtt{GenParam} \rightarrow (g, p)$, где $p$ -- большое простое число и$\langle g \rangle = \Zp^\ast$
+\large 
+\begin{center}
+\begin{tabular}{l c c c l}
+	& Алиса (клиент)  & & Боб (сервер) &  \\
+	& \multirow{2}{*}{\includegraphics[scale=0.15]{Alice}} & {\huge $pwd$} &  \hspace{-20pt}
+	\multirow{2}{*}{\includegraphics[scale=0.15]{Bob}} &    \\[10pt]
+	$ a \leftarrow \{2, \ldots, p-2 \}$ & & {\Huge $\xrightarrow{\quad u  \quad }$}&  &\hspace{-30pt} $b \leftarrow \{2, \ldots, p-2 \}$ \\
+	\huge $w = v^a$& &  {\Huge $\xleftarrow{\quad v  \quad }$}&  & \hspace{-30pt}\huge $v = u^b$ \\[20pt]
+	\multicolumn{5}{c}{ \LARGE ${\color{Orange}k} =\Hash(\mathtt{id}_{A}, \mathtt{id}_{B}, u, v, w, pwd) $}   \\
+\end{tabular}
+\end{center}
+%\vspace{15pt}
+\end{center}
+$\text{PAKE}_1$ безопасен относительно {\color{Orange} пассивных} злоумышленников  при \\ условии сложности задачи CDH. \\[5pt]
+$\text{PAKE}_1$  небезопасен относительно {\color{Orange}активного} атакующего, выдающего \\ себя за сервер
+\end{frame}
+
+
+\begin{frame}{ Версия $\text{PAKE}_2$}
+\Large
+\vspace{-20pt}
+\begin{center}
+$\Hash$-- криптографическая хэш-функция  \\[3pt]
+$\mathtt{id}_{A}$ -- идентификатор Алисы, $\mathtt{id}_{B}$ -- идентификатор Боба\\[3pt]
+Зафиксируем большое простое $p$, и $\langle g \rangle = \Zp^\ast$, $\color{Orange} \alpha, \beta \in \Zp^\ast $\\
+\large 
+\begin{center}
+\begin{tabular}{l c c c l}
+& Алиса (клиент)  & & Боб (сервер) &  \\
+& \multirow{2}{*}{\includegraphics[scale=0.15]{Alice}} & { ${\color{Orange}pwd} \in \Zp^\ast $} &  \hspace{-20pt}
+\multirow{2}{*}{\includegraphics[scale=0.15]{Bob}} &    \\[10pt]
+$ a \leftarrow \{2, \ldots, p-2 \}$ & & &  &\hspace{-30pt} $b \leftarrow \{2, \ldots, p-2 \}$ \\[3pt]
+\huge ${\color{Orange} u = g^a \cdot \alpha^{pwd}} $ & & {\Huge $\xrightarrow{\quad u \quad }$}& & \hspace{-30pt}  \huge ${\color{Orange} v = g^b \cdot \beta^{pwd}} $ \\[3pt]
+\huge $ {\color{Orange}w = (v/\beta^{pwd})^a}$& &  {\Huge $\xleftarrow{\quad v \quad }$}&  & \huge \hspace{-30pt} ${\color{Orange}w = (u/\alpha^{pwd})^b}$ \\[17pt]
+\multicolumn{5}{c}{ \LARGE ${\color{Orange}k} =\Hash(\mathtt{id}_{A}, \mathtt{id}_{B}, u, v, w, pwd) $}   \\
+\end{tabular}
+\end{center}
+%
+\end{center}
+
+\vspace{20pt}
+
+$\text{PAKE}_2$ безопасен относительно {\color{Orange} активных} злоумышленников \\ при условии сложности задачи CDH \\
+
+
+\end{frame}
+
+\begin{frame}{PAKE на практике}
+\Large
+\begin{itemize}
+\itemsep 10pt
+\item Пароли на сервере хранятся в виде $g^{\Hash(\text{salt}, pwd)}$ (атакующий, получив это значение, не может эффективно вычислить $pwd$)
+\item Популярный пример PAKE: Secure Remote Password (SRP) (iCloud Key Vault)
+\item Другой пример: OPAQUE \url{https://tools.ietf.org/html/draft-krawczyk-cfrg-opaque-00} -- криптографический стойкий и эффективный PAKE
+\end{itemize}
+\end{frame}
+
+
+\end{document}

@@ -226,52 +226,52 @@
 }
 \end{frame}
 
-\begin{frame}{Поиск ближайшего вектора {\textbf{C}}VP / BDD}
-\vspace{-30pt}
-\begin{tikzpicture}%[show background grid]
-\hspace{-30pt}
-\begin{scope}
-\foreach \y in {-2,...,4}
-\foreach \x in {-2,...,3}
-\filldraw(\x*40pt+\y*10pt, 10pt*\x+20pt*\y) circle (1.7pt);
-
-\filldraw(0pt,0pt) circle (1.7pt) node[below]{ $0$};
-
-\draw[-stealth, white, thick] (0,0) -- (50pt, 30pt) node[font=\Large, above, xshift=5pt]{$\bvec_1$};
-\draw[-stealth, white, thick] (0,0) -- (40pt, 10pt) node[font=\Large, below, xshift=5pt]{$\bvec_2$};
-
-%\draw[-stealth, Orange, thick] (0, 0) -- (10pt, 20pt) node[font=\LARGE, left]{$\vvec$};
-
-\filldraw[fill=Orange, draw=Orange](-18pt,45pt) circle (1.7pt) node[below right, yshift=3pt, xshift=-2pt]{ \LARGE $\tvec$};
-\draw[fill=none, draw=Orange] (-18pt,45pt) circle (10pt);
-\filldraw(-10pt,50pt) circle (1.7pt) node[below right]{ \Large $\vvec$};
-\onslide<3->
-{
-\draw[fill=CharCoalDark, draw=none, opacity=0.5] (2.2,-3.0) rectangle (8.5,3.0) node[color=white, opacity=1,align=center] at (6.2, 1.0){
-	\LARGE 
-	Для решения BDD в $\Lat$, \\[3pt]
-	\LARGE
-	вызываем оракул для approx-SVP на \\[3pt]
-	\LARGE
-	``связанной'' решетке р-ти+1. \\[3pt]
-};
-}
-
-\end{scope}
-\end{tikzpicture}
-	\vspace{-25pt}
-\Large {
-
-	В задаче {\color{Orange}{поиска ближайшего вектора} (CVP)} для $\tvec \notin \Lat$ требуется найти $\vvec \in \L$:
-	\[
-	\norm{\vvec - \tvec} \text{минимально для всех } \vvec \in \Lat
-	\]
-	\pause
-	Часто: $\dist(t, \Lat) \leq \frac{1}{\gamma} \lambda_1(\Lat)$. 
-	Получаем задачу {\color{Orange}Декодирования с Ограниченным расстоянием,  $\gamma$-BDD}
-	
-}
-\end{frame}	
+%\begin{frame}{Поиск ближайшего вектора {\textbf{C}}VP / BDD}
+%\vspace{-30pt}
+%\begin{tikzpicture}%[show background grid]
+%\hspace{-30pt}
+%\begin{scope}
+%\foreach \y in {-2,...,4}
+%\foreach \x in {-2,...,3}
+%\filldraw(\x*40pt+\y*10pt, 10pt*\x+20pt*\y) circle (1.7pt);
+%
+%\filldraw(0pt,0pt) circle (1.7pt) node[below]{ $0$};
+%
+%\draw[-stealth, white, thick] (0,0) -- (50pt, 30pt) node[font=\Large, above, xshift=5pt]{$\bvec_1$};
+%\draw[-stealth, white, thick] (0,0) -- (40pt, 10pt) node[font=\Large, below, xshift=5pt]{$\bvec_2$};
+%
+%%\draw[-stealth, Orange, thick] (0, 0) -- (10pt, 20pt) node[font=\LARGE, left]{$\vvec$};
+%
+%\filldraw[fill=Orange, draw=Orange](-18pt,45pt) circle (1.7pt) node[below right, yshift=3pt, xshift=-2pt]{ \LARGE $\tvec$};
+%\draw[fill=none, draw=Orange] (-18pt,45pt) circle (10pt);
+%\filldraw(-10pt,50pt) circle (1.7pt) node[below right]{ \Large $\vvec$};
+%\onslide<3->
+%{
+%\draw[fill=CharCoalDark, draw=none, opacity=0.5] (2.2,-3.0) rectangle (8.5,3.0) node[color=white, opacity=1,align=center] at (6.2, 1.0){
+%	\LARGE 
+%	Для решения BDD в $\Lat$, \\[3pt]
+%	\LARGE
+%	вызываем оракул для approx-SVP на \\[3pt]
+%	\LARGE
+%	``связанной'' решетке р-ти+1. \\[3pt]
+%};
+%}
+%
+%\end{scope}
+%\end{tikzpicture}
+%	\vspace{-25pt}
+%\Large {
+%
+%	В задаче {\color{Orange}{поиска ближайшего вектора} (CVP)} для $\tvec \notin \Lat$ требуется найти $\vvec \in \L$:
+%	\[
+%	\norm{\vvec - \tvec} \text{минимально для всех } \vvec \in \Lat
+%	\]
+%	\pause
+%	Часто: $\dist(t, \Lat) \leq \frac{1}{\gamma} \lambda_1(\Lat)$. 
+%	Получаем задачу {\color{Orange}Декодирования с Ограниченным расстоянием,  $\gamma$-BDD}
+%	
+%}
+%\end{frame}	
 
 
 
@@ -328,7 +328,7 @@
 		\hspace{5pt} -- С док-вом  & $2^{2.465n + \smallo(n)}$& $2^{1.325n + \smallo(n)}$ \\ [-1ex]
 		\hspace{5pt} -- Эвристические: & & \\ [-1ex]
 		\hspace{15pt} -- $2$-просеивание  & $2^{0.415 n + \smallo(n)}$ & $2^{0.208n + \smallo(n)}$\\
-		\hspace{15pt} -- $2$-просеивание+LSH  & $2^{0.415 n + \smallo(n)}$ & $2^{0.208n + \smallo(n)}$\\
+		\hspace{15pt} -- $2$-просеивание+LSH  & $2^{0.292 n + \smallo(n)}$ & $2^{0.208n + \smallo(n)}$\\
 		\hspace{15pt} -- $3$-просеивание & $2^{0.396n + \smallo(n)}$ & $2^{0.1887n + \smallo(n)}$  \\ \hline
 		
 	\end{tabular}
