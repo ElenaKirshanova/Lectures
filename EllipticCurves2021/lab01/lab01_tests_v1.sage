@@ -21,6 +21,26 @@ def jInvariant(a1, a2, a3, a4, a6, q):
     # your code here
 
 
+def randIsomorphic(a1, a2, a3, a4, a6, q):
+    """
+    If a_i's define an elliptic curve E, output the coeffs of a random curve isomorph to E over F_q
+    or over QQ (if q = 0)
+    :param a1, a2, a3, a4, a6: the coeffs of the input curve
+    :param q: char (=size) of the base field !!! Not tested if q is non-prime
+    
+    TESTS::
+        sage: randIsomorphic(0, 1, 0, 0, 1, 0)
+        [84018929351/40278291547, -3529590244531057273929/3244681539890263306418, 16968084280/65345114520434467921250200124323, 353286229108528897936/2631989573826162588039934597339577439997681, 428744830863529428921825964376141/273278975468076514722490246385165108162347501490379343657997333056]
+        
+        sage: randIsomorphic(1, 2, 1, 5, 1, 5)
+        [6, 6, 5, 2, 5]
+        
+        sage: randIsomorphic(0, 0, 0, 0, 0, 5)
+        Exception: the input curve is singular
+    """
+    # your code here
+
+
 def isIsomorphic(a1, a2, a3, a4, a6, b1, b2, b3, b4, b6, q):
     """
     If a_i's and b_i's define elliptic curves E1, E2, solve a system of non-lin. equations to find
@@ -44,35 +64,6 @@ def isIsomorphic(a1, a2, a3, a4, a6, b1, b2, b3, b4, b6, q):
         
         sage: isIsomorphic(0,1,3,1,2,12,19,17,10,10, 53)
         'non-isomorphic'
-    """
-    # your code here
-
-def test_randIsomorphic(a1, a2, a3, a4, a6, q):
-    if q == 0:
-        E1 = EllipticCurve([a1, a2, a3, a4, a6])
-    else:
-        K = GF(q)
-        E1 = EllipticCurve([K(a1), a2, a3, a4, a6])
-    E2 = EllipticCurve(randIsomorphic(a1, a2, a3, a4, a6, q))
-    return E1.is_isomorphic(E2)
-
-
-def randIsomorphic(a1, a2, a3, a4, a6, q):
-    """
-    If a_i's define an elliptic curve E, output the coeffs of a random curve isomorphic to E over F_q
-    or over QQ (if q = 0)
-    :param a1, a2, a3, a4, a6: the coeffs of the input curve
-    :param q: char (=size) of the base field !!! Not tested if q is non-prime
-    
-    TESTS::
-        sage: test_randIsomorphic(0, 1, 0, 0, 1, 0)
-        True
-
-        sage: test_randIsomorphic(1, 2, 1, 5, 1, 5)
-        True
-        
-        sage: randIsomorphic(0, 0, 0, 0, 0, 5)
-        Exception: the input curve is singular
     """
     # your code here
 
