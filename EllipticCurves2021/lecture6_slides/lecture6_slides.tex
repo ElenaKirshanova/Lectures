@@ -28,6 +28,39 @@
 
 \frame{\titlepage}
 
+\begin{frame}{$\rho$-метод Полларда}
+\[E/\mathbb{F}_q: y^2 = x^3 + a x + b\]
+
+\[P \in E(\mathbb{F}_q), \operatorname{ord}{P} = ?\]
+
+\structure{Идея:} задать псевдослучайную последовательность точек $P_0 = P, P_{i+1} = f(P_{i})$ и экспонент $e_0, e_1, \ldots$, т. ч. $P_i = [e_i] P$. $E(\mathbb{F}_q)$ -- конечная группа \MyImplies $\exists i, j: P_i = P_j$ \MyImplies $\operatorname{ord}(P)$ делит $|e_i - e_j|$.
+
+\vspace{1em}
+Для нахождения $i,j$ т.ч. $P_i = P_j$ используются различные алгоритмы нахождения циклов.
+\end{frame}
+
+\begin{frame}{$\rho$-метод Полларда}{На основе алг. поиска циклов Флойда}
+\structure{Вход}: $P \in E(\mathbb{F}_q)$, $r \in \mathbb{N}$, $h: E(\mathbb{F}_q) \rightarrow \{1, \ldots, r\}$. \\
+\structure{Выход:} $M$ т.ч., $\operatorname{ord}(P) \mid M$\\
+\begin{enumerate}
+    \item Сгенерировать $r$ случайных чисел~$\alpha_i$;
+    \item Вычислить $Q_i = [\alpha_i] P$;
+    \item Задать $f: (P, e) \mapsto (P + Q_{h(P)}, K+\alpha_{h(P)})$;
+    \item $(P_1, K_1) = (P, 1)$;
+    \item $(P_2, K_2) = f(P_1, K_1)$;
+    \item \structure{while} $P_1 \neq P_2$ \structure{do:}
+    \item \quad $(P_1, K_1) = f(P_1, K_1)$;
+    \item \quad $(P_2, K_2) = f(f(P_2, K_2))$;
+    \item \structure{return} $M = |K_1 - K_2|$.
+\end{enumerate}
+
+\structure{Сложность:} $O({q^{1/4}})$ по времени и $O(1)$ по памяти. 
+\end{frame}
+
+%\begin{frame}{Алгоритм Сазерленда}
+%    
+%\end{frame}
+
 \begin{frame}{Алгоритм Схоофа\footnote{\textit(гол.) Schoof = Схооф, в рус. лит. больше известен как Шуф.}}
 \[
 E/\mathbb{F}_q: y^2 = x^3 + a x + b
