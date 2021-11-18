@@ -97,6 +97,23 @@ $p-1 = \prod p_i^{e_i},\ p_i \leq B_1, p_i^{e_i} \leq B_2$, т.~е. $p-1$ явл
     
     Тогда алгоритм $(p-1)$ Полларда находит $p$ за время $O( B_1 \lg^3 N)$ с вероятностью $1  - \frac{1}{B_1}$.
 \end{block}
+\vspace{1em}
+
+\ProofBegin
+Положим $K = \prod\limits_{p_i \leq  B_1}{p_i^{e_i}}$.
+
+Т.~к. $(q-1)$ -- не $B_1$-гладкое, $\exists r$ -- простое, $r > B_1: r \mid q-1$.
+
+Если $r \mid \operatorname{ord}_{\mathbb{Z}_q^\times}(a)$, то $\operatorname{ord}_{\mathbb{Z}_q^\times}(a) \nmid K$ \MyImplies $a^K \not\equiv 1 \bmod{q}$.
+
+С другой стороны $K$ -- кратно $p-1$ \MyImplies $a^K \equiv 1 \bmod{p}$ и $\gcd(a^K - 1, N) = p$.
+
+%Т.~е. необх. показать, что $r \mid \operatorname{ord}_{\mathbb{Z}_q^\times}(a)$ с большой вероятностью для $a \in \mathbb{Z}_N^\times$.
+%Вероятность, что целое число делится на простое~$r$ равна $\frac{1}{r}$.
+%Вероятность, что целое число делится на простое~$r$ равна $\frac{1}{r}$.
+
+Так как $\operatorname{ord}_{\mathbb{Z}_q^\times}(a)$ -- целое число, то вероятность того, что $\operatorname{ord}_{\mathbb{Z}_q^\times}(a) \nmid K$ равна $1 -\frac{1}{K} = 1 - \frac{1}{B_1}$. 
+\ProofEnd
 \end{frame}
 
 \begin{frame}{Сложность}
@@ -105,7 +122,7 @@ $p-1 = \prod p_i^{e_i},\ p_i \leq B_1, p_i^{e_i} \leq B_2$, т.~е. $p-1$ явл
     \item Шаг 2: $O( \lg^3 N )$
     \item Шаг 3: $O( \lg^2 N )$
 \end{itemize}
-\structure{Итого:} $O( B_1 \cdot \lg^3 N )$.
+\structure{Итого:} $O( B_1 \cdot \lg^3 N)$.
 \end{frame}
 
 \begin{frame}
@@ -207,9 +224,9 @@ $p-1 = \prod p_i^{e_i},\ p_i \leq B_1, p_i^{e_i} \leq B_2$, т.~е. $p-1$ явл
 Имеем: $r \mid \operatorname{ord}_{E(\mathbb{F}_q)}(P)$ \MyImplies $K \cdot P \neq \mathcal{O}$ на $E(\mathbb{F}_q)$.
 \vspace{0.5em}
 
-С другой стороны: $\#E(\mathbb{F}_p) \mid K$ \MyImplies $K \cdot P = \mathcal{O}$ на~$E(\mathbb{F}_q)$.
+С другой стороны: $\#E(\mathbb{F}_p) \mid K$ \MyImplies $K \cdot P = \mathcal{O}$ на~$E(\mathbb{F}_p)$.
 
-Вычисляем $k P$ на $E(\mathbb{Z}_N)$ \MyImplies получаем $P' + Q' = \mathcal{O}$ на $E(\mathbb{F}_p)$ и $P' + Q' \neq \mathcal{O}$ на $E(\mathbb{F}_q)$ \MyImplies Алгоритм вернёт $(p, q)$.
+Вычисляем $K \cdot P$ на $E(\mathbb{Z}_N)$ \MyImplies получаем $P' + Q' = \mathcal{O}$ на $E(\mathbb{F}_p)$ и $P' + Q' \neq \mathcal{O}$ на $E(\mathbb{F}_q)$ \MyImplies Алгоритм вернёт $(p, q)$.
 
 \vspace{0.5em}
 Сложность и вероятность: аналогично $(p-1)$ методу Полларда. 
