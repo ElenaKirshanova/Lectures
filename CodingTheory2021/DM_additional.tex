@@ -1,0 +1,133 @@
+\documentclass[11pt]{exam}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\noprintanswers % pour enlever les réponses
+%\printanswers
+
+\unframedsolutions
+\SolutionEmphasis{\itshape\small}
+\renewcommand{\solutiontitle}{\noindent\textbf{A: }}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{amscd,amsmath,amsthm}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+
+
+\usepackage[margin=0.73in]{geometry}
+%\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+%\usepackage{fullpage}
+
+
+\usepackage{hyperref}
+\usepackage{appendix}
+\usepackage{enumerate}
+
+
+
+\usepackage{algorithmicx, enumitem, algpseudocode, algorithm, caption}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{proposition}[theorem]{Proposition}
+
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+
+\newcommand{\nc}{\newcommand}
+\nc{\eps}{\varepsilon}
+\nc{\RR}{{{\mathbb R}}}
+\nc{\CC}{{{\mathbb C}}}
+\nc{\FF}{{{\mathbb F}}}
+\nc{\NN}{{{\mathbb N}}}
+\nc{\ZZ}{{{\mathbb Z}}}
+\nc{\PP}{{{\mathbb P}}}
+\nc{\QQ}{{{\mathbb Q}}}
+\nc{\UU}{{{\mathbb U}}}
+\nc{\OO}{{{\mathbb O}}}
+\nc{\EE}{{{\mathbb E}}}
+
+\newcommand{\val}{\operatorname{val}}
+
+\newcommand{\wt}{\ensuremath{\mathit{wt}}}
+\newcommand{\Id}{\ensuremath{I}}
+\newcommand{\transpose}{\mkern0.7mu^{\mathsf{ t}}}
+\newcommand*{\ScProd}[2]{\ensuremath{\langle#1\mathbin{,}#2\rangle}} %Scalar Product
+
+\pretolerance=1000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT STARTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tikz}
+\usetikzlibrary{automata}
+\DeclareMathOperator{\Vol}{Vol}
+
+\begin{document}
+	{\noindent
+		\textsc{БФУ им. И. Канта -- Теория кодирования и сжатия информации}
+		\hfill {Е. Киршанова // 2019--2020\\}
+	\hrule
+	\begin{center}
+		{\Large\textbf{
+				\textsc{Дополнительное домашнее задание} \\[5pt] {Срок сдачи: 13.12.21}
+		} } 
+	\end{center}
+	\hrule \vspace{5mm}
+	
+	\thispagestyle{empty}
+	
+	\vspace{0.2cm}
+	\section{Разделимые коды с максимальным расстоянием}
+	Коды, для которых выполняется равенство $d = n-k+1$, называются разделимыми кодами с максимальным расстоянием (краткое МДР) (вводились в лекции № 3). Пусть $C$ -- линейный $[n, k, d]$--код. 
+	\begin{questions}
+		\question Докажите, что $C$ -- код МДР тогда и только тогда, когда любые $n-k$ столбцов проверочной матрицы $H$ линейно независимы.
+		\question Докажите, что если $C$ -- код МДР, то и его дуальный код, $C^\perp$, также код МДР.
+		\question Пусть линейный код $C$  задан над $GF(4) = \{0, 1, \alpha, \alpha^2  \}$ порождающей матрицей
+		\[
+			G = 
+			\begin{pmatrix}
+			1 & 0 & 1 & 1 \\
+			0 & 1 & \alpha & \alpha^2
+			\end{pmatrix}
+		\]
+		\begin{enumerate}
+			\item Какова длина, размерность и минимальное расстояние кода? Сколько ошибок может исправить этот код? 
+			\item Сколько кодовых слов содержит $C$?
+			\item Напишите порождающую матрицу $C^\perp$. Является ли $C^\perp$ МДР кодом?
+			\item Принадлежит ли вектор $[\alpha \ 1 \ 0 \ \alpha+\alpha^2]$ коду $C$? Ответ поясните.
+		\end{enumerate}
+		
+
+	\end{questions}
+
+ 	
+\end{document}

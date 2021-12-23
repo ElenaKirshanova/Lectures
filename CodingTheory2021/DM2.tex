@@ -1,0 +1,131 @@
+\documentclass[11pt]{exam}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\noprintanswers % pour enlever les réponses
+%\printanswers
+
+\unframedsolutions
+\SolutionEmphasis{\itshape\small}
+\renewcommand{\solutiontitle}{\noindent\textbf{A: }}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{amscd,amsmath,amsthm}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+
+
+\usepackage[margin=0.73in]{geometry}
+%\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+%\usepackage{fullpage}
+
+
+\usepackage{hyperref}
+\usepackage{appendix}
+\usepackage{enumerate}
+
+
+
+\usepackage{algorithmicx, enumitem, algpseudocode, algorithm, caption}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{proposition}[theorem]{Proposition}
+
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+
+\newcommand{\nc}{\newcommand}
+\nc{\eps}{\varepsilon}
+\nc{\RR}{{{\mathbb R}}}
+\nc{\CC}{{{\mathbb C}}}
+\nc{\FF}{{{\mathbb F}}}
+\nc{\NN}{{{\mathbb N}}}
+\nc{\ZZ}{{{\mathbb Z}}}
+\nc{\PP}{{{\mathbb P}}}
+\nc{\QQ}{{{\mathbb Q}}}
+\nc{\UU}{{{\mathbb U}}}
+\nc{\OO}{{{\mathbb O}}}
+\nc{\EE}{{{\mathbb E}}}
+
+\newcommand{\val}{\operatorname{val}}
+
+\newcommand{\wt}{\ensuremath{\mathit{wt}}}
+\newcommand{\Id}{\ensuremath{I}}
+\newcommand{\transpose}{\mkern0.7mu^{\mathsf{ t}}}
+\newcommand*{\ScProd}[2]{\ensuremath{\langle#1\mathbin{,}#2\rangle}} %Scalar Product
+
+\pretolerance=1000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT STARTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tikz}
+\usetikzlibrary{automata}
+\DeclareMathOperator{\Vol}{Vol}
+
+\begin{document}
+	{\noindent
+		\textsc{БФУ им. И. Канта -- Теория кодирования и сжатия информации}
+		\hfill {Е. Киршанова //2021\\}
+	\hrule
+	\begin{center}
+		{\Large\textbf{
+				\textsc{Домашнее задание № 2} \\[5pt] {Опубликовано 22.10.21, Срок сдачи: 05.11.21}
+		} } 
+	\end{center}
+	\hrule \vspace{5mm}
+	
+	\thispagestyle{empty}
+	
+	\noindent \textsf{Инструкция}
+	
+	\begin{enumerate}
+		\itemsep 2pt
+		\item Решения принимаются \emph{исключительно} до дэдлайна, указанного в шапке ДЗ. Время сдачи указано в соответствии с Калининградским часовым поясом.
+		\item Решения должны быть выполнены \textbf{индивидуально}.
+		\item Решения должны быть написано разборчиво,  все утверждения должны быть аргументированы.
+		\item Решения принимаются по электронной почте \textsf{elenakirshanova@gmail.com} с четкой пометкой, кто автор присланных решений.
+		\item Все решения должны быть оформлены в \textbf{один} файл формата {pdf}, которые должен иметь адекватное соотношение размер-качество (весь файл должен занимать не более 15Мb).
+	\end{enumerate}	
+	
+	\vspace{0.2cm}
+	\section{Код Рида-Соломона}
+	
+	Найдите в файле \url{https://crypto-kantiana.com/elena.kirshanova/teaching/coding_2021/HW2.txt} параметры своего кода и значение вектора $y$. Декодируйте $y$ (то есть найдите вектор ошибок и исходное сообщение) любым из изученных алгоритмов декодирования. Опишите промежуточные вычисления. Для решений можете использовать Sage. Исходный код присылать необязательно.
+		
+	\section{Совершенный код}
+	Формуляр заполнения ставок на футбольные матчи содержит в себе таблицу, составленную из списка 13 игр, где каждой из них сопоставлены три выбора, описывающие  все возможные исходы игры: \textit{Выигрыш команды №1}, \textit{Выигрыш команды № 2}, \textit{Ничья}. Для заполнения формуляра нужно выбрать один из исходов напротив каждого матча.
+	
+	Опишите стратегию заполнения минимального количества формуляров так, чтобы хотя бы один из этих формуляров содержал как минимум 12 верных ставок. Какое число формуляров необходимо заполнить при этой стратегии?
+	
+	\textit{Подсказка:} существует совершенный код длины 13 с минимальным расстоянием 3 над $\FF_3$.
+ 	
+\end{document}

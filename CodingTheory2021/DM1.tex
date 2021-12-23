@@ -1,0 +1,174 @@
+\documentclass[11pt]{exam}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\noprintanswers % pour enlever les réponses
+%\printanswers
+
+\unframedsolutions
+\SolutionEmphasis{\itshape\small}
+\renewcommand{\solutiontitle}{\noindent\textbf{A: }}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel}
+
+
+%\usepackage[margin=0.73in]{geometry}
+%\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+%\usepackage{fullpage}
+
+
+\usepackage{hyperref}
+\usepackage{appendix}
+\usepackage{enumerate}
+
+
+\usepackage{graphicx,epsfig,amsmath,latexsym,amssymb,verbatim}%,revsymb}
+\usepackage{algorithmicx, enumitem, algpseudocode, algorithm, caption}
+
+
+%%%%%%%%%%%%%%%%%%%%%
+% Handling comments and versions %%%
+%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\extra}[1]{}
+
+\renewcommand{\comment}[1]{\texttt{[#1]}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{proposition}[theorem]{Proposition}
+
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+
+\newcommand{\nc}{\newcommand}
+\nc{\eps}{\varepsilon}
+\nc{\RR}{{{\mathbb R}}}
+\nc{\CC}{{{\mathbb C}}}
+\nc{\FF}{{{\mathbb F}}}
+\nc{\NN}{{{\mathbb N}}}
+\nc{\ZZ}{{{\mathbb Z}}}
+\nc{\PP}{{{\mathbb P}}}
+\nc{\QQ}{{{\mathbb Q}}}
+\nc{\UU}{{{\mathbb U}}}
+\nc{\OO}{{{\mathbb O}}}
+\nc{\EE}{{{\mathbb E}}}
+
+\newcommand{\val}{\operatorname{val}}
+
+\newcommand{\wt}{\ensuremath{\mathit{wt}}}
+\newcommand{\Id}{\ensuremath{I}}
+\newcommand{\transpose}{\mkern0.7mu^{\mathsf{ t}}}
+\newcommand*{\ScProd}[2]{\ensuremath{\langle#1\mathbin{,}#2\rangle}} %Scalar Product
+
+\pretolerance=1000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT STARTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tikz}
+\usetikzlibrary{automata}
+\DeclareMathOperator{\Vol}{Vol}
+
+\begin{document}
+	{\noindent
+		\textsc{БФУ им. И. Канта -- Теория кодирования и сжатия информации'21}
+		\hfill {Е. Киршанова \\}
+	\hrule
+	\begin{center}
+		{\Large\textbf{
+				\textsc{Домашнее задание № 1} \\[5pt] {Опубликовано 10.09.21, Срок сдачи: 24.09.21 (23:59)}
+		} } 
+	\end{center}
+	\hrule \vspace{5mm}
+	
+	\thispagestyle{empty}
+	
+	\vspace{0.2cm}
+	
+	\noindent \textsf{Инструкция}
+	
+	\begin{enumerate}
+		\itemsep 2pt
+		\item Решения принимаются \emph{исключительно} до дэдлайна, указанного в шапке ДЗ. Время сдачи указано в соответствии с Калининградским часовым поясом.
+		\item Решения должны быть выполнены индивидуально.
+		\item Решения должны быть написано разборчиво,  все утверждения должны быть аргументированы.
+		\item Решения принимаются по электронной почте \textsf{elenakirshanova@gmail.com} с четкой пометкой, кто автор присланных решений.
+		\item Все решения должны быть оформлены в \textbf{один} файл формата {pdf}, которые должен иметь адекватное соотношение размер-качество (весь файл должен занимать не более 15Мb).
+	\end{enumerate}	
+	\section{Код Адамара}
+	Бинарный код Адамара, $\mathsf{Had_r}$ -- это  $[2^r, r]_2$- код с порождающей матрицей $r \times 2^r$, столбцы которой представляют всевозможные битовые строки длины $r$. Докажите, что минимальное расстояние кода $\mathsf{Had_r}$  равно $2^{r-1}$.
+
+		
+	\section{Линейные коды}
+		Пусть $C_1, C_2$ -- линейные коды длины $n$, заданные над $\FF_q$ порождающими матрицами $G_1, G_2$. Определим следующие коды
+		\begin{itemize}
+			\item $C_3 = C_1 \cup C_2$
+			\item $C_4 = C_1 \cap C_2$
+			\item $C_5 = C_1 + C_2 = \{  c_1 + c_2 \, : \, c_1 \in C_1, c_2 \in C_2 \}$
+			\item $C_6 = \{  (c_1 \, |\, c_2 ) \, : \, c_1 \in C_1, c_2 \in C_2 \}$, где $(\cdot|\cdot)$ обозначает конкатинацию слов. 
+		\end{itemize}
+		Для $i = 1, \ldots 6$ обозначим за $k_i$ -- размерность кода $\log_q |C_i|$, а за $d_i$-- минимальное расстояние кода $C_i$. Положим $k_1, k_2 >0$.
+	 	\begin{questions}
+	 		\question Докажите, что $C_3$ -- линейный тогда и только тогда, когда либо $C_1 \subseteq C_2$, либо $C_2 \subseteq C_1$.
+	 		\question Докажите, что коды $C_4, C_5, C_6$-- линейные
+	 		\question Докажите, что если $k_4>0$, то $d_4 \geq \max\{d_1, d_2\}$
+	 		\question Докажите, что $k_5 \leq k_1 + k_2$, и что равенство достигается тогда и только тогда, когда $k_4 = 0$
+	 		\question Докажите, что $d_5 \leq \min\{ d_1, d_2\}$
+	 		\question Докажите, что 
+	 		\[
+	 			\begin{pmatrix}
+	 			G_1 & 0 \\
+	 			0 & G_2 \\
+	 			\end{pmatrix}
+	 		\]
+	 		является порождающей матрицей для $C_6$, а следовательно, $k_6 = k_1 + k_2$
+	 		\question Докажите, что $d_6 = \min\{d_1, d_2\}$.
+	 	\end{questions}
+ 	
+\section{Задача о заключенных}
+
+В тюрьме сидят семеро заключенных (в оригинальной версии задачи была темница и Минотавр, но мы цивилизованные люди). На всех заключенных надевают по одной шляпе либо красного, либо синего цвета так, что каждый заключенный видит цвета шляп других заключенных, но не свой.
+
+В фиксированное время все заключенные декларируют свой выбор в надежде угадать цвет своей шляпы: либо `красный', либо `черный', либо `пасс'.  Заключенные не имеют права передавать друг другу какую-либо информацию ни в какое время.
+
+Если все заключенные сказали `пасс', они все остаются в тюрьме. Если хотя бы один из них не угадал свой цвет, они также все остаются в тюрьме. Если все заключенные, кто угадывал свой цвет, корректно его угадал (таковых должно быть как минимум 1), они все выходят на свободу.
+
+Предложите и обоснуйте стратегию, в которой заключенные имеют вероятность $7/8$ выйти из тюрьмы.
+Объясните, как ваша стратегия связано с кодом Хэмминга $[7,4,3]$. Если бы заключенных было не 7, а 15, имели бы они бОльший успех на положительный для них исход?
+ 	
+% название задачи ``The Hat problem'' (solution and description \url{https://web.njit.edu/~wguo/Hat%20Probelm.pdf}, see also \url{https://www.cs.cmu.edu/puzzle/solution15.pdf}) 	
+ 	
+% \section{Задание на программирование: расширенный код Хэмминга [15,11,3]}
+% 
+% \begin{enumerate}
+% 	\item Кода Хэмминга  [15,11,3] -- обобщение изученного на лекции кода Хэмминга [7,4,3]. Отличное описание этого кода можно найти на \\
+% 	\url{https://www.youtube.com/watch?v=X8jsijhllIA} \\
+% 	\url{https://www.youtube.com/watch?v=b3NxrZOu_CE\&t=472s}
+% 	
+% 	\item Задача: реализовать алгоритм кодировать и декодирования для кода Хэмминга [15,11,3]. Названия функций и doctests можно найти по ссылке \\
+% 	https://crypto-kantiana.com/elena.kirshanova/teaching/coding\_2020/DM1\_template.py
+% \end{enumerate}
+ 	
+\end{document}
