@@ -48,25 +48,27 @@
 \end{frame}
 
 \begin{frame}{Постквантовая криптография -- перспективы}
-\structure{SIKE/SIDH}: обмен ключами
+\structure{SIKE/SIDH}: обмен ключами.
 \begin{itemize}
     \item SIKE был альтернативным кандидатом на стандартизацию в Round 3 NIST
-    \item Castryck, Decru предложили полиномиальную атаку
-    \item Замена: \structure{weakSIDH}
+    \begin{tcolorbox}[colframe=title-and-section-color!120, colback=title-and-section-color!5, title=SIKE Cryptographic Challenge, center title]
+    	\begin{itemize}
+    		\item {\small
+    			\href{https://github.com/microsoft/SIKE-challenges/}{github.com/microsoft/SIKE-challenges/}}
+    		\item 5000 USD или 50 000 USD за взлом
+    	\end{itemize}
+    \end{tcolorbox}
+    \item Был взломан Castryck и Decru, используя информацию о точках кручения в протоколе
+    \item Замена: \structure{weakSIDH}, \structure{CSIDH}
 \end{itemize}
 
-\begin{tcolorbox}[colframe=title-and-section-color!120, colback=title-and-section-color!5, title=SIKE Cryptographic Challenge, center title]
-\begin{itemize}
-    \item {\small
-        \href{https://github.com/microsoft/SIKE-challenges/}{github.com/microsoft/SIKE-challenges/}}
-    \item 5000 USD или 50 000 USD за взлом
-\end{itemize}
-\end{tcolorbox}
+Есть также подписи: \structure{OSIDH}, \structure{SeaSign}.
 
 \vspace{1em}
 \begin{scriptsize}
 	\begin{itemize}
-		\item[\structure{*}] Castryck W., Decru T. An efficient key recovery attack on SIDH. \url{https://eprint.iacr.org/2022/975}.
+		\item[\structure{*}] Castryck W., Decru T. An efficient key recovery attack on SIDH. \url{https://eprint.iacr.org/2022/975}
+		\item[\structure{*}] \url{https://issikebrokenyet.github.io/}
 	\end{itemize}
 \end{scriptsize}
 \end{frame}
@@ -85,8 +87,27 @@
 \end{frame}
 
 \begin{frame}{Определение}
+	Уравнение Вейерштрасса \structure{в аффинных координатах}:
+	\begin{equation}\label{eq:weierstrassequation}
+		f: y^2+a_1xy + a_3y = x^3 + a_2x^2 + a_4x + a_6
+	\end{equation}
+
+	Уравнение над полем~$K$ -- \structure{гладкое}, если во множестве его решений над~$\overline{K}$ нет сингулярных точек.
+	\vspace{1em}
+	
+	\structure{Эллиптическая кривая} задаётся как \[E(K) = \{ (x,y) \in K \times K: f(x,y)=0 \} \cup \{\mathcal{O}\}
+	\]
+	для гладкого~$f$.
+	\begin{itemize}
+		\item $\mathcal{O}$ -- точка в бесконечности.
+		\item $K$ -- некоторое поле, чаще всего $K = \mathbb{F}_q$.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Проективные координаты}
     %\structure{Обозначения.}
-    $\mathbb{F}_q$ -- конечное поле, $|\mathbb{F}_q| = q = p^n$, $K$ -- поле, $\overline{K}$ -- алг. замыкание.
+    %$\mathbb{F}_q$ -- конечное поле, $|\mathbb{F}_q| = q = p^n$, $K$ -- поле, $\overline{K}$ -- алг. замыкание.
     
     \structure{Уравнение Вейерштрасса} в проективных координатах: 
         \begin{equation}
@@ -101,23 +122,18 @@
         \end{itemize}
         %\footnotetext[1]{проективная плоскость над $K$ — множество классов эквивалентности на $K^3\setminus \{0,0,0\}$, т.е. $\overrightarrow{X} \sim \overrightarrow{Y}$, если $x_1=u*y_1,x_2=u*y_2,x_3=u*y_3$ }
     %\structure{Эллиптическая кривая}:
+    
+    \vspace{1em}
+    
     \structure{Эллиптическая кривая $E$} -- множество точек $\mathbb{P}^2(K)$, удовлетворяющих гладкой кривой \eqref{eq:weierstrass}.
         
     \begin{itemize}
         \item Точка в бесконечности: $\exists! \mathcal{O} = (0: 1: 0)$.
     \end{itemize}
-\end{frame}
 
-\begin{frame} 
-Уравнение Вейерштрасса \structure{в аффинных координатах} $(x=X/Z, y=Y/Z)$:
-      \begin{equation}\label{eq:weierstrassequation}
-            f: y^2+a_1xy + a_3y = x^3 + a_2x^2 + a_4x + a_6
-        \end{equation}
-        Тогда $E(K) = \{ (x,y) \in K \times K: f(x,y)=0 \} \cup \{\mathcal{O}\}$.
-    
-    \begin{itemize}
-        \item Проективные координаты позволяют избежать деления в арифметике за счёт доп. умножений.
-    \end{itemize}
+	\begin{itemize}
+	\item Проективные координаты позволяют избежать деления в арифметике за счёт доп. умножений.
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Дискриминант}
@@ -347,6 +363,14 @@ j(E) = \frac{c_4^3}{\Delta}
 {\footnotesize
     \href{https://crypto-kantiana.com/semyon.novoselov/teaching/elliptic_curves_2022}{crypto-kantiana.com/semyon.novoselov/teaching/elliptic\_curves\_2022}
 }
+\end{frame}
+
+\begin{frame}{Темы курсовых}
+	\begin{enumerate}
+		\item Схема обмена ключами CSIDH
+		\item Схема цифровой подписи SeaSign
+		\item \url{crypto-kantiana.com/thesis_topics.html}
+	\end{enumerate}
 \end{frame}
 
 \end{document}
