@@ -387,91 +387,135 @@
 \tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
 
 \begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
-	%uncomment if require: \path (0,310); %set diagram left start at 0, and has height of 310
-	
+	%%%%%%%%%%%%%%%%%%%
+	% Left side arrows
+	%%%%%%%%%%%%%%%%%%%
 	%Straight Lines [id:da17602726868869878] 
-	\draw    (144.5,127.83) -- (252,127.51) ;
-	\draw [shift={(255,127.5)}, rotate = 179.83] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (5.36,-2.57) -- (0,0) -- (5.36,2.57) -- cycle    ;
-	%Straight Lines [id:da5151276494097119] 
-	\draw    (404.5,127.82) -- (512,127.5) ;
-	\draw [shift={(401.5,127.83)}, rotate = 359.83] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (5.36,-2.57) -- (0,0) -- (5.36,2.57) -- cycle    ;
-	%Straight Lines [id:da09168079881977365] 
-	\draw    (401.5,165.33) -- (509,165.01) ;
-	\draw [shift={(512,165)}, rotate = 179.83] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (5.36,-2.57) -- (0,0) -- (5.36,2.57) -- cycle    ;
-	%Straight Lines [id:da606368011362501] 
-	\draw    (147.5,165.32) -- (255,165) ;
-	\draw [shift={(144.5,165.33)}, rotate = 359.83] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (5.36,-2.57) -- (0,0) -- (5.36,2.57) -- cycle    ;
-	%Straight Lines [id:da4782643167070846] 
-	\draw    (401.5,195.83) -- (509,195.51) ;
-	\draw [shift={(512,195.5)}, rotate = 179.83] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (5.36,-2.57) -- (0,0) -- (5.36,2.57) -- cycle    ;
+	\draw (145,130) -- (205,130);
+	\draw [shift={(207,130)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (5.36,-2.57) -- (0,0) -- (5.36,2.57) -- cycle;
+	
+	%Straight Lines [id:da606368011362501]
+	\draw    (145,165) -- (205,165) ;
+	\draw [shift={(142,165)}, rotate = 360] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (5.36,-2.57) -- (0,0) -- (5.36,2.57) -- cycle;
+	
 	%Straight Lines [id:da0586486120331462] 
-	\draw    (144.5,195.83) -- (252,195.51) ;
-	\draw [shift={(255,195.5)}, rotate = 179.83] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (5.36,-2.57) -- (0,0) -- (5.36,2.57) -- cycle    ;
+	\draw    (145,195) -- (205,195) ;
+	\draw [shift={(207,195)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (5.36,-2.57) -- (0,0) -- (5.36,2.57) -- cycle;
+
+	%%%%%%%%%%%%%%%%%%%%
+	% Right side arrows
+	%%%%%%%%%%%%%%%%%%%%
+	%Straight Lines [id:da5151276494097119] 
+	\draw (320,130) -- (380,130) ;
+	\draw [shift={(318,130)}, rotate = 360] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (5.36,-2.57) -- (0,0) -- (5.36,2.57) -- cycle;
+
+	%Straight Lines [id:da09168079881977365] 
+	\draw    (320,165) -- (380,165) ;
+	\draw [shift={(382,165)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (5.36,-2.57) -- (0,0) -- (5.36,2.57) -- cycle;
+
+	%Straight Lines [id:da4782643167070846] 
+	\draw    (320,195) -- (380,195) ;
+	\draw [shift={(382,195)}, rotate = 180] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (5.36,-2.57) -- (0,0) -- (5.36,2.57) -- cycle;
+	
+	%%%%%%%%%%%%%%%%%%%%%%%
+	% Text nodes for Agent
+	%%%%%%%%%%%%%%%%%%%%%%%
+	% Text Node
+	\draw (120,72) node [anchor=north west][inner sep=0.75pt]   [align=left] {\structure{{\Large\faUserSecret}}};
+
+	% Text Node
+	\draw (100,122) node [anchor=north west][inner sep=0.75pt]   [align=left] {\structure{$a \in \mathbb{N}$}};
+
+	% Text Node
+	\draw (52,156) node [anchor=north west][inner sep=0.75pt]   [align=left] {\structure{$k_a = [a] ([c] P)$}};
 	
 	% Text Node
-	\draw (259,34) node [anchor=north west][inner sep=0.75pt]   [align=left] {\structure{\boxed{P \in E(\mathbb{F}_q)}}};
+	\draw (42,186) node [anchor=north west][inner sep=0.75pt]   [align=left] {\structure{$c_a=Enc_{k_a}(\text{\faCheese})$}};
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Text nodes for left side arrows
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	% Text Node
-	\draw (442,108) node [anchor=north west][inner sep=0.75pt]   [align=left] {\structure{$[b] P$}};
+	\draw (162,110) node [anchor=north west][inner sep=0.75pt]   [align=left] {$[a] P$};
+
 	% Text Node
-	\draw (103,115) node [anchor=north west][inner sep=0.75pt]   [align=left] {\structure{$a \in N$}};
+	\draw (162,146) node [anchor=north west][inner sep=0.75pt]   [align=left] {$[c] P$};
+
 	% Text Node
-	\draw (186,100) node [anchor=north west][inner sep=0.75pt]   [align=left] {\structure{$[a] P$}};
+	\draw (170,180) node [anchor=north west][inner sep=0.75pt]   [align=left] {$c_a$};
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Text nodes for public parameters
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	% Text Node
-	\draw (311.5,73) node [anchor=north west][inner sep=0.75pt]   [align=left] {\includegraphics[width=2.5em]{mouse.png}};
+	\draw (225,35) node [anchor=north west][inner sep=0.75pt]   [align=left] {\structure{\boxed{P \in E(\mathbb{F}_q)}}};
+
+	%%%%%%%%%%%%%%%%%%%%%%%
+	% Text nodes for Mouse
+	%%%%%%%%%%%%%%%%%%%%%%%
 	% Text Node
-	\draw (524,118) node [anchor=north west][inner sep=0.75pt]   [align=left] {\structure{$b \in N$}};
+	\draw (245,115) node [anchor=north west][inner sep=0.75pt]   [align=center] {\includegraphics[width=2.5em]{mouse.png}};
+
 	% Text Node
-	\draw (447,146) node [anchor=north west][inner sep=0.75pt]   [align=left] {\structure{$[c] P$}};
+	\draw (245,155) node [anchor=north west][inner sep=0.75pt]   [align=center] {\structure{$c \in \mathbb{N}$}};
+
 	% Text Node
-	\draw (24,151) node [anchor=north west][inner sep=0.75pt]   [align=left] {key\_a = [a] ([c] P)};
+	\draw (215,186) node [anchor=north west][inner sep=0.75pt]   [align=center] {\structure{$\text{\faCheese} = Dec_{k_a}(c_a)$}};
+
 	% Text Node
-	\draw (191,138) node [anchor=north west][inner sep=0.75pt]   [align=left] {$[c] P$};
+	\draw (216,215) node [anchor=north west][inner sep=0.75pt]   [align=left] {\structure{$c_b = Enc_{k_b}(\text{\faCheese})$}};
+
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Text Nodes for right side arrows
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	% Text Node
-	\draw (315,146) node [anchor=north west][inner sep=0.75pt]   [align=left] {$c \in \mathbb{N}$};
+	\draw (335,110) node [anchor=north west][inner sep=0.75pt]   [align=left] {$[b] P$};	
+	
 	% Text Node
-	\draw (524,159) node [anchor=north west][inner sep=0.75pt]   [align=left] {Ключ: [b] ([c] P)};
+	\draw (335,146) node [anchor=north west][inner sep=0.75pt]   [align=left] {$[c] P$};
+	
 	% Text Node
-	\draw (1,188) node [anchor=north west][inner sep=0.75pt]   [align=left] {c1=Enc\_key(cheese)};
+	\draw (340,180) node [anchor=north west][inner sep=0.75pt]   [align=left] {$c_b$};
+
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Text Nodes for Cat
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	% Text Node
-	\draw (251,176) node [anchor=north west][inner sep=0.75pt]   [align=left] {cheese = Dec\_key\_a(c1)};
+	\draw (385,72) node [anchor=north west][inner sep=0.75pt]   [align=left] {\structure{{\Large\faCat}}};
+
 	% Text Node
-	\draw (251,198) node [anchor=north west][inner sep=0.75pt]   [align=left] {c2 = $Enc_{key_b}(cheese)$};
+	\draw (385,122) node [anchor=north west][inner sep=0.75pt]   [align=left] {\structure{$b \in \mathbb{N}$}};
+
 	% Text Node
-	\draw (173,176) node [anchor=north west][inner sep=0.75pt]   [align=left] {c1};
+	\draw (385,156) node [anchor=north west][inner sep=0.75pt]   [align=left] {\structure{$k_b = [b] ([c] P)$}};
+	
 	% Text Node
-	\draw (450,175) node [anchor=north west][inner sep=0.75pt]   [align=left] {c2};
-	% Text Node
-	\draw (524,189) node [anchor=north west][inner sep=0.75pt]   [align=left] {cheese = Dec\_key\_b(c2)};
-	% Text Node
-	\draw (104,76) node [anchor=north west][inner sep=0.75pt]   [align=left] {\structure{{\Large\faUserSecret}}};
-	% Text Node
-	\draw (524,72) node [anchor=north west][inner sep=0.75pt]   [align=left] {structure{{\Large\faCat}}};
+	\draw (385,186) node [anchor=north west][inner sep=0.75pt]   [align=left] {\structure{$\text{\faCheese} = Dec_{k_b}(c_b)$}};
+	
 \end{tikzpicture}
 		\end{center}
-		\begin{itemize}
-			\item \structure{{\Large\faCheese}} \includegraphics[width=2.5em]{mouse.png}
-		\end{itemize}
+
+%		\begin{itemize}
+%			\item \structure{{\Large\faCheese}} \includegraphics[width=2.5em]{mouse.png}
+%		\end{itemize}
 	\end{frame}
+
+%	\begin{frame}{Цифровая подпись}
+%	\end{frame}
 	
-	\begin{frame}{Атака ``человек посередине''\footnote{\textit{(англ.)} man in the middle (MITM)}}
-		content...
-	\end{frame}
+%	\begin{frame}{Стандарты}
+%		\begin{enumerate}
+%			\item EC
+%		\end{enumerate}
+%	\end{frame}
 	
-	\begin{frame}{Цифровая подпись}
-		content...
-	\end{frame}
-	
-	\begin{frame}{Стандарты}
-		\begin{enumerate}
-			\item EC
-		\end{enumerate}
-	\end{frame}
-	
-	\begin{frame}{Пример использования обмена ключами или подписи}
-		\begin{enumerate}
-			\item TODO: скриншот сертификата, параметры
-		\end{enumerate}
-	\end{frame}
+%	\begin{frame}{Пример использования обмена ключами или подписи}
+%		\begin{enumerate}
+%			\item TODO: скриншот сертификата, параметры
+%		\end{enumerate}
+%	\end{frame}
 	
 	\begin{frame}{Оптимизация: проективные координаты}
 		\[E: Y^2 Z = X^3+ A x Z^2 + B Z^3\]
@@ -533,7 +577,7 @@
 		
 		\structure{Страница курса:}\\
 		{\footnotesize
-			\href{https://crypto-kantiana.com/semyon.novoselov/teaching/elliptic_curves_2021}{crypto-kantiana.com/semyon.novoselov/teaching/elliptic\_curves\_2021}
+			\href{https://crypto-kantiana.com/semyon.novoselov/teaching/elliptic_curves_2022}{crypto-kantiana.com/semyon.novoselov/teaching/elliptic\_curves\_2022}
 		}
 		
 	\end{frame}
