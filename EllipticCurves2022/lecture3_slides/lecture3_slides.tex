@@ -182,8 +182,8 @@ E[2] = \left\{ \mathcal{O}, (e_1, 0), (e_2 ,0), (e_3,0) \right\} \simeq \mathbb{
 \begin{frame}{Многочлены деления}
 \begin{block}{Теорема}
     Пусть $E: {y^2} = {x^3} + Ax + B$, $P = \left( {x,y} \right) \in E$ и $n \in {\mathbb{N}_+ }$. Тогда
-    $$[n] P = \left( {\frac{{{\phi _n}\left( x \right)}}{{\psi _n^2\left( x \right)}},\;\frac{{{\omega _n}\left( x \right)}}{{{{\left( {{\psi _n}\left( {x,y} \right)} \right)}^3}}}} \right)
-    $$
+    \[[n] P = \left( {\frac{{{\phi _n}\left( x \right)}}{{\psi _n^2\left( x \right)}},\;\frac{{{\omega _n}\left( x \right)}}{{{{\left( {{\psi _n}\left( {x,y} \right)} \right)}^3}}}} \right)
+    \]
 \end{block}
 
 Таким образом, отображение (эндоморфизм) <<умножение на $n$>> задается рациональными функциями.
@@ -215,19 +215,19 @@ $e_n(S,T) = 1, \forall S \implies T = \mathcal{O}$
 \end{enumerate}
 \end{block}
 
-Другие билинейные отображения: спаривание Тейта, эта-спаривание
+Другие билинейные отображения: спаривание Тейта, эта-спаривание.
 \end{frame}
 
-\begin{frame}{Алгоритм Миллера}
-%todo: алгоритм для построения функций спариваний
-%todo: сравнить с алгоритмом быстрым умножением.
-\end{frame}
+%\begin{frame}{Алгоритм Миллера}
+%%todo: алгоритм для построения функций спариваний
+%%todo: сравнить с алгоритмом быстрым умножением.
+%\end{frame}
 
 \begin{frame}{Билинейные отображения. Приложения}
 \structure{Степень вложения:} минимальное целое $k$ т.ч. $E[n] \subseteq E(\mathbb{F}_{q^k})$.
 
 \begin{itemize}
-    \item Атака на DLOG: $|\left<P\right>| = n$, $Q = l P$.
+    \item Атака на DLOG: $|\left<P\right>| = n$, $Q = [l] P$.
     \begin{enumerate}
         \item Выбрать случайную точку $R$.
         \item $\alpha = e_n(P, R)$
@@ -241,12 +241,61 @@ $e_n(S,T) = 1, \forall S \implies T = \mathcal{O}$
 \end{itemize}
 \end{frame}
 
-\begin{frame}{ECDSA/ГОСТ}
+\begin{frame}{Цифровая подпись}{(дополнение к предыдущей лекции)}
+	\structure{Общие параметры:} кривая $E$ над~$\mathbb{F}_q$, $P \in E(\mathbb{F}_q)$, $r = \operatorname{ord}$.
+	
+	\vspace{1em}
+	\structure{Подпись} := (\structure{Setup}, \structure{Sign}, \structure{Verify}).
+	
+	\vspace{1em}
+	
+	\structure{Setup:}
+	\begin{enumerate}
+		\item Пользователь \structure{\faUserSecret} выбирает секретный ключ~$a \in [1, r]$.
+		\item Открытый ключ: $Q = [a] P$.
+	\end{enumerate}
+
+	\vspace{1em}
+	\structure{Sign:}
+	
+	Для подписи сообщения~$m$ пользователь \structure{\faUserSecret}:
+	\begin{enumerate}
+		\item выбирает случайное~$k \in [1, r]$ и вычисляет $R = [k] P  = (x, y)$
+		\item вычисляет~$s = k^{-1} (m + a x) \bmod{r}$
+		\item подпись: $(m, R, s)$
+	\end{enumerate}
 \end{frame}
 
-\begin{frame}{BLS}
-%Boneh-Lynn-Shacham (BLS)
+\begin{frame}
+\structure{Verify:}
+
+Для проверки подписи пользователь~\structure{\faCat}:
+\begin{enumerate}
+	\item вычисляет~$u_1 = s^{-1} m \bmod{r}$ и $u_2 = s^{-1} x \bmod{r}$
+	\item $S = [u_1] P + [u_2] Q$
+	\item проверяет равенство~$S = R$.
+\end{enumerate}
+
+\vspace{1em}
+\structure{Корректность:}
+
+\structure{$\triangleleft$}
+$S = [u_1] P + [u_2] Q = [s^{-1} m] P + [s^{-1} x] Q = [s^{-1}] ([m] P + [x a] P) = [k] P = R$.
+\structure{$\triangleright$}
+
 \end{frame}
+
+\begin{frame}{}
+\begin{itemize}
+	\item используется повсеместно в составе протокола TLS
+	\item для безопасности схемы требуется ряд ограничений на параметры
+	\item ECDSA/ГОСТ 34.10-2018
+\end{itemize}
+\end{frame}
+
+%\begin{frame}{BLS}
+%%Boneh-Lynn-Shacham (BLS)
+%\end{frame}
 
 \begin{frame}{Литература}
 \nocite{Menezes1993}\nocite{Blake1999}\nocite{Washington2008}
