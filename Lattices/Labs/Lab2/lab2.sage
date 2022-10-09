@@ -37,9 +37,11 @@ def test_Schnorr(N, n, prec=1000):
 	B = diagonal_matrix(diag, sparse=False)
 	for i in range(n):
 		B[i, n] = sr(N*ln(P[i]))
-	
-	print(B)
 
+
+
+	B = B.LLL()
+	print(B)
 
 	b = svp(B)
 	e = [b[i] / sr(N*f[i]) for i in range(n)]
@@ -53,17 +55,17 @@ def test_Schnorr(N, n, prec=1000):
 		if e[i] < 0:
 			v *= P[i]^(-e[i])
 
-	return is_smooth(u - v*N, P) 
+	return is_smooth(u - v*N, P)
 
 try:
 	bits = int(sys.argv[1])
 except:
-	bits = 400
+	bits = 16
 
 try:
 	n = int(sys.argv[2])
 except:
-	n = 47
+	n = 20
 
 try:
 	trials = int(sys.argv[3])
