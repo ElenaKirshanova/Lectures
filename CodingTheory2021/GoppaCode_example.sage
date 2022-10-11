@@ -25,7 +25,7 @@ for i in range(p^kappa):
 t = 2 #also the number of errors Goppa code can decode if binary
 Rff = PolynomialRing(ff, 'x')
 x = Rff.gen()
-g = Rff(x^2 + a*x + 2)#Rff.irreducible_element(t)
+g = Rff(x^2 + a*x + 2*a)#Rff.irreducible_element(t)
 print('g:', g)
 
 
@@ -75,17 +75,18 @@ G = matrix(H.transpose().kernel().basis())
 mes = gen_message(k,p)
 #c = mes*G
 
-c = vector(GF(p), [1, 0, 1, 1, 2, 0, 1])
+#c = vector(GF(p), [0, 1, 1, 1, 2, 2, 0])
 
 
 print('k = ', k)
 print('m = ', mes)
-print('c = ', c)
+#print('c = ', c)
 
 e = vector(GF(p),[0]*n)
-e[3] = 2
+e[2] = 2
 
-y = c+e
+y = [1, 0, 1, 0, 2, 0, 1]
+#y = c+e
 print('y = ', y)
 
 Rquo = Rff.quotient(g, 'x1')
@@ -95,8 +96,8 @@ for i in range(len(L)):
     print(i, ':', L[i], ': ', Rquo(1/(x1-L[i])))
     Linv[i] = Rquo(1/(x1-L[i]))
 
-syndrome = sum([c[i]*Linv[i] for i in range(n)])
-print('syndrome c:', syndrome)
+#syndrome = sum([c[i]*Linv[i] for i in range(n)])
+#print('syndrome c:', syndrome)
 
 syndrome = sum([y[i]*Linv[i] for i in range(n)])
 print('syndrome:', syndrome)

@@ -24,16 +24,24 @@ print(H*G.transpose())
 print(H*G1.transpose())
 print("-----------------------")
 #-----------------------
-H = matrix(GF(2),[[1,0,1,1,1],[0,0,1,0,1],[0,1,1,1,0]])
-print("H:", H)
-print(H.rank())
-print("H:", H.echelon_form())
+H = matrix(GF(2),[[1,0,1,1,1],[1,0,1,0,1],[0,1,1,0,1]])
+print("H:")
+print(H)
+print('rank:', H.rank())
+print("H echelon form:")
+print(H.echelon_form())
+
+G1 = matrix(GF(2), [[1,0,1,1,0],[0,1,0,1,0]])
+
+print('G1*H.transpose():')
+print(G1*H.transpose())
 
 G = matrix(H.transpose().kernel().basis())
-print("G:", G)
+print("G:")
+print(G)
 c = vector(GF(2),[0,1])*G
 print('c:', c)
-e = vector(GF(2),[0,0,1,0,0])
+e = vector(GF(2),[1,0,0,0,0])
 y = c+e
 print(y)
 
