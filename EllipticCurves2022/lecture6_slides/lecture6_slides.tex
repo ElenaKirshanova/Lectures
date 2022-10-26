@@ -45,13 +45,13 @@
 \begin{enumerate}
     \item Сгенерировать $r$ случайных чисел~$\alpha_i$;
     \item Вычислить $Q_i = [\alpha_i] P$;
-    \item Задать $f: (P, e) \mapsto (P + Q_{h(P)}, K+\alpha_{h(P)})$;
-    \item $(P_1, K_1) = (P, 1)$;
-    \item $(P_2, K_2) = f(P_1, K_1)$;
+    \item Задать $f: (P, e) \mapsto (P + Q_{h(P)}, e+\alpha_{h(P)})$;
+    \item $(P_1, e_1) = (P, 1)$;
+    \item $(P_2, e_2) = f(P_1, e_1)$;
     \item \structure{while} $P_1 \neq P_2$ \structure{do:}
-    \item \quad $(P_1, K_1) = f(P_1, K_1)$;
-    \item \quad $(P_2, K_2) = f(f(P_2, K_2))$;
-    \item \structure{return} $M = |K_1 - K_2|$.
+    \item \quad $(P_1, e_1) = f(P_1, e_1)$;
+    \item \quad $(P_2, e_2) = f(f(P_2, e_2))$;
+    \item \structure{return} $M = |e_1 - e_2|$.
 \end{enumerate}
 
 \structure{Сложность:} $O({q^{1/4}})$ по времени и $O(1)$ по памяти. 
@@ -133,7 +133,7 @@ E[\ell] = \{P \in E(\overline{\mathbb{F}}_q)~|~[\ell] P = \mathcal{O}\} \simeq \
         \item $x^q, y^q, x^{q^2}, y^{q^2} \pmod{\psi_\ell} $ \structure{$\implies$} быстрое возведение в степень 
         \item $[q'](x,y)$ и $[t'](x^q, y^q)$ $\pmod{\psi_\ell(x)}$ \structure{$\implies$} многочлены $q'$ и $t'$-деления
     \end{itemize}
-    Значение $t' = t\bmod{\ell}$ и соответственно $\#E(\mathbb{F}_q)~\bmod{\ell}$ находим перебором возможных вариантов для $(t',q')$ пока не выполнится \eqref{eq:chi_mod_l_2}.
+    Значение $t' = t\bmod{\ell}$ и соответственно $\#E(\mathbb{F}_q)~\bmod{\ell}$ находим перебором возможных вариантов для $t'$ пока не выполнится \eqref{eq:chi_mod_l_2}.
 \end{frame}
 
 \begin{frame}{Алгоритм Схоофа}
