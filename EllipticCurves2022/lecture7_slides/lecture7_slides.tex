@@ -100,19 +100,20 @@ $p-1 = \prod p_i^{e_i},\ p_i \leq B_1, p_i^{e_i} \leq B_2$, т.~е. $p-1$ явл
 \vspace{1em}
 
 \ProofBegin
-Положим $K = \prod\limits_{p_i \leq  B_1}{p_i^{e_i}}$.
+Положим $k = \prod\limits_{p_i \leq  B_1}{p_i^{e_i}}$.
+\begin{itemize}
+	\item $k$ -- кратно $p-1$ \MyImplies $a^k \equiv 1 \bmod{p}$
+	\item $(q-1)$ -- не $B_1$-гладкое \MyImplies $\exists r$ -- простое, $r > B_1$ т.ч. $r \mid q-1$.
+\end{itemize}
+В случае~$r \mid \operatorname{ord}_{\mathbb{Z}_q^\times}(a)$:
+\begin{itemize}
+	\item имеем~$\operatorname{ord}_{\mathbb{Z}_q^\times}(a) \nmid k$,
+	поэтому $a^k \not\equiv 1 \bmod{q}$.
+	\item $\gcd(a^k - 1, N) = p$, т.к.~$a^k \equiv 1 \bmod{p}$ и~$a^k \not\equiv 1 \bmod{q}$.
+\end{itemize}
+	
 
-Т.~к. $(q-1)$ -- не $B_1$-гладкое, $\exists r$ -- простое, $r > B_1: r \mid q-1$.
-
-Если $r \mid \operatorname{ord}_{\mathbb{Z}_q^\times}(a)$, то $\operatorname{ord}_{\mathbb{Z}_q^\times}(a) \nmid K$ \MyImplies $a^K \not\equiv 1 \bmod{q}$.
-
-С другой стороны $K$ -- кратно $p-1$ \MyImplies $a^K \equiv 1 \bmod{p}$ и $\gcd(a^K - 1, N) = p$.
-
-%Т.~е. необх. показать, что $r \mid \operatorname{ord}_{\mathbb{Z}_q^\times}(a)$ с большой вероятностью для $a \in \mathbb{Z}_N^\times$.
-%Вероятность, что целое число делится на простое~$r$ равна $\frac{1}{r}$.
-%Вероятность, что целое число делится на простое~$r$ равна $\frac{1}{r}$.
-
-Так как $\operatorname{ord}_{\mathbb{Z}_q^\times}(a)$ -- целое число, то вероятность того, что $\operatorname{ord}_{\mathbb{Z}_q^\times}(a) \nmid K$ равна $1 -\frac{1}{K} = 1 - \frac{1}{B_1}$. 
+Так как $\operatorname{ord}_{\mathbb{Z}_q^\times}(a)$ -- целое число, то вероятность того, что $\operatorname{ord}_{\mathbb{Z}_q^\times}(a) \nmid k$ равна $1 -\frac{1}{k} = 1 - \frac{1}{B_1}$. 
 \ProofEnd
 \end{frame}
 
@@ -216,17 +217,17 @@ $p-1 = \prod p_i^{e_i},\ p_i \leq B_1, p_i^{e_i} \leq B_2$, т.~е. $p-1$ явл
 
 \begin{frame}
 \ProofBegin
-Пусть $ K = \prod\limits_{p_i \leq B_1} p_i^{e_i}$.
+Пусть $k = \prod\limits_{p_i \leq B_1} p_i^{e_i}$.
 
 \vspace{0.5em}
 Т.~к. $\#E(\mathbb{F}_q)$ -- не $B_1$-гладкое, то $\exists r > B_1$ т.~ч. $r \mid \#E(\mathbb{F}_q)$.
 
-Имеем: $r \mid \operatorname{ord}_{E(\mathbb{F}_q)}(P)$ \MyImplies $K \cdot P \neq \mathcal{O}$ на $E(\mathbb{F}_q)$.
+Имеем: $r \mid \operatorname{ord}_{E(\mathbb{F}_q)}(P)$ \MyImplies $k \cdot P \neq \mathcal{O}$ на $E(\mathbb{F}_q)$.
 \vspace{0.5em}
 
-С другой стороны: $\#E(\mathbb{F}_p) \mid K$ \MyImplies $K \cdot P = \mathcal{O}$ на~$E(\mathbb{F}_p)$.
+С другой стороны: $\#E(\mathbb{F}_p) \mid k$ \MyImplies $k \cdot P = \mathcal{O}$ на~$E(\mathbb{F}_p)$.
 
-Вычисляем $K \cdot P$ на $E(\mathbb{Z}_N)$ \MyImplies получаем $P' + Q' = \mathcal{O}$ на $E(\mathbb{F}_p)$ и $P' + Q' \neq \mathcal{O}$ на $E(\mathbb{F}_q)$ \MyImplies Алгоритм вернёт $(p, q)$.
+Вычисляем $k \cdot P$ на $E(\mathbb{Z}_N)$ \MyImplies получаем $P' + Q' = \mathcal{O}$ на $E(\mathbb{F}_p)$ и $P' + Q' \neq \mathcal{O}$ на $E(\mathbb{F}_q)$ \MyImplies Алгоритм вернёт~$(p, q)$.
 
 \vspace{0.5em}
 Сложность и вероятность: аналогично $(p-1)$ методу Полларда. 
@@ -236,6 +237,7 @@ $p-1 = \prod p_i^{e_i},\ p_i \leq B_1, p_i^{e_i} \leq B_2$, т.~е. $p-1$ явл
 \begin{frame}
 \structure{Замечание.} Баланс выбора $B_1$:
 \begin{itemize}
+	\item $B_1$ нужно брать больше, чтобы увеличивать вероятность, что~$E(\mathbb{F}_p)$ -- $B_1$-гладкое (и можно применять лемму).
     \item малое $B_1$ \structure{$\Rightarrow$} быстрый алгоритм, малая вероятность успеха 
     \item большое $B_1$ \structure{$\Rightarrow$} медленный алгоритм, большая вероятность успеха. 
 \end{itemize}
