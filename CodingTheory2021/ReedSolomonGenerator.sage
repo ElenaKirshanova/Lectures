@@ -1,11 +1,11 @@
 
 
 R = ZZ['x']
-p = 3
-n = 2
+p = 2
+n = 3
 f_cycl = R.cyclotomic_polynomial(p**n - 1)
 
-k = 2
+k = 3
 d = (p**n - 1) - k + 1
 
 F = GF(p)
@@ -13,7 +13,7 @@ Fx = PolynomialRing(F, 'x')
 decomp = (Fx(f_cycl)).factor()
 #print(decomp)
 #defining_poly = decomp[1][0]
-defining_poly = x^2+ 2*x + 2
+defining_poly = x^3 + x + 1
 print('defining_poly:', defining_poly)
 ff.<a> = FiniteField(p**n, modulus = defining_poly)
 S = [0]*(p**n - 1)
@@ -22,6 +22,8 @@ for i,x in enumerate(ff):
 	print(i,x, a**i)
 	if not (i==0 or x ==1):
 		S[i] = x
+
+S = [1, a, a^2, a + 1, a^2 + a, a^2 + a + 1, a^2 + 1]
 
 print('Reed-Solomon code with params [', (p**n - 1), k, d,']')
 print('evaluation set S = ', S)
@@ -132,7 +134,7 @@ def PetersonDecode(k, S, y, ff):
 	assert len(S)==len(y)
 	n = len(S)
 
-	deg_E = 3 #floor((n - k + 1)/2)
+	deg_E = floor((n - k + 1)/2)
 	deg_G = deg_E-1
 	print('deg_E:', deg_E, 'deg_G:', deg_G)
 
@@ -174,7 +176,7 @@ def PetersonDecode(k, S, y, ff):
 
 #m = gen_message(k, S)
 #print('m = ', m)
-#m = [a+1, 0, a]
+##m = [a+1, 0, a]
 #c = encode(m, S)
 #print('c = ', c)
 #e = gen_error(2, d, S)
@@ -183,18 +185,18 @@ def PetersonDecode(k, S, y, ff):
 #print('y = ', y)
 
 
-#m = [2*a+1, 2]
-#c = encode(m, S)
-#print('c = ', c)
+m = [a^2, a+1, a]
+c = encode(m, S)
+print('c = ', c)
 
-y = (a + 1, a + 2, 2*a, 0, 2*a + 1, a, a, 2*a)
-#print('y = ', y)
-
-decP = PetersonDecode(k, S, y, ff)
-#print('decP:', decP)
-#print(encode(decP.coefficients(), S))
+y = [a^2 + 1, 1+a, a^2+1, 0, 1, 0, a^2 + 1]
+print('y = ', y)
 
 decWB = WB_decode(k, S, y, ff)
 print('dec:', decWB, decWB.coefficients())
-print(encode(decWB.coefficients(), S) )
-print(vector(y)-vector(encode(decWB.coefficients(), S)))
+print('encode back:', encode(decWB.coefficients(), S) )
+print('error:', vector(y)-vector(encode(decWB.coefficients(), S)))
+
+decP = PetersonDecode(k, S, y, ff)
+print('decP:', decP)
+print(encode(decP.coefficients(), S))

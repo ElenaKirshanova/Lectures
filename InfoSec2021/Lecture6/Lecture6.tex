@@ -1,0 +1,663 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{stackengine}
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+%\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+
+
+\newcommand{\AxisRotator}[1][rotate=0]{%
+	\tikz [x=0.4cm,y=1.0cm,line width=.2ex,-stealth,#1] \draw[color=Orange] (0,0) arc (-150:150:2 and 1);%
+}
+
+\title{Лекция №6 \\[10pt]
+	Часть 1. Схема криптографической подписи. Определение. }
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}{Схема цифровой подписи: зачем нужна?}
+	\large 
+	\begin{center}
+Обмен ключами + Симметрическое шифрование =  {\color{Orange}{конфидециальность} } 
+	\end{center}
+Но
+	\begin{itemize}
+		\itemsep 10pt
+		\item протокол обмена ключами Диффи-Хэллмана {\color{Orange} подвержен активным атакам} 
+		\item  он не обеспечивает {\color{Orange} целостность} передаваемых данных
+		\item он не обеспечивает {\color{Orange} аутентификацию}
+	\end{itemize}
+
+\vspace{15pt}
+
+Наша цель: обеспечить целостность и аутентификацию, как схема MAC,  но в асимметрическом  {\color{Orange} открытым} мире.\\[10pt]
+
+%\centering
+
+\Large Асимметрическая версия МАС'a -- {\color{Orange} криптогрфическая схема подписи}
+\end{frame}
+
+
+
+\begin{frame}{Схема подписи: определение}
+\Large
+
+{\color{Orange}{Схема подписи}} состоит из трех ppt алгоритмов
+\begin{itemize}
+	\itemsep 10pt
+	\item Генерация ключа: $(\sk, \vk) \leftarrow \KeyGen(1^\lambda)$ \\
+	$\vk$ -- ключ верификации (открытый), $\sk$ -- подписывающий ключ (секретный)
+	\item Генерация подписи: $\sigma \leftarrow \Sign(m, \sk)$
+	\item Верификация: $\Ver(m, \sigma, \vk)$ выдает $\{\mathsf{accept}, \mathsf{reject}  \}$.
+\end{itemize}
+\vspace{15pt}
+Здесь,  $m \in \mesS$ -- сообщение, которое должно быть подписано\\[10pt]
+
+{\color{Orange}Корректность}: $\forall m, \forall (\sk, \vk) \leftarrow \KeyGen():$ 
+\[
+	\Ver(m, \Sign(m, \sk), \vk)  = \mathsf{accept}
+\]
+\end{frame}
+
+\begin{frame}{Схема подписи: безопасность}
+	\Large
+	2 типа атак {\color{Orange} на выбранное сообщение}: \\[10pt]
+	{\color{Orange}I. Экзистенциальная подделка (Existential forgery)} \\
+	\large 
+		\begin{itemize}
+			\item атакующий может запросить подписать любое сообщение $m$
+			\item ppt атакующий не должен сформировать корректную пару $(m, \sigma)$ для нового $m$, т.е.,  для $m$, для которого он не запрашивал подпись
+		\end{itemize}
+	\Large 
+	\pause
+	{\color{Orange}II. Сильная экзистенциальная подделка (Strong Existential forgery)} \\
+	\large 
+	\begin{itemize}
+		\item атакующий может запросить подписать любое сообщение $m$
+		\item  ppt атакующий не должен сформировать корректную пару $(m, \sigma)$  {\color{Orange}  даже для сообщений, на которые была запрошена подпись}, i.e., $(m, \sigma')$ является \\ корректной атакой, даже если злоумышленник знает $(m, \sigma)$.
+	\end{itemize}
+
+\vspace{10pt}
+
+Из цифровой подписи, безопасной в первой (слабой) модели, можно \\ сделать схему подписи, безопасную во второй, более сильной модели
+\end{frame}
+
+\begin{frame}{Безопасность UF-CMA (Unforgeability under Chosen Message Attack)}
+\Large
+
+\begin{center}
+	$\Pi = (\KeyGen, \Sign, \Ver)$ --  схема подписи \\[20pt]
+	
+	\begin{tabular}{c c c}
+		{\color{Orange} Челленджер $\mathcal{C}$ } & & {\color{Orange} Атакующий $\mathcal{A}$ }\\ [5pt]
+		$(\vk, \sk ) \leftarrow \KeyGen(1^\lambda)$ & & $\mesS \gets \emptyset$\\ [2pt]
+		 & $\xleftarrow{m} $  &\\ 
+		$\sigma =  \Sign(m, \sk)$ &$\xrightarrow{\sigma }$  & $\mesS \gets \mesS \cup \{m \}$\\[10pt]
+		& $\xleftarrow{(m' , \sigma' ) }$ & $m' \notin \mesS$ \\ [5pt]
+	\end{tabular}
+	\begin{tikzpicture}[overlay]
+	\draw[fill=none, draw=white, opacity=0.5] (-9.5,-2.0) rectangle (-4.7,2.0); 
+	\draw[fill=none, draw=white, opacity=0.5] (-3.2,-2.) rectangle (0.0,2.0); 
+	\node at (-3.8, 0.3) {\AxisRotator};
+	\end{tikzpicture}
+\end{center}
+
+\vspace{15pt}
+
+$\mathtt{W_{\Pi, \adv}}$ -- событие $\Ver(\vk, \sigma') = \mathsf{accept}$. \\ [4pt]
+$\mathtt{And} = \Pr[\mathtt{W_{\Pi, \adv}}] $ -- выигрыш  $\adv$. \\ [4pt]
+\color{Orange} Схема подписи $\Pi$ безопасна в модели UF-CMA, если $\forall$ ppt $\adv:$  \[\mathtt{SigAdv} = \negl(\lambda).\]
+
+\end{frame}
+
+\begin{frame}{Еще о безопасности}
+\Large
+	\begin{itemize}
+		\itemsep 15pt
+		\item {\color{Orange} Hеотказ от авторства} (Non-repudiation) \\
+		 -- Подписывающий ``привязан'' к своим подписям. \\
+		 
+		\item {\color{Orange} Стойкость относительно дубликатов подписывающих ключей (Duplicate Signature Key Selection,DSKS)}\\
+		-- Атакующий, имея $(m, \sigma)$, может сгенерировать пару$(\vk', \sk')$, т.ч.\ $(m, \sigma)$ -- корректная пара относительно $(\vk', \sk')$.\\
+		-- Для предотвращения такой атаки подписывающий конкатинирует сообщение со своим открытым ключом
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Применение цифровой подписи: обновление софта}
+
+\begin{figure}
+	\hspace{-60pt}
+	\includegraphics[width=0.9\textwidth]{Signature_software}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Схемы подписи на практике}
+\Large
+\begin{enumerate}
+	\itemsep10pt
+	\item {\color{Orange} RSA} \\
+	-- основана на сложности задачи {\color{Orange} факторизации}\\
+	-- быстрая процедура $\Ver$, медленные $\Sign, \KeyGen$; длинный ключи, подписи
+	
+	\item {\color{Orange} (EC)DSA= (Elliptic Curve) Digital Signature Algorithm} \\
+	-- основана на сложности задачи  {\color{Orange} dlog}\\
+	-- медленнее $\Ver$, быстрее $\Sign, \KeyGen$\\
+	-- в ECDSA меньшего размера ключи и подписи
+	\pause
+	\item {\color{Orange} ГОСТ Р 34.10-2012 }  \\
+	-- аналогичен ECDSA \\
+	-- старый ГОСТ Р 34.10-94 аналогичен DSA
+\end{enumerate}
+\pause
+\centering
+
+Размеры ключей (в битах):\\[5pt]
+\begin{tabular}{c | c| c}
+	Security lvl. & ECDSA / ГОСТ'12 & RSA/DSA \\ \hline
+	80 & 160 & 1024 \\
+	128 & 256 & 3072 \\
+	256 & 512 & 15360
+\end{tabular}
+\end{frame}
+
+\begin{frame}
+Часть II \\ [10pt]
+\begin{LARGE}
+	
+	\color{Orange}
+	\Huge  Арифметика в кольце целых чисел
+	
+\end{LARGE}
+\end{frame}
+
+\begin{frame}{Арифметика в кольце целых}
+\Large 
+{\color{Orange} Положим $N = p \cdot q$, где $p, q$ -- большие простые числа}
+
+\begin{itemize}
+	\item $\ZN = \left\{ 0, 1, \ldots, N-1 \right\}$ -- {\color{Orange} кольцо}
+	\item Элементы $\ZN$ складываются и умножаются по модулю $N$. \\
+	Пример: $N = 15$
+	\begin{align*}
+	11+6 \bmod N &= \rem(17, 15) = 2 \\
+	6\cdot 7  \bmod N &= \rem(42, 15) = 12
+	\end{align*}
+	
+	\item Не для всякого ненулевого $x \in \ZN$ существует обратимый! \\[3pt]
+	Множество обратимых элементов: $\ZN^{\ast} =\{x \in \ZN \; | \;  \text{НОД}(x,N) = 1\}$.\\[5pt]
+	
+	Пример: $3, 6, 9, 5, 10, 12 \notin \ZN^{\ast}$. \\[3pt]
+	$\ZN^{\ast} = \{1, 2, 4, 7, 8, 11, 13, 14\}$.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Структура $\ZN^\ast$ }
+\Large 
+\begin{itemize}
+\itemsep 10pt
+\item  $\phi(N) = |\ZN^\ast|$ -- {\color{Orange}функция  Эйлера} \\[5pt]
+--  $N$ -- простое, $\phi(N) = N-1$ \\[3pt]
+--  $N = p_1^{e_1} \cdot p_n^{e_n}$, $\phi(N)=  N \cdot \prod_{i} \left(1 - \frac{1}{p_i}\right)$. \\[3pt]
+-- для $N = p \cdot q$, {\color{Orange}$\phi(N) = (p-1)(q-1)$.} \\[3pt]
+Пример: $|\ZN^{\ast}| = |\{1, 2, 4, 7, 8, 11, 13, 14\}| = 2 \cdot 4 = 8$.
+
+\item {\color{Orange}Теорема Эйлера:} для всех $a \in \ZN^{\ast}$
+\[
+{\color{Orange}	\LARGE a^{\phi(n)} = 1 \bmod N }
+\]
+{\large Теорема Ферма: $a^{p-1} = 1 \bmod p$ для простого $p$.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Простые и трудные задачи в $\ZN$}
+\Large 
+\begin{center}
+{\color{Orange}  $N = p \cdot q$},  $p, q$ -- по $\approx$ 1024 бит каждое.\\
+\end{center}
+В $\ZN$ следующие операции  {\color{Orange} эффективные}  \\[5pt]
+-- сложение, умножение, нахождение обратного (если существует, проверить несуществование)\\[3pt]
+--  возведение в степерь $g^r \bmod N$ \\[14pt]
+Сегодня  {\color{Orange} считаются трудными} задачи \\[5pt]
+-- {\color{Orange} факторизация}: нахождение $p, q$  \\[3pt]
+-- вычисление квадратного корня в $\ZN$ (эквивалентно факторизации) \\[3pt]
+-- вычисление $e$-го корня в  $\ZN$ при $\gcd(e, \phi(N)) = 1$\\
+%-- dlog (TODO)
+\end{frame}
+
+
+\begin{frame}
+Часть III \\ [10pt]
+\begin{LARGE}
+	
+	\color{Orange}
+	\Huge  Подпись RSA
+	
+\end{LARGE}
+\end{frame}
+
+
+
+\begin{frame}{Генерация ключей в подписи RSA}
+\Large
+Возьмём $\ell>2$--целое и $e>2$ -- нечетное целое (на практике  $e=65537$) \\[8pt]
+{\color{Orange} $\mathsf{RSAGen}(\ell, e):$}
+\begin{enumerate}
+	\itemsep5pt
+	\item Сгенерировать $\ell$-битное целое $p$ т.ч.\ $\gcd(p-1, e)=1$
+	\item Сгенерировать  $\ell$-битное цело $q \neq p$ т.ч.\ $\gcd(q-1, e)=1$
+	\item $N= p \cdot q$, $\phi(N) = (p-1)(q-1)$
+	\item $d = e^{-1} \bmod \phi(N)$
+	\item Вывод: $\vk = (N, e), \sk=(N, d)$
+\end{enumerate}
+%\vspace{7pt}
+\large
+\pause
+\begin{itemize}
+	\item  $\exists$ ppt алгоритм генерации простых чисел ($\exists$  ppt алгоритмы теста на простоту)
+	\item Шаг 4 корректен:  $d \in \ZN^\ast$, т.к. \[ \hspace{-20pt} \gcd(p-1, e) = \gcd(q-1, e) = 1 \implies \gcd((p-1)(q-1), e)=1.\]
+	\item на $p,q$ должны удовлетворять  {\color{Orange} большому числу условий} 
+\end{itemize}
+\centering
+\Large Не пытайтесь повторить $\mathsf{RSAGen}$ самостоятельно. 
+\end{frame}
+
+\begin{frame}{RSA Signature Generation and Verification}
+\large
+$\Hash: \{0,1\}^\ast \rightarrow \ZN^\ast$-- криптографическая хэш-функция
+\vspace{10pt}
+\begin{columns}[t]
+\begin{column}{0.45\textwidth}
+	
+	{\color{Orange} I. $\mathsf{RSASign}(\sk=(N, d), m):$}
+	\begin{enumerate}
+		\itemsep5pt
+		\item $y = \Hash(m) \in \ZN^\ast$
+		\item $\sigma = y^d \bmod N$
+	\end{enumerate}
+	\vspace{10pt}
+	\pause
+	{\color{Orange} II. $\mathsf{RSAVerify}(\vk=(N, e), m, \sigma):$}
+	\begin{enumerate}
+		\itemsep5pt
+		\item $y' = \sigma^e \bmod N$
+		\item $\mathtt{return}(y'==\Hash(m))$ \\
+	\end{enumerate}
+\end{column}
+\begin{column}{0.55\textwidth}
+	\pause
+	{\color{Orange} Корректность:}
+	Для $N=pq$ и $e,d$ т.ч.\ $ed = 1 \bmod \phi(N)$ и для всех $x \in \Z$
+	{\color{Orange} 
+		\[
+		x^{ed} = x \bmod N
+		\] }
+	\pause
+	Док-во: для $k \in \Z$
+	\begin{align*}
+	&ed = 1 + k \phi(N) = 1+k(p-1)(q-1) \\  \pause
+	& x^{p-1} = 1 \bmod p \quad \text{(Ferma't thm.)}\\ \pause
+	& x^{ed} = x^{1+k(p-1)(q-1)} = \\
+	& x \cdot (x^{p-1})^{q-1} = x \bmod p \\ \pause
+	&\text{Аналог.}, x^{ed}  = x \bmod q \\ \pause
+	& \implies  p, q \, |\, x^{ed} - x \\
+	& \implies   x^{ed} = x \bmod p \cdot q
+	\end{align*}
+\end{column}
+\end{columns}
+\LARGE
+%\vspace*{-40pt}
+%{\color{Orange}  $(y^d)^e = y^{ed} = y \bmod N$ } \\[20pt]
+\vspace{10pt}
+\centering
+\vfill
+Без $\Hash$ схема тривиально взламывается!
+\end{frame}
+
+\begin{frame}{Безопасность подписи RSA}
+\Large
+
+{\color{Orange}  RSA предположение сложности:}
+Не существует ppt алгоритма, который, получив на вход $(N, m, m^e)$ для случайного $m \in \ZN^\ast$, выдаёт $m$.\\[10pt]
+
+{\centering Факторизация $N \implies $ вычисление $e$-го корня. \\[5pt] Обратная редукция не доказана! }  \\[15pt]
+
+Самый быстрый сегодня алгоритм факторизации -- General Number Field sievie -- со сложностью
+\[
+\sim e^{(\lg N)^{1/3}}
+\]
+
+
+{\color{Orange}  Теорема:} Схема подписи ($\mathsf{RSAGen},$ $\mathsf{RSASign},$ $\mathsf{RSAVerify}$) безопасна в \\ модели {\color{Orange} UF-CMA}, если {\color{Orange}  предположение RSA корректно} и $\Hash$ является \\ {\color{Orange}  случайным оракулом.} \\[10pt]
+
+\end{frame}
+
+\begin{frame}{Стандарты}
+\Large 
+Вариант RSA подписи станартизованы под именем PKCS (Public Key Cryptography Standards)   \\
+\url{https://en.wikipedia.org/wiki/PKCS} \\[10pt]
+
+Версия 2.2 (крайняя)  PKCS \#1 включает \\[10pt]
+\begin{itemize}
+\itemsep10pt
+\item RSASSA-PSS \\
+SSA = Signature Scheme with Appendix \\[5pt]
+PSS =  Probabilistic Signature Scheme
+\item  RSASSA-PKCS1-v1\_5 (существуеют атаки)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+Часть IV \\ [10pt]
+\begin{LARGE}
+	
+	\color{Orange}
+	\Huge  Слепая подпись. Сертификаты
+	
+\end{LARGE}
+\end{frame}
+
+
+\begin{frame}{ Слепая подпись RSA}
+
+\Large
+{\color{Orange} Сценарий:} {\color{Orange} A }  необходима подпись банка ({\color{Orange} Б }) на осуществлении транзакции. При этом {\color{Orange} Б } не должен знать о том, что именно он подписывает. {\color{Orange} Б } осуществляет {\color{Orange} слепую подпись.} \\[5pt]
+
+$\Hash: \{0,1\}^\ast \rightarrow \Z_p^\ast$ -- криптографическая хэш-функция \\
+$ m $ -- транзакция
+
+\begin{center}
+	\begin{tabular}{c c c}
+		{\color{Orange} A } & & {\color{Orange} Б }\\ [5pt]
+		& &  $\sk = (N, d), \vk= (N, e)\leftarrow \mathtt{RSA.KeyGen()}$\\
+		$r \xleftarrow{\$} \Z_N$ & &  \\
+		$m' = \Hash(m) \cdot r^e$  & $\xrightarrow{ \Huge \; m' \;}$&  $\sigma' = (m')^d$ \\
+		$\sigma = \sigma' / r $& $\xleftarrow{ \Huge \; \sigma' \;}$&  \\
+	\end{tabular}
+	
+\end{center}
+
+\begin{itemize}
+	\item {\color{Orange} A } получает корректную подпись для $m'$ \\[25pt]
+	\item Значение $r^e$ маскирует исходное сообщение ({\color{Orange} Б} не знает ничего о $m$)
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}{Слепая подпись }
+
+\Large
+
+\begin{itemize}
+\itemsep10pt
+\item Слепая подпись безопасна, если ppt атакующий, зная $\vk$ и $Q$ слепых подписей, не может сгенерировать $Q+1$ пару  $(m, \sigma)$
+\item Безопасность слепой подписи RSA основана на задача 1MRSA: \\
+\begin{itemize}
+	\itemsep5pt
+	\large 
+	\item {\color{Orange} A} получает значения $w = \hat{v}^{1/e}$ от Челленджера для $\hat{v}$ по своему выбору
+	\item Задача {\color{Orange} A}: вычислить $v^{1/e}$ для какого-либо одного $v \neq \hat{v}$, выбранного Челленджером
+\end{itemize}	
+
+\item Слепая подпись может быть построена на основе подписи Шнорра
+\item Используются в протоколах Anonymous Credentials, E-cash. 
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Применение криптографических подписей}
+\Large
+Подписи на практике
+\begin{enumerate}
+\itemsep 10pt
+\item RSA \\
+длинные ключи и подписи; быстрая верификация
+\item ECDSA, ГОСТ\\
+длинные ключи и подписи; верификация медленнее
+\end{enumerate}
+\vspace{10pt}
+RSA хороша для {\color{Orange} Сертификатов}, ECDSA/ГОСТ -- для имейлов. \\[10pt]
+
+
+\end{frame}
+
+\begin{frame}{Сертификаты}
+\Large 
+Задача сертификата:  связать публичный ключ с человеком/машиной.
+\begin{center}
+\begin{tabular}{l c c c l}
+& \Large Алиса & &\Large Сертификационный центр (CA)&  \\ 
+&  $\pk_{\texttt{A}}$  & & $\vk_{\texttt{CA}}$, $\sk_{\texttt{CA}}$ & \\
+& \multirow{5}{*}{\includegraphics[scale=0.15]{Alice}} & & &  \\  \pause
+& & $\xrightarrow[\texttt{id, email, } \pk_{\texttt{A}}]{\text {Certificate Signing Request}}$ & & \\  \pause
+& & & \Large Сертификация id Алисы: & \\
+& & & Создание $\texttt{cert}$& \\
+& & & Подпись $\texttt{cert}$& \\
+& & $\xleftarrow{\LARGE \texttt{cert}, \; \sigma = \Sign(\sk_{\texttt{CA}}, \texttt{cert})}$ & & \\  
+\end{tabular}
+\end{center}
+
+\vspace{15pt}
+\Large
+Для осуществления аутентифицированного канала с Алисой \\
+верифицируется $\texttt{cert}$:
+$\Ver(\vk_{\texttt{CA}} \texttt{cert},\sigma )$. \\[5pt]
+
+Если $\Ver(\vk_{\texttt{CA}} \texttt{cert},\sigma ) = \mathsf{accept}$, то $\pk_{\texttt{A}}$ используется для \\ коммуникации с Алисой.\\[8pt]
+
+Пример: сертификат X.509 certificate
+\end{frame}
+
+\begin{frame}{Цепочки сертификатов}
+\Large
+\begin{center}
+
+\begin{align*}
+&{\LARGE \text{Корневой CA } \hspace{70pt} \xrightarrow{\hspace{2em}} \quad \quad \text{Промежуточный CA}} \\
+&\text{сертифицирует промежуточные CA}  \hspace{37pt} \text{сертифицирует клиентов} 
+\end{align*}
+\end{center}
+\vspace{15pt}
+Сегодня мы имеем тысячи промежуточный CAs \\[10pt]
+Для противостояния CAs: {\color{Orange} certificate pinning:} \\[7pt]
+\begin{enumerate}
+\item Каждый браузер (клиент) поддерживает базу данных (pinning database): \\
+($\texttt{domain}$, $\texttt{hash}_0$, $\texttt{hash}_1, \ldots$ )
+\item Данные для БД предоставляет домен
+\item Когда браузер стучится в домен, домен высылает ему цепочку\\ своих сертификатов $\texttt{cert}_0, 
+\texttt{cert}_1, \ldots$
+\item Браузер вычисляет $\Hash(\texttt{cert}_i)$ и верифицирует $\texttt{hash}_i$. 
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Пример цепочки сертификатов }
+\begin{figure}
+\includegraphics[scale=0.45]{cert1}
+\end{figure}
+
+
+\end{frame}
+
+
+\end{document}
