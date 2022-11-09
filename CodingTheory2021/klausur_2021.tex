@@ -1,0 +1,250 @@
+\documentclass[12pt,a4paper]{scrartcl}
+
+%\usepackage[T1]{fontenc}
+%\usepackage[utf8x]{inputenc}
+\usepackage{array}
+
+%\usepackage[ngerman]{babel}
+%\usepackage{ngerman}
+
+%---enable russian----
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian,ngerman]{babel}
+
+
+\usepackage{amsmath, amsfonts}
+\newcounter{blatt}
+\setcounter{blatt}{99}
+\parindent = 0mm
+\pagestyle{empty}
+\setlength{\textheight}{26cm}
+
+\usepackage{amssymb,epsfig,hyperref}
+\usepackage{fancyhdr,pdfpages,graphicx}
+\newcommand{\N}{\ensuremath{\mathbb{N}}\xspace}
+\newcommand{\rem}[1]{}
+
+\usepackage{enumerate}
+
+
+%complexity classes
+\newcommand*{\POLY}{{\mathcal{P}}}
+\newcommand*{\NPOLY}{{\mathcal{NP}}}
+
+\newcommand{\marrow}{\marginpar[\hfill$\longrightarrow$]{$\longleftarrow$}}
+\newcommand{\todo}[1][]{\textbf{TODO} \marrow\textsf{#1}}
+
+%
+% Aufruf: \auf{Aufgabentext}
+%
+\newcounter{auf}
+\newcommand{\auf}[2]
+{
+\stepcounter{auf}{\textbf{Задание} \textbf{\arabic{auf}} } ({#1} баллов) \vspace{3pt}
+
+#2
+
+% TODO: Uncomment page break here
+%\bigskip
+\newpage %\phantom{X} \newpage
+}
+%
+% kleine Buchstaben zum durchnummerieren mit enumerate auf Level 1
+%
+%\renewcommand{\theenumi}{\alph{enumi}}
+%\renewcommand{\labelenumi}{\theenumi)}
+
+\newcommand{\nc}{\newcommand}
+\nc{\eps}{\varepsilon}
+\nc{\RR}{{{\mathbb R}}}
+\nc{\CC}{{{\mathbb C}}}
+\nc{\FF}{{{\mathbb F}}}
+\nc{\NN}{{{\mathbb N}}}
+\nc{\ZZ}{{{\mathbb Z}}}
+\nc{\PP}{{{\mathbb P}}}
+\nc{\QQ}{{{\mathbb Q}}}
+\nc{\UU}{{{\mathbb U}}}
+\nc{\OO}{{{\mathbb O}}}
+\nc{\EE}{{{\mathbb E}}}
+
+
+
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\cset}[2]{\left\{#1 \middle\arrowvert #2\right\}}
+\newcommand{\gor}{\; | \;}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}} % linksbündig mit Breitenangabe
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}} % zentriert mit Breitenangabe
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}} % rechtsbündig mit Breitenangabe
+
+
+\begin{document}
+Е.\ A.\ Киршанова \hfill БФУ им. И.Канта \\
+
+
+
+
+
+\begin{center}
+  \LARGE
+  \underbar{Контрольная работа}\\[1ex]
+  \Large
+  по дисциплине \\[1ex]
+  \textsc{Теория Кодироваия и Сжатия Информации}\\[2ex]
+  \large
+  Время: 120 минут \\
+ 24.12.2021
+\end{center}
+\vspace*{1.5cm}
+
+
+Имя   :\\[-2.2ex] \rule{0.9\textwidth}{.2pt}\\[2ex]
+Фамилия : \\ [-2.2ex] \rule{0.9\textwidth}{.2pt}\\[1ex]
+%Studiengang:\\[-2.2ex] \rule{0.7\textwidth}{.2pt}\\[1ex]
+%Geburtsdatum:\\[-2.2ex] \rule{0.7\textwidth}{.2pt}\\[1ex]
+
+\vspace*{1.5cm}
+\textbf{Требования:}
+\begin{itemize}
+  \item Не следует разделять скреплённые листы.  Если вам не хватает места для ответа, попросите у экзаменатора дополнительные листы. Подпишите их и приложите их к контрольной, чётко указав, решения каких заданий содержатся на каком листе.
+%Schreiben Sie die Lösung jeder Aufgabe direkt auf das Blatt mit der Aufgabenstellung. Es dürfen Vorder- und R"uckseite verwendet werden. Wenn der Platz nicht ausreicht, k"onnen die leeren Seiten am Ende der Klausur benutzt werden.
+ \item Для записи ответов вы можете использовать обе стороны листов.
+  \item Пишите \textbf{разборчиво}.
+  \item Поясняйте свои ответы.
+    
+    
+  
+\end{itemize}
+
+%\vspace*{0.5cm}
+\rule{\textwidth}{.2pt}
+\vfill
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{|p{5cm}||c|c|c|}
+    \hline
+    Задание & 1 & 2 & 3  \\
+    \hline
+    Баллы & \phantom{XXXXXX}/ 6 & \phantom{XXXXXX}/ 6 & \phantom{XXXXXX}/ 9  \\
+    \hline
+  \end{tabular}\\[5ex]
+
+  \begin{tabular}{|p{4.2cm}|p{4.2cm}|p{4.2cm}|}
+    \hline
+    Контрольная & Бонусы & Общая  \\
+    \hline
+     &   &  \\[1ex]
+    \hline
+  \end{tabular}
+  
+\end{center}
+
+\newpage 
+ 
+\auf{$6 \times 1 $}{%
+
+\begin{enumerate}[1]
+	\setlength\itemsep{13em}
+	\item Является множество $C$ линейным кодом? Ответ поясните.
+	\[
+		C = \{ 0000, 1100, 0011, 1111 \}.
+	\]
+	\item Линейный код $C$ над $\FF_5$  задан проверочной матрицей
+	\[
+		H = \begin{bmatrix}
+		1&2&0&1&4\\ 
+		3&1&1&2&1
+		\end{bmatrix}.
+	\]
+	Есть ли среди ниже перечисленных векторов $x$ кодовые слова из $C$? Если да, то какие? Ответ поясните. \\
+	
+	\begin{tabular}{ p{7cm} p{7cm}  }
+	$x = \left[ \begin {array}{ccccc} 0&0&1&2&2\end {array} \right]  $ 	 & $x = \left[ \begin {array}{ccccc} 1&0&1&0&2\end {array} \right]  $ \\[3ex]
+		$x = \left[ \begin {array}{ccccc} 4&4&3&1&0\end {array} \right] $ & $x = \left[ \begin {array}{ccccc} 2&3&0&1&1\end {array} \right] $ 
+	\end{tabular}
+
+	\item Каково максимальное число ошибок, исправляемое следующими линейными кодами?
+	\begin{enumerate}
+		\setlength\itemsep{1em}
+		\item $[7,4,3]_2$ -- код Хэмминга,
+		\item $[2^r, r, 2^{r-1}]$ -- код Адамара,
+		\item Код Рида-Соломона над $\FF_{7}$ длины $n = |\FF^*_{7}|$, размерности $k = 4$.
+	\end{enumerate}	
+
+	\item Линейный код $C$ задан параметрами $[10, 5, 4]$. Каковы длина и размерность $C^\perp$ -- дуального к $C$ кода?
+
+	\item Линейный код над $\FF_2$ задан проверочной матрицей 	
+	\[
+	H = \begin{bmatrix}
+		0&1&1&1&0\\ 
+		1&0&1&0&1
+	\end{bmatrix}.
+	\]
+	Опишите порождающую матрицу для этого кода.
+	
+	\item Покажите, что нельзя найти 32 бинарных вектора длины 8, таких, что минимальное расстояние между ними как минимум равно 3.
+	
+	
+\end{enumerate}
+
+}
+\newpage
+
+
+\auf{$6$}{%
+	Пусть $C-[5,2]$--линейный код над $\FF_2$, заданный проверочной матрицей
+	\[
+	H = 
+	\begin{pmatrix}
+	1&0&1&1&1\\
+	0&0&1&0&1\\
+	0&1&1&1&0\\
+	\end{pmatrix}
+	\]  
+	\begin{enumerate}
+		\item Найдите порождающую матрицу кода.
+		\item Определите минимальное расстояние кода с помощью проверочной матрицы.
+		\item Какое количество ошибок может исправить этот код?
+		\item С помощью декодирования по синдрому декодируйте
+		\[
+		y = [0\; 1\; 0\; 0\; 1]
+		\]
+		и восстановите исходное сообщение.
+		\item Какие вектора $y \in \FF_2^5$ не получится однозначно декодировать этим кодом?
+		\item Опишите проверочную и порождающую матрицы кода, дуального к $C$.
+	\end{enumerate}
+	
+}
+
+\newpage\ \newpage
+ 
+
+
+\auf{$9$}{%
+	Для кода Гоппы, заданного над $\FF_{3^2} \cong \FF_3[x]/(x^2+2x+2)\cong \FF_3(\alpha)$ , c параметрами  $g(x) = x^2+\alpha  x+2$, $L = \{ 1, 2, 2\alpha+2, \alpha, 2\alpha, \alpha+1, 2\alpha+1 \}$, декодируйте \[y = [1 \; 0\; 1\; 0\; 2\; 0\; 1].\] \\
+Можете использовать следующие равенства
+\begin{equation*}
+\begin{aligned}[c]
+\frac{1}{x-1} &\equiv (2\alpha+1)x+2\alpha \bmod g(x) \\ 
+\frac{1}{x-2} &\equiv (\alpha+2)x+(2\alpha+2) \bmod g(x)   \\
+\frac{1}{x-(2\alpha+2)} &\equiv (2\alpha+1)x+(\alpha+2) \bmod g(x)  \\
+\frac{1}{x-\alpha} &\equiv \alpha x+2\alpha+2 \bmod g(x)  \\
+\frac{1}{x-2\alpha} &\equiv x \bmod g(x) \\
+\frac{1}{x-(\alpha+1)} &\equiv (2\alpha+2)x +\alpha \bmod g(x) \\
+\frac{1}{x-(2\alpha+1)}& \equiv (\alpha+2) x +\alpha+2 \bmod g(x) \\
+\end{aligned}
+\end{equation*}
+		
+Можете также использовать \[\FF_{3^2}^\star = \{ 1, \alpha, \alpha^2 = \alpha+1, \alpha^3 = 2\alpha+1, \alpha^4 = 2, \alpha^5 = 2\alpha, \alpha^6 =2\alpha+2, \alpha^7= \alpha+2  \}.\]
+}
+
+
+\newpage\ 
+
+\end{document}
+
+
+
