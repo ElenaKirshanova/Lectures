@@ -242,7 +242,7 @@ $p-1 = 2^k \cdot q$, $q$ -- нечётное\\
 \begin{block}{Алг. 3. Prove\_prime}
 На шаге 2, $p_i$ уменьшается на 2 \structure{$\implies$} $O(\log p)$ итераций.\\
 Доминирующий шаг: подсчёт точек в Gen\_curve \\
-\structure{$\implies$} общее время работы: $O(\log^4 p)$
+\structure{$\implies$} общее время работы: $\widetilde{O}(\log^4 p)$
 
 Количество кривых $E_{A,B}$, не удовлетворяющих условиям шага 1 в Gen\_curve() $= O(\log^3 p)$ (эвристика)
 \end{block}
