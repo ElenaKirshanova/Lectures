@@ -22,7 +22,7 @@
 \subtitle{Лекция 8. Тест на простоту на эллиптических кривых}
 \author{Семён Новосёлов}
 \institute{БФУ им. И. Канта}
-\date{2021}
+\date{2022}
 
 \begin{document}
 
@@ -158,11 +158,14 @@ $p-1 = 2^k \cdot q$, $q$ -- нечётное\\
 
 \begin{frame}
 \structure{$\triangleleft$}
-От противного: пусть $n$ -- составное $\Rightarrow \exists p > 3$, т.ч. $p | n$ и $p \leq \sqrt{n}$.
+От противного: пусть $n$ -- составное \structure{$\Rightarrow$} $\exists p > 3$, т.ч. $p \mid n$ и $p \leq \sqrt{n}$.
 \begin{itemize}
     \item Заметим: $\gcd(4A^3 + 27B^2, p) \neq 0 \bmod p$.\\Иначе: противоречие с $\gcd(4A^3 + 27B^2, n) = 1$.
-    \item Тогда по Лемме имеем $L_p \in E_{A,B}(\mathbb{F}_p)$ и $q\cdot L_p = (qL)_p = \infty_p = \infty$ \structure{$\Rightarrow$} $\operatorname{ord}(L_p)$ должен делить $q$.      
-    \item По Теореме Хассе-Вейля: $\operatorname{ord}(L_p) \leq \#E_{A,B}(\mathbb{F}_p) \leq (\sqrt{p} + 1)^2 \leq (n^{1/4} + 1)^2 < q$. 
+    \item Тогда по Лемме имеем $L_p \in E_{A,B}(\mathbb{F}_p)$ и $q\cdot L_p = (qL)_p = \infty_p = \infty$ \structure{$\Rightarrow$} $\operatorname{ord}(L_p) \mid q$ \structure{$\Rightarrow$} $\operatorname{ord}(L_p) = q$, т.к. $q$ -- простое.
+    \item Имеем:
+
+    $(n^{1/4} + 1)^2 < q = \operatorname{ord}(L_p) \leq \#E_{A,B}(\mathbb{F}_p) < (\sqrt{p} + 1)^2$.
+    \item \structure{$\implies$} $p > \sqrt{n}$.
     \item Это противоречие, значит, $n$ -- простое. \structure{$\triangleright$}
 \end{itemize}
 \end{frame}
@@ -236,13 +239,13 @@ $p-1 = 2^k \cdot q$, $q$ -- нечётное\\
 
 Шаг 1: $x \xleftarrow{\$} \mathbb{F}_p$ -- кв. вычет с вероятностью~$O(1)$.
 
-Шаг 4: быстрое умножение на $q$:\\$O(\log q \cdot \log^2 p) = O(\log^3 p)$
+Шаг 4: быстрое умножение на $q$:\\$\widetilde{O}(\log q \cdot \log p) = \widetilde{O}(\log^2 p)$ битовых операций.
 \end{block}
 
 \begin{block}{Алг. 3. Prove\_prime}
 На шаге 2, $p_i$ уменьшается на 2 \structure{$\implies$} $O(\log p)$ итераций.\\
 Доминирующий шаг: подсчёт точек в Gen\_curve \\
-\structure{$\implies$} общее время работы: $\widetilde{O}(\log^4 p)$
+\structure{$\implies$} общее время работы: $\widetilde{O}(\log^5 p)$
 
 Количество кривых $E_{A,B}$, не удовлетворяющих условиям шага 1 в Gen\_curve() $= O(\log^3 p)$ (эвристика)
 \end{block}
