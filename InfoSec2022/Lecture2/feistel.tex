@@ -1,0 +1,39 @@
+\documentclass{standalone}
+
+%% Common TikZ libraries
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+%% Custom TikZ addons
+\usetikzlibrary{crypto.symbols}
+\tikzset{shadows=no}        % Option: add shadows to XOR, ADD, etc.
+
+%% Document
+\begin{document}
+\begin{tikzpicture}
+    \foreach \z in {1, 2,...,3} {
+        \node[draw=white,thick,minimum width=1cm,color=white] (f\z) at ($\z*(0,-1.5cm)$)  {$f_\z$};
+        \node (xor\z) [XOR, left of = f\z, node distance = 2cm, scale=0.8,color=white] {};
+        \draw[thick,-latex, color=white] (f\z) -- (xor\z);
+    }
+    \foreach \z in {1, 2} {
+   	 	\draw[thick,latex-latex,color=white] (f\z.east) -| +(1.5cm,-0.5cm) -- ($(xor\z) - (0,1cm)$) -- ($(xor\z.north) - (0,1.5cm)$);
+   	 	\draw[thick,color=white] (xor\z.south) -- ($(xor\z)+(0,-0.5cm)$) -- ($(f\z.east) + (1.5cm,-1cm)$) -- +(0,-0.5cm);
+    }
+
+	%% Inputs    
+    \node (p0) [above of = f1, minimum width=5cm,minimum height=0.5cm,node distance=1cm] {}; 
+    \node (l0) [above of = xor1,node distance=1cm, color=white] {$L_0$};
+    \node (r0) [right of = l0, node distance = 4cm,color=white] {$R_0$};
+    \draw[thick,-latex,color=white] (l0 |- p0.south) -- (xor1.north);
+    \draw[thick,color=white] ($(f1.east)+(1.5cm,0)$) -- +(0,0.75cm);
+
+	%% Outputs
+    \node (p3) [below of = f3, minimum width=5cm,minimum height=0.5cm,node distance=1.75cm,color=white] {}; 
+    \node (l3) [below of = xor3,node distance=1.75cm,color=white] {$L_3$};
+    \node (r3) [right of = l3, node distance = 4cm,color=white] {$R_3$};
+    \draw[thick,latex-latex,color=white] (f3.east) -| +(1.5cm,-0.5cm) -- ($(xor3) - (0,1cm)$) -- (xor3 |- p3.north);
+    \draw[thick,-latex,color=white] (xor3.south) -- ($(xor3)+(0,-0.5cm)$) -- ($(f3.east) + (1.5cm,-1cm)$) -- +(0,-0.5cm);
+
+\end{tikzpicture}
+\end{document}

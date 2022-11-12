@@ -6,7 +6,7 @@ def gen_message(k, S):
 	for i in range(k):
 		rand_index = ZZ.random_element(0,nelements)
 		m_coeffs[i] = S[rand_index]
-	return m_coeffs 
+	return m_coeffs
 
 def eval_poly(f, y):
 	res = 0
@@ -62,14 +62,15 @@ y = c+e
 
 #y = vector(F, [1,0,1,0,3,5])
 
-print('m = ', m)
-print('c = ', c)
-print('e = ', e)
+#print('m = ', m)
+#print('c = ', c)
+#print('e = ', e)
 #print('y = ', y)
 
 #y = [5, 5, 6, 0, 2, 6]
 #y =  [2, 4, 1, 2, 5, 2]
-y = [6, 0, 4, 3, 3, 3]
+#y = [6, 0, 4, 3, 3, 3]
+y = [1, 3, 6, 5, 1, 2]
 
 assert(n>= 3*k-1)
 
@@ -122,4 +123,3 @@ print(fbivar.factor())
 """
 #s1 = vector(F, [3,1,4,5,1])
 #print(Qmat*s1)
-
