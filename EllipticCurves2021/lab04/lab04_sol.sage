@@ -111,7 +111,7 @@ def orderP(E, P1, q):
 
 
 def test_orderBSGS(i):
-  q = Primes().next(2^(14*i) + 1)
+  q = Primes().next(2^(16*i) + 1)
   a = ZZ.random_element(1,q-1)
   b = ZZ.random_element(1,q-1)
   F = GF(q)
