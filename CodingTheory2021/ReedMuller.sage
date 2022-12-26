@@ -26,19 +26,22 @@ G[10] = [G[3][i]*G[4][i] for i in range(n)]
 print(G)
 
 m = vector(F, k)
-m[1] = 1
-m[2] = 1
-m[4] = 1
-m[5] = 1
-m[8] = 1
+#m[3] = 1
+#m[6] = 1
+#m[8] = 1
+
+m = vector(F, [0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0])
 
 e = vector(F, n)
-e[12] = 1
+e[4] = 1
 c = m*G
 y = c+e
 
-print('c = ', c)
-print('y = ', y)
+#print('c = ', c)
+#print('y = ', y)
+
+
+y = vector(F,[0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1])
 
 #majority decoding
 
@@ -50,7 +53,7 @@ print('y = ', y)
 #for s in S:
 #	print(list(s))
 
-	
+
 
 
 t = r_param
@@ -72,10 +75,10 @@ while t>0:
 		print('s, s_:', s, s_)
 		for wb in Wb:
 			print('wb:', wb)
-			
+
 			a = vector(F, m_param)
 			indb = 0
-			for ind in range(m_param-t): 
+			for ind in range(m_param-t):
 				a[s_list[ind]] = wb[indb]
 				indb+=1
 
@@ -166,5 +169,4 @@ while t>0:
 
 
 
-# RM(1,4) example 
-
+# RM(1,4) example

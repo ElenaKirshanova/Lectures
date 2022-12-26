@@ -263,11 +263,11 @@ print('Concatenated code params: n = ', n_in*n_out, ' k = ', k_out*k_in, ' d >= 
 
 # generate a message
 m = gen_message(k_out, S)
-print('m = ', m, '\n')
+#print('m = ', m, '\n')
 
 #encode the message with the outer code
 c_out = encode(m, S)
-print('c\' = ', c_out, '\n')
+#print('c\' = ', c_out, '\n')
 
 
 #encode the message with the inner code
@@ -279,8 +279,8 @@ for i in range(n_out):
 	cout_isom[i] = to_V(c_out[i])
 	c_in[i] = random_enc(to_V(c_out[i]), G)
 
-print('c_isomorph = ', cout_isom, '\n')
-print('c = c_isomorph*G = ', c_in, '\n')
+#print('c_isomorph = ', cout_isom, '\n')
+#print('c = c_isomorph*G = ', c_in, '\n')
 
 
 d = d_out * d_in
@@ -302,18 +302,21 @@ for i in range(n_out):
 	y[i]+= e[i*n_in:(i+1)*n_in]
 	#print(i, e[i*n_in:(i+1)*n_in])
 	#assert (sum(ZZ(e[i*n_in:(i+1)*n_in][j]) for j in range(n_in) ))<=3
-print('y:', y, '\n')
+#print('y:', y, '\n')
 #print(type(y))
 #print(type(y[0]))
 
+y_= [(0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0), (0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0), (0, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0), (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), (0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1), (0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0), (0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1)]
+    
 
-y = [vector(GF(2),(1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1)),
-	vector(GF(2),(0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1)),
-			vector(GF(2),(1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1)),
-			vector(GF(2),(0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1)),
-			vector(GF(2),(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1)),
-			vector(GF(2),(1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1)),
-			vector(GF(2),(0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1))]
+y = [vector(GF(2), i) for i in y_]
+#y = [vector(GF(2),(1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1)),
+#	vector(GF(2),(0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1)),
+#			vector(GF(2),(1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1)),
+#			vector(GF(2),(0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1)),
+#			vector(GF(2),(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1)),
+#			vector(GF(2),(1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1)),
+#			vector(GF(2),(0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1))]
 
 
 w_prime = [0]*n_out
