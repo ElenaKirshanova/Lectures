@@ -1,0 +1,354 @@
+% !TeX program = xelatex
+% !BIB TS-program = biber
+
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+\usepackage{pgfplots, subfigure}
+\usepackage{extarrows}
+
+\usepackage[backend=biber,firstinits=true,hyperref=true,style=numeric-comp]{biblatex}
+
+\usepackage{soul}
+
+\usepackage{../beamerthemeec2020}
+{\footnotesize\bibliography{../biblio}}
+
+\title{Эллиптические кривые}
+\subtitle{Лекция 9. Выбор кривой для криптографии}
+\author{Семён Новосёлов}
+\institute{БФУ им. И. Канта}
+\date{2022}
+
+\begin{document}
+
+\frame{\titlepage}
+
+%\begin{frame}{Мотивация}
+%\begin{itemize}
+%    \item
+%\end{itemize}
+%\end{frame}
+
+\begin{frame}{Как выбрать кривую, подходящую для криптографии?}
+\structure{Требования:}
+\begin{enumerate}
+    \item Безопасность: Для заданного параметра безопасности $\lambda$ сложность наилучшей известной атаки должна быть $\approx 2^\lambda$. На данный момент $\lambda \approx 128$.
+    \item Эффективность: групповой закон должен вычисляться быстро.
+\end{enumerate}
+%Рассмотреть все известные атаки на выявить условия применимости и отсечь все слабые кривые.
+%    \begin{enumerate}
+%        \item DLOG
+%        \item Криптография на спариваниях
+%        \item Криптография на изогениях 
+%    \end{enumerate}
+\end{frame}
+
+\begin{frame}{I. Безопасность}
+\[
+E/\mathbb{F}_q: y^2 + a_1 x y + a_3 y = x^3 + a_2 x^2 + a_4 x + a_6
+\]
+\begin{itemize}
+    \item $N = \#E(\mathbb{F}_q)$, вычисляем с помощью SEA за $O(\log^4{q})$
+    \item $N = O(q)$ (граница Хассе-Вейля)
+    \item \structure{DLOG:}
+    $
+    Q = [\ell] P, \quad (P, Q) \mapsto \ell
+    $
+    \item $G = \left<P\right>$ для $P \in E(\mathbb{F}_q)$
+    \item для эффективности: $\#G = \operatorname{ord}{P} \approx \#E(\mathbb{F}_q)$
+\end{itemize}
+Рассмотрим обзорно атаки и соответствующие им ограничения на~$(N,q,\ell)$.
+\end{frame}
+
+\begin{frame}{Атака BSGS или $\rho-$методом Полларда}
+    %\begin{itemize}
+        %\item 
+        Адаптируем алгоритм BSGS нахождения порядка точки из лекции по подсчёту точек.
+    %\end{itemize} 
+    
+    \structure{Сложность:} $\widetilde{O}(\sqrt{\#G}) = \widetilde{O}(\sqrt{q})$ по времени и по памяти.
+    \begin{itemize}
+        \item $\rho$-метод Полларда позволяет снизить сложность по памяти до $O(\operatorname{polylog} q)$.
+    \end{itemize}
+    \structure{Вывод:} для уровня безопасности $\lambda = 128$ требуется кривая с подгруппой $G$ порядка $\approx 2^{256}$. Т.е. над полем $\mathbb{F}_q$ размера $q \approx 2^{256}$.
+\end{frame}
+
+\begin{frame}{Атака Полига-Хеллмана}
+    \structure{Идея:} решить задачу DLOG в подгруппах $G$ с помощью $\rho$-метода Полларда и восстановить искомый DLOG в $G$ по КТО.
+    \begin{center}
+        $\#G = p_1^{e_1} \cdot \ldots \cdot p_m^{e_m}$ \structure{$\implies$} $G \simeq \mathbb{Z} / p_1^{e_1} \mathbb{Z} \oplus \ldots \oplus \mathbb{Z} / p_m^{e_m} \mathbb{Z}$
+    \end{center}
+    
+    %\begin{itemize}
+        %\item 
+        т.е. $G \simeq G_1 \oplus ... \oplus G_m$, где $\#G_1 = p_1^{e_1}, \ldots, \#G = p_m^{e_m}$.
+    %\end{itemize}
+    
+    \structure{Сложность:} $\widetilde{O}(\sum e_i (\log{\#G} + \sqrt{p_i}))$
+    
+    \begin{center}
+        \structure{$\Downarrow$}
+    \end{center}
+    
+    \structure{Вывод:} для безопасности $\#G = c r$, где $r$ -- большое простое число, $c$ -- малое число.
+\end{frame}
+
+\begin{frame}
+    Комбинируя условия двух атак получаем, что группа точек кривой должна как минимум:
+\begin{itemize}
+    \item содержать подгруппу \structure{простого} порядка размера $256$-бит для уровня безопасности $128$-бит.
+    \item соответственно, размер поля $q \approx 2^{256}$.
+\end{itemize} 
+\end{frame}
+
+\begin{frame}{Атака спуском Вейля}
+    \begin{itemize}
+        \item В случае $q = p^n$ можно определить ограничение Вейля:
+        \[
+        W/\mathbb{F}_p := W_{\mathbb{F}_{p^n} / \mathbb{F}_p}(\mathbb{F}_p) = E(\mathbb{F}_{p^n}).
+        \]
+        \item Это абелево многообразие размерности $n$, т.е. проективное многообразие, обладающее структурой группы.
+        \item Поэтому $DLOG$ на $E/\mathbb{F}_{p^n}$ можно свести к $W/\mathbb{F}_p$.
+        %\item Если $W \subseteq Jac_D$ для некоторой кривой $D/\mathbb{F}_p$ рода $g \geq n$, то изменение сложности $DLOG$:
+        %\begin{itemize}
+        %    \item для $g = O()$, алгоритм [Enge–Gaudry'2002]
+        %    \item $g = 2, n = 2$, $D$ -- гиперэллиптическая:
+        %    \begin{center}
+        %    $\widetilde{O}(p)$ \structure{$\implies$}
+        %    \end{center}
+        %\end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+Если $W \subseteq Jac_D$ для некоторой кривой $D/\mathbb{F}_p$ рода $g \geq n$, то получаем изменение сложности $DLOG$:
+\begin{itemize}
+    \item $g \geq \log_g{p}$, $D$ -- гиперэллиптическая,% алгоритм [Enge–Gaudry'2002] для DLOG в $Jac_D(\mathbb{F}_p)$:
+    \begin{center}
+      $\widetilde{O}(p^{n/2})$ (Pollard) \structure{$\implies$} $L_{p^g}(1/2, 2.732)$ (Enge–Gaudry)
+    \end{center}
+    получаем переход к субэкспоненциальной сложности при $g \approx n$.
+    \item $g < \log_g{p}$, $D$ -- гиперэллиптическая,
+    \begin{center}
+        $\widetilde{O}(p^{n/2})$ (Pollard) \structure{$\implies$} $\widetilde{O}(p^{2-2/g})$ (GTTD).
+    \end{center}
+    Например, при $n = 8, g = 4$ получаем переход от $\widetilde{O}(p^{4})$ к $\widetilde{O}(p^{1.5})$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+    \item Кривая $D$ не всегда существует для кривой $E(\mathbb{F}_{q^n})$ и заданного рода $g \geq n$.
+    \item В общем случае найти кривую $D$ не просто.
+    \item Условия при которых $\exists$ $D$ не до конца ясны.
+\end{itemize}
+\structure{Консервативный выбор размера поля} для криптографии с учётом существования атаки спуском Вейля: $q = p$.
+\end{frame}
+
+\begin{frame}{Атака с помощью билинейных спариваний}
+Пусть $r = \#G$, $G \subseteq E(\mathbb{F}_q)$ и $\mu_r = \{x \in \overline{\mathbb{F}}_q | x^r = 1\}$.
+
+Атака использует следующее отображение на $E[r]$.
+    \begin{block}{Теорема (спаривание Вейля)}
+    $\exists$ отображение
+    $
+    e_n: E[r] \times E[r] \rightarrow \mu_r
+    $
+    со свойствами:
+    \begin{enumerate}
+        \item $e_r(T,T) = 1$
+        \item $e_r(T,S) = e_r(S,T)^{-1}$
+        \item $e_r(S_1 + S_2, T) = e_r(S_1, T) e_r(S_2, T)$ \hfill \textit{(билинейность)} \\
+        $e_r(S, T_1 + T_2) = e_r(S, T_1) e_r(S, T_2)$
+        \item $e_r(S,T) = 1, \forall T \implies S = \mathcal{O}$ \hfill \textit{(невырожденность)}\\
+        $e_n(S,T) = 1, \forall S \implies T = \mathcal{O}$
+    \end{enumerate}
+\end{block}
+
+Другие билинейные отображения: спаривание Тейта, эта-спаривание.
+\end{frame}
+
+\begin{frame}
+    \structure{Степень вложения:} минимальное целое $k$ т.ч. $E[r] \subseteq E(\mathbb{F}_{q^k})$.
+    
+    \begin{itemize}
+        \item Атака на DLOG: $\mid\left<P\right>\mid = r$, $Q = \ell P$.
+        \begin{enumerate}
+            \item Выбрать случайную точку $R$.
+            \item $\alpha = e_r(P, R)$
+            \item $\beta  = e_r(Q, R)$ \hfill 
+            \begin{scriptsize}
+                $(\beta = e_r(\ell P, R) = e_r(P, R)^\ell = \alpha^\ell)$
+            \end{scriptsize}
+            \item $\ell = DLOG(\alpha, \beta)$ в $\mathbb{F}_{q^k}$
+        \end{enumerate}    
+        \item Конструктивное использование: ZCash, IBE, \st{SIKE}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+    \item Сложность решения DLOG в $\mathbb{F}_{q^k}$ используя
+NFS (и его модификации): $L_{q^k}(1/3, c)$.
+    \item Для уровня безопасности $\lambda = 128$ требуется поле размера $3072$-бит [ECRYPT'18].
+    
+    \begin{center}
+        \structure{$\Downarrow$}
+    \end{center}
+
+    Для стойкости к атаке с помощью билинейных спариваний необходимо: $k \geq 24$ ($3072/128$).
+    \item Т.к. $\mu_r \subseteq \mathbb{F}_{q^k} \iff q^k \equiv 1 \pmod{r}$. Достаточно проверить, что:
+    \[
+    r \nmid q^k - 1, 
+    \]
+    для $k = 1, \ldots, 24$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Аномальные кривые}
+Кривые с $\#E(\mathbb{F}_p) = p$ называются \structure{аномальными}.
+\begin{itemize}
+    \item Если $\#G = p$ для кривой $E/\mathbb{F}_p$, то $\exists$ гомоморфизм $E[p] \rightarrow \Omega^0_E(\mathbb{F}_p)$
+\end{itemize}
+Здесь $\Omega^0_E(\mathbb{F}_p)$ -- $\mathbb{F}_p$-векторное пространство голоморфных дифференциалов, где $DLOG$ решается время $O(polylog(p))$
+\begin{itemize}
+    \item Подробнее: [Galbraith'12, \S26.4.1].
+    \item Условия легко проверяются.
+\end{itemize}
+\end{frame}
+
+%\begin{frame}{Атаки методом исчисления индексов}
+%    \begin{itemize}
+%        \item Semaev
+%        \item Joux \& Vitse
+%    \end{itemize}
+%\end{frame}
+%
+%\begin{frame}{Атаки на параметры с малым весом Хемминга}
+%    \begin{itemize}
+%        \item 
+%    \end{itemize}
+%\end{frame}
+
+\begin{frame}{Атаки на кривые с автоморфизмами}
+Существуют модификации методов $BSGS$ или $\rho$-метода Полларда, использующие автоморфизмы.
+
+\begin{itemize}
+    \item \structure{Идея:} при поиске $DLOG$ перебирать вместо точек $P$ классы эквивалентности $(P, \psi(P), \psi^2(P), \ldots, \psi^{\alpha-1}(P))$ для $\alpha = \operatorname{ord}{\psi}$.
+    \item \structure{Сложность:} для модифицированного $\rho$-метода Полларда -- $O(\sqrt{\frac{\pi}{2\alpha}}\sqrt{\#G})$ [Galbraith'12, Th.~14.4.3]
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+    \begin{itemize}
+    \item Может быть обобщено на эндоморфизмы, в случае если их можно эффективно вычислить.
+    \end{itemize}
+
+    \structure{Пример кривой:}
+    \[E/\mathbb{F}_p: y^2 = x^3 + a_6,\]
+    \begin{itemize}
+        \item Автоморфизм: $(x,y) \mapsto (\zeta_3 x, y)$ для $p \equiv 1 \pmod{3}$, $\alpha = 3$.
+        \item Эффективная арифметика, т.к. $a_4 = 0$.
+        \item Однако нужно учитывать ускорение $DLOG$.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Условия безопасности для $\lambda = 128$ относительно основных атак.}
+    \[E/\mathbb{F}_q: y^2 = x^3 + a_4 x + a_6\]
+    \begin{enumerate}
+        \item $r = \#\left<P\right> \subseteq E(\mathbb{F}_q)$ -- простое число, $\#E(\mathbb{F}_q) / r$ -- малое число (стойкость к методу Полига-Хеллмана)
+        \item $r \approx 2^{256}$ (стойкость к $\rho$-методу Полларда) 
+        \item $q = p$ (стойкость к спуску Вейля)
+        \item $r \nmid q^k - 1$ для $k \leq 24$ (стойкость к атакам на спариваниях)
+        \item $r \neq p$ (кривая не аномальная)
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Дополнительно}
+    \begin{itemize}
+        \item Параметры кривой должны сопровождаться детальным описанием откуда они взялись.
+        \begin{itemize}
+            \item сиды всех псевдослучайных функций
+            \item выбор псевдослучайных функций / хеш-функций (если $a_4 = hash(seed), a_6 = hash(seed)$)
+        \end{itemize}
+        \item Условия только для DLOG, не гарантируется безопасное использование $E$ в протоколах
+    \end{itemize}
+\end{frame}
+
+%\begin{frame}{Требования стандарта (ГОСТ)}
+%\begin{itemize}
+%    \item 
+%\end{itemize}
+%\end{frame}
+
+\begin{frame}{II. Эффективность}
+Есть $3$ основных формы кривой $E$.
+\begin{enumerate}
+    \item Краткая форма Вейерштрасса:
+    \[y^2 = x^3 + a x + b\]
+    \item Кривые Монтгомери:
+    \[
+    B y^2 = x^3 + A x^2 + x
+    \]
+    \item Кривые Эдвардса:
+    \[
+    x^2 + y^2 = 1 + d x^2 y^2
+    \]
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Сравнение операций}
+\begin{table}[]
+    \begin{tabular}{l|lc}
+     Кривая/Операция   & $P + Q$ & $2 P$  \\
+        \hline
+     Кривая Вейерштрасса (проект. коорд.)  & $12 M + 2 S$ & $5M + 2 S$ \\
+     Кривая Вейерштрасса (коорд. Якоби)  & $11 M + 5 S$ & $1M + 8 S$ \\
+     Кривая Эдвардса  & $10 M + 1 S$  & $3M + 4 S$ \\
+     Кривая Монтгомери & $6M + 2 S$\footnote{ для $2P + Q$} & $4M$
+    \end{tabular}
+\end{table}
+
+\end{frame}
+
+%\begin{frame}{II. Криптография на спариваниях}
+%    \begin{itemize}
+%        \item 
+%    \end{itemize}
+%\end{frame}
+
+%\begin{frame}{III. Криптография на изогениях}
+%    \begin{itemize}
+%        \item 
+%    \end{itemize}
+%\end{frame}
+
+\begin{frame}{Литература}
+    %\nocite{Menezes1993}
+    %\nocite{Lenstra1987}
+    %\nocite{Blake1999}
+    \nocite{CohenFrey+2005}
+    %\nocite{Washington2008}
+    %\nocite{GoldwasserKilian1999}
+    %\nocite{CohenLenstra1984}
+    \nocite{Galbraith2012}
+    \nocite{SafeCurves}
+    \printbibliography
+    
+    \begin{center}
+        \begin{tcolorbox}[enhanced,hbox,colback=block-green-color-bg,colframe=subsection-color!120,title=Контакты,center title]
+            \begin{varwidth}{\textwidth}
+                \begin{center}
+                    \href{mailto:snovoselov@kantiana.ru}{snovoselov@kantiana.ru}
+                \end{center}
+            \end{varwidth}
+        \end{tcolorbox}	
+    \end{center}\end{frame}
+
+\end{document}
