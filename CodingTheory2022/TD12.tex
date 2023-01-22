@@ -1,0 +1,170 @@
+\documentclass[11pt]{exam}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\noprintanswers % pour enlever les réponses
+%\printanswers
+
+\unframedsolutions
+\SolutionEmphasis{\itshape\small}
+\renewcommand{\solutiontitle}{\noindent\textbf{A: }}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{amscd,amsmath,amsthm}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+
+
+\usepackage[margin=0.73in]{geometry}
+%\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+%\usepackage{fullpage}
+
+
+\usepackage{hyperref}
+\usepackage{appendix}
+\usepackage{enumerate}
+
+
+
+\usepackage{algorithmicx, enumitem, algpseudocode, algorithm, caption}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{proposition}[theorem]{Proposition}
+
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+
+\newcommand{\nc}{\newcommand}
+\nc{\eps}{\varepsilon}
+\nc{\RR}{{{\mathbb R}}}
+\nc{\CC}{{{\mathbb C}}}
+\nc{\FF}{{{\mathbb F}}}
+\nc{\NN}{{{\mathbb N}}}
+\nc{\ZZ}{{{\mathbb Z}}}
+\nc{\PP}{{{\mathbb P}}}
+\nc{\QQ}{{{\mathbb Q}}}
+\nc{\UU}{{{\mathbb U}}}
+\nc{\OO}{{{\mathbb O}}}
+\nc{\EE}{{{\mathbb E}}}
+
+\newcommand{\val}{\operatorname{val}}
+
+\newcommand{\wt}{\ensuremath{\mathit{wt}}}
+\newcommand{\Id}{\ensuremath{I}}
+\newcommand{\transpose}{\mkern0.7mu^{\mathsf{ t}}}
+\newcommand*{\ScProd}[2]{\ensuremath{\langle#1\mathbin{,}#2\rangle}} %Scalar Product
+
+\pretolerance=1000
+
+\newcommand*\abs[1]{\left\lvert#1\right\rvert}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT STARTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+	{\noindent
+		\textsc{БФУ им. И. Канта -- Теория кодирования и сжатия информации}
+		\hfill {Е. Киршанова // 2022\\}
+	\hrule
+	\begin{center}
+		{\Large\textbf{
+				\textsc{Практика № 12} \\[5pt] {05.12.22}
+		} } 
+	\end{center}
+	\hrule \vspace{5mm}
+	
+	\thispagestyle{empty}
+	
+	\vspace{0.2cm}
+	
+		
+	
+\section{Алгоритм декодирования кода Гоппы}
+		Положим $y = (y_1, \ldots, y_n)$ - полученное искаженное сообщение кода Гоппы. Обозначим за $B = \{ i \vert e_i = 1\}$ -- позиции ошибок в $y$, $\abs{B} = t \leq \lfloor \frac{d-1}{2} \rfloor$. Обозначим далее
+		\begin{align*}
+				\sigma(x) &= \prod_{i \in B} (x - \alpha_i), \quad \deg \sigma = t \\
+				\omega(x) & = \sum_{i \in B} \prod_{j \in B, j \neq i} (x - \alpha_j), \quad \deg \omega = t-1.
+		\end{align*}
+ 	
+ 		Для кода Гоппы, заданного параметрами  $g(x) = x^2+x+1$, $q=2$, $L = \FF_{2^3} \cong \FF_2[x]/(x^3+x+1)  = \{ 0, 1, \alpha, \alpha^2, \alpha^3 = \alpha+1, \alpha^4 = \alpha^2 + \alpha, \alpha^5 = \alpha^2 + \alpha+1, \alpha^6 = \alpha^2+1 \}$, с помощью алгоритма, описанного ниже, декодируйте \\
+ 		
+ 		\def\arraystretch{1.5}
+ 		\setlength{\tabcolsep}{15pt}
+ 		\begin{tabular}{l  | c }
+ 			Шаманов Юрий & $y = (0, 1, 1, 0, 1, 0, 1, 1)$\\ \hline
+ 			Белов Андрей  & $y=(1, 1, 0, 0, 0, 0, 0, 1)$\\ \hline
+ 			Никита Мжачих   & $y=(1, 1, 1, 1, 1, 1, 0, 1)$\\ \hline
+ 			Клементий Конрат  &  $y=(1, 1, 0, 1, 1, 1, 1, 1)$\\  \hline
+ 			Попов Никита &$y = (1, 0, 0, 0, 1, 1, 1, 1)$ \\  \hline
+ 			Толпекин Максим &  $y=(1, 0, 1, 0, 0, 1, 1, 1)$\\  \hline
+ 			Чубань Артем  &  $y= (1, 1, 0, 0, 0, 0, 0, 1)$\\  \hline
+ 			Микрюков Данила & $y = (1, 0, 0, 1, 1, 1, 0, 1)$\\  \hline
+ 			Тронина София   & $y= (1, 0, 1, 0, 0, 0, 0, 1)$\\  \hline
+ 			Кунинец Артем  &$y= (0, 0, 0, 1, 0, 1, 0, 1)$ \\  \hline
+ 			Сацута Анатолий  & $y = (1, 0, 1, 1, 0, 0, 1, 1)$\\  \hline
+ 			Плюснина Арина & $y= (1, 0, 1, 0, 1, 0, 0, 0)$ \\  \hline
+ 			Меркулова Ольга &  $y= (1, 0, 0, 1, 1, 1, 0, 1)$\\  \hline
+ 			Воронов Алексадр & $y = (0, 1, 1, 1, 1, 1, 0, 1) $ \\  \hline
+ 			Кураленко Антон & $y= (1, 1, 0, 1, 1, 1, 1, 0) $\\  \hline 
+ 			Тарасов Егор & $y= (1, 1, 0, 0, 1, 0, 1, 1) $\\  \hline 
+ 		\end{tabular}\\
+ 	
+ 		\newpage
+ 		
+ 		\textbf{Алгоритм декодирования кода Гоппы}
+ 		\textit{
+ 		\begin{enumerate}
+			\item Вычислить синдром $s(x) = \sum_{i =1}^n \frac{y_i}{x-\alpha_i}~\bmod g^2(x)$
+			\item Используя сравнение $\sigma(x) s(x) \equiv \omega(x) \bmod g^2(x)$, найти многочлены $\sigma(x), \omega(x)$.
+			\item Найти множество  $B = \{ i \vert e_i = 1\}$ по корням $\sigma(x)$ над $\FF_{q^m}$
+			\item Вычислить вектор ошибок $e$, где $e_i = \frac{\omega(\alpha_i)}{\sigma'(\alpha_i)}$.
+ 		\end{enumerate}
+		}
+		Можете использовать следующие равенства по модулю $g^2(x)$  (FIXME: не совпадает последовательность элементов с $L$)
+		\begin{equation*}
+		\begin{aligned}[c]
+			\frac{1}{x-\alpha_1} &\equiv x^3 + x \\ 
+			\frac{1}{x-\alpha_2} &\equiv (\alpha^2 + \alpha)x^3 + (\alpha^2 + \alpha + 1)x^2 + (\alpha + 1)x + \alpha^2 + \alpha \\
+			\frac{1}{x-\alpha_3} &\equiv \alpha x^3 + (\alpha + 1)x^2 + (\alpha^2 + 1)x + \alpha \\
+			\frac{1}{x-\alpha_4} &\equiv (\alpha^2 + \alpha)x^3 + x^2 + (\alpha^2 + 1)x + \alpha^2  \\
+		\end{aligned} \quad \quad 
+		\begin{aligned}[c]
+		\frac{1}{x-\alpha_5} &\equiv \alpha^2x^3 + (\alpha^2 + 1)x^2 + (\alpha^2 + \alpha + 1)x + \alpha^2 \\
+		 \frac{1}{x-\alpha_6} &\equiv \alpha^2x^3 + x^2 + (\alpha + 1)x + \alpha \\
+		 \frac{1}{x-\alpha_7}& \equiv \alpha x^3 + x^2 + (\alpha^2 + \alpha + 1)x + \alpha^2 + \alpha \\
+		  \frac{1}{x-\alpha_8} &\equiv x^3 + x^2 \\
+		\end{aligned}
+		\end{equation*}
+	
+	
+
+\end{document}

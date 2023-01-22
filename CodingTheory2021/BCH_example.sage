@@ -88,7 +88,7 @@ for i in range(n-k):
     for j in range(n):
         H[i,j] = alpha^((i+1)*j)
 
-#print(H)
+print(H)
 
 m = gen_message(k)
 c = m*G
@@ -131,7 +131,7 @@ y_ = c+e
 #print('e = ', e)
 #print('y = ', y_)
 
-y_ = [1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0]
+y_=vector([0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1])
 
 
 s = vector([sum(y_[i]*alpha^(j*i) for i in range(n)) for j in range(n-k)])
@@ -142,9 +142,9 @@ s_poly = sum(s[i]*z^i for i in range(n-k))
 print('s:', s_poly)
 
 r,s_,t_ = extended_euclid_break(z^(n-k), s_poly)
-#print(t_*s_poly+s_*z^(n-k))
-#print('r: ', r)
-#print('t_:', t_)
+print(t_*s_poly+s_*z^(n-k))
+print('r: ', r)
+print('t_:', t_)
 #print(s_,t_)
 #print(s_.factor())
 #print(t_.factor())

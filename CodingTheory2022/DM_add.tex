@@ -1,0 +1,150 @@
+\documentclass[11pt]{exam}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\noprintanswers % pour enlever les réponses
+%\printanswers
+
+\unframedsolutions
+\SolutionEmphasis{\itshape\small}
+\renewcommand{\solutiontitle}{\noindent\textbf{A: }}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{amscd,amsmath,amsthm}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+
+
+\usepackage[margin=0.73in]{geometry}
+%\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+%\usepackage{fullpage}
+
+
+\usepackage{hyperref}
+\usepackage{appendix}
+\usepackage{enumerate}
+
+
+
+\usepackage{algorithmicx, enumitem, algpseudocode, algorithm, caption}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{proposition}[theorem]{Proposition}
+
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+
+\newcommand{\nc}{\newcommand}
+\nc{\eps}{\varepsilon}
+\nc{\RR}{{{\mathbb R}}}
+\nc{\CC}{{{\mathbb C}}}
+\nc{\FF}{{{\mathbb F}}}
+\nc{\NN}{{{\mathbb N}}}
+\nc{\ZZ}{{{\mathbb Z}}}
+\nc{\PP}{{{\mathbb P}}}
+\nc{\QQ}{{{\mathbb Q}}}
+\nc{\UU}{{{\mathbb U}}}
+\nc{\OO}{{{\mathbb O}}}
+\nc{\EE}{{{\mathbb E}}}
+
+\newcommand{\val}{\operatorname{val}}
+
+\newcommand{\wt}{\ensuremath{\mathit{wt}}}
+\newcommand{\Id}{\ensuremath{I}}
+\newcommand{\transpose}{\mkern0.7mu^{\mathsf{ t}}}
+\newcommand*{\ScProd}[2]{\ensuremath{\langle#1\mathbin{,}#2\rangle}} %Scalar Product
+
+\pretolerance=1000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT STARTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tikz}
+\usetikzlibrary{automata}
+\DeclareMathOperator{\Vol}{Vol}
+
+\begin{document}
+	{\noindent
+		\textsc{БФУ им. И. Канта -- Теория кодирования и сжатия информации}
+		\hfill {Е. Киршанова // 2022\\}
+	\hrule
+	\begin{center}
+		{\Large\textbf{
+				\textsc{Дополнительное домашнее задание} \\[5pt] {Срок сдачи: 23.12.22}
+		} } 
+	\end{center}
+	\hrule \vspace{5mm}
+	
+	\thispagestyle{empty}
+	
+	\vspace{0.2cm}
+	\section{Циклические коды}
+	
+	Линейный $[n,k]$-код над полем $\FF$ называется \emph{циклическим}, если любой сдвиг кодового слова слова также принадлежит коду, то есть 
+	\[
+			c = (c_0, \ldots, c_{n-1})\in C \implies (c_{n-1}, c_0, \ldots , c_{n-1})  \in C. 
+	\]
+	Векторам из $\FF^n$ будем сопоставлять многочлены из $\FF[x]$ степени $<n$: $c_0, \ldots c_{n-1} \mapsto c_0 + c_1 x + \ldots + c_{n-1} x^{n-1}$.
+	\begin{questions}
+		\question Покажите, что циклический $[n,k]$-код $C$ образует идеал в $F[x]/(x^n - 1)$.
+		\question Докажите, что код Рида-Соломона $\mathrm{RS}_{\FF_q, \FF_q^*}(n,d)$-- циклический. Напомним, $\mathrm{RS}_{\FF_q, \FF_q^*}(n,d) = \{ c \in \FF_q^n \; | \; c(\alpha) = c(\alpha^2) = \ldots = c(\alpha^{n-k}) = 0  \}$
+		\question Докажите, что для циклического  $[n,k]$-кода $C$, где $k>0$, существует единственный унитарный многочлен $g(x)$, такой что \[c(x) \in C \iff g(x) | c(x).\]
+		\noindent Такой многочлен называется \emph{порождающим}. Для него справедливо $C = \{ u(x) g(x) \; | \; u(x) \in \FF[x], \deg u < n-\deg g \}$.
+		\question Постройте порождающий многочлен для кода Рида-Соломона $\mathrm{RS}_{\FF_q, \FF_q^*}(n,d)$.
+		\question Многочлен $h(x) = \frac{x^n-1}{g(x)}$ называется \emph{проверочным}. Докажите, что $h(x) \in \FF[x]/(x^n-1)$, т.е.\ $g(x) | x^n - 1$.
+		\question Докажите обратное: если $g(x) | x^n - 1$, то множество $C = \{ u(x) g(x) \; | \; u(x) \in \FF[x], \deg u < n-\deg g \}$ является циклическим кодом.
+		\question Из многочленов $g, h$ можно построить порождающую и проверочную матрицы:
+		\begin{equation*}
+		\begin{aligned}[c]
+		G = 
+		\begin{pmatrix}
+		   g_0 & g_1 & \ldots & g_{n-k} & 0 & 0 \\
+			0 & g_0 & g_1 & \ldots & g_{n-k}  & 0 \\
+			\vdots & \vdots  & \vdots & \ddots & \vdots & \vdots \\
+			0 & 0 & 0 & \ldots &g_{n-k-1} & g_{n-k}  \\
+		\end{pmatrix}
+		\end{aligned} \quad \quad 
+		\begin{aligned}[c]
+		H = 
+		\begin{pmatrix}
+		h_k & h_{k-1} & \ldots & h_{0} & 0 & 0 \\
+		0 & h_k & h_{k-1} & \ldots & h_{0}  & 0 \\
+		\vdots & \vdots  & \vdots & \ddots & \vdots & \vdots \\
+		0 & 0 & 0 & \ldots &h_{1} & h_{0}  \\
+		\end{pmatrix}
+		\end{aligned}.
+		\end{equation*}
+		
+		Для циклического кода длины $7$ над $\FF_2$ c порождающим многочленом $g(x) =x^3+x+1 $, постройте $h(x), G, H$. Каково минимальное расстояние этого кода?
+	
+	\end{questions}
+ 	
+\end{document}

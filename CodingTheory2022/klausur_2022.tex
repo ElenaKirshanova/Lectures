@@ -1,0 +1,311 @@
+\documentclass[12pt,a4paper]{scrartcl}
+
+%\usepackage[T1]{fontenc}
+%\usepackage[utf8x]{inputenc}
+\usepackage{array}
+
+%\usepackage[ngerman]{babel}
+%\usepackage{ngerman}
+
+%---enable russian----
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian,ngerman]{babel}
+
+
+\usepackage{amsmath, amsfonts}
+\newcounter{blatt}
+\setcounter{blatt}{99}
+\parindent = 0mm
+\pagestyle{empty}
+\setlength{\textheight}{26cm}
+
+\usepackage{amssymb,epsfig,hyperref}
+\usepackage{fancyhdr,pdfpages,graphicx}
+\newcommand{\N}{\ensuremath{\mathbb{N}}\xspace}
+\newcommand{\rem}[1]{}
+
+\usepackage{enumerate}
+
+
+%complexity classes
+\newcommand*{\POLY}{{\mathcal{P}}}
+\newcommand*{\NPOLY}{{\mathcal{NP}}}
+
+\newcommand{\marrow}{\marginpar[\hfill$\longrightarrow$]{$\longleftarrow$}}
+\newcommand{\todo}[1][]{\textbf{TODO} \marrow\textsf{#1}}
+
+%
+% Aufruf: \auf{Aufgabentext}
+%
+\newcounter{auf}
+\newcommand{\auf}[2]
+{
+\stepcounter{auf}{\textbf{Задание} \textbf{\arabic{auf}} } ({#1} баллов) \vspace{3pt}
+
+#2
+
+% TODO: Uncomment page break here
+%\bigskip
+\newpage %\phantom{X} \newpage
+}
+%
+% kleine Buchstaben zum durchnummerieren mit enumerate auf Level 1
+%
+%\renewcommand{\theenumi}{\alph{enumi}}
+%\renewcommand{\labelenumi}{\theenumi)}
+
+\newcommand{\nc}{\newcommand}
+\nc{\eps}{\varepsilon}
+\nc{\RR}{{{\mathbb R}}}
+\nc{\CC}{{{\mathbb C}}}
+\nc{\FF}{{{\mathbb F}}}
+\nc{\NN}{{{\mathbb N}}}
+\nc{\ZZ}{{{\mathbb Z}}}
+\nc{\PP}{{{\mathbb P}}}
+\nc{\QQ}{{{\mathbb Q}}}
+\nc{\UU}{{{\mathbb U}}}
+\nc{\OO}{{{\mathbb O}}}
+\nc{\EE}{{{\mathbb E}}}
+
+
+
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\cset}[2]{\left\{#1 \middle\arrowvert #2\right\}}
+\newcommand{\gor}{\; | \;}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}} % linksbündig mit Breitenangabe
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}} % zentriert mit Breitenangabe
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}} % rechtsbündig mit Breitenangabe
+
+
+\begin{document}
+Е.\ A.\ Киршанова \hfill БФУ им. И.Канта \\
+
+
+
+
+
+\begin{center}
+  \LARGE
+  \underbar{Контрольная работа}\\[1ex]
+  \Large
+  по дисциплине \\[1ex]
+  \textsc{Теория Кодироваия и Сжатия Информации}\\[2ex]
+  \large
+ 26.12.2022\\
+Работы принимаются до 13:20 по Калининграду
+\end{center}
+\vspace*{1.5cm}
+
+
+Имя   :\\[-2.2ex] \rule{0.9\textwidth}{.2pt}\\[2ex]
+Фамилия : \\ [-2.2ex] \rule{0.9\textwidth}{.2pt}\\[1ex]
+%Studiengang:\\[-2.2ex] \rule{0.7\textwidth}{.2pt}\\[1ex]
+%Geburtsdatum:\\[-2.2ex] \rule{0.7\textwidth}{.2pt}\\[1ex]
+
+\vspace*{1.5cm}
+\textbf{Требования:}
+\begin{itemize}
+  %\item Не следует разделять скреплённые листы.  Если вам не хватает места для ответа, попросите у экзаменатора дополнительные листы. Подпишите их и приложите их к контрольной, чётко указав, решения каких заданий содержатся на каком листе.
+%Schreiben Sie die Lösung jeder Aufgabe direkt auf das Blatt mit der Aufgabenstellung. Es dürfen Vorder- und R"uckseite verwendet werden. Wenn der Platz nicht ausreicht, k"onnen die leeren Seiten am Ende der Klausur benutzt werden.
+ \item Для записи ответов вы можете использовать обе стороны листов.
+  \item Пишите \textbf{разборчиво}.
+  \item Поясняйте свои ответы.
+  \item Решения отправлять на почту elenakirshanova@gmail.com
+    
+    
+  
+\end{itemize}
+
+%\vspace*{0.5cm}
+\rule{\textwidth}{.2pt}
+\vfill
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{|p{5cm}||c|c|c|}
+    \hline
+    Задание & 1 & 2 & 3  \\
+    \hline
+    Баллы & \phantom{XXXXXX}/ 6 & \phantom{XXXXXX}/ 6 & \phantom{XXXXXX}/ 9  \\
+    \hline
+  \end{tabular}\\[5ex]
+
+  \begin{tabular}{|p{4.2cm}|p{4.2cm}|p{4.2cm}|}
+    \hline
+    Контрольная & Бонусы & Общая  \\
+    \hline
+     &   &  \\[1ex]
+    \hline
+  \end{tabular}
+  
+\end{center}
+
+\newpage 
+ 
+\auf{$6 \times 1 $}{%
+
+\begin{enumerate}[1]
+	\setlength\itemsep{13em}
+	\item Является множество $C$ линейным кодом? Ответ поясните. Если да, опишите его длину и мин. расстояние.
+	\[
+		C = \{ 0000, 1010, 1010, 1111 \}.
+	\]
+	\item Линейный код $C$ над $\FF_5$  задан проверочной матрицей
+	\[
+		H = \begin{bmatrix}
+		1&2&0&1&4\\ 
+		3&1&1&2&1
+		\end{bmatrix}.
+	\]
+	Есть ли среди ниже перечисленных векторов $x$ кодовые слова из $C$? Если да, то какие? Ответ поясните. \\
+	
+	\begin{tabular}{ p{7cm} p{7cm}  }
+	$x = \left[ \begin {array}{ccccc} 1&0&1&2&2\end {array} \right]  $ 	 & $x = \left[ \begin {array}{ccccc} 4&2&0&0&1\end {array} \right]  $ \\[3ex]
+		$x = \left[ \begin {array}{ccccc} 1&1&3&1&0\end {array} \right] $ & $x = \left[ \begin {array}{ccccc} 0&1&3&3&0\end {array} \right] $ 
+	\end{tabular}
+
+	\item Каково максимальное число ошибок, исправляемое следующими линейными кодами?
+	\begin{enumerate}
+		\setlength\itemsep{1em}
+		\item $[7,4,3]_2$ -- код Хэмминга,
+		\item $[2^r, r, 2^{r-1}]$ -- код Адамара,
+		\item Код Рида-Соломона над $\FF_{11}$ длины $n = |\FF^*_{11}|$, размерности $k = 4$.
+	\end{enumerate}	
+
+	\item Линейный код $C$ задан параметрами $[10, 5, 4]$. Каковы длина и размерность $C^\perp$ -- дуального к $C$ кода?
+
+	\item Линейный код над $\FF_2$ задан проверочной матрицей 	
+	\[
+	H = \begin{bmatrix}
+		1&1&0&1&0\\ 
+		1&0&1&0&1
+	\end{bmatrix}.
+	\]
+	Опишите порождающую матрицу для этого кода. 
+	
+	\item Линейный код над $\FF_3$ задан порождающей матрицей
+		\[
+	G = \begin{bmatrix}
+		1&0&1&1\\ 
+		0&1&1&-1
+	\end{bmatrix}.
+	\]
+	Является ли этот код MDS кодом? \textit{Код является MDS кодом, если $k = n-d+1$}. Ответ обоснуйте.
+	%See https://a.ravagnani.win.tue.nl/coding%20th/Coding_theory_notes.pdf for a solution
+	
+\end{enumerate}
+
+}
+\newpage
+
+
+\auf{$6$}{%
+	Пусть $C-[5,2]$--линейный код над $\FF_2$, заданный проверочной матрицей
+	\[
+	H = 
+	\begin{pmatrix}
+	1&0&1&1&0\\
+	1&0&1&0&1\\
+	0&1&1&0&1\\
+	\end{pmatrix}
+	\]  
+	\begin{enumerate}
+		\item Найдите порождающую матрицу кода.
+		\item Определите минимальное расстояние кода с помощью проверочной матрицы.
+		\item Какое количество ошибок может исправить этот код?
+		
+		и восстановите исходное сообщение.
+		\item Какие вектора $y \in \FF_2^5$ не получится однозначно декодировать этим кодом?
+		\item Опишите проверочную и порождающую матрицы кода, дуального к $C$.
+		\item С помощью декодирования по синдрому декодируйте $y$.
+	\end{enumerate}
+\begin{center}
+
+
+\def\arraystretch{1.5}
+\setlength{\tabcolsep}{15pt}
+\begin{tabular}{l  | c }
+	Шаманов Юрий    & $y = (1, 0, 1, 1, 1)$\\ \hline
+	Белов Андрей  &  $y =  (0, 1, 1, 1, 1)$\\  \hline
+	Никита Мжачих&  $y=(0, 1, 1, 0, 0)$\\  \hline
+	Клементий Конрат  & $y = (1, 0, 1, 0, 0)$\\  \hline
+	Попов Никита & $y=(1, 1, 0, 0, 0)$ \\  \hline
+	Толпекин Максим &  $y=(0, 1, 0, 1, 1)$\\  \hline
+	Чубань Артем & $y = (1, 0, 0, 1, 1)$ \\  \hline
+	Микрюков Данила  & $y=(1, 1, 1, 1, 1)$\\  \hline
+	Тронина София  & $y=(1, 1, 0, 0, 1)$\\  \hline
+	Кунинец Артем  & $y=(1, 1, 0, 1, 0)$\\  \hline
+	Кураленко Антон  & $y=(0, 1, 1, 1, 1)$\\  \hline
+	Тарасов Егор & $y=(1, 1, 1, 0, 1)$\\  \hline
+	Сацута Анатолий  & $y=(1, 1, 1, 1, 0)$\\  \hline
+	Плюснина Арина  & $y=(0, 0, 1, 1, 0)$\\  \hline
+	Меркулова Ольга  & $y=(0, 0, 1, 0, 1)$\\  \hline
+	Воронов Алексадр  & $y=(0, 0, 0, 1, 1)$\\  \hline
+\end{tabular}
+\end{center}
+	
+}
+
+\newpage\ \newpage
+ 
+
+
+\auf{$9$}{%
+	
+\textbf{Найдите свою фамилию в одном из заданий и выполните его.}
+
+\section{БЧХ-код}
+	
+Рассмотрим БЧХ-код длины $n=15$ размерности $k=9$ с минимальным расстоянием $d=5$. %Код задан порождающим многочленом $g(x) = x^8+x^7+x^6+x^4+1$, который факторизуется над $\FF_2$ как $g(x) = (x^4+x+1)\cdot (x^4+x^3+x^2+x+1)$. 
+Примитивный элемент $\alpha$ -- корень неприводимого над $\FF_2$ многочлена $x^4+x+1$.\\
+
+\begin{enumerate}
+	\item Сколько ошибок может исправить этот код?
+	\item Примените расширенный алгоритм Евклида для декодирования слова $y$. Восстановите исходное сообщение.
+\end{enumerate}
+
+
+\def\arraystretch{1.5}
+\setlength{\tabcolsep}{15pt}
+\begin{tabular}{l  | c }
+	Белов Андрей   & $y=(0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1)$\\ \hline
+	Никита Мжачих  &  $y=(0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1)$\\  \hline
+	Толпекин Максим&  $y=(0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1)$\\  \hline
+	Кунинец Артем  & $y = (1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0)$\\  \hline
+	Кураленко Антон & $y=(0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1)$ \\  \hline
+	Тарасов Егор &  $y=(0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1)$\\  \hline
+	Сацута Анатолий & $y = (1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0)$ \\  \hline
+	Воронов Алексадр & $y=(1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0)$\\  \hline
+\end{tabular}
+
+\section{Код Рида-Соломона}
+
+Код Рида-Соломона задан над $\FF_{11}$ множеством $S = \{ 2^0 = 1, 2^1 = 2, 2^2 = 4, 2^3 = 8, 2^4 = 5, 2^5 =10 , 2^6 = 9, 2^7 = 7, 2^8 =3 , 2^9 = 6   \}$. Код размерности $k=6$.
+
+\begin{enumerate}
+	\item Сколько ошибок может исправить этот код?
+	\item Декодируйте слово $y$. Восстановите исходное сообщение.
+\end{enumerate}
+
+\def\arraystretch{1.5}
+\setlength{\tabcolsep}{15pt}
+\begin{tabular}{l  | c }
+	Шаманов Юрий    & $y=(4, 1, 5, 1, 10, 1, 6, 1, 3, 6)$\\ \hline
+	Попов Никита &  $y=(4, 1, 8, 5, 0, 9, 6, 7, 9, 5)$\\  \hline
+	Чубань Артем &  $y=(2, 5, 7, 2, 0, 1, 5, 4, 5, 1)$\\  \hline
+	Микрюков Данила   & $y = (3, 8, 0, 3, 5, 6, 3, 2, 8, 0)$\\  \hline
+	Тронина София & $y=(2, 5, 2, 1, 9, 8, 4, 10, 5, 7)$ \\  \hline
+	Плюснина Арина &  $y=(9, 6, 0, 7, 2, 6, 0, 1, 9, 10)$\\  \hline
+	Меркулова Ольга & $y = (8, 5, 7, 6, 10, 2, 7, 0, 8, 9)$ \\  \hline
+	Клементий Конрат & $y=(7, 3, 0, 0, 3, 9, 10, 1, 6, 9)$\\  \hline
+\end{tabular}
+
+}
+
+\end{document}
+
+
+

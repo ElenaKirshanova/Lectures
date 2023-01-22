@@ -227,6 +227,7 @@ e = gen_error(2, d, S)
 print('e = ', e)
 y = c + e
 print('y = ', y)
+y = (4, 1, 5, 1, 10, 1, 6, 1, 3, 6)
 
 decP = PetersonDecode(k, S, y, ff)
 print('decP:', decP)
