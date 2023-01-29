@@ -1,0 +1,213 @@
+\documentclass[11pt]{exam}
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+
+
+\usepackage[margin=0.73in]{geometry}
+%\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{amscd,amsmath,amsthm}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+
+\usepackage{algorithmicx, enumitem, algpseudocode, algorithm, caption}
+\usepackage{tikz}
+\usetikzlibrary{automata}
+
+\usepackage{textcomp}
+
+\usepackage{kbordermatrix} % to label matrix rows and columns
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}
+
+\newtheorem{theorem}{Теорерма}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{definition}[theorem]{Определение}
+\newtheorem{claim}[theorem]{Утверждение}
+\newtheorem{fact}[theorem]{Факт}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+
+\newcommand{\nc}{\newcommand}
+\nc{\eps}{\varepsilon}
+\nc{\RR}{{{\mathbb R}}}
+\nc{\CC}{{{\mathbb C}}}
+\nc{\FF}{{{\mathbb F}}}
+\nc{\NN}{{{\mathbb N}}}
+\nc{\ZZ}{{{\mathbb Z}}}
+\nc{\PP}{{{\mathbb P}}}
+\nc{\QQ}{{{\mathbb Q}}}
+\nc{\UU}{{{\mathbb U}}}
+\nc{\OO}{{{\mathbb O}}}
+\nc{\EE}{{{\mathbb E}}}
+
+\newcommand{\bigO}{\mathcal{O}}
+
+\newcommand{\val}{\operatorname{val}}
+
+\newcommand{\wt}{\ensuremath{\mathit{wt}}}
+\newcommand{\Id}{\ensuremath{I}}
+\newcommand{\transpose}{\mkern0.7mu^{\mathsf{ t}}}
+\newcommand*{\ScProd}[2]{\ensuremath{\langle#1\mathbin{,}#2\rangle}} %Scalar Product
+\newcommand*\abs[1]{\left\lvert#1\right\rvert}
+\newcommand*\norm[1]{\left\lVert#1\right\rVert}
+
+\pretolerance=1000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT STARTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tikz}
+\usetikzlibrary{automata}
+\DeclareMathOperator{\Vol}{Vol}
+
+\begin{document}
+	{\noindent
+		\textsc{БФУ им. И. Канта -- Криптография на решётках}
+		\hfill {Е. Киршанова // 2022\\}
+\hrule
+\begin{center}
+	{\LARGE
+			Лабораторная работа № 1 \\[5pt]
+			\textbf{Атака на RSA c малым открытым ключом } \\[10pt]
+	 	{01.02.2021, Дедлайн: 15.02.2022} 
+ 	} 
+\end{center}
+\hrule \vspace{5mm}
+	
+	\thispagestyle{empty}
+	
+	\vspace{0.2cm}
+	\section{Алгоритм Копперсмита нахождения малых корней многочлена}
+	
+	В основе атаки на одностороннюю функцию RSA лежит следующая теорема, доказанная Доном Копперсмитом в~\cite{Coppersmith}.
+	
+	\begin{theorem}\label{thm:Coppersmith}
+		Положим, $N$ -- целое, $f\in \ZZ[x]$ -- унитарный многочлен степени $n$. Положим далее, $X = N^{\frac{1}{n}-\varepsilon}$ для $\varepsilon>0$. Тогда существует алгоритм, который вернет все $|x_0| < X$, удовлетворяющие $f(x_0) =0 \bmod N$, за время, равному времени работы алгоритма LLL на решетки размерности $\bigO(\min\{ \frac{1}{\varepsilon}, \log_2 N \})$.
+	\end{theorem}
+
+	Прелесть это теоремы состоит в том, что модуль $N$ может быть составным числом (для простых модулей необходимости в использовании теоремы Копперсмита нет, так как существуют более быстрые алгоритмы нахождения корней).
+	
+	Далее мы докажем эту Теорему~\ref{thm:Coppersmith}. Начнем с результата, полученным Хогрейв-Хрэхэмом~\cite{HG}. Многочлену $h(x) = \sum_{i=0}^{n} a_i x^i \in \ZZ[x]$ будем сопоставлять вектор-коэффициентов $(a_i)_i\in \ZZ^{n_1}$ и определять квадрат нормы $\norm{h}^2 = \sum_i \abs{a_i}^2$. 
+	\begin{lemma}\label{lem:HG}
+		Пусть $h(x) \in \ZZ[x]$ -- многочлен степени $n$ и $X>0$ -- целое. Положим, $\norm{h(xX)} < N / \sqrt{n}$. Если $\abs{x_0} < X$ удовлетворяет $h(x_0) = 0 \bmod N$, то уравнение $h(x_0) = 0$ выполняется над $\ZZ$.
+	\end{lemma}
+	\begin{proof}
+	\begin{align*}
+		\abs{h(x_0)} &=\abs{\sum_i a_i x^i_0} = \abs{ \sum_i a_i X^i \left( \frac{x_0}{X} \right)^i} \leq \sum_i \abs{a_i X^i \left( \frac{x_0}{X} \right)^i} \\
+		& < \sum_i \abs{a_i X^i} \leq \sqrt{n} \norm{h(xX)} < N. 
+	\end{align*}
+	Из этого неравенства и условия $h(x_0) = 0 \bmod N$, следует $h(x_0) \equiv 0$. 
+	\end{proof}
+
+	Лемма~\ref{lem:HG} утверждает, что если $h$ -- многочлен малой нормы, то всего его корни $\bmod~N$, также малые по абсолютному значению, являются его корнями над целыми числами. Следовательно, мы будем искать для многочлена $f(x)$ (необязательно малой нормы), многочлен $h(x)$ малой нормы, имеющий такие же корни, как $f(x)$. Очевидно, мы могли бы искать линейные комбинации многочленов вида $f, xf, x^2f, \ldots$, дающие малую норму. Однако, часто такие многочлены не дают желаемую нетривиальную линейную комбинацию. Поэтому Копперсмит предлагает добавлять в список многочленов степени $f(x)$, заметив, что если $f(x) = 0 \bmod N$, то $f(x)^i = 0 \bmod N^i$ для любого $i > 1$. В общем случае зададим для некоторого целого $m$\footnote{Более точный анализ показывает, что $m = \lceil \frac{1}{n\varepsilon} \rceil$, на практике $m$ выбирают небольшой константой.} многочлены
+	\[
+		g_{i,j}(x) = N^{m-i}x^jf(x)^i, \quad \text{ для } i = 0, \ldots, m-1, j = 0, \ldots n-1.
+	\]
+	Тогда $x_0$ -- корень многочлена $g_{i,j}(x)$ по модулю $N^m$ для всех $i \geq 0$. Теперь мы будем искать многочлен $h(x)$ -- линейную комбинацию многочленов $g_{i,j}(x)$, такую, что норма $h(xX)$ не превосходит $N^m$ (выбор многочленов $g_{i,j}(xX)$ позволяет увеличить границу с $N$ до $N^m$).
+	
+	Решим задачу поиска линейной комбинации с малой нормой. Сопоставляя многочленам $g_{i,j}(xX)$ вектора, составленные из их коэффициентов, задача поиска $h(x)$ сводится к поиску короткого вектора в решетке, образованной матрицей-коэффициентов, где в $i$-м столбце записан коэффициенты многочленов при $i$-ой степени $x$. Получим решетку размерности $w = nm$, базисом которой будет нижне-треугольная матрица (упорядочивая сначала по $i$, потом по $j$). Например, для $n=2, m=3$ матрица будет иметь вид
+	
+	\renewcommand{\kbldelim}{(}% Left delimiter
+	\renewcommand{\kbrdelim}{)}% Right delimiter
+	\[
+		\kbordermatrix{
+					& x^0 & x^1 & x^2 & x^3 & x^4 & x^5 \\
+		g_{0,0}(xX) & N^3 &  &  &  &  & \\
+		g_{0,1}(xX) & \star & N^3X &  &  &  & \\
+		g_{1,0}(xX) & \star & \star & N^2X^2 &  &  & \\
+		g_{1,1}(xX) & \star & \star & \star & N^2X^3 &  & \\
+		g_{2,0}(xX) & \star & \star & \star & \star & NX^4 &  \\
+		g_{2,1}(xX) & \star & \star & \star & \star & \star & NX^5
+	}
+	\]
+	
+	Позиции $\star$ соответствуют коэффициентам многочленов $g_{i,j}(xX)$, пустые позиции соответствуют нулям. Алгоритм LLL, запущенный для этого базиса (здесь базис задан векторами-строками, как в FPyLLL/Sage!), вернет вектор $v$ решётки, чья норма будет удовлетворять $\norm{v} \leq 2^{w} \det(L)^{1/w}$. Определитель решетки можно оценить как\footnote{Множители, ушедшие из-за аппроксимации в формуле ниже, учитываются в $\varepsilon$.}
+	\begin{align*}
+		\det(L) &= \prod_{i=0}^{m-1} N^{(m-i)n} \prod_{j=0}^{n-1} \prod_{i=0}^{m-1} X^j X^{ni} = \prod_{i=1}^{m} N^{in} \prod_{i=0}^{nm-1} X^i = \\
+		&= N^{\frac{m(m+1)n}{2}} X^{\frac{mn(mn-1)}{2}} \approx N^{\frac{m^2n}{2}}X^{\frac{m^2n^2}{2}}.
+	\end{align*}
+	
+	Для того, чтобы вектор $v$ (соответствующий многочлену $h(xX)$), полученный из алгоритма LLL удовлетворял условию Леммы~\ref{lem:HG}, необходимо выполнение неравенства
+	\begin{align*}
+		2^{w} \det(L)^{1/w} < \frac{N^m}{\sqrt{w}}.
+	\end{align*}
+	 
+	 Подставляя полученную аппроксимацию для $\det(L)$ и пренебрегая малыми множителями, условие выше дает
+	 \begin{align*}
+	 	\det(L) \leq N^{mw} \iff X \leq N^{1/n},
+	 \end{align*} 
+	 что соответствует границе в Теореме~\ref{thm:Coppersmith} в точности до $\varepsilon$, возникающим вследствие аппроксимаций.
+	
+	\section{При чём тут RSA?}
+	
+	\subsection{Стереотипные сообщения}
+	Схема шифрования и алгоритм подписи RSA основаны на односторонней функции вида $x \mapsto x^e \bmod N$, для некой $e \in \ZZ_N^\star$ (такое отображение называется ``односторонней функцией с потайным входом''\footnote{\url{https://en.wikipedia.org/wiki/Trapdoor\_function}}, так как зная $d = e^{-1} \bmod \phi(N)$ эту функцию можно эффективно обратить. Так \emph{небезопасная} версия шифрования сообщения $m$, вычисляет шифр-текст $c=m^e \bmod N$. 
+	
+	Для того, чтобы сделать возведение в степень $e$ эффективным, некоторые реализации RSA выбирали $e=3$.\footnote{Сегодня все реализации RSA отказались от такой шифрующей экспоненты.} В этой лабораторной вы убедитесь в том, что это плохая идея. Например, если мы шифруем стереотипные сообщения, такие как ``ваш пароль на сегодня: XXXXX'', то шифр-текст такого сообщения есть $(S+x)^e \bmod N$, где $S$ -- известная часть сообщения ``ваш пароль на сегодня: ', а пароль $x$ -- неизвестная. Тогда шифр-текст соответствует многочлену $f(x) = (S+x)^e - c \bmod N$, где неизвестная часть открытого текста $x$ -- его корень. Если шифрующая экспонента $e$ мала, алгоритм Копперсмита позволит эффективно найти $x$, так как размерность решетки будет небольшой. 
+	
+	 
+	\subsection{Случайная набивка (padding)}
+	
+	Эта атака на RSA была предложена Фрэнклином-Райтером в 1996 году.  Положим, открытые сообщения $m,m'$ связны соотношением $m = m'+r$, где $r$-- малое значение (например, если для шифрования $i$-го сообщения используется так называемая набивка $R_i = i < 2^k$ для ``рандомизации'' открытого текста, то $c_i = (m\cdot 2^k + i \bmod N)$\footnote{Очевидно, такой метод рандомизации не является безопасным}). Тогда для $e = 3$,
+	\begin{align*}
+		c &= m^3 \bmod N \\
+		c' &=(m+r)^3 \bmod N.
+	\end{align*}
+	Зная $c, c'$ и $r$, можно легко вычислить $m$. 
+	
+	Что, если мы не знаем $r$, но знаем, что оно мало? Тогда два шифр-текста $c, c'$ дадут два уравнения 
+	\begin{align*}
+	m^3 - c = 0 \bmod N \\
+	(m+r)^3 - c' = 0\bmod N,
+	\end{align*}
+	в которых неизвестными являются $m,r$. Используя метод результант (классический метод исключения неизвестного из системы, нам в лабораторной понадобится только значение результанты), по переменной получим многочлен от одной переменной $r$.
+	\begin{align*}
+		\text{res}_m(m^3 - c, (m+r)^3 - c' ) = r^9 + (3c - 3c')r^6 + 3r^3(c^2 + 7cc'+c'^2) + (c-c')^3 \bmod N.
+	\end{align*}
+	Полученный многочлен $f(r)=r^9 + (3c - 3c')r^6 + 3r^3(c^2 + 7cc'+c'^2) + (c-c')^3 $ степени 9 имеет своим корнем искомое значение $r$. Если $r < N^{1/9}$, Теорема~\ref{thm:Coppersmith} вычислит этот корень.
+	\section{Задание к лабораторной}
+		
+	В этой лабораторной вам даны открытый ключ RSA $(N,e=3)$ и два шифр-текста $(c,c')$ для сообщений $(m,m')$, связанных неким малым $r$. Ваша задача -- найти $r$ и пару сообщений.
+	
+	Параметры заданы в файле \textsf{lab1\_input.txt} по ссылке \url{https://crypto-kantiana.com/elena.kirshanova/teaching/lattices_2022/lab1\_input.txt}.
+	
+	Для успешной атаки можете использовать $X=\lfloor 0.5 \cdot N^{1/9} \rfloor$, в определении $g_{i,j}$ можете взять $m = 5$.
+	
+	\begin{thebibliography}{9}
+		\bibitem{Coppersmith} 
+		Don Coppersmith.
+		\textit{Small solutions to polynomial equations, and low exponent RSA vulnerabilities}. 
+		Journal of Cryptology, 10:233--260, 1997
+		
+		\bibitem{HG} 
+		Nick Howgrave-Graham
+		\textit{Finding small roots of univariate modular equations revisited.}. 
+		Cryptography and Coding, volume 1355 of Lecture Notes in Computer Science,  131--142.
+		Springer-Verlag, 1997.
+	\end{thebibliography}	
+		
+\end{document}

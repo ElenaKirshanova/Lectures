@@ -1,0 +1,127 @@
+\documentclass[11pt]{exam}
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+
+
+\usepackage[margin=0.73in]{geometry}
+%\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{amscd,amsmath,amsthm}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+
+\usepackage{algorithmicx, enumitem, algpseudocode, algorithm, caption}
+\usepackage{tikz}
+\usetikzlibrary{automata}
+
+\usepackage{textcomp}
+
+\usepackage{kbordermatrix} % to label matrix rows and columns
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}
+
+\newtheorem{theorem}{Теорерма}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{definition}[theorem]{Определение}
+\newtheorem{claim}[theorem]{Утверждение}
+\newtheorem{fact}[theorem]{Факт}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+
+\newcommand{\nc}{\newcommand}
+\nc{\eps}{\varepsilon}
+\nc{\RR}{{{\mathbb R}}}
+\nc{\CC}{{{\mathbb C}}}
+\nc{\FF}{{{\mathbb F}}}
+\nc{\NN}{{{\mathbb N}}}
+\nc{\ZZ}{{{\mathbb Z}}}
+\nc{\PP}{{{\mathbb P}}}
+\nc{\QQ}{{{\mathbb Q}}}
+\nc{\UU}{{{\mathbb U}}}
+\nc{\OO}{{{\mathbb O}}}
+\nc{\EE}{{{\mathbb E}}}
+
+\newcommand{\bigO}{\mathcal{O}}
+
+\newcommand{\val}{\operatorname{val}}
+
+\newcommand{\wt}{\ensuremath{\mathit{wt}}}
+\newcommand{\Id}{\ensuremath{I}}
+\newcommand{\transpose}{\mkern0.7mu^{\mathsf{ t}}}
+\newcommand*{\ScProd}[2]{\ensuremath{\langle#1\mathbin{,}#2\rangle}} %Scalar Product
+\newcommand*\abs[1]{\left\lvert#1\right\rvert}
+\newcommand*\norm[1]{\left\lVert#1\right\rVert}
+
+\pretolerance=1000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT STARTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tikz}
+\usetikzlibrary{automata}
+\DeclareMathOperator{\Vol}{Vol}
+
+\begin{document}
+	{\noindent
+		\textsc{БФУ им. И. Канта -- Криптография на решётках}
+		\hfill {Е. Киршанова // 2020--2021\\}
+\hrule
+\begin{center}
+	{\LARGE
+			Дополнительная лабораторная работа № 5 \\[5pt]
+			\textbf{Взлом хэш-функции} \\[10pt]
+	 	{01.06.2021} 
+ 	} 
+\end{center}
+\hrule \vspace{5mm}
+	
+	\thispagestyle{empty}
+	
+	\vspace{0.2cm}
+	\section{Хэш-функция на решетках}
+	
+	На задаче SIS можно построить хэш-функцию следующим образом:
+	\begin{enumerate}
+		\item Для фиксированных $m>n>1$ и $q>1$, выберем матрицу $A \leftarrow(\ZZ_q^{n\times m})$
+		\item Хэш-функция $\mathcal{H}_A$ определяется отображением
+		\begin{align*}
+			\mathcal{H}_A: \{0,1\}^m &\rightarrow \ZZ_q^n \\
+			x &\mapsto Ax \bmod q
+		\end{align*}
+	\end{enumerate}
+
+	Цель работы: отыскать коллизию для $\mathcal{H}_A$.
+	
+	Заметим, что коллизией для $\mathcal{H}_A$ будет считаться любая пара бинарных векторов $(x, x')$, такая, что $x \neq x'$ и $Ax = Ax' \bmod q$. Из последнего равенства следует, что $A(x -x') = 0 \bmod q$, а значит, $x, x' \in L^\perp(A)$. Эту пару можно найти с помощью алгоритма редукции базиса $L^\perp(A)$.
+
+	\section{Задание к лабораторной}
+	
+	Задача: для параметров $n = 12, m=113, q = 37$, найти коллизию для хэш-функции $\mathcal{H}_A$. Пример реализации хэш-функции можно найти по адресу 
+	\url{https://crypto-kantiana.com/elena.kirshanova/teaching/lattices\_2021/lab5.sage}
+	
+	Код лабораторной должен вывести коллизию для $L^\perp(A)$. Алгоритм должен работать для случайной матрицы $A$.
+	
+\end{document}

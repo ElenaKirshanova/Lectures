@@ -1,0 +1,199 @@
+% !TeX encoding = UTF-8
+\documentclass[11pt]{exam}
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+
+
+\usepackage[margin=0.73in]{geometry}
+%\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{amscd,amsmath,amsthm}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+
+\usepackage{algorithmicx, enumitem, algpseudocode, algorithm, caption}
+\usepackage{tikz}
+\usetikzlibrary{automata}
+
+\usepackage{textcomp}
+
+\usepackage{kbordermatrix} % to label matrix rows and columns
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}
+
+\newtheorem{theorem}{Теорерма}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{definition}[theorem]{Определение}
+\newtheorem{claim}[theorem]{Утверждение}
+\newtheorem{fact}[theorem]{Факт}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+
+\newcommand{\nc}{\newcommand}
+\nc{\eps}{\varepsilon}
+\nc{\RR}{{{\mathbb R}}}
+\nc{\CC}{{{\mathbb C}}}
+\nc{\FF}{{{\mathbb F}}}
+\nc{\NN}{{{\mathbb N}}}
+\nc{\ZZ}{{{\mathbb Z}}}
+\nc{\PP}{{{\mathbb P}}}
+\nc{\QQ}{{{\mathbb Q}}}
+\nc{\UU}{{{\mathbb U}}}
+\nc{\OO}{{{\mathbb O}}}
+\nc{\EE}{{{\mathbb E}}}
+
+\newcommand{\bigO}{\mathcal{O}}
+
+\newcommand{\val}{\operatorname{val}}
+
+\newcommand{\wt}{\ensuremath{\mathit{wt}}}
+\newcommand{\Id}{\ensuremath{I}}
+\newcommand{\transpose}{\mkern0.7mu^{\mathsf{ t}}}
+\newcommand*{\ScProd}[2]{\ensuremath{\langle#1\mathbin{,}#2\rangle}} %Scalar Product
+\newcommand*\abs[1]{\left\lvert#1\right\rvert}
+\newcommand*\norm[1]{\left\lVert#1\right\rVert}
+
+\pretolerance=1000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT STARTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tikz}
+\usetikzlibrary{automata}
+\DeclareMathOperator{\Vol}{Vol}
+
+\begin{document}
+	{\noindent
+		\textsc{БФУ им. И. Канта -- Криптография на решётках}
+		\hfill {Е. Киршанова // 2022\\}
+\hrule
+\begin{center}
+	{\LARGE
+			Лабораторная работа № 2 \\[5pt]
+			\textbf{
+				Задача спрятанного числа 
+			} \\[10pt]
+	 	{02.03.2022, Дедлайн: 15.03.2022} 
+ 	} 
+\end{center}
+\hrule \vspace{5mm}
+	
+	\thispagestyle{empty}
+	
+	\vspace{0.2cm}
+	\section{Формулировка задачи}
+	Задача ``спрятанного числа'' (англ.\ the Hidden Number Problem, HNP) была поставлена в статье~\cite{BV} в связи со сторонними атаками на задачу Диффи-Хэллмана (ДХ). На сложности задачи ДХ основан популярный алгоритм генерации общего ключа: Алиса и Боб, обладая секретными $a$, $b$ соответственно, обмениваются значениями $g^a$, $g^b$, формируя тем самым общий ключ $g^{ab}$. Полагаем, что $g$–образующий мультипликативной группы $\FF_p^\star$ для большого простого $p$. Задача ДХ говорит о том, что любой эффективный атакующий, зная $g,g^a,g^b$, не может вычислить $g^{ab}$. Что, если атакующий имеет доступ к некоторым битам $g^{ab}$? С учетом корявых реализаций этого важного протокола, вопрос не праздный~\cite{MB+}. Этот вопрос мотивирует задачу HNP.
+	\begin{definition}
+	 Задача спрятанного числа. Зафиксируем простое $p$ и целое положительное $\delta$. Обозначим за $\bigO_\alpha(t)$–оракул, который выдает $\delta$ значимых бит числа $\alpha t~\bmod~p$:
+	 \[
+	 	\bigO_\alpha(t) = \mathrm{MSB}_{\delta}(\alpha \cdot t~\bmod~p).
+	 \]
+	Задача состоит в вычислении $\alpha$, имея доступ к $\bigO_\alpha(t)$.
+	\end{definition}
+
+	Суть этой лабораторной состоит в реализации алгоритма, решающую задачу HNP. Отметим, что чем меньше $\delta$, тем сильнее считается атака ($\delta = \lceil \log(p)\rceil$ делает задачу тривиальной).
+	
+	Уточним определение $\mathrm{MSB}$. Для атаки удобно думать о функции $\mathrm{MSB}_{\delta}(x)$ как о функции, возвращающей любое целое $z$, удовлетворяющее $|x-z| < p/2^\delta$. Такое определение будет удобно для анализа алгоритма, который мы рассмотрим ниже.
+	
+	\section{Решение задачи HNP}
+	
+	Основной результат Боне-Венкатесана~\cite{BV} формулируется так: для $\delta = \lceil \sqrt{n} \rceil + \lceil \log n\rceil$ и $d = 2\sqrt{n}$ вызовов оракула $\bigO_\alpha(\cdot)$ задача HNP решается за детерминированное полиномиальное (от $\log p$) время.
+	
+	Положим, мы выбрали $d$ случайных значений $t_1, \ldots, t_d$ из $\FF_p$ и значений $a_1, \ldots, a_d$, каждый из которых удовлетворяет
+	\[
+		\abs{\alpha t_i~\bmod~p - a_i} < p/2^{\delta}.
+	\]
+	
+	Построим решетку ранга $d+1$, порожденную \emph{столбцами}
+	\[
+	B = \begin{pmatrix}
+	p & 0 & 0 & \ldots & 0 & t_1 \\
+	0 & p & 0 & \ldots & 0 & t_2 \\
+	0 & 0 & p & \ldots & 0 & t_3 \\
+	\vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+	0 & 0 & 0 & \ldots & p & t_d \\
+	0 & 0 & 0 & \ldots & 0 & 1/p \\
+	\end{pmatrix}.
+	\]
+	
+	Заметьте, во-первых, что матрица не целочисленная. Эту проблему мы далее решим. Во-вторых, умножив последний столбец матрицы $B$ на $\alpha$ (который нам неизвестен) и отняв необходимые кратные $p$ с помощью остальных столбцов, мы получим вектор решетки
+	\[
+	v = (r_1,\ldots,r_d,\alpha/p),
+	\]
+	где $|r_i - a_i| < p/2^\delta$. Обозначим $u = (a_1,\ldots,a_d,0)$. Этот вектор нам известен и, кроме этого, $\| u - v\| \leq \sqrt{d+1}\cdot p/2^\delta$. 
+	
+	Таким образом, пара $(L(B),u)$ формирует задачу близкого вектора. Однако, с базисом, описанным выше, трудно оперировать на практике, так как он не является целочисленным. Для решения этой проблемы воспользуемся трюком, предложенным в~\cite{AH}. Напомним, что мы имеем сравнения
+	\begin{equation} \label{eq:equiv_relation}
+		\alpha t_i \equiv a_i + b_i \bmod~p,
+	\end{equation}
+	из которых нам известны $t_i, b_i$, неизвестны $\alpha$ и $b_i$, т.ч.\ $|b_i|< p/2^\delta$. Из сравнений~\eqref{eq:equiv_relation}, выполняется $\alpha \equiv t_1^{-1}(a_1 +b_i)\bmod~p \equiv t_i^{-1}(a_i +b_i)\bmod~p$, $\forall i$. Значит,
+	\begin{align*}
+		t_i \cdot t_1^{-1}(a_1 +b_1) &\equiv (a_i +b_i) \bmod~p \iff  \\
+		t_i \cdot t_1^{-1} b_1 & \equiv a_i -  t_i \cdot t_1^{-1}a_1 + b_i \bmod~p 
+	\end{align*}
+	Полагая $\hat{t}_{i-1}:= t_i\cdot t_1^{-1}$ для $i>1$, а $\hat{a}_{i-1}:= a_i -  t_i \cdot t_1^{-1}a_1$, мы получаем новую инстанцию задачи HNP с неизвестным $b_1$ (вместо $\alpha$). Рассмотрим теперь решетку, порожденную столбцами $\hat{B}$:
+	\[
+	\hat{B} = \begin{pmatrix}
+	p & 0 & 0 & \ldots & 0 & \hat{t}_1 \\
+	0 & p & 0 & \ldots & 0 & \hat{t}_1 \\
+	0 & 0 & p & \ldots & 0 & \hat{t}_1 \\
+	\vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+	0 & 0 & 0 & \ldots & p & \hat{t}_{d-1} \\
+	0 & 0 & 0 & \ldots & 0 & 1 \\
+	\end{pmatrix}.
+	\]
+	Заметьте, что (известным нам) вектор $\hat{u} = (\hat{a}_1, \ldots, \hat{a}_{d-1},  \lceil p/2^\delta \rceil)$, отстает от вектора решетки $L(\hat{B})$ на вектор $(b_2, \ldots, b_d, \star)$, где $|\star| = p/2^\delta - b_1 <p/2^\delta$, а значит $(L(\hat{B}), \hat{u})$ формируют задачу нахождения близкого вектора.
+	
+		
+	 %Боне-Венкатесан~\cite{BV} доказывают, что это не просто задача ближайшего вектора, а уникального ближайшего вектора, которую при указанных параметрах можно решить с помощью алгоритма Бабая (LLL).
+	
+	\section{Задание}
+	
+	Реализовать алгоритм, решающий задачу HNP для $p$ порядка 512 бит. Для реализации оракула можете использовать скрипт~\cite{script} а для нахождения ближайшего вектора можно использовать функцию babai (реализована в fpylll). Вам нужно восстановить как значение $b_i$, так и $\alpha$.
+	
+	
+	
+	\begin{thebibliography}{9}
+		\bibitem{BV} 
+		D. Boneh, R. Venkatesan.  
+		\textit{Hardness of computing the most significant bits of secret keys in Diffie-Hellman and related schemes.} 
+		\url{https://link.springer.com/content/pdf/10.1007\%2F3-540-68697-5_11.pdf}
+		
+		\bibitem{MB+} 
+		Robert Merget, Marcus Brinkmann, Nimrod Aviram, Juraj Somorovsky and Johannes Mittmann, J{\"o}rg Schwenk.
+		\textit{Raccoon Attack: Finding and Exploiting Most-Significant-Bit-Oracles in TLS-DH(E)} \url{https://eprint.iacr.org/2020/1151}
+		
+		\bibitem{AH}
+		M. R. Albrecht, Heninger. \textit{On Bounded Distance Decoding with Predicate: Breaking the ``Lattice Barrier'' for the Hidden Number Problem}
+		\url{https://eprint.iacr.org/2020/1540.pdf}
+		
+		\bibitem{script}
+		\url{https://crypto-kantiana.com/elena.kirshanova/teaching/lattices_2022/tp2_oracle.sage}
+		
+		
+	\end{thebibliography}	
+		
+\end{document}

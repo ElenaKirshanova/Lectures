@@ -1,0 +1,187 @@
+\documentclass[11pt]{exam}
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+
+
+\usepackage[margin=0.73in]{geometry}
+%\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{amscd,amsmath,amsthm}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+
+\usepackage{algorithmicx, enumitem, algpseudocode, algorithm, caption}
+\usepackage{tikz}
+\usetikzlibrary{automata}
+
+\usepackage{textcomp}
+
+\usepackage{kbordermatrix} % to label matrix rows and columns
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}
+
+\newtheorem{theorem}{Теорерма}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{definition}[theorem]{Определение}
+\newtheorem{claim}[theorem]{Утверждение}
+\newtheorem{fact}[theorem]{Факт}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+
+\newcommand{\nc}{\newcommand}
+\nc{\eps}{\varepsilon}
+\nc{\RR}{{{\mathbb R}}}
+\nc{\CC}{{{\mathbb C}}}
+\nc{\FF}{{{\mathbb F}}}
+\nc{\NN}{{{\mathbb N}}}
+\nc{\ZZ}{{{\mathbb Z}}}
+\nc{\PP}{{{\mathbb P}}}
+\nc{\QQ}{{{\mathbb Q}}}
+\nc{\UU}{{{\mathbb U}}}
+\nc{\OO}{{{\mathbb O}}}
+\nc{\EE}{{{\mathbb E}}}
+
+\newcommand{\bigO}{\mathcal{O}}
+
+\newcommand{\val}{\operatorname{val}}
+
+\newcommand{\wt}{\ensuremath{\mathit{wt}}}
+\newcommand{\Id}{\ensuremath{I}}
+\newcommand{\transpose}{\mkern0.7mu^{\mathsf{ t}}}
+\newcommand*{\ScProd}[2]{\ensuremath{\langle#1\mathbin{,}#2\rangle}} %Scalar Product
+\newcommand*\abs[1]{\left\lvert#1\right\rvert}
+\newcommand*\norm[1]{\left\lVert#1\right\rVert}
+
+\pretolerance=1000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT STARTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tikz}
+\usetikzlibrary{automata}
+\DeclareMathOperator{\Vol}{Vol}
+
+\begin{document}
+	{\noindent
+		\textsc{БФУ им. И. Канта -- Криптография на решётках}
+		\hfill {Е. Киршанова // 2020--2021\\}
+\hrule
+\begin{center}
+	{\LARGE
+			Лабораторная работа № 4 \\[5pt]
+			\textbf{Атака на подписи GGH/NTRU} \\[10pt]
+	 	{05.05.2021} 
+ 	} 
+\end{center}
+\hrule \vspace{5mm}
+	
+	\thispagestyle{empty}
+	
+	\vspace{0.2cm}
+	\section{Алгоритм подписи GGH}
+	
+	Цель этой лабораторной -- атаковать подпись GGH (названа в честь авторов Goldreich, Goldwasser, Halevi)~\cite{GGH}, на основе которой было предложено несколько популярных подписей, в том числе запатентованная\footnote{Патенты в крипто--зло!} подпись NTRU~\cite{NTRUSign}(сегодня мы знаем, как обойти эту атаку, и построить безопасную подпись, см.\ лекцию).
+	
+	Для начала рассмотрим алгоритм подписи. Пару (публичный, секретный) ключи формируют базисы $d$-размерной решетки (полного ранга). Секретный ключ $sk$ -- `хороший' базис решетки (например, HKZ-редуцированный), открытый ключ $pk$ -- `плохой' базис этой же решетки (например, HNF форма $sk$).
+	
+	Сообщения предполагаются выбранными из множества $\ZZ^d$ (любое отображение $\{0,1\}^\star \rightarrow \ZZ^d$ подойдет).
+	
+	Процедура генерации подписи берет на вход хороший базис решетки $sk$ и решает задачу нахождения ближайшего вектора (CVP) к $m$. Например, при достаточно редуцированном базисе для решения аппроксимации CVP запускается алгоритм Бабая. Заметьте, что вектор-ошибки $(m - \mathtt{CVP}(sk, m))$ лежит в фундаментальном параллелепипеде базиса $sk$, $\mathcal{P}(sk)$, и этот вектор ошибки легко вычислить, зная пару (сообщение, подпись).
+	
+	Процедура верификации, получив на вход тройку $(m, \sigma, pk)$, проверяет с помощью $pk$ -- базиса $L$, евклидову норму ошибки $\norm{m - \sigma}$. Если она мала, а именно меньше чем некая граница $\eta$ (полагаем $\eta$ известным), то подпись принимается, если нет, отклоняется.
+	
+	\begin{algorithm}
+		\begin{algorithmic}[1]
+			\Function{KeyGen}{$L = \mathcal{L}(B)$-- решетка, порожденная $B$}
+			\State		\Return $pk = (\text{HNF}(B), \eta), sk = \text{HKZ}(B)$ \Comment{$\eta$ зависит от базиса Грам-Шмидта базиса $sk$.}
+			\EndFunction
+			
+			\vspace{10pt}
+			\Function{Sign}{$m, sk$}
+			\State \Return $\sigma = \mathtt{CVP}(sk, m)$
+			\EndFunction
+			
+			\vspace{10pt}
+			\Function{Verify}{$m, \sigma, pk$}
+			\State \Return $\norm{\sigma-m} \leq \eta$
+			\EndFunction
+		\end{algorithmic}
+	\end{algorithm}
+	
+	В лабораторной работе, предлагается взять $sk = q \Id_d$ (с тривиальным алгоритмом Бабая) для некого фиксированного $q$, а в качестве $pk = U \cdot sk$, где $U$ -- случайная унимодулярная матрица.  Вообще, так генерировать публичный ключ нельзя, но это работает быстро и не влияет на суть лабораторной. С корректно сгенерированным $pk$ атака работает точно также.
+	
+	Пример реализации подписи можно найти по ссылке \url{https://crypto-kantiana.com/elena.kirshanova/teaching/lattices_2021/lab4\_GGHsign.sage}.
+	
+	
+	
+	\section{Атака}
+	
+	Проблема этой подписи заключается в том, что достаточное большое число подписей ``выдают'' форму фундаментального параллелепипеда $\mathcal{P}(sk)$, а вместе с ним и секретного ключа $sk$.  Атака была формализована в 2006 в работе Нгуена-Регева~\cite{NR06} и состоит из следующих шагов:
+	\begin{enumerate}
+		\item Получение большого числа подписей под одним ключом (в этой лабораторной мы планируем взломать один фиксированный ключ)
+		\item Аппроксимация матрицы $sk^t sk$. Как это сделать описано в Разделе 4.1  статьи~\cite{NR06}. Из этой аппроксимации получить матрицу $L$, отображающую элементы $\mathcal{P}(sk)$ в элементы фундаментального параллелепипеда куба. В примере, выбранном в лабораторной, этот куб есть $(\Id_d)$ (в статье описывается общий случай, когда этот куб может быть ``перевернут'', то есть любой ортогональной матрицей).  Матрица $L$ получена на шаге 2 Алгоритма~1 в~\cite{NR06}.
+		\item С помощью $L$ отобразить все элементы  $\mathcal{P}(sk)$  в элементы $\mathcal{P}(\Id_d)$, то есть в элементы куба со сторонами длины 1. Здесь допустима погрешность, так как на первом шаге мы получим не точное значение $sk^t sk$, а его аппроксимацию.
+		\item Аппроксимацией моментов этого куба (см. раздел 4.3 в~\cite{NR06}), получить аппроксимацию $\Id_d$.
+		Суть этого шага в следующем: имея выборку и некоего многомерного тела (в нашем случае $\mathcal{P}(\Id_d))$, мы можем аппроксимировать образующую этого параллелепипеда (в нашем случае $\Id_d$), имея достаточное число элементов в выборке. Это своего рода обобщение неравенства Чебышёва (где аппроксимируется первый момент -- мат. ожидание) на моменты более высоких порядков. 
+		\item С помощью обратного отображения $L^{-1}$, отобразить $\Id_d$ в $sk$. Это сделано в шаге 5 Алгоритма~1 в~\cite{NR06}.
+	\end{enumerate}
+	
+
+	\section{Задание к лабораторной}
+	
+	Задача: реализовать алгоритм, описанный в Разделе 4 статьи~\cite{NR06} и получить аппроксимацию $sk$.
+	
+	Пояснения к заданию:
+	\begin{itemize}
+	\item Для предложенной размерности $d=70$ понадобится не менее $100\,000$ подписей. Для такой размерности атака должна занимает около часа на 2,8 GHz Intel Core i5.  Демонстрировать работоспособность кода можно и на меньших размерностях, однако нужно показать результат работы на больших размерностях. 
+	\item Параметры подписи, такие как форма $sk$, можно изменять (при этом убедитесь, что алгоритм Бабая работает верно). 
+	\item Матрица $V$ раздела 4.1 в ~\cite{NR06} есть $sk$ в наших обозначениях. Однако обратите внимание, что в разделе 4.4  $V$ уже обозначает другую матрицу (в нашем примере, $\Id_d$).
+	\item Вектор ошибки, возвращаемый алгоритмом Бабая в реализации, лежит в фундаментальном параллелепипеде $\mathcal{P}_{1/2}(sk) = \{ \sum_{i=1}^d x_i v_k \; x_i \in [-1/2, 1/2] \}$, в то время как атака в~\cite{NR06} описывает  $\mathcal{P}(sk) = \{ \sum_{i=1}^d x_i v_k \; x_i \in [-1, 1] \}$. Это, в частности, влияет на  фактор 3, описанный в Лемме 1 в~\cite{NR06}.
+	\item  При реализации Алгоритма~2 из~\cite{NR06} обратите внимание, что только те $w$, 4-ый момент которых близок к 1/5, ведут к верной аппроксимации $\Id$, а следовательно, $sk$. Подтверждает этот факт Лемма 3 в~\cite{NR06}.
+	Не все $w$ полезны. Параметр $\delta$ в этом алгоритме можно выбрать из диапазона $[0.65, 0.8]$.
+	\item Аппроксимация $\text{mom}_{sk}(w)$, упомянутая в разделе 4.3 в~\cite{NR06} реализуется с помощью неравенства Чебышёва~\cite{Cheb}.
+	
+	\end{itemize}
+	
+	\begin{thebibliography}{9}
+		\bibitem{NTRUSign} 
+		J. Hoffstein, N. A. Howgrave Graham, J. Pipher, J. H. Silverman, and W. Whyte.
+		\textit{NTRUSIGN: Digital signatures using the NTRU lattice.}
+		
+		\bibitem{GGH} 
+		O. Goldreich, S. Goldwasser, and S. Halevi. 
+		\textit{Public-key cryptosystems from lattice reduction problems.}
+		
+		\bibitem{NR06}
+		Phong Q. Nguyen and Oded Regev.
+		\textit{Learning a Parallelepiped: Cryptanalysis of GGH and NTRU Signatures}. EuroCrypt'06
+		\url{https://cims.nyu.edu/~regev/papers/gghattack.pdf}
+		
+		\bibitem{Cheb}
+		\url{https://en.wikipedia.org/wiki/Chebyshev\%27s_inequality#Probabilistic_statement}
+	\end{thebibliography}	
+		
+\end{document}
