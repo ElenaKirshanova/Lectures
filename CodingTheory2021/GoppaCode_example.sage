@@ -62,6 +62,7 @@ L = [1, 2, 2*a + 2, a, 2*a, a + 1, 2*a + 1] #constructL(S, n)
 print("L:", L)
 
 Hbar = gen_parity(L,g)
+print(Hbar)
 V, from_V, to_V = ff.vector_space(F, map=True)
 H = matrix(F, kappa*Hbar.nrows(), n)
 for i in range(Hbar.nrows()):
@@ -70,23 +71,25 @@ for i in range(Hbar.nrows()):
 		for k in range(kappa):
 			H[kappa*i+k, j] = tmp_vec[k]
 
+print(H)
+
 k = n-kappa*Hbar.nrows()
 G = matrix(H.transpose().kernel().basis())
 mes = gen_message(k,p)
-#c = mes*G
+c = mes*G
 
 #c = vector(GF(p), [0, 1, 1, 1, 2, 2, 0])
 
 
 print('k = ', k)
 print('m = ', mes)
-#print('c = ', c)
+print('c = ', c)
 
 e = vector(GF(p),[0]*n)
 e[2] = 2
 
-y = [1, 0, 1, 0, 2, 0, 1]
-#y = c+e
+#y = [1, 0, 1, 0, 2, 0, 1]
+y = c+e
 print('y = ', y)
 
 Rquo = Rff.quotient(g, 'x1')
@@ -102,7 +105,7 @@ for i in range(len(L)):
 syndrome = sum([y[i]*Linv[i] for i in range(n)])
 print('syndrome:', syndrome)
 
-print(Rquo((x1+1)*(2*a*x1+a+1)))
+#print(Rquo((x1+1)*(2*a*x1+a+1)))
 
 #print(Rquo(1/(2*a)))
 #print(Rquo(1/(a)))

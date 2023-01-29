@@ -12,7 +12,7 @@ a = 2
 while True:
 	if Mod(a,p).multiplicative_order() == n:
 		break
-	else: 
+	else:
 		a+=1
 	print('a:', a)
 
@@ -41,8 +41,8 @@ def gen_message(k, S):
 	nelements = len(S)
 	for i in range(k):
 		rand_index = ZZ.random_element(0,nelements)
-		m_coeffs[i] = S[i]
-	return m_coeffs 
+		m_coeffs[i] = S[rand_index]
+	return m_coeffs
 
 def eval_poly(f, y):
 	res = 0
@@ -51,13 +51,11 @@ def eval_poly(f, y):
 	return res
 
 
-
 def encode(m, S):
 	c = [0]*len(S)
 	for i in range(len(S)):
 		c[i] = eval_poly(m, S[i])
 	return vector(c)
-
 
 
 def gen_error(nerrs, d, S):
@@ -85,7 +83,7 @@ def WB_decode(k, S, y, ff):
 	deg_N = deg_E + k - 1
 
 	print('degs:', deg_E, deg_N)
-	
+
 	A = []
 	for i in range(len(S)):
 		A.append([y[i]*(S[i]**j) for j in range(deg_E)] + [-(S[i]**j) for j in range(deg_N+1)] )
@@ -145,7 +143,7 @@ def PetersonDecode(k, S, y, ff):
 	for i in range(deg_E):
 		AMat[i]  = [0]*i + list(syndrom[:n-k-i-1])
 	for i in range(deg_G):
-		AMat[i+deg_E,i] = - 1 
+		AMat[i+deg_E,i] = - 1
 
 	print('AMat:')
 	print(AMat)
@@ -161,14 +159,61 @@ def PetersonDecode(k, S, y, ff):
 
 	R.<x> = PolynomialRing(ff, 'x')
 	epoly = sum([evec[i]*x^i for i in range(len(evec))])
-	print('epoly:', epoly, epoly.factor())
+	gpoly = sum([gammavec[i]*x^i for i in range(len(gammavec))])
+	print('epoly:', epoly, epoly.factor(), diff(epoly))
+	print('gpoly:', gpoly)
 
 	#find roots
+	pos = 0
 	for root in S:
 		if(eval_poly(evec, root) == 0):
-			print('root:', root)
+			print('root:', root, 'pos:', n-pos)
+		pos+=1
 
-	return 1 
+
+	return 1
+
+
+#-----------------------------------
+#m =  [1, 2, 4, 8, 5, 10]
+#c =  (8, 1, 5, 1, 0, 1, 6, 1, 3, 6)
+#e =  (7, 0, 0, 0, 10, 0, 0, 0, 0, 0)
+#y =  (4, 1, 5, 1, 10, 1, 6, 1, 3, 6)
+#-----------------------------------
+#m =  [1, 9, 7, 9, 7, 10]
+#c =  (10, 1, 8, 10, 0, 9, 6, 7, 9, 5)
+#e =  (5, 0, 0, 6, 0, 0, 0, 0, 0, 0)
+#y =  (4, 1, 8, 5, 0, 9, 6, 7, 9, 5)
+#-----------------------------------
+#m =  [1, 7, 10, 5, 7, 5]
+#c =  (2, 4, 7, 2, 0, 1, 5, 5, 5, 1)
+#e =  (0, 1, 0, 0, 0, 0, 0, 10, 0, 0)
+#y =  (2, 5, 7, 2, 0, 1, 5, 4, 5, 1)
+#-----------------------------------
+#m =  [2, 7, 6, 7, 8, 7]
+#c =  (4, 8, 0, 3, 8, 6, 3, 2, 8, 0)
+#e =  (10, 0, 0, 0, 8, 0, 0, 0, 0, 0)
+#y =  (3, 8, 0, 3, 5, 6, 3, 2, 8, 0)
+#-----------------------------------
+#m =  [10, 6, 1, 9, 8, 1]
+#c =  (2, 5, 2, 9, 9, 3, 4, 10, 5, 7)
+#e =  (0, 0, 0, 3, 0, 5, 0, 0, 0, 0)
+#y =  (2, 5, 2, 1, 9, 8, 4, 10, 5, 7)
+#-----------------------------------
+#m =  [4, 6, 4, 3, 5, 9]
+#c =  (9, 6, 0, 7, 2, 6, 7, 1, 3, 10)
+#e =  (0, 0, 0, 0, 0, 0, 4, 0, 6, 0)
+#y =  (9, 6, 0, 7, 2, 6, 0, 1, 9, 10)
+#-----------------------------------
+#m =  [5, 6, 2, 4, 9, 4]
+#c =  (8, 10, 7, 6, 10, 2, 7, 0, 2, 9)
+#e =  (0, 6, 0, 0, 0, 0, 0, 0, 6, 0)
+#y =  (8, 5, 7, 6, 10, 2, 7, 0, 8, 9)
+#-----------------------------------
+#m =  [2, 7, 6, 7, 6, 2]
+#c =  (8, 3, 0, 0, 7, 9, 10, 1, 6, 9)
+#e =  (10, 0, 0, 0, 7, 0, 0, 0, 0, 0)
+#y =  (7, 3, 0, 0, 3, 9, 10, 1, 6, 9)
 
 
 
@@ -182,6 +227,7 @@ e = gen_error(2, d, S)
 print('e = ', e)
 y = c + e
 print('y = ', y)
+y = (4, 1, 5, 1, 10, 1, 6, 1, 3, 6)
 
 decP = PetersonDecode(k, S, y, ff)
 print('decP:', decP)
@@ -200,5 +246,3 @@ decWB = WB_decode(k, S, y, ff)
 print('dec:', decWB, decWB.coefficients())
 print(encode(decWB.coefficients(), S))
 """
-
-

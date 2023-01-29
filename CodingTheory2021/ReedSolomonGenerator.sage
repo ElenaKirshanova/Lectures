@@ -91,9 +91,11 @@ def WB_decode(k, S, y, ff):
 	for i in range(len(S)):
 		A.append([y[i]*(S[i]**j) for j in range(deg_E)] + [-(S[i]**j) for j in range(deg_N+1)] )
 
+	#print(A)
+
 	AMat = matrix(ff, [Arow for Arow in A])
 
-	#print(AMat)
+	print(AMat)
 
 	#AMat2 = AMat.echelon_form()
 	#print('AMat2', AMat2)
@@ -108,14 +110,17 @@ def WB_decode(k, S, y, ff):
 	epoly += x**deg_E
 
 	npoly = sum([ sol[i]*(x**(i-deg_E))  for i in range(deg_E,deg_E+deg_N+1)])
-
+	print(npoly)
+	print(R( [sol[i] for i in range(deg_E,deg_E+deg_N+1)] ))
 	#f = npoly / epoly
 	f, r = npoly.quo_rem(epoly)
+	print(f,r)
+	print(npoly//epoly)
 	print('epoly:', epoly)
 	print('npoly:', npoly)
-	print('f:', f)
+	print('f:', f, 'r:', r)
 	flist = list(R(f))
-	print('y:', y)
+	#print('y:', y)
 	#c = vector([eval_poly(flist,S[i]) for i in range(len(S))])
 	#c = vector([2*a + 1, 2*a, a + 2, 0, 2*a, 2*a+1, 1, a + 2])
 	#print('c:', c)
@@ -127,7 +132,7 @@ def WB_decode(k, S, y, ff):
 	#print('check:', Hmat*c)
 
 
-	return f
+	return flist
 
 
 def PetersonDecode(k, S, y, ff):
@@ -185,17 +190,22 @@ def PetersonDecode(k, S, y, ff):
 #print('y = ', y)
 
 
-m = [a^2, a+1, a]
-c = encode(m, S)
-print('c = ', c)
+#m = [a^2, a+1, a]
+#c = encode(m, S)
+#print('c = ', c)
 
-y = [a^2 + 1, 1+a, a^2+1, 0, 1, 0, a^2 + 1]
+y = [a^2 + 1, a + 1, a^2 + 1, 0, 1, 0, a^2 + 1]
 print('y = ', y)
 
 decWB = WB_decode(k, S, y, ff)
-print('dec:', decWB, decWB.coefficients())
-print('encode back:', encode(decWB.coefficients(), S) )
-print('error:', vector(y)-vector(encode(decWB.coefficients(), S)))
+print('dec:', decWB)
+print('encode back:', encode(decWB, S) )
+print('error:', vector(y)-vector(encode(decWB, S)))
+
+H = gen_h(k, S, ff)
+print(H*vector(ff, [a^2 + 1, 1, a^2, 0, 1, 0, a^2 + 1]))
+
+print('--------------------------------------------')
 
 decP = PetersonDecode(k, S, y, ff)
 print('decP:', decP)

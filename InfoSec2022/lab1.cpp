@@ -5,9 +5,9 @@
 //  Created by Elena on 18/01/2021.
 //
 
-// TODO: command line
+// clang++ lab1.cpp -I /usr/local/include/cryptopp /usr/local/lib/libcryptopp.a
 
-//#include "lab1.hpp"
+#include "lab1.hpp"
 
 #include "cryptlib.h"
 #include "secblock.h"
@@ -53,7 +53,7 @@ void Dec(SecByteBlock &key, SecByteBlock &iv, std::string &ciphertext, std::stri
 
 int main()
 {
-	std::string plaintext = "some plaintext", ciphertext, decrypted;
+	std::string plaintext = "some plaintext 2", ciphertext, decrypted;
 
 	SecByteBlock key(32), iv(8);
 	KeyGen(key, iv);
