@@ -1,0 +1,190 @@
+% !TeX encoding = UTF-8
+\documentclass[11pt]{exam}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+\setlength{\parskip}{8pt}
+\parindent=16pt
+
+%from other file
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{amscd}
+\usepackage{amsfonts}
+%- - -
+
+\usepackage{fancyvrb}
+\usepackage{hyperref}
+\usepackage{setspace}
+%\usepackage{tempora}
+%\usepackage[14pt]{extsizes}
+
+%table positioning forcing
+\usepackage{float}
+
+% - - -
+
+% - - -
+% Other packages
+\usepackage[amsthm, thmmarks]{ntheorem}
+%\usepackage{graphicx, url, latexsym, amscd, varwidth, dsfont}%, ntheorem}
+\usepackage{amsmath, amssymb, amsfonts, navigator, mathtools}
+\usepackage{mathrsfs, array, bbm, booktabs, epstopdf, xspace, pstricks}
+\usepackage{caption, subcaption, multirow, multicol, paralist}
+%\usepackage{caption, subcaption, multirow, multicol, paralist, authblk}
+%\usepackage{pgfplots, pgfplotstable, float, longtable, tikz}%, enumitem}
+% - - -
+\usepackage{titlesec}
+\titleformat*{\section}{\normalsize\bfseries}
+\titleformat*{\subsection}{\normalsize\bfseries}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{mathtools} 
+
+\setlength{\parskip}{8pt}
+\parindent=16pt
+
+%indent after chapter
+\usepackage{indentfirst}
+
+%\def\BibAuthor#1{\emph{#1}}
+%\def\BibTitle#1{#1}
+%\def\BibUrl#1{{\small\url{#1}}}
+%\def\BibHttp#1{{\small\url{http://#1}}}
+%\def\BibFtp#1{{\small\url{ftp://#1}}}
+%\def\typeBibItem{\small\sloppy}
+
+\newtheorem{theorem}{Теорема}[section]
+\newtheorem{corollary}{Следствие}[theorem]
+\newtheorem{lemma}[theorem]{Лемма}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\author{А.С. Каренин}
+\title{Лабораторная NTRU}
+\date{\today}
+
+\begin{document}	
+
+	
+		{\noindent
+		\textsc{\small БФУ им. И. Канта -- Криптография на решётках}
+		\hfill {A. Каренин, E.Киршанова, 2023}
+		\hrule
+		\begin{center}
+			{\LARGE
+				Лабораторная работа № 4 \\[5pt]
+				\textbf{
+					NTRU Криптосистема
+				} \\[10pt]
+				{Дедлайн: 15.05.2023} 
+			} 
+		\end{center}
+		\hrule \vspace{5mm}
+	
+	Исторически, одним из первых предложенных постквантовых решений в области криптосистем является криптосистема NTRU, предложенная в 1996-м поду Сильверманом, Хоффштейном и Пайпером в своей статье \cite{HoffsteinPS98}. Оригинальная статья вводила так называемое NTRU предположение, состоящее в том, что нахождение решения уравнения $h = f/g \pmod{x^n-1} \pmod{q}$ для простого $q$, $n$ -- степени двойки, где $h$ известно, а неизвестные $f$ и $g$ малы относительно еквклидовой нормы, является вычислительно сложной задачей.
+	
+	Есть множество вариантов NTRU: классический, упомянутый выше, HRSS, HPS, NTRU Prime \cite{schanck2018comparison}. В данной лабораторной работе мы используем HRSS подобный вариант NTRU. Процедура генерации ключей в нашей лабораторной выглядит следующим образом:
+	
+	  \begin{algorithm}[H] \caption{KeyGen} \label{keygen}
+	  	\begin{tabular}{ll}
+		\textbf{Input:} & $\Phi_d$  -- многочлен степени $d$,\\
+		& $p$ -- малое простое (обычно 3), \\
+		& $q$ -- простое.\\
+		\textbf{Output:} & $f, g \in \Z[x] / \Phi $ -- секретный ключ ($f$ -- обратим),\\
+		& $h \in \Z[x] / \Phi$ -- открытый ключ.
+	\end{tabular}
+		\begin{algorithmic}[1]
+			\State $f, g \leftarrow^\$ \{-p/2 \leqslant k <p/2\}$, где $f$ обратим в $\Z[x] / \Phi $
+			\State Обратить $f \in \Z[x]/\Phi$ сначала по модулю $p$, затем по модулю $q$: 
+			\[ \mathbf{f} := \left( (f^{-1} \pmod p)^{-1} \pmod{q} \pmod{\Phi} \right)\]
+			\State $h := p\cdot g \cdot \mathbf{f}  \bmod q \bmod \Phi$
+			\State \Return $g,f,h$
+		\end{algorithmic}
+	\end{algorithm}
+	
+	Алгоритм шифрования представлен ниже:
+	
+	\begin{algorithm}[H] \caption{Encrypt} \label{encrypt}
+		\begin{tabular}{ll}
+		\textbf{Input:}  & $\Phi_d$ -- многочлен степени $d$, \\
+		& $p$ -- малое нечётное простое (обычно 3), \\
+		& $q$ -- простое, \\
+		& $f,g$ -- секретный ключ,  \\
+		& $m \in \Z[x]/\Phi$ -- сообщение с коэффициентами $m_i \in \{-p/2 \leqslant k <p/2\}$\\ 
+		\textbf{Output:} & $c$ -- зашифрованное сообщение.
+		\end{tabular}
+		\begin{algorithmic}[1]
+			\State $ r \leftarrow^\$ \{-p/2 \leqslant k <p/2\} $ -- ослепляющий многочлен.
+			\State $c := h\cdot r + m \pmod{q}$
+			\State \Return $c$
+		\end{algorithmic}
+	\end{algorithm}
+	
+	Расшифровать сообщение можно при помощи следующего алгоритма:
+	
+	\begin{algorithm}[H] \caption{Decrypt} \label{decrypt}
+		\begin{tabular}{ll}
+		\textbf{Input:} & $\Phi_d$ - многочлен степени $d$,\\
+		& $p$ - малое простое (обычно 3),\\
+		& $q$ - простое, \\
+		& $f,g$ - секретный ключ, \\
+		& $c \in \Z[x]/\Phi$ - зашифрованное сообщение.\\
+		\textbf{Output:} & $m$ -- дешифрованное сообщение
+	\end{tabular}
+		\begin{algorithmic}[1]
+			\State $ a:= ( e\cdot f \pmod{q} ) \pmod{p} $
+			\State \Return $m = \left( a\cdot (f^{-1} \pmod{p}) \right) \pmod{p}$
+		\end{algorithmic}
+	\end{algorithm}
+
+	Доказать корректность несложно: по модулю $q$ имеем $e = ( p\cdot g \cdot \mathbf{f})\cdot r + m $. Тогда $a = e \cdot f = p \cdot g \cdot r +  m\cdot f$. Если взять $a$ по модулю $p$ и в результате операций зашифрования и расшифрования не произошло переполнения, то останется $b = m\cdot f \pmod{p}$. Умножим $b$ на $f^{-1} \pmod{p}$ и получим $m \pmod{p}$. Заметьте, что хранить коэффициенты всех элементов кольца многочленов по модулю $p$ или $q$ нужно в промежутках $\{-p/2 \leqslant k <p/2\}$ и $\{-q/2 \leqslant k <q/2\}$ соответственно.
+	
+	 В 1999-м году Копперсмитом \cite{coppersmith1997lattice} была предложена первая атака при помощи решёток на криптосистему NTRU. Оригинальная атака опиралась на особый вид многочлена $\Phi = x^{2^n} - 1$, но мы приведём более общую атаку. Рассмотрим  алгебраическую решётку:
+	 \begin{equation}
+	 	B = \begin{pmatrix}
+	 		q & 0 \\
+	 		h & 1 \\
+	 	\end{pmatrix},
+	 \end{equation}
+ 	где, помимо векторов $(q,0)$ и $(h,1)$ из $(\Z[x] / \Phi)^2$ лежат также их линейные комбинации с коэффициентами из $\Z[x] / \Phi$, если $\Phi$ -- это циклотомический многочлен. В этом случае $\Z[x] / \Phi$ - это кольцо целых числового поля $\Q[x] / \Phi$.
+ 	
+ 	В ней же лежит вектор с коэффициентами $(g,f)$ относительно базиса $B$. Его координатами являются $(g,f) \cdot B = (qg + g, f)$. Так как вместе с вектором решётки вида $(qt+x,y)$ в ней же лежит и вектор вида $(x,y)$ (подумайте, почему), то в решётке, порождённой $B$ лежит и вектор $(g,f)$. Он является аномально коротким и может быть найден при помощи BKZ алгоритма.
+ 	
+ 	Но как редуцировать алгебраические решётки? На данный момент нам неизвестно о существовании специализированных эффективных алгоритмов редукции алгебраических решёток. Поэтому нам придётся погрузить решётку в поле $\Q$.
+ 	Пусть $K = \Q[x] / \Phi$ циклотомическое поле, заданное циклотомическим многочленом $\Phi$. Тогда $K$ получается присоединением примитивного корня $\zeta_f$ степени $f$ из единицы \footnote{Число $f$ называют кондуктором поля. Степень $d$ поля и кондуктор соотносятся через функцию Эйлера: $d = \phi(f)$}. Коэффициентным вложением элемента $k=\sum_{0\leqslant i <d} k_i \cdot \zeta^i \in K$ является вектор размерности $d$, состоящий из чисел $k_i$. Вложением вектора $(x,y)$ является решётка над полем $\Q$ размерности $d$ задаваемая базисом, состоящим из $d$ векторов длины $2d$: $\zeta^i \cdot (x,y)$ для $0 \leqslant i < d$. Базис вложения решётки является базисом, состоящим из вложений всех исходных векторов алгебраической решётки.
+ 	
+ 	\textbf{Пример:} пусть $K$ -- шестое циклотомическое поле ($\Phi = x^2 - x + 1$). Тогда $d=2$ и мы имеем $\zeta_6^2- \zeta_6 +1 = 0$. Пусть: 
+ 		 \begin{equation}
+ 		B = \begin{pmatrix}
+ 			7 & 0 \\
+ 			1\cdot \zeta_6 + 1& 1 \\
+ 		\end{pmatrix}.
+ 	\end{equation}
+	Тогда вложением элемента $x+y\cdot \zeta_6 \in K$ в $\Q$ будет решёлка ранга 2, порождённая векторами $(x,y)$ и $(\zeta_6 x, \zeta_6 y)$, а вложением $B$ будет:
+	\begin{equation*}
+		\begin{pmatrix}
+			7 & 0 & 0 & 0\\
+			0 & 7 & 0 & 0\\
+			1 & 1 & 1 & 0 \\
+			-1 & 2 & 0 & 1\\
+		\end{pmatrix}
+	\end{equation*}
+
+	Как и в случае с RSA, неправильно подобранные параметры могут привести к слабой защищённости криптосистемы. В случае криптосистем на решетках, как правило, чем больше размерность поля, тем защищённей система. Однако непропорционально большой $q$, суперполиномиально зависящий от $d$ тоже сильно бьёт по защищенности системы \cite{2021:999}. Данная атака основана на наблюдении, что нам необязательно находить секретный ключ: достаточно найти достаточно короткий вектор $(g',f')$ в алгебраической подрешётке, порождённой $(g,f)$ и использовать его в качестве ключа.
+	
+	\section*{Задание}
+
+	В данной лабораторной работе вам будет дан $432$-й циклотомический многочлен $x^{144}-x^{72}+1$ степени 144, простые $q \approx 2^{13}$, $p=3$, публичный ключ $h$ и зашифрованное сообщение $e$. Вам нужно найти короткий вектор решётки $(g',f')$  из плотной подрешётки, порождённой $(g,f)$ и дешифровать с его помощью сообщение.
+	Для этого вам следует построить базис решётки $B$, вложить его в $\Q$ и вызвать на нём LLL. После этого следует вызвать BKZ алгоритм с возрастающим параметром размера блока $\beta$ \footnote{Мы вызывали, начиная с $\beta=4$ с шагом в $2$.}. Примеры составлены так, что при $\beta \approx 40$ такой вектор должен отыскаться. В сообщении содержится название музыкальной группы, поэтому корректность атаки можно проверить наглядным образом.
+	Заметьте, что секретный ключ $(g',f')$ будет найден с точностью до знака и умножения на степень $\zeta_{432}^i$, где $i<144$, поэтому стоит сгенерировать 288 ключей и проверить, какой из них подойдёт.
+	
+	Параметры системы для каждой группы представлены в файле~\url{https://crypto-kantiana.com/elena.kirshanova/teaching/lattices_2023/lab4params.txt}
+	
+		\bibliography{citations}{}
+	\bibliographystyle{plain}
+\end{document}
