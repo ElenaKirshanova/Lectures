@@ -1,0 +1,135 @@
+% !TeX spellcheck = ru_RU-Russian
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode} 
+\usepackage{enumitem}
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+\usepackage{pgfplots, subfigure}
+
+
+% MACROS 
+% PROBABILITY SYMBOLS
+\newcommand*\PROB\Pr 
+\DeclareMathOperator*{\EXPECT}{\mathbb{E}}
+
+
+% GROUPS/DISTRIBUTIONS/SETS/LISTS
+\newcommand{\N}{{{\mathbb N}}}
+\newcommand{\Z}{{{\mathbb Z}}}
+\newcommand{\Q}{{{\mathbb Q}}}
+\newcommand{\R}{{{\mathbb R}}}
+\newcommand{\F}{{{\mathbb F}}}
+\newcommand{\PP}{{{\mathbb P}}}
+\newcommand*{\IZ}{\ensuremath{\mathbb{Z}}}
+\newcommand*{\IN}{\ensuremath{\mathbb{N}}}
+\newcommand*{\IR}{{{\mathbb R}}}
+\newcommand{\Zp}{\ints_p} % Integers modulo p
+\newcommand{\Zq}{\ints_q} % Integers modulo q
+\newcommand{\Zn}{\ints_N} % Integers modulo N
+\newcommand{\Zr}{\ensuremath{\mathbb{Z}/r\mathbb{Z}}} % Integers modulo N
+\newcommand*{\dDR}{\mathrm{d}} %de-Rham-Differential (the d in dx, dy, dz and so on)
+\newcommand{\transpose}{\mkern0.1mu^{\mathsf{t}}}
+\newcommand*{\union}{\mathbin{\cup}}
+
+% Landau 
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand*{\OLandau}{\bigO}
+\newcommand*{\WLandau}{\Omega}
+\newcommand*{\xOLandau}{\widetilde{\OLandau}}
+\newcommand*{\xWLandau}{\widetilde{\WLandau}}
+\newcommand*{\TLandau}{\Theta}
+\newcommand*{\xTLandau}{\widetilde{\TLandau}}
+\newcommand{\smallo}{o} %technically, an omicron
+\newcommand{\softO}{\widetilde{\bigO}}
+\newcommand{\wLandau}{\omega}
+\newcommand{\negl}{\mathrm{negl}} 
+
+% Misc
+\newcommand{\eps}{\varepsilon}
+\newcommand{\inprod}[1]{\left\langle #1 \right\rangle}
+
+ 
+\newcommand{\handout}[5]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf  } \hfill #2 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{#3}{}{Лабораторная работа #1}}
+
+\newtheorem{theorem}{Теорема}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Предложение}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Определение}
+
+\newtheorem{claim}[theorem]{Утверждение}
+\newtheorem{fact}[theorem]{Факт}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\theoremstyle{definition}
+\newtheorem{examples}[theorem]{Примеры}
+
+\theoremstyle{definition}
+\newtheorem{example}[theorem]{Пример}
+
+% 1-inch margins
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 6.5in
+
+\parindent 0in
+\parskip 1.5ex
+
+\begin{document}
+    
+    \lecture{\textnumero 1}{Осень 2023}{Преподаватель: Новосёлов Семён}{}
+    
+    Разработать программу в системе компьютерной алгебры Sage, реализующую следующие функции:
+    
+    \begin{enumerate}
+        \item \texttt{jInvariant}($a_1$, $a_2$, $a_3$, $a_4$, $a_6$), где $a_1$, $a_2$, $a_3$, $a_4$, $a_6$ -- коэффициенты кривой, заданной уравнением Вейерштрасса. Если кривая является эллиптической, функция возвращает $j$-инвариант кривой, иначе сообщение о том, что кривая сингулярна.
+        \item \texttt{randIsomorphic}($a_1 = 0$, $a_2 = 0$, $a_3 = 0$, $a_4 = 0$, $a_6 = 0$), где $a_1$, $a_2$, $a_3$, $a_4$, $a_6$, $a$, $b$ -- коэффициенты эллиптической кривой $E_1$ в общем случае, или в случае $char(K)\neq 2, 3$. Функция возвращает коэффициенты кривой~$E_2$, изоморфной~$E_1$ над $\mathbb{Q}$ путём случайного выбора параметров~$(u, r, s, t)$. Если коэффициенты $a_1$, $a_2$, $a_3$, $a_4$, $a_6$ задают сингулярную кривую, функция терминирует с соответствующим сообщением.
+        \item \texttt{isIsomorphic}($a_1$, $a_2$, $a_3$, $a_4$, $a_6$, $\_a_1$, $\_a_2$, $\_a_3$, $\_a_4$, $\_a_6$, $p$), где $a_1$, $a_2$, $a_3$, $a_4$, $a_6$ -- коэффициенты эллиптической кривой~$E_1$, $\_a_1$, $\_a_2$, $\_a_3$, $\_a_4$, $\_a_6$ -- коэффициенты эллиптической кривой $E_2$, $p$ -- простое число (означает кривые заданы над~$\mathbb{F}_p$) или $0$ (кривые заданы над~$\mathbb{Q}$). Функция определяет, являются ли кривые изоморфными над~$\mathbb{F}_p$ (или~$\mathbb{Q}$), и возвращает одно из значений $\in$ $\{isomorphic, non-isomorphic\}$. Если коэффициенты $a_1$, $a_2$, $a_3$, $a_4$, $a_6$ или $\_a_1$, $\_a_2$, $\_a_3$, $\_a_4$, $\_a_6$ задают сингулярную кривую, функция терминирует с соответствующим сообщением.
+        \item \texttt{findExtension}($a_1$, $a_2$, $a_3$, $a_4$, $a_6$, $\_a_1$, $\_a_2$, $\_a_3$, $\_a_4$, $\_a_6$, $p$), коэффициенты эллиптической кривой $E_1$,
+        $\_a_1$, $\_a_2$, $\_a_3$, $\_a_4$, $\_a_6$ -- коэффициенты эллиптической кривой $E_2$, заданные над~$\mathbb{F}_p$ ($p$ интерпретировать аналогично предыдущей функции).Функция определяет, над каким полем кривые~$E_1 \simeq E_2$ и возвращает степень расширения этого поля над~$\mathbb{F}_p$. Если коэффициенты $a_1$, $a_2$, $a_3$, $a_4$, $a_6$ или $\_a_1$, $\_a_2$, $\_a_3$, $\_a_4$, $\_a_6$ задают сингулярную кривую, функция терминирует с соответствующим сообщением.
+    \end{enumerate}
+
+    Требования к сдаче
+    \begin{itemize}
+        \item Исходный код должен содержать комментарии к каждой из функций с описанием входных и выходных параметров
+        \item Лабораторную следует выполнять модификацией файла с тестами, заменяя строку "\texttt{\# your code here.}" на код, реализующий функцию.
+        \item Функции должны работать на всех примерах, что проверяется запуском команды:
+        \\\texttt{sage -t file\_with\_tests.sage}
+        \item Студент должен понимать, что он написал, зачем, а также ответить на теоретические вопросы.
+    \end{itemize}
+    
+\end{document}
