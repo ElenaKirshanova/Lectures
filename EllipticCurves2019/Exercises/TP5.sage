@@ -2,7 +2,7 @@
 q = Primes().next(8382093480298834)
 p = Primes().next(833489843)
 
-print 'p:', p
+#print 'p:', p
 
 N = p*q
 #N = 100181800505809010267
@@ -35,7 +35,7 @@ def is_on_curve(N, Px, Py, a, b):
   return False
 
 E = EllipticCurve(ZN, [A, B])
-print E
+#print E
 assert( is_on_curve(ZN, x, y, A, B))
 
 def mySum(x1, y1, x2, y2, N, A):
@@ -77,7 +77,7 @@ def fastScalar(x1, y1, k, N, A):
       Q = mySum(x1, y1, Q[0], Q[1], N, A)
     else:
       Q = mySum(Q[0], Q[1], Q[0], Q[1], N, A)
-    
+
     #print j, k_bits[j], Q
     j = j+1
   return Q
@@ -117,7 +117,7 @@ def fastScalarRL(x1, y1, k, N, A):
 
 
 P = E([x,y])
-print 'P:', P
+#print 'P:', P
 p_prime = 2
 
 #print 'P:', P
@@ -144,7 +144,7 @@ def factorECM(N):
   ZN = IntegerModRing(N)
   Ntrials = 15
   for i in xrange(Ntrials):
-    print i
+    #print i
     # get a curve and a point on it
     A = ZN.random_element()
     x = ZN.random_element()
@@ -172,7 +172,5 @@ def factorECM(N):
       p_prime = Primes().next(p_prime)
     return 'no non-trivial divisor found'
 
-print N
-print 'factorECM:', factorECM(17*19)
-
-
+#print N
+print('factorECM:', factorECM(17*19))
