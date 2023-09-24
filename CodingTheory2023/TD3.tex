@@ -1,0 +1,150 @@
+\documentclass[11pt]{exam}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\noprintanswers % pour enlever les réponses
+%\printanswers
+
+\unframedsolutions
+\SolutionEmphasis{\itshape\small}
+\renewcommand{\solutiontitle}{\noindent\textbf{A: }}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel}
+
+
+\usepackage[margin=0.73in]{geometry}
+%\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+%\usepackage{fullpage}
+
+
+\usepackage{hyperref}
+\usepackage{appendix}
+\usepackage{enumerate}
+
+
+\usepackage{times,graphicx,epsfig,amsmath,latexsym,amssymb,verbatim}%,revsymb}
+\usepackage{algorithmicx, enumitem, algpseudocode, algorithm, caption}
+
+
+%%%%%%%%%%%%%%%%%%%%%
+% Handling comments and versions %%%
+%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\extra}[1]{}
+
+\renewcommand{\comment}[1]{\texttt{[#1]}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}
+
+% Landau 
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand*{\OLandau}{\bigO}
+\newcommand*{\WLandau}{\Omega}
+\newcommand*{\xOLandau}{\widetilde{\OLandau}}
+\newcommand*{\xWLandau}{\widetilde{\WLandau}}
+\newcommand*{\TLandau}{\Theta}
+\newcommand*{\xTLandau}{\widetilde{\TLandau}}
+\newcommand{\smallo}{o} %technically, an omicron
+\newcommand{\softO}{\widetilde{\bigO}}
+\newcommand{\wLandau}{\omega}
+\newcommand{\negl}{\mathrm{negl}} 
+
+
+\newtheorem{theorem}{Теорема}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Предложение}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Определение}
+
+
+\newcommand{\nc}{\newcommand}
+\nc{\eps}{\varepsilon}
+\nc{\RR}{{{\mathbb R}}}
+\nc{\CC}{{{\mathbb C}}}
+\nc{\FF}{{{\mathbb F}}}
+\nc{\NN}{{{\mathbb N}}}
+\nc{\ZZ}{{{\mathbb Z}}}
+\nc{\PP}{{{\mathbb P}}}
+\nc{\QQ}{{{\mathbb Q}}}
+\nc{\UU}{{{\mathbb U}}}
+\nc{\OO}{{{\mathbb O}}}
+\nc{\EE}{{{\mathbb E}}}
+
+\newcommand{\val}{\operatorname{val}}
+
+\newcommand{\wt}{\ensuremath{\mathit{wt}}}
+\newcommand{\Id}{\ensuremath{I}}
+\newcommand{\transpose}{\mkern0.7mu^{\mathsf{ t}}}
+\newcommand*{\ScProd}[2]{\ensuremath{\langle#1\mathbin{,}#2\rangle}} %Scalar Product
+
+\pretolerance=1000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT STARTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tikz}
+\usetikzlibrary{automata}
+\DeclareMathOperator{\Vol}{Vol}
+
+\begin{document}
+	{\noindent
+		\textsc{БФУ им. И. Канта -- Теория кодирования и сжатия информации}
+		\hfill {Е. Киршанова // 2023\\}
+	\hrule
+	\begin{center}
+		{\Large\textbf{
+				\textsc{Практика № 3} \\[5pt] {25.09.23}
+		} } 
+	\end{center}
+	\hrule \vspace{5mm}
+	
+	\thispagestyle{empty}
+	
+	\vspace{0.2cm}
+
+	
+\section{Граница Синглтона}
+	Докажите, что для $q>1$, $n, d \in \NN$, таких что $1 \leq d \leq n$, выполняется
+	\[
+		A_q(n,d) \leq q^{n-d+1}.
+	\]
+	
+
+\section{Коды с максимальным расстоянием}
+Пусть $C$-линейный $[n,k,d]$-- код с проверочной матрицей $H$. Докажите, что $C-$ код с максимальным расстоянием тогда и только тогда, когда $C^\perp$-- код с максимальным расстоянием.
+
+
+\section{Альтернативное доказательство Теоремы 4}
+	Пусть $q$ - простое, $n,k,d \in \NN$, такие что $k \leq n-d+1$.	 Рассмотрим множество матриц над $\FF_q$ вида
+	\[
+		H = [A | \Id_{n-k}] \in \FF_q^{n-k \times n}
+	\]
+	и зададим распределение на этом множестве через равномерное распределение над $(n-k \times k)$ матрицами $A$ над $\FF_q$.
+	\begin{enumerate}
+		\item Докажите, что для любого ненулевого вектора $y \in \FF_q^n$
+		\[
+			\Pr_{H \xleftarrow{\$} \FF_q^{n-k \times n}}  \left[Hy = 0\right]  = 
+			\begin{cases}
+				0, & \text{первые $k$ позиций $y$ нулевые} \\
+				q^{k-n}, & \text{иначе}.
+			\end{cases}
+		\]
+		\item  Докажите, что \[\Pr_{H \xleftarrow{\$} \FF_q^{n-k \times n}}  \left[H \text{ содержит $d-1$ лин.\ завис.\ столбцов }\right] \leq \rho, \] где
+		\[
+			\rho = q^{k-n} \cdot \frac{\Vol_q^n(d-1) - \Vol_q^{n-k}(d-1)}{q-1}.
+		\]
+	\end{enumerate}
+
+\end{document}
