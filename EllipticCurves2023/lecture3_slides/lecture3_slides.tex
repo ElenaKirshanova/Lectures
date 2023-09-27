@@ -148,7 +148,7 @@ E[2] = \left\{ \mathcal{O}, (e_1, 0), (e_2 ,0), (e_3,0) \right\} \simeq \mathbb{
     {\psi _{2m + 1}} &= {\psi _{m + 2}}\psi _m^3 - {\psi _{m - 1}}\psi _{m + 1}^3, \quad m \geqslant 2 \\
     {\psi _{2m}} &= {\left( {2y} \right)^{ - 1}} \cdot {\psi _m} \cdot \left( {{\psi _{m + 2}}\psi _{m - 1}^2 - {\psi _{m - 2}}\psi _{m + 1}^2} \right),\quad m \geqslant 3
 \end{align*}
-\structure{Получение}: из формул сложения в координатах Якоби.
+\structure{Получение}: из формул сложения и свойств $\wp$-функции Вейерштрасса (теория кривых над~$\mathbb{C}$).
 \end{frame}
 
 
@@ -176,7 +176,7 @@ E[2] = \left\{ \mathcal{O}, (e_1, 0), (e_2 ,0), (e_3,0) \right\} \simeq \mathbb{
         \psi _n^2\left( x \right) &= {n^2}{x^{{n^2} - 1}} + {\text{ мономы степени }} < {n^2} - 1
     \end{align*}
 \end{enumerate}
-Док-во: [Washington, Lemma 3.3].
+\ProofBegin \structure{Док-во:} [Washington, Lemma 3.3] \ProofEnd
 \end{frame}
 
 \begin{frame}{Многочлены деления}
@@ -185,6 +185,9 @@ E[2] = \left\{ \mathcal{O}, (e_1, 0), (e_2 ,0), (e_3,0) \right\} \simeq \mathbb{
     \[[n] P = \left( {\frac{{{\phi _n}\left( x \right)}}{{\psi _n^2\left( x \right)}},\;\frac{{{\omega _n}\left( x \right)}}{{{{\left( {{\psi _n}\left( {x,y} \right)} \right)}^3}}}} \right)
     \]
 \end{block}
+
+\ProofBegin \structure{Док-во:} [Washington, \S9.5] \ProofEnd
+\vspace{1em}
 
 Таким образом, отображение (эндоморфизм) <<умножение на $n$>> задается рациональными функциями.
 \end{frame}
@@ -216,6 +219,10 @@ $e_n(S,T) = 1, \forall S \implies T = \mathcal{O}$
 \end{block}
 
 Другие билинейные отображения: спаривание Тейта, эта-спаривание.
+
+\vspace{1em}
+\structure{Вычисление:} алгоритм Миллера на базе быстрого алгоритма скалярного умножения.
+
 \end{frame}
 
 %\begin{frame}{Алгоритм Миллера}
@@ -228,27 +235,27 @@ $e_n(S,T) = 1, \forall S \implies T = \mathcal{O}$
 
 \vspace{1em}
 
-\structure{Атака на DLOG:} $|\left<P\right>| = n$, $Q = [l] P$.
+\structure{Атака на DLOG:} $|\left<P\right>| = n$, $Q = [\ell] P$.
     \begin{enumerate}
         \item Выбрать случайную точку $R$.
         \item $\alpha = e_n(P, R)$
         \item $\beta  = e_n(Q, R)$ \hfill 
         \begin{scriptsize}
-        $(\beta = e_n(l P, R) = e_n(P, R)^l = \alpha^l)$
+        $(\beta = e_n(\ell P, R) = e_n(P, R)^\ell = \alpha^\ell)$
         \end{scriptsize}
-        \item $l = DLOG(\alpha, \beta)$ в $\mathbb{F}_{q^k}$
+        \item $\ell = DLOG(\alpha, \beta)$ в $\mathbb{F}_{q^k}$
     \end{enumerate}    
 
 \vspace{1em}
 Конструктивное использование: ZCash, IBE, BLS.
 \end{frame}
 
-\begin{frame}{zkProofs}
-\end{frame}
-
-\begin{frame}{BLS}
-%Boneh-Lynn-Shacham (BLS)
-\end{frame}
+%\begin{frame}{zkProofs}
+%\end{frame}
+%
+%\begin{frame}{BLS}
+%%Boneh-Lynn-Shacham (BLS)
+%\end{frame}
 
 \begin{frame}{Литература}
 \nocite{Menezes1993}\nocite{Blake1999}\nocite{Washington2008}
@@ -268,7 +275,7 @@ $e_n(S,T) = 1, \forall S \implies T = \mathcal{O}$
 
 \structure{Страница курса:}\\
 {\footnotesize
-    \href{https://crypto-kantiana.com/semyon.novoselov/teaching/elliptic_curves_2022}{crypto-kantiana.com/semyon.novoselov/teaching/elliptic\_curves\_2022}
+    \href{https://crypto-kantiana.com/semyon.novoselov/teaching/elliptic_curves_2023}{crypto-kantiana.com/semyon.novoselov/teaching/elliptic\_curves\_2023}
 }
 \end{frame}
 
