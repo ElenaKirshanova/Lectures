@@ -1,0 +1,364 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+
+
+
+
+
+%\newcommand\strikeout[2][]{%
+%	\begin{tabular}[b]{@{}c@{}} 
+%		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+%		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+%\end{tabular}}
+
+
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+%\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+%{rgb(0cm)=(1,1,1);
+%	rgb(0.7cm)=(1,1,1);
+%	rgb(0.719cm)=(1,1,1);
+%	rgb(0.72cm)=(0.975,0,0);
+%	rgb(0.9cm)=(1,1,1)}
+%
+%\usepackage[absolute,overlay]{textpos} %to clip to a corner
+%\newcommand\FrameText[1]{%
+%	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+%		\raggedright #1\hspace{.5em}
+%\end{textblock*}}
+
+%\makeatletter
+%\let\save@measuring@true\measuring@true
+%\def\measuring@true{%
+%	\save@measuring@true
+%	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+%	\def\beamer@sortzeroread##1<##2>{}%
+%	\def\beamer@finalnospec{}%
+%}
+%\makeatother
+
+
+\title{Лекция №3 \\[10pt]
+	Часть 2. Атаки на блочнык шифры.}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+
+
+\begin{frame}{Блок-шифр}
+\begin{figure}
+	\includegraphics[width=0.7\textwidth]{BlockCipherGeneral}
+\end{figure}
+
+\end{frame}
+
+
+
+\begin{frame}{Алгоритм перебора}
+
+\Large
+{\color{Orange}\textbf{Идея:}}  перебор ключа $k \in \{0,1\}^{\kappa}$ \\[5pt]
+	
+	Для DES/AES/GOST:  достаточно двух пар (открытый текст, шифр-текст) $(m_1, c_1 = \Enc(k, m_1)), (m_2, c_2=\Enc(k,m_2))$, чтобы определить $k$ с большой вероятностью. \\
+	
+{\color{Orange}\textbf{Сложность:}} $\bigO(2^{\kappa})$ \\[110pt]
+
+
+
+{\color{Orange}\textbf{Пример:}}  DES $k \in \{0,1\}^{56}$:
+
+\begin{itemize}
+	\item {\color{Orange}\textbf{'99-e}} ~22 часа на DeepCrack: дорогое железо+распределенная сеть
+	\item {\color{Orange}\textbf{'07-е}}~13 дней COPACOBANА: FPGA, дешевле
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Встреча посередине}
+\LARGE
+{\color{Orange}\textbf{Плохая идея:}} шифрование ``матрёшкой'' с двумя ключами (2-DES).
+
+\[
+	\Enc(m) = \Enc(k_2 , \Enc(k_1, m)) , \quad k = (k_1, k_2) \in \{0,1\}^{2 \kappa}
+\]
+{\color{Orange}\textbf{Сложность перебора:}} $\bigO(2^{2\kappa})$ \\
+{\color{Orange}\textbf{Сложность Встречи посередине:}} $\bigO(2^{\kappa})$ \\[5pt]
+
+Дано $(m^\star, c^\star = \Enc(k^\star_2 , \Enc(k^\star_1, m^\star))  )$\\[5pt]
+
+\begin{tikzpicture}
+\draw[-, color=white] (-2,-2.) -- (-2, 1.5); 
+\draw[-, color=white] (2,-2.) -- (2, 1.5); 
+\node[] at (-0., 1.4)  {T};
+
+\node[] at (0., 0.5)  {$(k_1, c = \Enc(k_1, m))$};
+\node[] at (0., 0.1)  {$\vdots$};
+\node[] at (0., -0.6)  {$\forall k_1 \in\{0,1\}^{\kappa} $};
+
+\node[] at (5., 1)  {For all $ k_2 \in\{0,1\}^{\kappa}: $};
+\node[] at (5.5, 0.4)  {$c' = \Dec(k_2, c^\star)$};
+\node[] at (5.5, -0.2)  {$\exists c \in T == c' $ ?};
+\end{tikzpicture}
+
+
+	
+\end{frame}
+%
+\begin{frame}{Атаки на дизайн: линейный криптанализ }
+\LARGE
+	Цель {\color{Orange}\textbf{линейного криптанализа:}} получить уравнения для ключа $k$ через биты $m, c$.
+	
+	{\color{Orange}\textbf{Пример:}} S-бокс $\{0,1\}^2 \rightarrow \{0,1\}^2$
+	\begin{columns}
+	\begin{column}{0.4\textwidth}
+		\begin{tabular}{c | c | c | c}
+			0 & 1 & 2 & 3 \\ \hline
+			2 & 0 & 3 & 1
+		\end{tabular}
+	\end{column}
+	\begin{column}{0.5\textwidth}
+		\begin{tabular}{c | c | c | c}
+			$X_0$ & $X_1$ & $Y_0$ & $Y_1$ \\ \hline
+			0 & 0 & 1 & 0 \\
+			0 & 1 & 0 & 0 \\
+			1 & 0 & 1 & 1 \\
+			1 & 1 & 0 & 1 
+		\end{tabular}
+	\end{column}
+	\end{columns}
+	
+	Линейность: \\
+	$X_0 = Y_1$ с вероятностью 1\\
+	$X_1 = Y_0 \oplus 1$  с вероятностью 1\\[10pt]
+	
+	{\color{Orange}\textbf{Такой $S$-box не является стойким:}} легко получить линейные \\ уравнения вида $f(m_i, c_i, k_i) = 0$.
+	
+\end{frame}
+
+\begin{frame}{Линейный криптанализ: таблица линейной аппроксимации }
+\large
+
+\begin{center}
+\begin{tabular}{c | c | c | c | c | c }
+	$X_0$ & $X_1$ & $Y_0$ & $Y_1$ & $X_0 + X_1 $ & $Y_0+Y_1$\\ \hline
+	0 & 0 & 1 & 0 & 0 & 1 \\
+	0 & 1 & 0 & 0 & 1 & 0\\
+	1 & 0 & 1 & 1 & 1 & 0\\
+	1 & 1 & 0 & 1 & 0 & 1\\ 
+\end{tabular}
+\end{center}
+
+\vspace{5pt}
+
+
+\begin{tabular}{c | c | c | c | c  }
+	& \textbf{$0\cdot Y_0 \oplus 0\cdot Y_1 $} & \textbf{$0\cdot Y_0 \oplus 1\cdot Y_1 $} & \textbf{$1\cdot Y_0 \oplus 1\cdot Y_1 $} & \textbf{$1\cdot Y_0 \oplus 1\cdot Y_1 $} \\ \hline
+	& & & &\\ 
+	\textbf{$0\cdot X_0 \oplus 0\cdot X_1 $} & & & &\\  [8pt] \hline
+	& & & &\\ 
+	\textbf{$0\cdot X_0 \oplus 1\cdot X_1 $} & & & &\\  [8pt] \hline 
+	& & & &\\ 
+	\textbf{$1\cdot X_0 \oplus 0\cdot X_1 $} & & & &\\  [8pt] \hline 
+	& & & &\\ 
+	\textbf{$1\cdot X_0 \oplus 1\cdot X_1 $} & & & &\\  [8pt] 
+\end{tabular}
+
+\vspace{55pt}
+\end{frame}
+
+\begin{frame}{Атаки на дизайн: дифференциальный криптанализ }
+\Large 
+Положим $Y = S(m \oplus k), \; Y' = S(m' \oplus k)$ -- одно применение $S$-бокса. \\[10pt]
+$\Delta Y = Y' \oplus Y$. $\Delta X = (m \oplus k) \oplus (m' \oplus k) = m \oplus m'$ \\[10pt]
+
+Цель {\color{Orange}\textbf{дифференциального криптанализа:}} использовать частотный анализ для вычисления вероятности появления $\Delta Y$ при каком-либо $\Delta X$. \\[10pt]
+
+	\begin{tabular}{c | c | c | c | c  }
+		$X$ & $Y$ & $ \Delta X = 10   $ & $ \Delta X = 01   $ & $ \Delta X = 11   $  \\ \hline
+		& & & &\\ [-2pt]
+		00 & 10 &  & &  \\  [5pt] \hline
+		& & & &\\ [-2pt]
+		01 & 00 &  & & \\[5pt] \hline
+			& & & &\\ [-2pt]
+		10 & 11 &  & & \\ [5pt] \hline
+			& & & &\\ [-2pt]
+		11 & 01 &  & & 
+	\end{tabular}% 
+\hspace{5pt}
+	\begin{tabular}{c | c | c | c | c  }
+		& 00 & 01& 10 & 11 \\  [5pt]  \hline
+	00 & & & &  \\   \hline
+	01 & & & &  \\   \hline
+	10 & & & &  \\  \hline
+	11 & & & &  \\   \hline
+\end{tabular}%
+\end{frame}
+
+
+\begin{frame}{Атаки на реализацию}
+\LARGE
+\begin{itemize}
+	\itemsep 1em
+	\item Атаки по сторонним каналам (side-channel attacks): \\[2pt]
+	замер {\color{Orange}\textbf{времени}} или {\color{Orange}\textbf{мощности}}, используемых в процессе $\Enc, \Dec$   \\[5pt]
+	Эти величины не должны зависеть от секретного ключа.
+
+	\item Внесение неисправностей (Fault-injection attacks)  \\[5pt]
+	 внешние воздействия на устройство, порождения аппаратных ошибок (нагрев, ЭМ волны)
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Напоследок}
+\Huge
+
+\begin{enumerate}
+	\itemsep 1em
+	\item {\color{Orange}\textbf{Не}} изобретайте {\color{Orange}\textbf{свой собственный}}  блок-шифр
+	\item {\color{Orange}\textbf{Используйте}} реализации блок-шифров из проверенных временем библиотек (OpenSSL)
+
+\end{enumerate}
+\end{frame}
+
+
+%\begin{frame}{Что почитать}
+%	\begin{figure}
+%		\includegraphics[height=0.7\textheight]{Book_cover}
+%	\end{figure}
+%\end{frame}
+
+\end{document}

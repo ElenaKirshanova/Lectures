@@ -1,0 +1,333 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{stackengine}
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+%\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+\titlegraphic{
+	
+	%\includegraphics[width=2.5cm]{stayhome}%
+	%\includegraphics[width=4.0cm]{ens_logo_gray}
+}
+\title{Лекция №5 \\[10pt]
+	Часть I. Криптографическая хэш-функция.}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}{Хэш-функции}
+
+\Large
+\begin{center}
+	{\color{Orange} Криптографическая хэш-функция ! = Хэш-функция} \\[10pt]
+\end{center}
+
+Фильтры Блума, контрольные суммы (sumXXX, fletcherXXX),  не являются криптографическими хэш-функциями.
+
+
+\end{frame}
+
+\begin{frame}{Криптографическая хэш-функция: определение}
+\Large
+	{\color{Orange}Криптографическая хэш-функция} -- \underline{двойка} полиномиальных алгоритмов $(\Gen, \Hash)$:
+	\begin{enumerate}
+		\itemsep 7pt
+		\item Вероятностный $\Gen: s \leftarrow \Gen(1^\lambda)$  
+		\item Детерминированный $\Hash_s: \{0,1\}^\star \rightarrow \{0,1\}^\ell$,
+	\end{enumerate}
+
+где $\Hash_s$ является  {\color{Orange} стойкой к коллизиям}: \\[5pt]
+
+для заданного $s$,  не существует ppt алгоритма, который находит $x, x' (x!=x')$,
+\[
+	\Hash_s(x) = \Hash(x')
+\]
+
+{\color{Orange} Криптографическая} хэш-функция \underline{обязана} быть стойкой к коллизиям.\\[5pt]
+
+Существует  \underline{много} коллизий для $\Hash_s$, но должно быть \underline{трудно} найти \\ любую коллизию.
+\end{frame}
+
+\begin{frame}{Свойство криптографической хэш-функции}
+\Large 
+\[
+\Hash_s: \{0,1\}^\star \rightarrow \{0,1\}^\ell
+\]
+
+	{\color{Orange} I.} Стойкость к нахождению прообраза (или односторонность) \\[5pt]
+	Дано: $(s, y \in \{0,1\}^\ell)$\\
+	Найти: $x$, такой что \ $\Hash_s(x) =  y$ \\[5pt]
+	{\color{Orange} Стойкая к коллизиям хэш-функция является стойкой к нахождению прообраза}
+	
+
+	\vspace{20pt}
+	{\color{Orange} II.} Стойкость к нахождению $2$-го прообраза \\[5pt]
+	Дано: $(s, x)$\\
+	Найти: $x'!=x$, такой что\ $\Hash_s(x) =  \Hash_s(x')$ \\[5pt]
+	{\color{Orange}  Стойкая к коллизиям хэш-функция является стойкой к нахождению \\ $2$-го прообраза}
+	
+	\vspace{20pt}
+	
+	Стойкость к коллизиям  $\implies$ 	{\color{Orange} II.}  $\implies$ 	{\color{Orange} I.}  
+\end{frame}
+
+\begin{frame}{Экзотические свойства хэш-функций}
+	\LARGE
+	В мире Bitcoin три свойства хэш-функции могу называться иначе:
+	
+	\begin{align*}
+		\text{нахождение прообраза} & \rightarrow  \text{``hiding''} \\
+		\text{нахождение 2-го прообраза} & \rightarrow  \text{``puzzle-friendliness''} \\
+		\text{стойкость к коллизиям} & \rightarrow  \text{``collision resistance''} \\
+	\end{align*}
+	 
+	
+	То есть для реализации Bitcoin подойдет криптографическая хэш-функция.
+
+\end{frame}
+
+\begin{frame}{Атака на любую хэш-функцию: парадокс Дней рождений}
+\large 
+	Положим $h_1, h_2, \ldots, h_n \in \{0,1\}^\ell$ независимо случайное выбранные строки. Парадокс Дней рождений
+	\[
+	\text{Для } n = \bigO\left (\sqrt{ \abs{ \{0,1\}^\ell }} \right) = \bigO\left( 2^{\ell/2} \right) \quad  \Pr[\exists (i != j) \; : \; h_i = h_j] > 1/2.
+	\]
+	
+	Алгоритм перебора находит коллизию после {\color{Orange} $\bigO(2^{\ell/2})$ } вычисленных хэшей: \\
+	\begin{enumerate}
+		\itemsep 10pt
+		\item Выбрать $ 2^{\ell/2}$ случайных строк $m_1, \ldots, m_{2^{\ell/2}}$ 
+		\item  Для каждой $m_i$ вычислить $h_i = \Hash_s(m_i)$, отсортировать пары $(h_i, m_i)$ по значению\ $h_i$
+		\item  Найти в упорядоченном списке $h_i = h_j$. Коллизия: $(m_i, m_j)$.
+	\end{enumerate}			
+
+	 \vspace{10pt}
+	 
+	 Алгоритм успешен с константной вероятностью по парадоксу ДР.
+	 \vfill
+	\LARGE
+	{\color{Orange} Вывод:} Требуем  $\ell \geq 160$.
+\end{frame}
+
+
+\begin{frame}{Хэш-функции: исторический дайджест}
+\large
+	\begin{enumerate}
+		\itemsep7pt
+		\item 1980e: MD4 (Message Digest) предложено R. Rivest.  {\color{Orange} $\ell = 128$} \\
+		Статус: {\color{Orange} Взломана.} Коллизию можно найти в течение секунд
+		
+		\item 1990: MD5. {\color{Orange} $\ell = 128$} \\
+		Статус: {\color{Orange} Взломана.} Коллизию можно найти в течение секунд
+		\pause
+		\item 1995: SHA-1 (Secure Hash Algorithm 1) {\color{Orange} $\ell = 160$ } \\
+		Статус: {\color{Orange} Взломана}. См.\ \url{https://shattered.io/} два PDF файла с одинаковым значением SHA-. \\
+		{\color{Orange} !:} всё еще используется некоторыми системами (GIT).
+		\pause
+		\item 2001: SHA-2 (SHA-256, SHA-384, SHA-512). {\color{Orange} $\ell=256, 348, 512$} \\
+		Статус: {\color{Orange} Считается безопасной.}
+		\pause
+		\item 2012: SHA-3 (Keccak). SHA-3 {\color{Orange} $\ell = 224/256/348/512$.} \\
+		Статус: {\color{Orange} Считается безопасной.} 
+	\end{enumerate}
+\pause
+В России:
+
+	\begin{enumerate}
+			\item GOST R 34.11-94 and GOST 34.311-95. {\color{Orange} $\ell = 256$} \\
+			 Статус: {\color{Orange} Считается устаревшей.} Коллизия за $2^{105}$ операций,
+			\item  GOST R 34.11-2012. Стрибог {\color{Orange} $\ell = 256, 512$} \\
+			 Статус: {\color{Orange} Считается безопасной.}  
+	\end{enumerate}
+\end{frame}
+
+
+\end{document}

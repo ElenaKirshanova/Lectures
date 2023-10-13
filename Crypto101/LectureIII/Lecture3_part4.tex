@@ -1,0 +1,377 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+
+\title{Лекция №3 \\[10pt]
+	Часть 4. Псевдослучайные функции.}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+\newcommand{\AxisRotator}[1][rotate=0]{%
+	\tikz [x=0.50cm,y=1.10cm,line width=.3ex,-stealth,#1] \draw[color=Orange] (0,0) arc (-150:150:2 and 1);%
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}{Псевдослучайная функция (Pseudorandom function): определение}
+\LARGE
+	Модель безопасного блок-шифра -- {\color{Orange}псевдослучайная функция (PRF).} \\[20pt]
+	
+	Псевдослучайная функция $F(k, x)$ -- {\color{Orange} детерминированный} алгоритм
+	\begin{align*}
+		F : \keyS \times \mathcal{X} &\rightarrow \mathcal{Y} \quad |\keyS|, |\mathcal{X}|, |\mathcal{Y}| < \infty \\ 
+		(k, m) & \rightarrow c,
+	\end{align*}
+	такая что $F(k, \cdot)$ {\color{Orange}``выглядит'' как случайная функция} из $\mathcal{X}$ в $\mathcal{Y}$.\\[10pt]
+	
+
+\end{frame}
+
+\begin{frame}{Безопасность псевдослучайной функции}
+\Large
+
+	 	$\mathcal{F}[\mathcal{X}, \mathcal{Y}]$ -- множество всех функций $f: \mathcal{X} \rightarrow  \mathcal{Y}$. \\[20pt]
+\begin{center}	
+		\begin{tabular}{c c c}
+		{\color{Orange} Челленджер $\mathcal{C}$ } & & {\color{Orange} Атакующий $\mathcal{A}$ }\\ [5pt]
+		$b \xleftarrow{\$} \{0,1\}  $& &\\ [2pt]
+		$\mkern-45mu b ==0: f \xleftarrow{\$} \mathcal{F}[\mathcal{X}, \mathcal{Y}]$  & &\\ [2pt]
+		$b ==1: k\xleftarrow{\$} \keyS, f = F(k, \cdot )$  & &\\ [2pt]
+	 	& $ \xleftarrow{\quad x_i \quad} $  & $x_i \in \mathcal{X}  $\\[5pt]
+		& $\xrightarrow{f (x_i)}$  &\\[5pt]
+		& $\xleftarrow{\quad \hat{b} \quad}$ & \\ [5pt]
+	\end{tabular}
+	\begin{tikzpicture}[overlay]
+	\node at (-3.8, -0.3) {\AxisRotator};
+	\draw[fill=none, draw=white, opacity=0.5] (-9.8,-2.3) rectangle (-4.8,3.0); 
+	\draw[fill=none, draw=white, opacity=0.5] (-3.0,-2.3) rectangle (0.0,3.0); 
+	\end{tikzpicture}
+\end{center}	
+	$\mathtt{W_{F, \adv}}$ -- событие $b == \hat{b}$. 
+	$\mathtt{PRFAdv} = \abs{\Pr[\mathtt{W_{F, \adv}}] - \frac{1}{2}}$ -- выигрыш  $\adv$ \\ [5pt]
+	
+	$F$ -- безопасная псевдослучайная функцию, если $\forall$ ppt $\adv:$  \[\mathtt{PRFAdv} = \negl(\lambda).\] 
+\end{frame}
+
+
+\begin{frame}{Блок-шифр $\implies^\star $ PRF}
+\Large
+Блок-шифр: $\Enc(k, \cdot ): \mathcal{X} \rightarrow \mathcal{X}$ --- перестановка.	 \\[20pt]
+
+\begin{tabular}{c c c}
+	{\color{Orange} Челленджер $\mathcal{C}$ } & & {\color{Orange} Атакующий $\mathcal{A}$ }\\ [5pt]
+	$b \xleftarrow{\$} \{0,1\}  $& &\\ [2pt]
+	$\mkern-45mu b ==0: f \xleftarrow{\$} \color{Orange}\mathcal{F}[\mathcal{X}, \mathcal{X}]$  & &\\ [2pt]
+	$b ==1: k\xleftarrow{\$} \keyS, {\color{Orange} f = \Enc(k, \cdot )}$  & &\\ [2pt]
+	& $ \xleftarrow{\quad x_i \quad} $  & $x_i \in \mathcal{X}  $\\[5pt]
+	& $\xrightarrow{f (x_i)}$  &\\[5pt]
+	& $\xleftarrow{\quad \hat{b} \quad}$ & \\ [5pt]
+\end{tabular}
+\begin{tikzpicture}[overlay]
+\node at (-3.8, -0.3) {\AxisRotator};
+\draw[fill=none, draw=white, opacity=0.5] (-9.9,-2.3) rectangle (-4.8,3.0); 
+\draw[fill=none, draw=white, opacity=0.5] (-3.0,-2.3) rectangle (0.0,3.0); 
+\end{tikzpicture}
+\vfill
+\normalsize
+{$\star$ для достаточно большой длины блока открытого/шифр-текста} 
+\end{frame}
+
+
+
+\begin{frame}{Блок-шифр $\implies^\star $ PRF}
+\LARGE
+{\color{Orange} Теорема. } Пусть $B = (\KeyGen, \Enc, \Dec)$ --- блок-шифр с 
+\[
+\Enc: \keyS \times \mathcal{X} \rightarrow \mathcal{X} - \text{ шифр. функцией, такой что } 1/|\mathcal{X}| - \negl(\lambda).
+\]
+{\color{Orange}$B$ --  безопасный блок-шифр тогда и только тогда, когда $\Enc$ -- безопасная PRF. }\\[10pt]
+
+
+\end{frame}
+
+\begin{frame}{Блок-шифр $\implies^\star $ PRF}
+
+\Large
+\vspace{-30pt}
+\textit{Скетч док-ва.} ppt $\adv$ не может отличить $f  \xleftarrow{\$} \mathcal{F}[\mathcal{X}, \mathcal{X}]$ от $f \xleftarrow{\$} S_{|\mathcal{X}|}$. \\[10pt]
+Положим, $\adv$ делает $\leq Q$ запросов к $\mathcal{C}$. \\[10pt]
+
+\begin{columns}[T]
+	\begin{column}{0.25\textwidth}
+		\begin{tabular}{c c}
+			{\color{Orange} Челленджер $\mathcal{C} $} &\\
+			{\color{Orange} 	$ f  \xleftarrow{\$} \mathcal{F}[\mathcal{X}, \mathcal{X}]$ } & \\[5pt]
+			$z_1, \ldots, z_Q \xleftarrow{\$} \mathcal{X}$ & \\
+			{\color{Orange} if $x_i == x_j$, {\small$(j<i)$} }& \\
+			$\quad y_i := y_j$ & \\
+			\hspace{-65pt}{\color{Orange} else} &  \\
+			$\mkern17mu  y_i := z_i$   & \\
+		\end{tabular}
+		\begin{tikzpicture}[overlay]
+			\draw[fill=none, draw=white, opacity=0.5] (0,-1.1) rectangle (4.2,3.7); 
+		\end{tikzpicture}
+	\end{column}%
+	\begin{column}{0.65\textwidth}
+		\begin{tabular}{c c}
+			{\color{Orange} Челленджер $\mathcal{C} $} &\\
+			{\color{Orange} 	$ f  \xleftarrow{\$} S_{|\mathcal{X}|}$ } & \\[5pt]
+			$z_1, \ldots, z_Q \xleftarrow{\$} \mathcal{X}$ & \\
+			{\color{Orange} if $x_i == x_j$, {\small$(j<i)$} }&  \\
+			$\quad y_i := y_j$ & \\
+			\hspace{-65pt}{\color{Orange} else} &  \\
+				$\mkern17mu  y_i := z_i$   &  \\[4pt]
+			\hspace{70pt} if $z_i \in \{y_1, \ldots, y_{i-1} \}$ & \\[3pt]
+			\hspace{80pt} $y_i \xleftarrow{\$} \mathcal{X} \setminus \{y_1, \ldots, y_{i-1} \}$& \\
+		\end{tabular}
+		\begin{tikzpicture}[overlay]
+		\draw[fill=none, draw=white, opacity=0.5] (-6.0,-2.3) rectangle (-0.7,2.5); 
+		\end{tikzpicture}
+	\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Псевдослучайный генератор $\implies$ Псевдослучайная функция}
+\vspace{-10pt}
+	\Large
+	\begin{align*}
+		G: & \{0,1\}^n \rightarrow \{0,1\}^{2n} - \text{PRG} \\
+		 & \hskip3em \Downarrow \\
+		F:  & \{0,1\}^n \times \{0,1\}^{\ell} \rightarrow \{0,1\}^n  - \text{PRF} 
+	\end{align*}
+	
+	Положим $G(s) = (G_0(s), G_1(s))$, $G_i(s) \in \{0,1\}^n$.
+	
+	\begin{columns}[T]
+		\begin{column}{0.3\textwidth}
+			\LARGE
+			\begin{align*}
+				&F(k, x): \\
+				&\hspace{10pt} t  = s \\
+				&\hspace{10pt}\text{For } i = 1 \text{ to } n: \\
+				&\hspace{20pt} t  = G_{x_i}(s) \\
+				&\hspace{10pt} \text{return } t\\
+			\end{align*}
+		\end{column}%
+		\begin{column}{0.55\textwidth}
+			\begin{tikzpicture}[level/.style={sibling distance=30mm/#1}]
+			\node [circle,draw] (z){}
+			child {node [circle,draw] (a) {}
+				child {node [circle,draw]   {}
+						child {node [circle,draw] (d) {} edge from parent node[left,draw=none] {$0$} }
+						child {node [circle,draw] (e) {} edge from parent node[right,draw=none] {$1$}}
+						edge from parent node[left,draw=none] {$0$}
+				}
+				child {node [circle,draw] (g) {}
+					child {node [circle,draw]  {} edge from parent node[left,draw=none] {$0$} }
+					child {node [circle,draw]  {} edge from parent node[right,draw=none] {$1$}}
+				 edge from parent node[right,draw=none] {$1$}
+				}
+			edge from parent node[left,draw=none] {$0$}
+			}
+			child {node [circle,draw] (j) {}
+				child {node [circle,draw]  {}
+					child {node [circle,draw]  {} edge from parent node[left,draw=none] {$0$}}
+					child {node [circle,draw]  {} edge from parent node[right,draw=none] {$1$}}
+				edge from parent node[left,draw=none] {$0$}
+				}
+				child {node [circle,draw]  {}
+					child {node [circle,draw]  {} edge from parent node[left,draw=none] {$0$}}
+					child {node [circle,draw]  {} edge from parent node[right,draw=none] {$1$}}
+				edge from parent node[right,draw=none] {$1$}
+				}
+			edge from parent node[right,draw=none] {$1$}
+			};
+			\end{tikzpicture}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+
+\end{document}

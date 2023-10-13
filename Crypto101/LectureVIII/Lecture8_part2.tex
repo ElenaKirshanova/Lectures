@@ -1,0 +1,432 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{stackengine}
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+%\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+
+\newcommand{\AxisRotator}[1][rotate=0]{%
+	\tikz [x=0.4cm,y=1.0cm,line width=.2ex,-stealth,#1] \draw[color=Orange] (0,0) arc (-150:150:2 and 1);%
+}
+
+\title{Лекция №8 \\[10pt]
+	Часть 2. Арифметика в кольце целых чисел. Подпись RSA }
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+
+\begin{frame}{Арифметика в кольце целых}
+\Large 
+{\color{Orange} Положим $N = p \cdot q$, где $p, q$ -- большие простые числа}
+
+\begin{itemize}
+	\item $\ZN = \left\{ 0, 1, \ldots, N-1 \right\}$ -- {\color{Orange} кольцо}
+	\item Элементы $\ZN$ складываются и умножаются по модулю $N$. \\
+	Пример: $N = 15$
+	\begin{align*}
+	11+6 \bmod N &= \rem(17, 15) = 2 \\
+	6\cdot 7  \bmod N &= \rem(42, 15) = 12
+	\end{align*}
+	
+	\item Не для всякого ненулевого $x \in \ZN$ существует обратимый! \\[3pt]
+	Множество обратимых элементов: $\ZN^{\ast} =\{x \in \ZN \; | \;  \text{НОД}(x,N) = 1\}$.\\[5pt]
+
+	Пример: $3, 6, 9, 5, 10, 12 \notin \ZN^{\ast}$. \\[3pt]
+	$\ZN^{\ast} = \{1, 2, 4, 7, 8, 11, 13, 14\}$.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Структура $\ZN^\ast$ }
+\Large 
+\begin{itemize}
+	\itemsep 10pt
+	\item  $\phi(N) = |\ZN^\ast|$ -- {\color{Orange}функция  Эйлера} \\[5pt]
+	--  $N$ -- prime, $\phi(N) = N-1$ \\[3pt]
+	--  $N = p_1^{e_1} \cdot p_n^{e_n}$, $\phi(N)=  N \cdot \prod_{i} \left(1 - \frac{1}{p_i}\right)$. \\[3pt]
+	-- for $N = p \cdot q$, {\color{Orange}$\phi(N) = (p-1)(q-1)$.} \\[3pt]
+	Пример: $|\ZN^{\ast}| = |\{1, 2, 4, 7, 8, 11, 13, 14\}| = 2 \cdot 4 = 8$.
+	
+	\item {\color{Orange}Теорема Эйлера:} для всех $a \in \ZN^{\ast}$
+	\[
+	{\color{Orange}	\LARGE a^{\phi(n)} = 1 \bmod N }
+	\]
+	{\large Теорема Ферма: $a^{p-1} = 1 \bmod p$ для простого $p$.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Простые и трудные задачи в $\ZN$}
+\Large 
+\begin{center}
+{\color{Orange}  $N = p \cdot q$},  $p, q$ -- по $\approx$ 1024 бит каждое.\\
+\end{center}
+	В $\ZN$ следующие операции  {\color{Orange} эффективные}  \\[5pt]
+	-- сложение, умножение, нахождение обратного (если существует, проверить несуществование)\\[3pt]
+	--  возведение в степерь $g^r \bmod N$ \\[14pt]
+	Сегодня  {\color{Orange} считаются трудными} задачи \\[5pt]
+	 -- {\color{Orange} факторизация}: нахождение $p, q$  \\[3pt]
+	 -- вычисление квадратного корня в $\ZN$ (эквивалентно факторизации) \\[3pt]
+	 -- вычисление $e$-го корня в  $\ZN$ при $\gcd(e, \phi(N)) = 1$\\
+	 %-- dlog (TODO)
+\end{frame}
+
+\begin{frame}{Генерация ключей в подписи RSA}
+\Large
+Возьмём $\ell>2$--целое и $e>2$ -- нечетное целое (на практике $e=3$  или $e=65537$) \\[8pt]
+{\color{Orange} $\mathsf{RSAGen}(\ell, e):$}
+\begin{enumerate}
+	\itemsep5pt
+	\item Сгенерировать $\ell$-битное целое $p$ т.ч.\ $\gcd(p-1, e)=1$
+	\item Сгенерировать  $\ell$-битное цело $q \neq p$ т.ч.\ $\gcd(q-1, e)=1$
+	\item $N= p \cdot q$, $\phi(N) = (p-1)(q-1)$
+	\item $d = e^{-1} \bmod \phi(N)$
+	\item Вывод: $\vk = (N, e), \sk=(N, d)$
+\end{enumerate}
+%\vspace{7pt}
+\large
+\pause
+\begin{itemize}
+	\item  $\exists$ ppt алгоритм генерации простых чисел ($\exists$  ppt алгоритмы теста на простоту)
+	\item Шаг 4 корректен:  $d \in \ZN^\ast$, т.к. \[ \hspace{-20pt} \gcd(p-1, e) = \gcd(q-1, e) = 1 \implies \gcd((p-1)(q-1), e)=1.\]
+	\item на $p,q$ должны удовлетворять  {\color{Orange} большому числу условий} 
+\end{itemize}
+\centering
+\Large Не пытайтесь повторить $\mathsf{RSAGen}$ самостоятельно. 
+\end{frame}
+
+\begin{frame}{RSA Signature Generation and Verification}
+\large
+$\Hash: \{0,1\}^\ast \rightarrow \ZN^\ast$-- криптографическая хэш-функция
+\vspace{10pt}
+\begin{columns}[t]
+	\begin{column}{0.45\textwidth}
+		
+{\color{Orange} I. $\mathsf{RSASign}(\sk=(N, d), m):$}
+\begin{enumerate}
+	\itemsep5pt
+	\item $y = \Hash(m) \in \ZN^\ast$
+	\item $\sigma = y^d \bmod N$
+\end{enumerate}
+\vspace{10pt}
+\pause
+{\color{Orange} II. $\mathsf{RSAVerify}(\vk=(N, e), m, \sigma):$}
+\begin{enumerate}
+	\itemsep5pt
+	\item $y' = \sigma^e \bmod N$
+	\item $\mathtt{return}(y'==\Hash(m))$ \\
+\end{enumerate}
+	\end{column}
+	\begin{column}{0.55\textwidth}
+		\pause
+		{\color{Orange} Корректность:}
+		Для $N=pq$ и $e,d$ т.ч.\ $ed = 1 \bmod \phi(N)$ и для всех $x \in \Z$
+		{\color{Orange} 
+		\[
+			x^{ed} = x \bmod N
+		\] }
+	\pause
+		Док-во: для $k \in \Z$
+		\begin{align*}
+		&ed = 1 + k \phi(N) = 1+k(p-1)(q-1) \\  \pause
+		& x^{p-1} = x \bmod p \quad \text{(Ferma't thm.)}\\ \pause
+		& x^{ed} = x^{1+k(p-1)(q-1)} = \\
+		& x \cdot (x^{p-1})^{q-1} = x \bmod p \\ \pause
+		&\text{Аналог.}, x^{ed}  = x \bmod q \\ \pause
+		& \implies  p, q \, |\, x^{ed} - x \\
+		& \implies   x^{ed} = x \bmod p \cdot q
+		\end{align*}
+	\end{column}
+\end{columns}
+\LARGE
+%\vspace*{-40pt}
+%{\color{Orange}  $(y^d)^e = y^{ed} = y \bmod N$ } \\[20pt]
+\vspace{10pt}
+\centering
+\vfill
+Без $\Hash$ схема тривиально взламывается!
+\end{frame}
+
+\begin{frame}{Безопасность подписи RSA}
+\Large
+
+{\color{Orange}  RSA предположение сложности:}
+Не существует ppt алгоритма, который, получив на вход $(N, m, m^e)$ для случайного $m \in \ZN^\ast$, выдаёт $m$.\\[10pt]
+
+{\centering Факторизация $N \implies $ вычисление $e$-го корня. \\[5pt] Обратная редукция не доказана! }  \\[15pt]
+
+Самый быстрый сегодня алгоритм факторизации -- General Number Field sievie -- со сложностью
+\[
+	\sim e^{(\lg N)^{1/3}}
+\]
+
+
+{\color{Orange}  Теорема:} Схема подписи ($\mathsf{RSAGen},$ $\mathsf{RSASign},$ $\mathsf{RSAVerify}$) безопасна в \\ модели {\color{Orange} UF-CMA}, если {\color{Orange}  предположение RSA корректно} и $\Hash$ является \\ {\color{Orange}  случайным оракулом.} \\[10pt]
+ 
+\end{frame}
+
+\begin{frame}{Стандарты}
+\Large 
+Вариант RSA подписи станартизованы под именем PKCS (Public Key Cryptography Standards)   \\
+\url{https://en.wikipedia.org/wiki/PKCS} \\[10pt]
+
+Версия 2.2 (последняя)  PKCS \#1 включает \\[10pt]
+\begin{itemize}
+	\itemsep10pt
+	\item RSASSA-PSS \\
+	SSA = Signature Scheme with Appendix \\[5pt]
+	PSS =  Probabilistic Signature Scheme
+	\item  RSASSA-PKCS1-v1\_5 (существуеют атаки)
+\end{itemize}
+
+\end{frame}
+
+%\begin{frame}{Usages of signatures schemes}
+%	\Large
+%	Practical signature schemes 
+%	\begin{enumerate}
+%		\itemsep 10pt
+%		\item RSA \\
+%		long keys, signatures; fast verification
+%		\item ECDSA, GOST\\
+%		short keys, signatures; slower verification
+%	\end{enumerate}
+%\vspace{10pt}
+%RSA is good for {\color{Orange} Certificates}, ECDSA/GOST are good for e-mails. \\[10pt]
+%
+%Certificates  bind a public key to an identity.
+%\end{frame}
+
+%\begin{frame}{Certificates and PKI}
+%\begin{center}
+%	\begin{tabular}{l c c c l}
+%		& \Large Alice & &\Large Certificate Authority (CA)&  \\ 
+%		&  $\pk_{\texttt{A}}$  & & $\vk_{\texttt{CA}}$, $\sk_{\texttt{CA}}$ & \\
+%		& \multirow{5}{*}{\includegraphics[scale=0.15]{Alice}} & & &  \\  \pause
+%		& & $\xrightarrow[\texttt{id, email, } \pk_{\texttt{A}}]{\text {Certificate Signing Request}}$ & & \\  \pause
+%		& & & Certifying Alice’s identity & \\
+%		& & & Creating a certificate $\texttt{cert}$& \\
+%		& & & Signing $\texttt{cert}$& \\
+%		& & $\xleftarrow{\LARGE \texttt{cert}, \; \sigma = \Sign(\sk_{\texttt{CA}}, \texttt{cert})}$ & & \\  \pause
+%	\end{tabular}
+%\end{center}
+%
+%\vspace{15pt}
+%\Large
+%Anyone, who needs to communicate securely with Alice, first runs $\Ver(\vk_{\texttt{CA}} \texttt{cert},\sigma )$. If verification passes, $\pk_{\texttt{A}}$ can be used to communicate with Alice.\\[10pt]
+%
+%Example: X.509 certificate
+%\end{frame}
+%
+%\begin{frame}{Certificate chains}
+%	\Large
+%	\begin{center}
+%	
+%	\begin{align*}
+%			&{\LARGE \text{Root CAs } \quad \quad\xrightarrow{\hspace{2em}} \quad \quad \text{Intermediate CA}} \\
+%			&\text{certifies Interm.\ CAs}  \hspace{46pt} \text{certifies clients} 
+%	\end{align*}
+%	\end{center}
+%	\vspace{20pt}
+%	There are currently thousands of intermediate CAs operating on the Internet \\[10pt]
+%	To avoid malicious CAs: {\color{Orange} certificate pinning:} \\[7pt]
+%	\begin{enumerate}
+%		\item Every browser maintains a pinning database: \\
+%		($\texttt{domain}$, $\texttt{hash}_0$, $\texttt{hash}_1, \ldots$ )
+%		\item The data for each record is provided by the domain owner
+%		\item 	When the browser connects to a domain, domain sends its certificate chain $\texttt{cert}_0, 
+%		\texttt{cert}_1, \ldots$
+%		\item The browser computes $\Hash(\texttt{cert}_i)$ and verifies against $\texttt{hash}_i$. 
+%	\end{enumerate}
+%	
+%\end{frame}
+
+
+\end{document}

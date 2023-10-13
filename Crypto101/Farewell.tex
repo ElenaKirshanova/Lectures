@@ -1,0 +1,237 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{stackengine}
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+%\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+\usepackage{changepage}
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{MapleWood}{RGB}{241, 195, 142}
+\definecolor{Redwood}{RGB}{210, 173, 169}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+\title{Заключение \\[10pt]}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+
+
+\begin{frame}{Что дальше?}
+
+\centering
+\large
+\hspace{-70pt}\begin{tikzpicture}[text width=3.0cm, align=flush center,
+level 1/.style={level distance=3.5cm,sibling angle=135},
+level 2/.style={level distance=2.5cm,sibling angle=45}]
+\node{\LARGE \color{Orange} Криптография}
+[clockwise from=-45]
+child { node {\color{Orange} Инженерная}
+	[clockwise from=-285]
+	child { node {FPGA}}
+	child { node {Программирование++}}
+}
+child { node {\color{Orange} Теоретическая}
+	[clockwise from=90]
+	child { node {Теория сложности}}
+	child { node {Алгоритмы}}
+}
+child { node {\color{Orange} Криптоанализ}
+	[clockwise from=120]
+	child { node {Алгоритмы}}
+	child { node {Теория Чисел}}
+	child { node {Мат. анализ}}
+};
+\end{tikzpicture}
+	
+\end{frame}
+
+\begin{frame}{В продвинутом курсе криптографии можно узнать о}
+\Large
+\begin{itemize}
+	\itemsep 8pt 
+	\item  Шифрование на основе идентификационных данных, Identity-based Encryption (IBE)
+	\item Функциональное шифрование,  Functional Encryption (FE)
+	\item Многостороннее вычисление, Multi-Party Computation (MPC)
+	\item Гомоморфное шифрование, Homomorphic Encryption (HE)
+	\item Cхемы электронного голосования (e-voting)
+	\item Электронные деньги (e-cash)
+	\item $\ldots$
+\end{itemize}
+
+
+\end{frame}
+
+\end{document}

@@ -1,0 +1,448 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{stackengine}
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+%\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+\usepackage{fontawesome} % for ruble sign
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+\newcommand{\AxisRotator}[1][rotate=0]{%
+	\tikz [x=0.45cm,y=1.2cm,line width=.2ex,-stealth,#1] \draw[color=Orange] (0,0) arc (-150:150:2 and 1);%
+}
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+
+
+\titlegraphic{
+	
+	%\includegraphics[width=2.5cm]{erc_logo_gray}\hspace*{2.5cm}~%
+	%\includegraphics[width=4.0cm]{ens_logo_gray}
+}
+\title{Лекция №4 \\[10pt]
+	Коды аутентификации сообщений.}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+
+\begin{frame}{Конфиденциальность \& целостность}
+\LARGE 
+
+\begin{itemize}
+	\itemsep 1em
+	\item В предыдущих лекциях: {\color{Orange} конфиденциальность} сообщений
+	\item В этой лекции:  {\color{Orange} целостность}
+\end{itemize}
+
+\vspace{20pt}
+\LARGE {\color{Orange}Криптопрититив}: Код Аутентификации Сообщения (или Имитовставка)  \\[5pt] 
+Message Authentication Code (MAC) 
+
+
+\end{frame}
+
+\begin{frame}{Мотивация}
+\Large
+	\begin{center}
+		\begin{tabular}{c c c c c}
+			& Алиса  & & Боб &  \\
+			& \multirow{5}{*}{\includegraphics[scale=0.15]{Alice}} & &
+			\multirow{5}{*}{\includegraphics[scale=0.15]{Bob}} &  \\
+			&  & \Huge $\xrightarrow{\text{``Переслать \texttt{1000 \faRub } на карту XXXX'' }}$ & &  \\[20pt]
+			\multicolumn{5}{c}{\includegraphics[scale=0.15]{Eve}} \\
+			\multicolumn{5}{c}{Ева}
+		\end{tabular}
+	\end{center}
+
+	
+\end{frame}
+
+
+\begin{frame}{MAC: определение}
+\Large
+Цель: отправить сообщение $m$ от Алису к Бобу так, что бы злоумышленник не смог модифицировать $m$, оставаясь незамеченным \\[10pt]
+\begin{center}
+	\begin{tabular}{c c c c c}
+		& Alice  & & Bob &  \\
+		& \multirow{5}{*}{\includegraphics[scale=0.18]{Alice}} & &
+		\multirow{5}{*}{\includegraphics[scale=0.18]{Bob}} &  \\
+		&  & \Huge $\xrightarrow{\mkern25mu m, \; \mactag \mkern25mu}$ & &  \\ 
+		\LARGE $k \in \keyS$ &   & &  & $k \in \keyS$ \\[10pt]
+		$\mactag \leftarrow S(k,m)$   & & &  &    \\ [20pt] 
+		\multicolumn{5}{r}{$V(k,m, \mactag) \in \{ 0, 1\}$ }  \\
+	\end{tabular}
+\end{center}
+\pause
+\large
+{\color{Orange} Код Аутентификации Сообщения } состоит из 3-х ppt алгоритмов:
+\vspace{-2pt}
+\begin{itemize}
+	\item Генерация ключа: $\KeyGen(1^\lambda): k \leftarrow \keyS$ \\[4pt]
+	\item Генерация тага: $S(k, m): \mactag \leftarrow \tagS$ \\[4pt]
+	\item Верификация тага: $V(k, m, \mactag): \{0, 1\}  $
+\end{itemize}
+\end{frame}
+
+\begin{frame}{MAC: корректность и безопасность}
+\Large
+{\color{Orange} Код Аутентификации Сообщения } состоит из 3-х ppt алгоритмов:
+\vspace{-2pt}
+\begin{itemize}
+	\item Генерация ключа: $\KeyGen(1^\lambda): k \leftarrow \keyS$ \\[4pt]
+	\item Генерация тага: $S(k, m): \mactag \leftarrow \tagS$ \\[4pt]
+	\item Верификация тага: $V(k, m, \mactag): \{0, 1\}  $
+\end{itemize}
+
+\vspace{10pt}
+{\color{Orange} Корректность:} \LARGE 
+$ V(k, m, S(k,m)) = 1 \; \forall \; m \in \mesS, k \in \keyS $
+
+\vspace{10pt}
+{\color{Orange}Безопасность:}
+Для ppt атакующего $\adv$, имеющего пары $\{(m_1, t_1), \ldots, (m_N, t_N) \}$ для $m_i$, выбранных им самим, $\adv$ не может сгенерировать новую пару  $(m,t)$
+\[(m,t) \notin \{(m_1, t_1), \ldots, (m_N, t_N) \}\]
+
+\vspace{10pt}
+
+Поэтому безопасная длина тага: $96, 128, 256 $ бит.
+\end{frame}
+
+\begin{frame}{MAC: безопасность}
+
+\Large 
+\begin{center}
+	$I = (\KeyGen, S, V)$ --  MAC \\[10pt]
+	
+	\begin{tabular}{c c c}
+		{\color{Orange} Челленджер $\mathcal{C}$ } & & {\color{Orange} Атакующий $\mathcal{A}$ }\\ [5pt]
+		$k \leftarrow \KeyGen(1^\lambda)$ & $\xrightarrow{\quad \lambda \quad}$  &\\[5pt]
+		& $\xleftarrow{\quad  m_i \quad}$  &$m_i\leftarrow \mesS $\\ [5pt]
+		
+		$t_i \leftarrow S(k, m_i)$ & $\xrightarrow{\quad t_i \quad}$ &\\ [5pt]
+
+		& $\xleftarrow{\quad  (m^\star, t^\star) \quad}$ & \\ [5pt]
+	\end{tabular}
+	\begin{tikzpicture}[overlay]
+	%\draw[fill=none, draw=white, opacity=0.5] (-8.5,-2.3) rectangle (-5.0,2.7); 
+	%\draw[fill=none, draw=white, opacity=0.5] (-3.0,-2.3) rectangle (0.0,2.7); 
+	\end{tikzpicture}
+\end{center}
+
+\vspace{5pt}
+$\mathtt{W_{I, \adv}}$ -- событие $Ver(k, m^\star, t^\star) == 1$. \\ [4pt]
+$\mathtt{MacAdv} = \Pr[\mathtt{W_{I, \adv}}] $ -- выигрыш  $\adv$. \\ [4pt]
+\color{Orange} Схема MAC $I$ безопасна, если для любого ppt $\adv:$  \[\mathtt{MacAdv} = \negl(\lambda).\]
+\end{frame}
+
+
+\begin{frame}{Конструкции MAC}
+\Large
+\begin{enumerate}
+	\itemsep1em
+	\item Блок-шифр  (AES, ГОСТ), псевдослучайная ф-ия $f$  -- примеры конструкции MAC для 16-байтных сообщений
+	\begin{align*}
+			S(m) &:= f(k, m) \rightarrow t \\
+			V(k, m, t) & :=f(k, m) == t \; ? \;  1 : 0 
+	\end{align*}
+
+	
+	\item Для более длинных сообщений:  \\[10pt]
+		-- CBC-MAC (целостность банковских транзакций) \\ 
+		Стандарты: ANSI, FIPS 186-3, ГОСТ \\[5pt]
+		-- NMAC (Nested MAC) \\[5pt]
+		-- HMAC (SSL, IPSec)
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{ECBC-MAC }
+\Large
+ $m = (m_1, m_2, m_3, ...)$, $F-$ блок-шифр (AES, ГОСТ), $|m_i|$  --  128 бит
+	\begin{figure}
+		\includegraphics[width=0.75\textwidth]{CBC_MAC}
+	\end{figure}
+\vspace{-90pt}
+
+\Large 
+$V((k, k1), m)$ выполняет идентичные шаги.\\[10pt]
+
+Отличия от CBC-mode:
+\begin{itemize}
+	\itemsep 5pt
+	\item $k, k1$ - два {\color{Orange} разных} ключа для $F $
+	\item Не используется IV
+	\item Выходное значение \textbf{tag} может быть урезано (тем самым уменьшая безопасность схемы, стандарты ANSI X9.19, ISO/IEC 9797)
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Вложенный (Nested) MAC}
+	\Large
+	\vspace{-25pt}
+	$m = (m_1, m_2, m_3, ...)$, $\textbf{F}-$ блок-шифр (AES, ГОСТ), $|m_i|$ -- $n$ бит, $k  \in \{0,1\}^\kappa$.
+	\begin{figure}
+		\includegraphics[width=0.75\textwidth]{NMAC}
+	\end{figure}
+\vspace{-40pt}
+$
+	\text{fpad} \in \{0,1\}^{n - \kappa} -\text{любое фиксированное значение}
+$
+\end{frame}
+
+\begin{frame}{Набивка (padding)}
+\Large
+\begin{center}
+Что если $\mathbf{m} = (m_1, m_2, ...)$ не кратно длине блока?
+\end{center}
+Пример {\color{Orange} плохой} набивки : добивать $0'$-ми.
+\[m = (\star \star \star  ), \quad |m|< 128 \text{бит}\] 
+
+Набивка такого $m$:
+\[m_{\text{padded}}=(\star \star \star  \; 0 \ldots 0  ). \] 
+
+Тогда для сообщения $m' = (m||0)$:
+\[S(k,m_{\text{padded}}) = S(k, m')\]
+
+\vspace{10pt}
+\centering
+Для $\mathbf{m} \neq \mathbf{m'}$, должно выполнятся $\mathbf{m}||\text{pad} \neq \mathbf{m'}||\text{pad}$. \\[5pt]
+ Набивка должна быть функцией $1 \leftrightarrow 1$.
+	
+\end{frame}
+
+\begin{frame}{Набивка (padding)}
+	\Large
+	\begin{enumerate}
+		\itemsep1em
+		\item {\color{Orange} ISO.} Набивка: $10\ldots0$. `1' означает начало набивки. \\
+		Добавляется фиктивный блок, если $|m| < $ длина блока
+		\item {\color{Orange} NIST, GOST}  
+		\begin{figure}
+			\captionsetup[subfigure]{labelformat=empty}
+			\begin{subfigure}{.5\textwidth}
+				\hspace{-30pt}
+				\includegraphics[width=.95\textwidth]{CBC_Mac_Padding}
+				\caption{\hspace{-30pt}  \Large $m_4$< длина блока}
+			\end{subfigure}%
+		 \begin{subfigure}{.5\textwidth}
+		\hspace{-36pt}
+			\includegraphics[width=.95\textwidth]{CBC_Mac_Padding_1}
+			\caption{\hspace{-50pt}  \Large $m_4$= длина блока}
+		\end{subfigure}%
+		\end{figure}
+		\vspace{1em}
+		Преимущества: нет фиктивного блока, нет дополнительного вызова F.
+		 
+	\end{enumerate}
+\end{frame}
+
+
+\begin{frame}{Двухфакторная аутентификация}
+
+\Large 
+Двухфакторная аутентификация = пользователь предоставляет то, что он {\color{Orange} знает} (пароль) + то, чем он {\color{Orange} владеет} (смартфон) 
+
+\[
+I = (\KeyGen, S, V) - \text{ MAC }  
+\]
+
+\vspace{10pt}
+%	\begin{center}
+	\begin{tabular}{c c c c c}
+		 Пользователь &  & &  & Сервер \\
+		 \multirow{5}{*}{\includegraphics[scale=0.12]{Alice}} & & &
+		 & \multirow{5}{*}{\includegraphics[scale=0.12]{Bob}}  \\
+		&  $k \leftarrow \KeyGen()$ &  & &  \\
+		&  &  $\xrightarrow{ \quad k \quad}$ & &  \\[10pt]
+		&  $p = S(k, T)$ &  & &  \\
+		& {\small $T$ -- текущая дата, время} & $\xrightarrow{ \quad p \quad}$   & &  \\
+		& &  &  & $V(k, p, T)$ \\
+	\end{tabular}
+
+\vspace{10pt}
+$p$ -- временной одноразовый пароль (timed one-time password).
+%\end{center}
+
+
+\end{frame}
+
+\end{document}

@@ -1,0 +1,48 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\usetikzlibrary{crypto.symbols}
+\usetikzlibrary {positioning}
+\usetikzlibrary{shapes}
+\usetikzlibrary{decorations, decorations.text,backgrounds}
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+
+\begin{document}	
+	\begin{tikzpicture}[background rectangle/.style={fill=CharCoalDark}, show background rectangle]
+		%% Subkey XORs
+		\foreach \z in {0,...,15} {
+			\node[XOR, scale=0.8, color=white] (xor\z) at ($\z*(0.75em, 0)$) {};
+			\node[XOR, scale=0.8, color=white] (xorr\z) at ($\z*(0.75em, 0)+(0,-9em)$) {};
+		}
+		
+		%% Nodes positions
+		\foreach \z in {0,...,15} {
+			\node (i\z) [above = 0.75em of xor\z] {};
+			\node (o\z) [below = 2.5em of xor\z] {};
+			\node (ii\z) [above = 0.25em of xorr\z] {};
+			\node (oo\z) [below = 3em of xorr\z] {};
+			\node (t\z) [below = 4em of oo\z] {};
+			\draw[thick, color=white] (i\z) -- (xor\z);
+		}
+		
+		%% Permutation layer
+		\foreach \z [evaluate=\z as \zz using {int(mod(11*\z,15))}] in {0,...,14} {
+			\draw[thick, color=white] (xor\z)  -- (o\z.center)  -- (ii\zz.center) -- (xorr\zz) -- (oo\zz);
+			\draw[thick, color=white] (oo\z.north)  -- (t\zz.south) -- +(0,-0.5em);
+		}
+		\draw[thick, color=white] (xor15) -- (o15.center) -- (ii15.center) -- (xorr15) -- (oo15);
+		\draw[thick, color=white] (oo15.north) -- (t15.south) -- +(0,-0.5em);	
+		
+		%% SBoxes
+		\foreach \z in {0,...,3} {
+			\node[draw=white, thick,minimum width=2.75em,minimum height=2em,fill=CharCoalDark,rotate=-90] (p4) at ($\z*(3em,0) + (1.1em,-2em)$) {{\color{white}$S$}};
+			\node[draw=white,thick,minimum width=2.75em,minimum height=2em,fill=CharCoalDark,rotate=-90] (p4) at ($\z*(3em,0) + (1.1em,-11em)$) {{\color{white}$S$}};
+		}
+		
+		\node[left = 0.5em of xor0, color=white,rotate=-90] {$k_{1}$};
+		\node[left =0.5em of xorr0, color=white,rotate=-90] {$k_{2}$};
+		
+	\end{tikzpicture}
+\end{document}

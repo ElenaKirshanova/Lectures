@@ -1,0 +1,586 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{stackengine}
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+%\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+
+\title{Лекция №6 \\[10pt]
+	Часть 1. Шифрование с аутентификацией. Определение }
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+
+\newcommand{\AxisRotator}[1][rotate=0]{%
+	\tikz [x=0.5cm,y=1.9cm,line width=.2ex,-stealth,#1] \draw[color=Orange] (0,0) arc (-150:150:2 and 1);%
+}
+
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}{Agenda}
+	\Large 
+	До сегодняшнего дня 
+	\begin{itemize}
+		\item Конфиденциальность (Симметрическое шифрование)
+		\item Целостность (MAC, HMAC)
+	\end{itemize}
+	\vspace{20pt}
+	Эти примитивы защищают данные от {\color{Orange} пассивного (eavesdropping) злоумышленника}\\
+	 
+	\vspace{20pt}
+	В этой лекции: \\
+	Безопасность данных относительно {\color{Orange} активного (tampering)  \\ злоумышленника}\\[10pt]
+	\LARGE Шифрование с аутентификацией (Authenticated Encryption)
+
+\end{frame}
+
+\begin{frame}{Шифрование с аутентификацией: определение}
+\Large
+
+{\color{Orange}{Шифрование с аутентификацией (AE)}} состоит из трех ppt алгоритмов
+\begin{itemize}
+	\itemsep 10pt
+	\item Генерация ключа: $\KeyGen(1^\lambda): k \leftarrow \keyS$
+	\item Шифрование: $\Enc: \keyS \times \mesS \times \nonceS \rightarrow \cipS$
+	\item Дешифрование:  $\Dec: \keyS \times \cipS  \times \nonceS \rightarrow \mesS \cup \{\bot\}$
+\end{itemize}
+\vspace{15pt}
+$\keyS$ - мн-во ключей, $\mesS$ - мн-во открытых текстов, $\cipS$ - мн-во шифр-текстов,  \\ $\nonceS$ - мн-во {\color{Orange} нонсов}. \\[10pt]
+
+
+НОВОЕ: $\{\bot\}$ -- шифр-текст отклонен \\[10pt]
+
+
+{\color{Orange} Нонсе (nonce)} = ``number that can only be used once'' \\[5pt]
+Нонс может быть предсказуем, но он не должен быть использован \\ {\color{Orange} дважны} для одного ключа. \\[5pt]
+%Пример: значения, полученные из IV в различных режимах симм. шифрования. 
+
+\end{frame}
+
+\begin{frame}{Корректность, безопасность шифрования с аутентификацией }
+\Large
+{\color{Orange}{Шифрование с аутентификацией (AE)}} состоит из трех ppt алгоритмов
+\begin{itemize}
+	\itemsep 10pt
+	\item Генерация ключа: $\KeyGen(1^\lambda): k \leftarrow \keyS$
+	\item Шифрование: $\Enc: \keyS \times \mesS \times \nonceS \rightarrow \cipS$
+	\item Дешифрование:  $\Dec: \keyS \times \cipS  \times \nonceS \rightarrow \mesS \cup \{\bot\}$
+\end{itemize}
+
+\vspace{15pt}
+{\color{Orange}{Корректность:}} $\forall m, \forall k, \forall n:$ $\Dec(k, \Enc(k, m,n), n) = m$
+
+\vspace{15pt}
+{\color{Orange}{Безопасность (неформально):}}
+\begin{itemize}
+	\itemsep 10pt
+	\item $\Enc(k, m_0, n)$ неотличимо от $\Enc(k, m_1, n)$ $\forall m_0 != m_1$ (без знания $k$) 
+	\item  Эффективный злоумышленник не в состоянии сформировать \\ шифр-текст, которые не дешифруется в $\{\bot\}$.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Безопасность шифрования с аутентификацией}
+	\Large
+	Шифрование с аутентификацией обеспечивает
+	\begin{itemize}
+		\itemsep 10pt
+		\item {\color{Orange}Аутентификацию:} Если $\Dec(k, c, n)!=\{\bot\}$, получатель знает, что сообщение пришло от того, кто знает $k$
+		\pause
+		\item {\color{Orange}AE $\implies$ стойкость относительно атаки на выбранный шифр-текст} 
+	\end{itemize}
+
+\vspace{15pt}
+В  атаке на выбранный шифр-текст (Chosen Ciphertext Attack, CCA)  злоумышленник может
+\begin{itemize}
+	\item получить шифрования сообщений по своему выбору
+	\item запросить дешифрование {\color{Orange}{любого}} шифр-текста по своему \\ выбору кроме кроме одного фиксированного чалленджа  $c$
+\end{itemize}
+%\vfill
+%\centering
+%\color{Orange} A CCA adversary is a very powerful adversary. \\
+%Why does it capture real life attacks?
+\end{frame}
+
+\begin{frame}{Атака на выбранный открытый текст/ Chosen Plaintext Attack(CPA) (лекция №3)}
+\large
+\begin{center}
+	
+	\begin{tabular}{c c c}
+		{\color{Orange} Челленджер $\mathcal{C}$ } & & {\color{Orange} Атакующий $\mathcal{A}$ }\\ [5pt]
+		$k \leftarrow \KeyGen(1^\lambda)$ & $\xrightarrow{\quad \Huge \lambda \quad}$  &\\[5pt]
+		$b \xleftarrow{\$} \{0,1\}  $& &\\ [5pt]
+		& $\xleftarrow{\; \Huge m_{0, i}, m_{1, i}  \;}$  &$m_{0, i}, m_{1,i} \leftarrow \mesS $\\ [5pt]
+		
+		$c_i \leftarrow \Enc(k, m_{b, i})$ &  &\\ [5pt]
+		& $\xrightarrow{\quad c_i \quad}$ & \\ [5pt]
+		& $\xleftarrow{\quad \hat{b} \quad}$ & \\ [5pt]
+	\end{tabular}
+	\begin{tikzpicture}[overlay]
+	\draw[fill=none, draw=white, opacity=0.5] (-8.3,-2.3) rectangle (-5.0,2.7); 
+	\draw[fill=none, draw=white, opacity=0.5] (-3.0,-2.3) rectangle (0.0,2.7); 
+	\node at (-3.8, -0.1) {\AxisRotator};
+	\end{tikzpicture}
+\end{center}
+
+\vspace{5pt}
+$\mathtt{W_{\Pi, \adv}}$ -- событие $b == \hat{b}$. \\ [4pt]
+$\mathtt{CPAAdv} = \abs{\Pr[\mathtt{W_{\Pi, \adv}}] - \frac{1}{2}}$ --выигрыш  $\adv$. \\ [4pt]
+\color{Orange} Шифр-схема $\Pi$ CPA безопасна, если для любого ppt $\adv:$  $\mathtt{CPAAdv} = \negl(\lambda).$
+\end{frame}
+
+\begin{frame}{Атака на выбранный шифр-текст/ Chosen Ciphertext Attack(CCA) }
+	\large
+	\begin{center}
+		
+		\begin{tabular}{c c c}
+			{\color{Orange} Челленджер $\mathcal{C}$ } & & {\color{Orange} Атакующий $\mathcal{A}$ }\\ [5pt]
+			$k \leftarrow \KeyGen(1^\lambda)$ & $\xrightarrow{\quad \Huge \lambda \quad}$  &\\[5pt]
+			$b \xleftarrow{\$} \{0,1\}  $& &\\ [5pt]
+			& $\xleftarrow{\; \Huge m_{0, i}, m_{1, i}  \;}$  &$m_{0, i}, m_{1,i} \leftarrow \mesS $\\ [2pt]
+			
+			$c_i \leftarrow \Enc(k, m_{b, i})$ &  &\\ [2pt]
+			$C = C \cup \{c_i\} $ & $\xrightarrow{\quad c_i \quad}$  &\\ [8pt]
+			
+			& $\xleftarrow{\; c_j \notin C   \;}$  &\\ [5pt]
+			$\hat{m_j} \leftarrow \Dec(k, c_{j})$  &  $\xrightarrow{\quad c_i \quad}$ & \\[2pt]
+			& $\xleftarrow{\quad \hat{b} \quad}$ & \\ [5pt]
+		\end{tabular}
+		\begin{tikzpicture}[overlay]
+		\draw[fill=none, draw=white, opacity=0.5] (-8.3,-2.5) rectangle (-5.0,3.2); 
+		\draw[fill=none, draw=white, opacity=0.5] (-3.0,-2.5) rectangle (0.0,3.2); 
+		\node at (-3.8, -0.1) {\AxisRotator};
+		\end{tikzpicture}
+	\end{center}
+	
+	\vspace{-5pt}
+	$\mathtt{W_{\Pi, \adv}}$ -- событие $b == \hat{b}$. \\ [4pt]
+	$\mathtt{CCAAdv} = \abs{\Pr[\mathtt{W_{\Pi, \adv}}] - \frac{1}{2}}$ --выигрыш  $\adv$. \\ [4pt]
+	\color{Orange} Шифр-схема $\Pi$ CCA безопасна, если для любого ppt $\adv:$  $\mathtt{CCAAdv} = \negl(\lambda).$
+\end{frame}
+
+\begin{frame}{Пример of CCA атаки (IPSec, упрощенна версия)}
+\Large 
+Пусть $\Enc$ шифрование в режиме CTR \\
+Сообщение $m$ состоит из хэдера ``Боб'+текст сообщения
+
+\LARGE
+	\begin{center}
+		\begin{tabular}{c c c c c}
+			Алиса &     &Почтовый сервер  & &Боб\\
+			$k$ & {\huge $\xrightarrow{c \;= \Enc(k,\, m = \text{Боб||...})}$ }  &  $k$ & $\xrightarrow{\hspace{10pt}m\hspace{10pt}}$ & \pause\\[8pt] 
+			&  $\xrightarrow{\Huge \hspace{1em}c\hspace{1em}}$ Ева  $\xrightarrow{\hspace{1em}\hat{c}\hspace{1em}}$  & & & \\
+		\end{tabular}
+	\end{center}
+
+\Large
+Положим $\mathtt{len}$(``Боб'') $==$  $\mathtt{len}$(``Ева'') $==$ длине блока.
+\vspace{15pt}
+\begin{columns}
+	\begin{column}{0.4\linewidth}
+		\begin{figure}
+		\hspace{-30pt}	\includegraphics[width=0.9\linewidth]{CTR}
+		\end{figure}
+	\end{column}
+	\begin{column}{0.4\linewidth}
+{
+\hspace{-50pt}
+{\color{Orange} $\hat{c_1} = c_1 \oplus $[``Боб''] $\oplus$ [``Ева''] } \\[5pt]
+\hspace{-50pt}Оставшиеся блоки $\hat{c}$ равные$c$.\\[5pt]
+\hspace{-50pt}Ева узнает $m$, запрашивая $\Dec(\hat{c})$.
+}
+	\end{column}
+
+\end{columns}
+\end{frame}
+
+%\begin{frame}{Construction of AE}
+%\Large 
+%\centering
+%{\color{Orange} AE = Secure Encryption + Secure Mac} \\[10pt]
+%
+%Two keys: Encryption key $k_E$, MAC key $K_M$ \\
+%\pause 
+%\begin{center}
+%	Two main paradigms:
+%\end{center}
+%\vspace{10pt}
+%
+%\begin{columns}
+%	\begin{column}{0.5\linewidth}
+%	{\color{Orange} I. Encrypt-then-MAC}
+%	\begin{enumerate}
+%		\item $c = \Enc(k_E, m)$
+%		\item $t = \MAC(k_M, c)$
+%		\item return $(c,t)$
+%	\end{enumerate}
+%Example: IPSec 
+%	\end{column} \pause
+%	\begin{column}{0.5\linewidth}
+%	 {\color{Orange} II. MAC-then-Encrypt}
+%		\begin{enumerate}
+%			\item $t = \MAC(k_M, n) $
+%			\item $c = \Enc(k_E, m||t)$
+%			\item return $c$
+%		\end{enumerate}
+%		Example: SSL 
+%\end{column}
+%\end{columns}
+%
+%\vspace{10pt}
+%
+%\pause
+%\begin{itemize}
+%	\item  Encrypt-then-MAC always provides AE
+%	\item MAC-then-Encrypt provides AE when $\Enc$ is randomized CTR/CBC mode encryption
+%	\item Other combinations of Mac and Encryption usually do not provide secure AE
+%\end{itemize}
+%
+%\end{frame}
+%
+%\begin{frame}{AE standards}
+%\LARGE
+%\begin{enumerate}
+%	\itemsep 10 pt
+%	\item \textbf{GCM (Galois Counter Mode)}. {\Large {\color{Orange}Encrypt-then-MAC}  \\
+%		Encryption: CTR mode + fast Mac (Carter-Wegman Mac).  \\
+%		Application: TLS \\
+%		Advantages: somewhat fast (on Intel)
+%	 }
+% \pause
+% 	\item \textbf{CCM}.  {\Large {\color{Orange}MAC-then-Encrypt}  \\
+% 		Encryption: CBC MAC (AES)+ CTR mode (AES)  \\
+% 		Application: 802.11i \\
+% 		Advantages: less code
+% 	}
+% \pause
+% 	\item \textbf{ChaCha20-Poly1305.} {\Large {\color{Orange} Encrypt-then-MAC}  \\
+% 		Encryption: ChaCha20 Encryption + Poly1305 MAC \\
+% 		Application: TLS \\
+% 		Advantages: fast
+% 	}
+%\end{enumerate}
+%\pause
+%\vspace{10pt}
+%These three are implemented in OpenSSL. \\
+%I do not know of Russian AE standards (although one can replace Enc and MAC by Russian GOSTs).
+%\end{frame}
+%
+%\begin{frame}{AEAD: Authenticated Encryption with Associated Data }
+%	\Large
+%	Often not all data needs to be encrypted.\\
+%	
+%	\LARGE
+%	\[
+%	\underbrace{
+%	\left[
+%	\texttt{Associated data} ||
+%	\texttt{Encrypted data}
+%	\right]
+%	}_\text{Authenticated}
+%	\]
+%	
+%	\vspace{25pt}
+%	
+%	Example: $[\texttt{header} || \texttt{payload} ]$ in internet protocols\\
+%	
+%	\vspace{25pt}
+%
+%	Most used AEAD: {\color{Orange}AES-GCM AEAD}
+%	
+%\end{frame}
+%
+%\begin{frame}{AES-GCM AEAD}
+%\Large Message $m=(m_1, \ldots, m_s)$
+%\only<1>
+%{
+%	\begin{figure}
+%		\includegraphics[width=\linewidth]{AES_GCM_AEAD_1}
+%	\end{figure}
+%}
+%\only<2>
+%{
+%	\begin{figure}
+%		\includegraphics[width=\linewidth]{AES_GCM_AEAD_2}
+%	\end{figure}
+%}
+%\only<3>
+%{
+%	\begin{figure}
+%		\includegraphics[width=\linewidth]{AES_GCM_AEAD_3}
+%	\end{figure}
+%}
+%\only<4->
+%{
+%	\begin{figure}
+%		\includegraphics[width=\linewidth]{AES_GCM_AEAD_full}
+%	\end{figure}
+%}
+%\only<5>
+%{
+%Output $(c_1, \ldots, c_s, c_{s+1})$
+%}
+%\end{frame}
+%
+%\begin{frame}{AES-GCM AEAD}
+%\begin{figure}
+%	\includegraphics[width=0.7\linewidth]{AES_GCM_AEAD_full}
+%\end{figure}
+%
+%\begin{itemize}
+%	\item Uses just one key
+%	\item MAC: GHASH (Galois Hash) - uses finite field arithmetic (fast)
+%	\item Decryption: \\
+%	1. Verifies MAC \\
+%	2. $\Dec(c_1, \ldots, c_s)$
+%\end{itemize}
+%
+%\end{frame}
+%\begin{frame}{AEAD in TLS 1.3}
+%	\LARGE
+%	\begin{center}
+%		\begin{tabular}{c c c }
+%			\texttt{Browser}&  {\color{Orange}{Phase 1} Handshake}   & \texttt{Web server}  \\
+%			& {\Large Asymmetric Encryption}  & \\ 
+%			& {\Large Common keys are derived}  & \\ 
+%			$k_{b\rightarrow s}$&  & $k_{b\rightarrow s}$\\ 
+%			$k_{s\rightarrow b}$&  & $k_{s\rightarrow b}$ \pause \\ 
+%			&  {\color{Orange}{Phase 2} TLS record protocol}   &  \\
+%			& {\Large AEAD}  & \\ 
+%		\end{tabular}
+%	\end{center}
+%\end{frame}
+%
+%\begin{frame}{TLS record protocol}
+%\Large Data = $\left[m_1, \ldots, m_s\right]$
+%\LARGE
+%\begin{center}
+%	\begin{tabular}{c c c }
+%\texttt{Browser}&   & \texttt{Web server}  \\
+%$k_{b\rightarrow s}$&  & $k_{b\rightarrow s}$\\ 
+%$k_{s\rightarrow b}$&  & $k_{s\rightarrow b}$  \\ 
+%$ctr_{b\rightarrow s}$&  & $ctr_{b\rightarrow s}$\\ 
+%$ctr_{s\rightarrow b}$& {\large$\underbrace{
+%		\left[
+%		\texttt{Meta data} || \;
+%		m_i \; || \;
+%		\texttt{Nonce}
+%		\right]}$}  & $ctr_{s\rightarrow b}$  \\ 
+%\multicolumn{3}{c}{ $\xrightarrow{ \hspace{1em}  \Huge \text{AES-GCM-AEAD}(k_{b\rightarrow s}) \hspace{3.4em} }$  }  \pause \\
+%$ctr_{b\rightarrow s}++$&  & $ctr_{b\rightarrow s}++$\\ 
+%\end{tabular}
+%\end{center}
+%
+%\pause 
+%\vspace{10pt}
+%\texttt{Meta data} includes: record on the phase (1 or 2), TLS Version, \texttt{len}$(c)$ \\
+%Counters $ctr$ are used to prevent replay attacks
+%
+%\end{frame}
+%
+%\begin{frame}{Programming Assignment \# 5}
+%\Large
+%OpenSSL provides interfaces to GCM, CCM AEs via \texttt{EVP}\\[15pt]
+%
+%
+%This PA:  to implement Encryption and Decryption Interfaces for any two Authenticated Encryption
+%\begin{itemize}
+%	\item GCM 
+%	\item CCM 
+%	\item ChaCha20-Poly1305
+%\end{itemize}
+%
+%\vspace{10pt}
+%See \url{https://wiki.openssl.org/index.php/EVP_Authenticated_Encryption_and_Decryption} for code
+%
+%
+%\end{frame}
+
+\end{document}

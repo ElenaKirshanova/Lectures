@@ -1,0 +1,513 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+\definecolor{darkslateblue}{RGB}{72,61,139}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+\def\darktheme{}
+\ifdefined\darktheme
+	\setbeamercolor{background canvas}{bg=CharCoalDark}
+	\setbeamerfont{title}{series=\bfseries}
+	\setbeamercolor{title}{fg=Orange}
+	\setbeamercolor{section in toc}{fg=white}
+	\setbeamercolor{frametitle}{fg=Orange}
+	\setbeamercolor{normal text}{fg=white}
+	%\setbeamercolor{normal text}{fontsize=12pt}
+	\setbeamercolor{itemize item}{fg=Orange}
+	\setbeamercolor{itemize item item}{fg=Orange}
+	\setbeamercolor{enumerate item}{fg=Orange}
+	\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+	\setbeamerfont{block title}{series=\bfseries}
+	
+	\setbeamertemplate{itemize item}[circle]
+	%\setbeamertemplate{itemize subitem}[$\checkmark$]
+	\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+	\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+\else
+	\setbeamercolor{background canvas}{bg=white}
+	\setbeamerfont{title}{series=\bfseries}
+	\setbeamercolor{title}{fg=darkslateblue}
+	\setbeamercolor{section in toc}{fg=black}
+	\setbeamercolor{frametitle}{fg=darkslateblue}
+	\setbeamercolor{normal text}{fg=black}
+	%\setbeamercolor{normal text}{fontsize=9pt}
+	\setbeamercolor{itemize item}{fg=darkslateblue}
+	\setbeamercolor{itemize item item}{fg=darkslateblue}
+	\setbeamercolor{enumerate item}{fg=darkslateblue}
+	\setbeamercolor{block title}{bg=darkslateblue,fg=white}
+	\setbeamerfont{block title}{series=\bfseries}
+	
+	\setbeamertemplate{itemize item}[circle]
+	%\setbeamertemplate{itemize subitem}[$\checkmark$]
+	\setbeamertemplate{itemize subitem}{\color{blue}\Large$\textbullet$}
+	\setbeamertemplate{itemize subitem}{\color{blue} \tiny $\blacksquare$}
+
+\fi
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+
+%\institute{ENS Lyon}
+\author{\\ [10pt]
+}
+\titlegraphic{
+	
+	%\includegraphics[width=2.5cm]{erc_logo_gray}\hspace*{2.5cm}~%
+	%\includegraphics[width=4.0cm]{ens_logo_gray}
+}
+\title{Лекция №2 \\[10pt]
+		Часть 1. Псевдослучайные генераторы}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}{Одноразовый блокнот}
+\LARGE
+
+$\mesS, \keyS, \cipS = \{0,1\}^n$. \\
+
+\begin{itemize}
+	\item $\KeyGen(1^{\lambda}): k \leftarrow \{0,1\}^n$ \\[10pt]
+	\item $\Enc(k, m \in \{0,1\}^n): c = k \oplus m$ \\[10pt]
+	\item $\Dec(k, c \in \{0,1\}^n): m = k \oplus c$ \\[10pt]
+\end{itemize}
+
+{\color{Orange}  Проблема:} большие ключи. \\[10pt]
+
+{\color{Orange}  Решение:}  ``растянуть'' случайные $\ell$-бит в $L > \ell$ {\color{Orange}  псевдо-случайных} бит.
+
+\begin{align*}
+	G : \{0,1\}^{\ell} & \rightarrow \{0,1\}^{L}:	\\
+		s & \mapsto G(s) 
+	\end{align*}
+	
+{\color{Orange}\textbf{Интуиция:}}  ppt $\adv$ не может отличить $G(s)$ от $r \xleftarrow{\$} \{0,1\}^L$.
+
+\end{frame}
+
+\begin{frame}{Псевдослучайный генератор (PRG)}
+\Large
+	
+	PRG $G$ -- {\color{Orange} эффективный детерминированный} алгоритм, получающий на вход {\color{Orange} начальное значение (seed)} $s \in \mathcal{S} = \{0,1\}^{\ell}$ и вычисляющий $r \in \mathcal{R} = \{0,1\}^L$  \\
+	
+
+	\vspace{15pt}
+	%\centering
+	\begin{columns}
+	\begin{column}{0.5\textwidth}
+			{\color{Orange}\textbf{Эксперимент 0}} \\[10pt]
+			\begin{tabular}{c c c}
+				{\color{Orange} $\mathcal{C}$ } & &  {\color{Orange} Атакующий $\mathcal{A}$ } \\ [5pt]
+				$\Huge	s \leftarrow \mathcal{S}$ &  &  \\
+				$\Huge	r \leftarrow G(s)$  & $\xrightarrow{\; r \; }$ & \\
+				 & $\xleftarrow{\; \hat{b} \; }$ & \\
+			\end{tabular}
+			\begin{tikzpicture}[overlay]
+			\draw[fill=none, draw=white, opacity=0.5] (-6.2,-1.0) rectangle (-4.0,1.4); 
+			\draw[fill=none, draw=white, opacity=0.5] (-3.2,-1.0) rectangle (-0.2,1.4); 
+			\end{tikzpicture}
+	\end{column}
+	\begin{column}{0.5\textwidth}
+		{\color{Orange}\textbf{Эксперимент 1:}}\\[10pt]
+			\begin{tabular}{c c c}
+			{\color{Orange} $\mathcal{C}$ } & &  {\color{Orange} Атакующий $\mathcal{A}$ } \\ [5pt]
+			 &  &  \\
+			$\Huge	r \xleftarrow{\$} \{0,1\}^{L}$  & $\xrightarrow{\; r \; }$ & \\
+			& $\xleftarrow{\; \hat{b} \; }$ & \\
+		\end{tabular}
+		\begin{tikzpicture}[overlay]
+		\draw[fill=none, draw=white, opacity=0.5] (-6.7,-1.0) rectangle (-4.0,1.4); 
+		\draw[fill=none, draw=white, opacity=0.5] (-3.2,-1.0) rectangle (-0.2,1.4); 
+		\end{tikzpicture}
+		
+	\end{column}
+	\end{columns}
+	
+	\vspace{10pt}
+	\LARGE
+	 $W_b$ событие ``$\mathcal{A}$ возвращает $b$'' \\[5pt]
+	 Выигрыш $\mathcal{A}$'s $:	\mathsf{PRGadv} \left[  \mathcal{A}, G \right ] = |\Pr[W_0] - \Pr[W_1]|$. \\[10pt]
+	 
+	PRG $G$ -- {\color{Orange}\textbf{безопасный}}, если $	\mathsf{PRGadv} = \negl(\cdot)$ для всех ppt $\mathcal{A}$.
+	 
+
+\end{frame}
+
+\begin{frame}{Атаки на PRG}
+\Large 
+\vspace{-15pt}
+\begin{align*}
+G : \{0,1\}^{\ell} & \rightarrow \{0,1\}^{L}:	\\
+s & \mapsto G(s) 
+\end{align*}
+
+Существует атакующий $\mathcal{A}$ для $G$ со сложностью $2^\ell$. \\[10pt]
+
+
+Кроме этого,  {\color{Orange}\textbf{$\Pi$ статистический тест}} для $\{0,1\}^\ell$ --  алгоритм $A$, выдающий $0$ (=``не случайное'') или $1$ (=``случайное'') \\
+\LARGE
+\begin{enumerate}
+	\item $A(x) = 1 \quad \abs{\# 0(x) - \# 1(x)} \leq 10 \sqrt{n}$  \\ [10pt]
+	\item $A(x) = 1 \quad \max \mathsf{len}\{1...1(x) \} \leq 10 \log n$  \\ [10pt]
+\end{enumerate}
+
+\vspace{4pt}
+
+Примеры реализаций тестов:
+\begin{itemize}
+	\item Diehard tests
+	\item TestU01
+	\item Тесты NIST
+\end{itemize}
+
+\end{frame}
+
+
+%
+%\begin{frame}{Pseudorandom Generators (PRGs)}
+%\LARGE 
+%	Idea: `Stretch' truly random $\ell$-bits seed $s$ into a longer $L$-bits `random looking' string  
+%	\vspace{15pt}
+%	Define
+%	\LARGE
+%	\begin{align*}
+%		G : \{0,1\}^{\ell} & \rightarrow \{0,1\}^{L}:	\\
+%		s & \mapsto G(s) 
+%	\end{align*}
+%	
+%	{\color{Orange}\textbf{Intuition:}} an ppt adversary cannot tell the difference between $G(s)$ and $r \leftarrow \{0,1\}^L$.
+%	
+%\end{frame}
+%
+
+%
+
+%
+%\begin{frame}{Stream Cipher = OTP with keys output by a PRG}
+%\LARGE
+%	Let $G: \{0,1\}^{\ell} \rightarrow \{0,1\}^L$ \\[5pt]
+%	
+%	The {\color{Orange}\textbf{stream cipher}} $\Pi = (\KeyGen, \Enc, \Dec)$ is defined over
+%	\begin{itemize}
+%		\item $\keyS = \{0,1\}^{\ell}$ \\
+%		\item $\mesS = \{0,1\}^{L}$ \\
+%		\item $\cipS = \{0,1\}^{L}$ \\
+%	\end{itemize}
+%	\vspace{10pt}
+%	For $s \in \{0,1\}^{\ell}$
+%	\begin{itemize}
+%		\item $\Enc(s, m \in \{0,1\}^L): c = G(s) \oplus m$ \\[10pt]
+%		\item $\Dec(s, c \in \{0,1\}^L): m = G(s)\oplus c$ \\
+%	\end{itemize}
+%
+%\end{frame}
+%
+%\begin{frame}{Semantic Security}
+%		\begin{tikzpicture}
+%			\draw[-stealth, thick] (-1.8,-1.0) -- (-1.0,-1.0) node[above,midway]{\Huge $b$};
+%			\draw[fill=CharCoalDark, draw=white, opacity=0.5] (-1.0,-2.0) rectangle (1.8,1.8)  node[color=white, opacity=1,align=center, pos=0.5]{
+%				\Large  {\color{Orange}{\underline{Challenger}} }  \\[18pt]
+%				\Huge $k \leftarrow \keyS$
+%			};
+%			\draw[stealth-, thick] (1.8,0.5) -- (6.5,0.5) node[above,midway]{\Large $m_0, m_1 \in \mesS,  |m_0|=|m_1|$};
+%			\draw[-stealth, thick] (1.8,-0.5) -- (6.5,-0.5) node[above,midway]{\Large $c \leftarrow \Enc(k,m)$};
+%			\draw[fill=CharCoalDark, draw=white, opacity=0.5] (6.5,-2.0) rectangle (8.0,1.8)  node[color=white,pos=0.8] {
+%				\Large  {\color{Orange}{\underline{$\mathcal{A}$}} }
+%			};
+%			\draw[-stealth, thick] (8.0,-1.0) -- (9.0,-1.0) node[above,midway]{\Huge $b'$};
+%		\end{tikzpicture}
+%		\Large
+%		\vspace{15pt} \\
+%		\centering
+%		
+%		Let $W_b$ be the event that $\mathcal{A}$ outputs $b$. \\
+%		$\mathcal{A}$'s advantage: $	\mathsf{Adv} \left[  \mathcal{A}, \Enc \right ] = |\Pr[W_0] - \Pr[W_1]|$. \\[5pt]
+%		
+%		 $\Pi$ is {\color{Orange}\textbf{semantically secure}} if $	\mathsf{PRGadv} = \negl(\lambda)$  for all ppt $\mathcal{A}$.
+%\end{frame}
+%
+%%\begin{frame}{Unpredictability of a PRG}
+%%	content...
+%%\end{frame}
+%
+%\begin{frame}{Semantic Security of $\Pi$}
+%\LARGE
+%	\begin{theorem}
+%		If $G$ is a secure PRG, then the stream cipher $\Pi$ constructed from $G$ is semantically secure.
+%	\end{theorem}
+%\vspace{20pt}
+%{\color{Orange}\textbf{Proof strategy: }} for any adversary $\mathcal{A}$ against semantic security, $\exists$ an adversary $\mathcal{B}$ against $G$.
+%\end{frame}
+%
+%\begin{frame}{QUESTION!}
+%	\LARGE
+%	
+%	Let $G$ be a PRG that the last bit of the output is always 0. \\[10pt]
+%	Let $\Pi$ be a stream cipher constructed from $G$.\\[15pt]
+%	\centering
+%	{\color{Orange}\textbf{Is $\Pi$ semantically secure?}} 
+%\end{frame}
+%
+%
+%
+%\begin{frame}{Constrictions of a PRG: Salsa and ChaCha}
+%\Large
+%	\begin{itemize}
+%		\item Salsa20,ChaCha20: proposed by D.Bernstein in 2005, 2008
+%		\item used in many TLS cipher suits
+%		\item Input: $256$-bit seed and a parameter $L$
+%		\item Output: $(256 \cdot L)$-bit pseudorandom string
+%	\end{itemize}
+%	\vspace{20pt}
+%	\pause
+%	Two components
+%	\begin{enumerate}
+%		\item $\mathsf{pad}(s, j, 0)$: takes a seed $s$, a $64$-bit counter $j$ and a $64$-bit nonce\\
+%		Output: $512$-bit block
+%		\item a fixed public permutation $\pi: \{0,1\}^{512} \rightarrow \{0,1\}^{512}$
+%	\end{enumerate}
+%	\vspace{20pt}
+%	See \url{https://cr.yp.to/chacha.html} for details
+%\end{frame}
+%
+%\begin{frame}{ChaCha PRG}
+%\begin{figure}
+%	\includegraphics[width=\textwidth]{ChaCha20}
+%\end{figure}
+%
+%Nonce -- the third parameter of $\mathsf{pad}(s, j, 0)$ is used to convert a PRG into a PRF (useful for encryption of multiple messages).
+%\vfill
+%\small
+%{\color{gray}\textbf{picture is taken from D.Boneh, V.Shoup A Graduate Course in Applied Cryptography}} 
+%\end{frame}
+%
+%\begin{frame}{(Somewhat) Broken PRGs}
+%\LARGE
+%\begin{enumerate}
+%	\itemsep2em 
+%	\item {\color{Orange}\textbf{linear congruential generators}} 
+%	\begin{itemize}
+%		\LARGE
+%				\itemsep5pt  
+%		\item had been used in glibc, Microsoft Visual Basic, Java
+%		\item notorious for RANDU
+%		\item \textbf{not cryptographically secure PRG!}
+%	\end{itemize}
+%
+%	\item {\color{Orange}\textbf{RC4}} 
+%	\begin{itemize}
+%		\LARGE
+%		\itemsep5pt 
+%		\item proposed by R.Rivest  in 1987
+%		\item used to be a part of TLS, 802.11b WEP
+%		\item \textbf{not cryptographically secure PRG!}
+%	\end{itemize}
+%
+%	\item {\color{Orange}\textbf{Linear feedback shift registers}}
+%	\begin{itemize}
+%			\LARGE
+%			\itemsep5pt
+%		\item used for protecting movies on DVD disks
+%		\item weakly security  PRG (Trivium)
+%	\end{itemize} 
+%\end{enumerate}
+%
+%\end{frame}
+%
+%\begin{frame}{A Random Number Generator}
+%	\Large
+%	\begin{itemize}
+%		\itemsep7pt
+%		\item In practice, random bits are generated using a random number generator,  RNG
+%		\item An RNG outputs a sequence of pseudorandom bits
+%		\item Unlike PRG, an RNG take additional input (entropy source)
+%		\item Example in Linux: $\mathsf{/dev/random}$
+%		\item Entropy is usually taken from hardware (keyboard/mouse events, hardware interrupts, jitters).
+%	\end{itemize}
+%\end{frame}
+%
+%\begin{frame}{Application: Coin flipping}
+%\LARGE
+%Task:  throw a fair coin over without interaction 
+%\begin{center}
+%	\begin{tabular}{c c c c c}
+%		 \multicolumn{5}{c}{$G: \{0,1\}^{\ell} \rightarrow \{0,1\}^{L}$}\\[10pt]
+%		& Bob  & & Alice &  \\
+%		 & \multirow{5}{*}{\includegraphics[scale=0.20]{Bob}} & &
+%		\multirow{5}{*}{\includegraphics[scale=0.20]{Alice}} &  \\
+%		&  &  & & $r \leftarrow \{0,1\}^{L}$  \\
+%		&  & $\xleftarrow{r}$ & &  \\
+%		Flips a coin &   & &  &  \\
+%		$b \in \{0,1\}$&  & & &  \\
+%		$s \in \{0,1\}^{\ell}$&  & & &  \\[15pt]
+%		\multicolumn{5}{l}{$\mathsf{commit}(b, r, s)  = 
+%			\begin{cases}
+%			G(s), & b = 0\\
+%			G(s) \oplus r, & b=1
+%			\end{cases}
+%			$}  \\
+%		&  & $\xrightarrow{\mathsf{commit}(b, r, s)} $ & &  \\
+%	\end{tabular}
+%\end{center}
+%
+%\end{frame}
+
+\end{document}

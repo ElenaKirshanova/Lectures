@@ -1,0 +1,396 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{stackengine}
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+%\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+\titlegraphic{
+	
+	%\includegraphics[width=2.5cm]{stayhome}%
+	%\includegraphics[width=4.0cm]{ens_logo_gray}
+}
+\title{Лекция №5 \\[10pt]
+	Часть 3. Где используются хэш-функции}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}{В этой лекции}
+\Large
+	\begin{itemize}
+		\itemsep 10pt
+		\item Построение MACa
+		\item Протокол идентификации
+		\item Доказательство работы (proof of work)
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+
+\begin{LARGE}
+	
+	
+	\color{Orange}
+	1. Построение MACa
+	
+\end{LARGE}
+\end{frame}
+
+\begin{frame}{Построение MACa}
+\Large
+{\color{Orange} Задача:} из хэш-функции 
+\[H: \{0,1\}^\star \rightarrow \{0,1\}^{\ell}\] построить функцию генерации МАСа 
+\[S: \keyS \times \{0,1\}^\star \rightarrow \{0,1\}^{\ell}.\]
+
+\vspace{20pt}
+
+Основная сложность: хэш-функция -- бесключевой примитив. 
+
+\end{frame}
+
+\begin{frame}{Конструкция ``Two-key Nest''}
+\Large
+Для сообщения $M = (m_1, m_2)$ и $h: \{0,1\}^\ell \times \mesS \rightarrow  \{0,1\}^\ell $ -- функции компрессии
+\[
+	S((k_1, k_2), M) = \Hash_{\text{NMAC}}(k_2 \; ||  \; \Hash_{\text{NMAC}}(k_1 \; || \; M)
+\]
+
+\begin{figure}
+	\hspace{-60pt}
+	\includegraphics[scale=0.35]{TwoKeyNest}
+\end{figure}
+\vspace{-30pt}
+{\color{Orange} Теорема:} Если $h(\cdot, )$ и $h(, \cdot)$ -- псевдослучайная функция, то \\ Two-key Nest -- безопасный MAC.
+
+\end{frame}
+
+\begin{frame}
+
+\begin{LARGE}
+	
+	
+	\color{Orange}
+	2. Протокол идентификации
+	
+\end{LARGE}
+\end{frame}
+
+\begin{frame}{Протокол идентификации:  определение}
+\Large
+$\text{Id } = (\KeyGen, \textsf{P}, \textsf{V})$ -- интерактивный протокол, состоящий из 
+
+\begin{itemize}
+	\itemsep 7pt
+	\item $\KeyGen(1^\lambda) \rightarrow (\vk, \sk)$ 
+	\item $\textsf{P}(\sk)$ -- Доказывающий (Prover)
+	\item $\textsf{V}(\vk) \rightarrow \{0,1\}$ -- Проверяющий (Verifier)
+\end{itemize}
+
+\vspace{10pt}
+
+{\color{Orange} Корректность:} $\textsf{V}(\vk) \rightarrow 1$ при общении с $\textsf{\sk}$, где $\KeyGen(1^\lambda) = (\vk, \sk)$.
+
+\vspace{10pt}
+
+{\color{Orange} Безопасность:}
+\begin{tabular}{c c c}
+	{\color{Orange} Челленджер $\mathcal{C}$ } & & {\color{Orange} $\mathcal{A}$ } \\ 
+	$\KeyGen(1^\lambda) \rightarrow (\vk, \sk)$ & $\xrightarrow{\vk}$ & \\[5pt]
+	 & $\leftarrow$ & \\[-2pt]
+	 & $\rightarrow$ & \\[2pt]
+	
+\end{tabular}
+\vspace{10pt}
+
+Выигрыш $\mathcal{A}$ --  $\mathcal{C}$ возвращает ``1'' (Accept). \\[5pt]
+
+$\text{Id }$ -- безопасный Id-протокол относительно прямых атак,  \\ если $\forall $ ppt $\mathcal{A}$  вероятность выигрыша  $\negl(\lambda)$.
+
+\end{frame}
+
+\begin{frame}{Протокол парольной идентификации}
+\Large
+\[
+	\Hash: \{0,1\}^\star \rightarrow \{0,1\}^\ell - \text{ хэш-функция}
+\]
+
+\vspace{10pt}
+\begin{center}
+\begin{tabular}{c c c}
+	 \multicolumn{3}{c}{$\KeyGen \rightarrow (\sk = pwd, \vk = \Hash(pwd))$}  \\[20pt] 
+	$\textsf{P}(pwd)$  & & $\textsf{V}(\vk)$  \\[5pt]
+	& $\xrightarrow{\quad pwd \quad }$ & \\
+	&  & $\Hash(pwd) == \vk \; ? \; 1 \; : \; 0 $
+\end{tabular}
+\end{center}
+
+\vspace{10pt}
+
+$\Hash$ -- криптографическая хэш-функция $\implies$ протокол  \\ $\text{Id} = (\KeyGen,\textsf{P}, \textsf{V} )$ безопасен относительно прямых атак.
+
+\end{frame}
+
+
+\begin{frame}{Протокол парольной идентификации}
+\Large
+\[
+\Hash: \{0,1\}^\star \rightarrow \{0,1\}^\ell - \text{ хэш-функция}
+\]
+
+\vspace{10pt}
+\begin{center}
+	\begin{tabular}{c c c}
+		\multicolumn{3}{c}{$\KeyGen \rightarrow (\sk = pwd, \vk = [\Hash(pwd, {\color{Orange}salt}), {\color{Orange}salt \xleftarrow{\$} S}])$}  \\[20pt] 
+		$\textsf{P}(pwd)$  & & $\textsf{V}(\vk = (h, {\color{Orange}salt}))$  \\[5pt]
+		& $\xrightarrow{\quad pwd \quad }$ & \\
+		&  & $\Hash(pwd, {\color{Orange}salt}) == h \; ? \; 1 \; : \; 0 $
+	\end{tabular}
+\end{center}
+
+\vspace{10pt}
+
+$\Hash$ -- криптографическая хэш-функция $\implies$ протокол  \\ $\text{Id} = (\KeyGen,\textsf{P}, \textsf{V} )$ безопасен относительно прямых атак.
+
+\end{frame}
+
+
+
+\begin{frame}
+
+\begin{LARGE}
+	
+	
+	\color{Orange}
+	3. Доказательство работы (proof of work)
+	
+\end{LARGE}
+\end{frame}
+
+
+
+
+\begin{frame}{Хэш-функция в  BitCoin}
+\Large
+Важный примитив в BitCoin: {\color{Orange} Proof of Work (PoW) / Доказательство работы} \\[10pt]
+Интуиция: вычислительная мощность пользователя $\implies$ пользователь должен доказать это результатом вычислений \\
+\vspace{15pt}
+\begin{itemize}
+	\itemsep 1em
+	\item PoW предложен Dwork \& Naor (1992) как противодействие спаму
+	\item {\color{Orange} Идея:}  заставить пользователя решить пазл ``средней сложности''  (решение должно быть легко верифицировать)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Хэш-функция в  BitCoin: конструкция PoW}
+
+\large
+Основной примитив: криптографическая хэш-функция  $\Hash:\{0,1\}^\star \rightarrow \{0,1\}^\ell$, сложность вычисления которой $T(\Hash)$.
+
+\vspace{10pt}
+	%\begin{center}
+	\begin{tabular}{l c c c l}
+		& Алиса  & & Боб &  \\
+		& Доказывающий  & & Проверяющий &  \\[3pt]
+		& \multirow{5}{*}{\includegraphics[scale=0.15]{Alice}} & & 
+		\multirow{5}{*}{\includegraphics[scale=0.15]{Bob}} &  1. $x \in \{0,1\}^{\star}$   \\
+		&  & \Huge $\xleftarrow{\mkern5mu x \mkern5mu}$ & &  3. Проверить: \\ [2pt]
+		2. Выбрать $s \in \{0,1\}^\star$   & & &  & $\Hash(s||x)$  имеет $n$ 0ей?  \\[-6pt]
+		т.ч.\ $\Hash(s||x)$ & & \Huge $\xrightarrow{\mkern5mu s \mkern5mu}$  &  &  {\color{Orange}  Время: $T(\Hash) $}  \\
+		начинается с $n$ 0'ей & & &  &  \\[4pt]
+		{\color{Orange}  Время: $2^n T(\Hash) $} & & &  & 
+	\end{tabular}
+%\end{center}
+
+\vspace{15pt}
+Для криптографической хэш-функции $\Hash$ Алиса не может найти $s$ \\ быстрее, чем перебором. Это атака на прообраз. 
+\end{frame}
+
+\end{document}

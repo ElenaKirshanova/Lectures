@@ -1,0 +1,368 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{stackengine}
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+%\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+\usepackage{changepage}
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{MapleWood}{RGB}{241, 195, 142}
+\definecolor{Redwood}{RGB}{210, 173, 169}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+\title{Лекция №10 \\[10pt]
+	Часть 2. Протоколы сквозного шифрования. Протокол Signal.}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+
+
+\begin{frame}{Безопасный обмен сообщениями}
+	\Large
+	{\color{Orange} Безопасный мессенджер (Secure Messaging, SM)} позволяет группе людей обмениваться сообщениями. При этом обеспечиваются\\[10pt]
+	\large
+
+	\begin{itemize}
+		\itemsep5pt
+		\item {\color{Orange} Корректность}
+		\item {\color{Orange} Конфиденциальность:} атакующий не получает никакой информации о переданных сообщениях, в случае если ни одна из сторон не скомпрометирована
+		\item {\color{Orange} Аутентификация:} атакующий не может изменить, продублировать или вставить новое сообщение
+		\item  {\color{Orange} Немедленное дешифрование}
+		\item {\color{Orange}  Стойкость к потере сообщений:} в случае утраты сообщения, коммуникация продолжается
+		\item {\color{Orange} Прямая секретность (forward secrecy):} все сообщения, переданные \emph{до} компрометации остаются конфиденциальны
+		\item {\color{Orange} Безопасность после компрометации: } стороны могут возобновить конфиденциальность \emph{после} компрометации
+	\end{itemize}
+	\centering
+\end{frame}
+
+\begin{frame}{Протокол Signal}
+	\Large
+	{\color{Orange}Протокол Signal} предложен компанией Open Whisper Systems. Пример протокола безопасного мессенджера. \\[10pt]
+	\large
+	\begin{itemize}
+		\itemsep 7pt
+		\item используется в приложениях Signal, WhatsApp, Facebook Messenger, Skype
+		\item каждое сообщение шифруется и аутентифицируется с помощью свежего симметрического ключа
+		\item удовлетворяет вышеперечисленным критериям безопасности 
+	\end{itemize}
+	\vspace{30pt}
+
+\normalsize 
+Описание протокола: \\ \url{https://signal.org/docs/specifications/doubleratchet/doubleratchet.pdf} \\[5pt]
+Его анализ: \url{https://eprint.iacr.org/2018/1037.pdf} \\[5pt]
+Лекция Y.Dodis: \url{https://www.youtube.com/watch?v=az-tMBjLcks}
+
+\end{frame}
+
+\begin{frame}{Primitives for SM Protocols}
+\Large
+\[
+	\left.
+	\begin{array}{rrr}
+		\text{Корректность}\\
+		\text{Конфиденциальность}\\
+		\text{Аутентификация}\\
+		\text{Немедленное дешифровани} \\
+		\text{Стойкость к потере сообщенийe}\\
+		\text{Прямая секретность }
+	\end{array}
+	\right\}\text{AEAD (симметрический примитив)}
+	\]
+AEAD -- Authenticated Encryption with Associated Data \\[20pt]
+\[
+\hspace{-70pt}\left.
+\begin{array}{rrr}
+\text{Прямая секретность }\\
+\text{Безопасность после компрометации} 
+\end{array}
+\right\}\text{CKA (асимм. примитив)}
+\]
+CKA -- Непрерывный обмен ключами (Continuous Key Agreement)
+\end{frame}
+
+\begin{frame}{Signal: симметрическая часть}
+\LARGE
+	\begin{center}
+		\begin{tabular}{c c c }
+			{\LARGE \color{Orange}\texttt{A}}&    & {\LARGE \color{Orange}\texttt{B}}  \\
+			{\color{Orange}\texttt{Отправляющий}}&  {\LARGE $\leftarrow k \rightarrow $ }  & {\color{Orange}\texttt{Получатель}}   \\[10pt]
+			$s_{\text{A},0} \leftarrow \mathtt{InitSender}(k)$& & $s_{\text{B},0} \leftarrow \mathtt{InitReceiver}(k)$ \\[10pt]
+			$s_{\text{A},1}, c_1 \leftarrow \mathtt{Send}(m_1)$& $\xrightarrow{\hspace{5pt}c_1\hspace{5pt}}$ & \\
+			$s_{\text{A},2}, c_2 \leftarrow \mathtt{Send}(m_2)$& $\xrightarrow{\hspace{5pt}c_2\hspace{5pt}}$ & \\
+			& & $s_{\text{B},1}, m_1 \leftarrow \mathtt{Receive}(c_1)$ \\
+			& & $s_{\text{B},2}, m_2 \leftarrow \mathtt{Receive}(c_2)$ \\
+			& $\vdots $& \\
+		\end{tabular}
+	\end{center} 
+\begin{itemize}
+	\item $\mathtt{Send}$ -- шифрование, $\mathtt{Receive}$ -- дешифрование
+	\item $s_{\text{A},i}$ -- $i$-ое состояние A
+	\item $s_{\text{B},i}$ -- $i$-ое состояние B
+	\item состояния должны оставаться конфиденциальными
+	\item шифр-тексты $c_i$ не обязаны приходит к \texttt{B} в корректном порядке
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Signal: AEAD + PRG}
+\Large 
+$\Enc,\Dec$ -- процедуры шифрования/дешифрование в AEAD (см. Лекцию № 6)
+\[
+\text{G}: \{0,1\}^n \rightarrow \{0,1\}^{2n} - \text{псевдослучайный генератор (см. Лекцию № 2)}
+\]
+	\vspace{-10pt}
+	\begin{columns}
+		\hspace{-30pt}
+		\begin{column}{0.5\textwidth}
+			\centering
+			\includegraphics[width=0.8\textwidth]{SendSignal}
+		\end{column}
+		\hspace{-80pt}
+		\begin{column}{0.5\textwidth}
+			\centering
+			\pause 
+			\includegraphics[width=0.8\textwidth]{ReceiveSignal}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Signal: AEAD + PRG}
+\Large 
+$\Enc, \Dec$ -- процедуры шифрования/дешифрование в AEAD (см. Лекцию № 6)
+\[
+\text{G}: \{0,1\}^n \rightarrow \{0,1\}^{2n} \text{псевдо-случайный генератор (см. Лекцию № 2)}
+\]
+\vspace{-20pt}
+\begin{columns}[T]
+	\hspace{-30pt}
+	\begin{column}{0.5\textwidth}
+		\centering
+		\includegraphics[width=0.9\textwidth]{SendSignalNoC2}
+	\end{column}
+	\hspace{-70pt}
+	\begin{column}{0.5\textwidth}
+		\centering
+		\pause 
+		\includegraphics[width=0.80\textwidth]{ReceiveSignalNoC2}
+	\end{column}
+\end{columns}
+\centering
+\vspace{10pt}
+%All w$_i$ are erased when no further needed.
+\end{frame}
+
+\begin{frame}{Signal: ассиметрическая часть}
+	\Large Общий ключ $k$ генерируется в результате протокола обмена ключами\\
+	Signal использует {\color{Orange} непрерывный протокол обмена ключами} Диффи-Хэллмана
+	 
+	\begin{center}
+		\begin{tabular}{c c c }
+			{\LARGE \color{Orange}\texttt{A}}&    & {\LARGE \color{Orange}\texttt{B}}  \\[2pt]
+			$x_1 $& $\xrightarrow{\hspace{15pt} g^{x_1} \hspace{15pt}}$ & \\[5pt]
+			& $\xleftarrow{\hspace{15pt} g^{x_2} \hspace{15pt}}$ & $x_2$ \\
+			{\color{Orange}$g^{x_1x_2}$} & & {\color{Orange}$g^{x_1x_2}$} \pause \\[5pt]
+			$x_3 $& $\xrightarrow{\hspace{15pt} g^{x_3} \hspace{15pt}}$ & \\
+			{\color{Orange}$g^{x_2x_3}$} & & {\color{Orange}$g^{x_2x_3}$ }\\[5pt]
+			& $\xleftarrow{\hspace{15pt} g^{x_4} \hspace{15pt}}$ & $x_4$  \\
+			{\color{Orange}$g^{x_3x_4}$} & & {\color{Orange}$g^{x_3x_4}$ }\\
+			& $\vdots $& \\
+		\end{tabular}
+	\end{center}
+\vspace{-10pt}
+\normalfont
+\begin{itemize}
+	\item Во время $i$ общий ключ $ = g^{x_i x_{i-1}}$
+	\item Новый общий ключ генерируется всякий раз, когда одна из \\ сторон меняет роль с {\color{Orange}\texttt{Получателя}} на {\color{Orange}\texttt{Отправителя}} 
+	\item Если ключ $g^{x_i x_{i-1}}$ скомпрометирован (атакующий знает $x_i$), стороны восстанавливают конфиденциальность спустя 2 раунда
+\end{itemize}
+	
+\end{frame}
+
+\begin{frame}{Замечания}
+\Large
+
+\begin{itemize}
+	\itemsep 10pt
+	\item Безопасность (нетривильно) основана на стойкость {\color{Orange} обмена ключами/KEM'a,} примитива {\color{Orange} AEAD},  {\color{Orange} PRG} 
+	\item На практике \\
+	\hspace{10pt} обмен ключами: Диффи-Хэллман на эллиптической кривой \\[3pt]
+	\hspace{10pt} AEAD:  CBC + HMAC \\[3pt]
+	\hspace{10pt} вместо PRG используется SHA-256 \\
+	\item формальное доказательство безопасности чатов (>2 участников) \\ под вопросом
+\end{itemize}
+\end{frame}
+
+\end{document}

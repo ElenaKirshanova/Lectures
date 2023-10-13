@@ -1,0 +1,322 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{stackengine}
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+%\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+
+\title{Лекция №5 \\[10pt]
+	Часть 5. Случайный оракул (Random Oracle)}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}{Хэш-функции }
+
+	\LARGE
+	 
+	 {\color{Orange} Задача: } конвертировать секретную строку $s$ (пароль) в ключ {\color{Orange}$k$}  \\[8pt] 
+	 
+	В криптографических приложениях (MAC, подпись) ${\color{Orange}k} = \Hash(s)$.\\[8pt] 
+	
+	Для этого результат хэширования {\color{Orange}$k$} должен ``выглядеть'' случайно. \\[25pt] 
+	
+	Формально, если $I(x)$-- сторонняя информация от $x$, то распределения
+	\[
+		(I(s), \Hash(s))  \quad \quad 	(I(s), k \xleftarrow{\$} \mathcal{T})
+	\]
+	
+	должно быть сложно отличить эффективному атакующему.
+	
+\end{frame}
+
+\begin{frame}{Эвристика случайного оракула, Bellare--Rogaway'93}
+\vspace{-60pt}
+	\Large
+	{\color{Orange} Идея:} моделировать хэш-функцию $\Hash: \mesS \rightarrow \mathcal{T}$ как {\color{Orange} случайную}  функцию из ${\color{Orange}\mathcal{O}} \xleftarrow{\$} \mathcal[\mesS, \mathcal{T}]$. \\[8pt]
+	
+	В док-ве безопасности челленджер {\color{Orange}$\mathcal{C}$} использует вместо {\color{Orange} конкретной} $\Hash$ функцию ${\color{Orange}\mathcal{O}}\xleftarrow{\$} \mathcal[\mesS, \mathcal{T}]$. \\[8pt]
+	\begin{center}
+		Функция {\color{Orange}$\mathcal{O}$} -- случайный оракул. \\[5pt]
+		
+		Док-во безопасности с  {\color{Orange}$\mathcal{O}$}  -- док-во в {\color{Orange} модели случайного оракула.}
+		
+	\end{center}
+
+\textbf{Реализация случайного оракула: метод ленивой выборки.}
+	
+
+\end{frame}
+
+\begin{frame}{Док-ва безопасности в модели случайного оракула}
+	\Large
+	\centering
+	Криптопритив $\Pi$ использует хэш-функцию $\Hash: \mesS \rightarrow \mathcal{T}$. \\[15pt]
+	
+	\begin{columns}[T]
+		\begin{column}{0.4\textwidth}
+			Доказательство в {\color{Orange}стандартной} модели \\[15pt]
+				\begin{tabular}{c c c}
+					{\color{Orange} Челленджер $\mathcal{C}$ } & & {\color{Orange} $\mathcal{A}$ } \\ 
+					& $\leftarrow$ & \\[-2pt]
+					& $\rightarrow$ & \\[2pt]
+				\end{tabular}
+			\begin{tikzpicture}[overlay]
+			\draw[fill=none, draw=white, opacity=0.5] (-4.8,-1.5) rectangle (-2.0,1.0); 
+			\draw[fill=none, draw=white, opacity=0.5] (-1.0,-1.5) rectangle (0.5,1.0); 
+			\end{tikzpicture}
+		\end{column}
+	\begin{column}{0.6\textwidth}
+		Доказательство в модели {\color{Orange}случайного оракула} \\[25pt]
+			\begin{tabular}{c c c}
+				{\color{Orange} Челленджер $\mathcal{C}$ } & & {\color{Orange} $\mathcal{A}$ } \\ 
+				& $\leftarrow$ & \\[-2pt]
+				& $\rightarrow$ & \\[50pt]
+				& {\color{Orange} Оракул $\mathcal{O}$ } &
+			\end{tabular}
+			\begin{tikzpicture}[overlay]
+		\draw[fill=none, draw=white, opacity=0.5] (-6.3,-0.5) rectangle (-3.0,2.0); 
+		\draw[fill=none, draw=white, opacity=0.5] (-1.0,-0.5) rectangle (0.5,2.0); 
+		\end{tikzpicture}
+	\end{column}
+	\end{columns}
+
+\vspace{20pt}
+
+В модели случайного оракула каждая сторона, {\color{Orange}  $\mathcal{C}$} и {\color{Orange}  $\mathcal{A}$}, \\ имеют доступ к {\color{Orange} Оракул $\mathcal{O}$}.
+\end{frame}
+
+\begin{frame}{Пример: PRF  из хэш-функции}
+ \Large
+ \vspace{-10pt}
+% Докажем, что  функция
+ 	\begin{align*}
+ 		\mathcal{F}: \keyS \times \mesS & \rightarrow \mathcal{T} \\
+ 								(k, m) & \rightarrow \Hash(k || m)
+ 	\end{align*}
+% является псевдослучайной в модели случайного оракула.
+ 
+ %\vspace{10pt}
+ 
+ {\color{Orange} Теорема.} Если множество $\keyS$ достаточно большое, функция $\mathcal{F}$ является {\color{Orange} псевдослучайной} в {\color{Orange} модели случайного оракула}. 
+ 
+ \vspace{25pt}
+ 
+ %\begin{center}	
+ 	\begin{tabular}{c c c}
+ 		{\color{Orange} Челленджер $\mathcal{C}$ } &{\color{Orange} $ \quad \mathcal{O}$ }  & {\color{Orange} Атакующий $\mathcal{A}$ }\\ [5pt]
+ 		$b \xleftarrow{\$} \{0,1\}  $& &\\ [2pt]
+ 		$\mkern-45mu b ==0: f \xleftarrow{\$} \mathcal{F}[\mathcal{K}, \mathcal{M}]$  & &\\ [2pt]
+ 		$b ==1: k\xleftarrow{\$} \keyS, f = {\color{Orange}   \mathcal{O} }(k, \cdot )$  & &\\ [2pt]
+ 		& $ \xleftarrow{\quad x_i \quad} $  & $x_i \in \mathcal{K}  $\\[5pt]
+ 		& $\xrightarrow{f (x_i)}$  &\\[5pt]
+ 		& $\xleftarrow{\quad \hat{b} \quad}$ & \\ [5pt]
+ 	\end{tabular}
+ 	\begin{tikzpicture}[overlay]
+ 	\draw[fill=none, draw=white, opacity=0.5] (-9.8,-2.3) rectangle (-4.8,3.0); 
+ 	\draw[fill=none, draw=white, opacity=0.5] (-2.9,-2.3) rectangle (-0.1,3.0); 
+ 	\end{tikzpicture}
+ %\end{center}	
+ \end{frame}
+
+\begin{frame}{Статус доказательств в модели со случайным оракулом}
+	\Large
+	
+	\begin{itemize}
+		\itemsep 10pt
+		\item На практике, случайный оракул реализован с помощью криптографической хэш-функции (SHA-3)
+		\item Если конструкция, доказанная безопасной в модели случайного оракула, оказывается ``взломанной'' На практике,  значит, выбранная  хэш-функция недостаточно ``хороша''.
+		\item Модель случайного оракула -- {\color{Orange} эвристическая } модель, она может быть неверна для  всех конструкций (см. Canetti-Goldreich-Halevi. The Random Oracle Methodology, Revisited.)
+		\item Современные конструкции цифровых подписей доказаны в модели случайного оракула
+	\end{itemize}
+\end{frame}
+
+
+\end{document}

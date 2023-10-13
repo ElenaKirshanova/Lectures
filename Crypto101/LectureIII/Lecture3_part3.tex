@@ -1,0 +1,382 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+
+\title{Лекция №3 \\[10pt]
+	Часть 3. Режим шифрования (modes of operation)}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+
+\begin{frame}
+	\Huge
+	\centering
+	{\color{Orange}Как правильно использовать блочный шифр для шифрования сообщений?} \\[10pt]
+	
+\end{frame}
+
+\begin{frame}{Режимы шифрования}
+\LARGE
+\centering
+\begin{enumerate} 
+	\itemsep 10pt
+	\item Режим электронной кодовой книги или режим простой замены (Electronic Block Code, EBC)
+	\item Режим сцепления блоков шифротекста (Cipher Block Chain, CBC)
+	\item Режим счётчика (Counter mode, CTR)
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Электронная кодовая книга, Electronic Block Code (EBC)}
+
+\Large
+Пусть $m = (m_1, m_2, m_3, ...), m_i \in \{0,1\}^n$ -- открытый текст. \\[10pt]
+Наивный способ  использования блочного шифра $B$
+\begin{figure}
+			\includegraphics[width=0.7\textwidth]{EBC}
+	\end{figure}
+\LARGE
+Это {\color{Orange} небезопасный!} метод: \quad
+если $m_1 = m_2$, то $c_1 = c_2$.
+
+\end{frame}
+
+\begin{frame}{Небезопасность EBC}
+\centering
+\Huge Если $m_1 = m_2$, то $c_1 = c_2$ \\[20pt]
+\large
+\begin{figure}
+	\includegraphics[width=0.22\textwidth]{Tux} \quad 
+	\includegraphics[width=0.22\textwidth]{Tux_ecb} \quad 
+	\includegraphics[width=0.22\textwidth]{Tux_secure}
+\end{figure}
+
+\vfill
+\small
+{\color{gray} \textsuperscript{\textcopyright} Wikipedia} 
+\end{frame}
+
+\begin{frame}{Режим сцепления блоков, Cipher Block Chain (CBC)}
+\Large
+{\color{Orange} IV} -- инициализирующий (начальный) вектор -- случайная строка $n$-бит
+
+\begin{figure}
+	\includegraphics[width=0.7\textwidth]{CBC}
+\end{figure}
+IV передается с шифр-текстом (публично известно).
+\end{frame}
+
+\begin{frame}{Безопасность режима сцепления блоков}
+\Large
+\begin{itemize}
+\itemsep 10pt
+\item Начальное значение IV должно быть {\color{Orange} случайным} (если атакующий может предсказать IV, шифрование CBC небезопасно).\\ 
+См. атаку на TLS 1.1.
+ 
+\item{\color{Orange} IV необходимо обновлять}  \\
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Безопасность режима сцепления блоков}
+\Large
+	Положим, мы используем одно и тоже IV для длинного сообщения $m=(m_1, \ldots, m_t)$ при $t> 2^{n/2}$.
+	\vspace{-10pt}
+	\begin{figure}
+		\includegraphics[width=0.75\textwidth]{CBC_1}
+	\end{figure}
+\vspace{-40pt}
+{\color{Orange}Парадокс Дней Рождений:} имея ~$2^{n/2}$ блоков шифр-текста $c_i$, \\ с большой вероятностью мы увидим два одинаковых $c_i$.
+\Large
+\[
+	c_1 \oplus m_2 == c_3 \oplus m_4
+\]
+Далее применяются статистические атаки на $m$.
+\end{frame}
+
+\begin{frame}{Парадокс Дней Рождений}
+\Large
+	{\color{Orange} Определить вероятность того, что в комнате из 30 человек двое родились в один день.}\\
+	\pause
+	\vspace{30pt}
+	\[
+		\left(1 - \frac{1}{365}\right)  \left(1 - \frac{2}{365}\right) \left(1 - \frac{3}{365}\right) \cdot \ldots \cdot \left(1 - \frac{29}{365}\right)  \approx 0.294
+	\]
+	
+	\vspace{30pt}
+	Значит, с вероятностью $1-0.294>0.7$ найдутся двое таких людей.
+	
+\end{frame}
+
+\begin{frame}{Обобщение Парадокса Дней Рождений}
+\Large
+Для $m$ человек и $N$ возможных дней рождений, вероятность того, что все $m$ человек имеют разные дни рождения:
+\[
+	P : = \prod_{i=1}^{m-1} \left(  1  -\frac{i}{N} \right) \approx e^{-m^2/2N}
+\]
+
+Для $m = \sqrt{2N \ln 2}$, $P \approx 1/2$.  Вероятность $P$ быстро увеличивается при росте $m$. \\[10pt]
+
+\pause
+Для блок-шифра с длиной блока $n$, имеем $2^{n}$ всевозможных блоков шифр-текстов.\\
+При {\color{Orange} $m = \bigO(2^{n/2})$ } шифр-блоков $c_i$'s, некоторые два из них равны с константной вероятностью.\\[15pt]
+
+Для режима CBC: $c_i == c_j$ при $m=(m_1, \ldots, m_t)$, {\color{Orange} $t \approx 2^{n/2}$}:
+\Large
+\[
+{\color{Orange} c_{i-1} \oplus m_{i} == c_{j-1} \oplus m_{j}}
+\]
+
+\end{frame}
+
+
+\begin{frame}{Набивка (Padding) для режима CBC}
+\Large
+CBC подразумевает, что все блоки $m_i$ фиксированной длины. Для этого используется ``набивка''.
+\begin{figure}
+	\includegraphics[width=0.70\textwidth]{CBC_Padding}
+\end{figure}
+Обычно $\ell$-байтная набивка состоит из $\ell$ копий of $\ell$. \\
+Набивка из $5$ байт: $5|5|5|5|5$. \\
+Если $m$ занимает меньше $n$-бит, добавляется фиктивный (dummy) блок.
+\end{frame}
+
+\begin{frame}{Режим счетчика, Counter Mode (CTR)}
+\Large
+Один из самых популярных режимов шифрования \\
+Здесь IV - начальное значение счетчика. \\
+Счетчик увеличивается для каждого нового блока. \\
+\begin{figure}
+	\includegraphics[width=0.75\textwidth]{CTR}
+\end{figure}
+\vspace{-20pt}
+CTR создает потоковое шифрование из блок-шифра \\
+
+\end{frame}
+
+\begin{frame}{Как выглядит IV}
+	\begin{figure}
+		\includegraphics[width=0.70\textwidth]{ShapeOfIV}
+	\end{figure}
+\vspace*{-50pt}
+\large
+\begin{itemize}
+\item Nonce (нонс) должен быть псевдослучайным (64-битный выход PRG) и \\ не должен повторяться для одного и того же ключа $k$\\
+\item Счетчик увеличивается для каждого нового блока
+\item Значение счетчика не передается в протоколах, обеспечивающих \\ последовательную доставку пакетов (https)
+\item Нонс обновляется после $2^{64}$ зашифрованных блоков.
+
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Преимущества режима Counter Mode}
+%\vspace{-40pt}
+\begin{figure}
+	\includegraphics[width=0.55\textwidth]{CTR}
+		\includegraphics[width=0.5\textwidth]{ShapeOfIV}
+\end{figure}
+\vspace{-20pt}
+\Large
+\begin{itemize}
+	\item Нонс известен шифрующей и дешифрующей сторонам
+	\item Простая процедура дешифрования
+	\item Лёгкая параллелизация (в отличие от CBC)
+	\item Не нужно использовать набивку
+	\item 64-битный нонс (CTR) vs.\ 128-битный IV
+\end{itemize}
+
+\end{frame}
+
+
+
+
+\end{document}

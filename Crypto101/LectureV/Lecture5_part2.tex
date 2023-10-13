@@ -1,0 +1,373 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{stackengine}
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+%\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+\titlegraphic{
+	
+	%\includegraphics[width=2.5cm]{stayhome}%
+	%\includegraphics[width=4.0cm]{ens_logo_gray}
+}
+\title{Лекция №5 \\[10pt]
+	Часть 2. Конструкция Меркла-Дамгора}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+
+\begin{frame}{Конструкция хэш-функций: парадигма Merkle-Damg\aa rd}
+\Large
+Из функции компрессии (определим позже) \[h: \keyS \times \mesS \rightarrow \keyS\]
+построим $\Hash: \mesS^\star \rightarrow \keyS.$ \\[10pt]
+
+Пусть $m = (m_1, m_2, m_3 )$ произвольной длины
+	\begin{figure}
+		\includegraphics[width=0.8\textwidth]{MerkleDamgard}
+	\end{figure}
+
+\textbf{IV} -- Начальное значение, фиксировано для конкретной хэш-функции \\
+\textbf{PB} -- Блок добивки $\left[100\ldots0 || \text{mes.\ length}\right]$. \\
+Если \textbf{PB}  не влезает, добавляем новый блок.
+
+\end{frame}
+
+\begin{frame}{Безопасность конструкции Merkle-Damg\aa rd}
+\Large
+\vspace{-8em}
+\begin{columns}[T]
+	\begin{column}{0.5\textwidth}
+	{\color{Orange} Теорема:} Если $h$ стойкая к коллизиям, то и  $H$ стойкая к коллизиям.
+	\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+	\includegraphics[width=\textwidth]{MerkleDamgard}
+\end{figure}
+\end{column}
+\end{columns}
+
+
+
+
+\end{frame}
+
+\begin{frame}{Конструкции функции компрессии $h$}
+\Large
+	\[
+	\Enc: \keyS \times \{0,1\}^n \rightarrow  \{0,1\}^n -\text{блок-шифр.} 
+	\]
+	
+\vspace{10pt}	
+	
+{\color{Orange} Конструкция Davies-Meyer:} $	h(H_{i}, m) = \Enc(H_i, m)\oplus H_i .$
+
+	\begin{figure}
+		\includegraphics[width=0.6\textwidth]{DaviesMeyerCompression}
+	\end{figure}
+\end{frame}
+
+
+\begin{frame}{Пример: Функция компрессии в SHA-256}
+\Large 
+
+	\begin{figure}
+		\includegraphics[width=0.8\textwidth]{SHA256}
+	\end{figure}
+
+\end{frame}
+
+\begin{frame}{Безопасность Davies-Meyer}
+
+\LARGE
+\begin{columns}[T]
+	\begin{column}{0.6\textwidth}
+		{\color{Orange} Теорема (неформально):}  $\Enc(k, \cdot): \{0,1\}^n \rightarrow \{0,1\}^n$ неотличима от случайной перестановки, то нахождение коллизии $h(H, m) = h(H', m')$ требует $\bigO(2^{n/2})$ вычислений $(\Enc, \Enc^{-1})$.
+	\end{column}
+\begin{column}{0.4\textwidth}
+\begin{figure}
+	\includegraphics[width=\textwidth]{DaviesMeyerCompression}
+\end{figure}
+\end{column}
+\end{columns}
+\vspace{10pt}	
+
+Конструкция Davies-Meyer оптимальна при условии $\Enc$ \\ неотличима от случайной перестановки. 
+\end{frame}
+
+\begin{frame}{Альтернативные конструкции $h$}
+	\Large
+	\begin{columns}[T]
+		\begin{column}{0.5\textwidth}
+	{\color{Orange} Конструкция Davies-Meyer:}
+	\[
+	h(H, m) = \Enc(H, m)\oplus H
+	\]
+	
+	 {\color{Orange} Конструкция Miyaguchi–Preneel:}
+	 \[
+	 h(H, m) = \Enc(H, m)\oplus H \oplus m
+	 \]
+	 
+	 \vspace{10pt}	
+	 ГОСТ  Р 34.11-2012 (Стрибог) использует Miyaguchi–Preneel.\\[7pt]
+	 Другие комбинации $\Enc, H, m$ возможны, см. B. Preneel, R. Govaerts, J. Vandewalle. ``Hash functions based on block ciphers: a synthetic approach.''  \\[7pt]
+	  Не все комбинации безопасны! \\[7pt]
+	 
+	 	\end{column}
+	\begin{column}{0.5\textwidth}
+		\begin{figure}
+			\includegraphics[width=\textwidth]{MiyaguchiPreneelCompression}
+			 
+			\vspace{30pt}	
+			
+			
+		\end{figure}
+	\end{column}
+\end{columns}
+\end{frame}
+
+%\begin{frame}{Sponge construction: SHA-3}
+%\large
+%SHA-3 (Keccak) is \underline{not} based on compression function. It is a {\color{Orange} Sponge} (рус.\ Губка) construction.
+%
+%$P_0, \ldots P_{n-1}$ are derived from the input message.
+%$Z_0, Z_1, \ldots$ is the output
+%
+%%\begin{figure}
+%%	\includegraphics[width=0.9\textwidth]{SpongeConstruction}
+%%\end{figure}
+%
+%The block transformation $f$ is  a permutation consisting of 5 primitive function (small permutations, bitwise operations).
+%
+%
+%\vfill
+%\small
+%{\color{gray} CC Wikipedia} 
+%
+%\end{frame}
+
+
+%\begin{frame}{Hash functions in BitCoin}
+%\Large
+%Basic concept in BitCoint: {\color{Orange} Proof of Work (PoW)} \\
+%Intuition: if a  user has computing power $\implies$ he should be able to prove it via doing some work\\
+%\vspace{15pt}
+%\begin{itemize}
+%	\itemsep 1em
+%	\item PoW introduced to crypto by Dwork \& Naor (1992) as a countermeasure against spam
+%	\item {\color{Orange} Idea:}  force users to solve some ``moderately hard'' puzzle (a solution should be fast to verify)
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}{Hash functions in BitCoin: constructing PoW}
+%
+%\Large
+%Main primitive: cryptographic hash function $\Hash:\{0,1\}^\star \rightarrow \{0,1\}^\ell$  that takes $T(\Hash)$ time to evaluate
+%
+%	\begin{center}
+%	\begin{tabular}{l c c c c}
+%		& Alice  & & Bob &  \\
+%		& Prover  & & Verifier &  \\
+%		& \multirow{5}{*}{\includegraphics[scale=0.15]{Alice}} & & 
+%		\multirow{5}{*}{\includegraphics[scale=0.15]{Bob}} & $x \in \{0,1\}^{\star}$   \\
+%		&  & \Huge $\xleftarrow{\mkern25mu x \mkern25mu}$ & &  \\ 
+%		Finds $s \in \{0,1\}^\star$   & & &  &  \\[-4pt]
+%		s.t.\ $\Hash(s||x)$ & & \Huge $\xrightarrow{\mkern25mu s \mkern25mu}$  &  &  \\
+%		starts with $n$ 0's & & &  &  Checks if \\
+%		  & & &  & $\Hash(s||x)$  has $n$ 0's\\
+%		{\color{Orange}  Time: $2^n T(\Hash) $} & & &  &  {\color{Orange}  Time: $T(\Hash) $}
+%	\end{tabular}
+%\end{center}
+%
+%For a cryptographic hash function $\Hash$ Alice cannot do better than brute-force over $s$. This is a pre-image search. 
+%\end{frame}
+
+\end{document}

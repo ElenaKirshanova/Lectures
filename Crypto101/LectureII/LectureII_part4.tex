@@ -1,0 +1,325 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+\definecolor{darkslateblue}{RGB}{72,61,139}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+\def\darktheme{}
+\ifdefined\darktheme
+	\setbeamercolor{background canvas}{bg=CharCoalDark}
+	\setbeamerfont{title}{series=\bfseries}
+	\setbeamercolor{title}{fg=Orange}
+	\setbeamercolor{section in toc}{fg=white}
+	\setbeamercolor{frametitle}{fg=Orange}
+	\setbeamercolor{normal text}{fg=white}
+	%\setbeamercolor{normal text}{fontsize=12pt}
+	\setbeamercolor{itemize item}{fg=Orange}
+	\setbeamercolor{itemize item item}{fg=Orange}
+	\setbeamercolor{enumerate item}{fg=Orange}
+	\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+	\setbeamerfont{block title}{series=\bfseries}
+	
+	\setbeamertemplate{itemize item}[circle]
+	%\setbeamertemplate{itemize subitem}[$\checkmark$]
+	\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+	\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+\else
+	\setbeamercolor{background canvas}{bg=white}
+	\setbeamerfont{title}{series=\bfseries}
+	\setbeamercolor{title}{fg=darkslateblue}
+	\setbeamercolor{section in toc}{fg=black}
+	\setbeamercolor{frametitle}{fg=darkslateblue}
+	\setbeamercolor{normal text}{fg=black}
+	%\setbeamercolor{normal text}{fontsize=9pt}
+	\setbeamercolor{itemize item}{fg=darkslateblue}
+	\setbeamercolor{itemize item item}{fg=darkslateblue}
+	\setbeamercolor{enumerate item}{fg=darkslateblue}
+	\setbeamercolor{block title}{bg=darkslateblue,fg=white}
+	\setbeamerfont{block title}{series=\bfseries}
+	
+	\setbeamertemplate{itemize item}[circle]
+	%\setbeamertemplate{itemize subitem}[$\checkmark$]
+	\setbeamertemplate{itemize subitem}{\color{blue}\Large$\textbullet$}
+	\setbeamertemplate{itemize subitem}{\color{blue} \tiny $\blacksquare$}
+
+\fi
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\newcommand\myeq{\stackrel{\mathclap{\normalfont\mbox{?}}}{=}}
+
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+
+%\institute{ENS Lyon}
+\author{\\ [10pt]
+}
+\titlegraphic{
+	
+	%\includegraphics[width=2.5cm]{erc_logo_gray}\hspace*{2.5cm}~%
+	%\includegraphics[width=4.0cm]{ens_logo_gray}
+}
+\title{Лекция №2 \\[10pt]
+		Часть 4. Современные псевдослучайные генераторы}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+
+
+\begin{frame}{Constrictions of a PRG: Salsa and ChaCha}
+\Large
+	\begin{itemize}
+		\itemsep 10pt
+		\item Salsa20,ChaCha20: предложены Д.Бернштайном в 2005, 2008
+		\item один из предложенных к использованию PRG в портфолио eStream
+		\item используется в интернет протоколах (TLS)
+		\item Вход: $256$-битное нач. значение и параметр $L$
+		\item Выход: $(256 \cdot L)$-битная псевдослучайная строка
+		\item Детали алгоритма \url{https://cr.yp.to/chacha.html} 
+	\end{itemize}
+
+	
+\end{frame}
+
+\begin{frame}{ChaCha PRG (упрощенная версия)}
+\LARGE
+
+Два компонента:
+\begin{enumerate}
+	\itemsep 8pt
+	\item функция $\texttt{pad}(s, j) : \{0,1\}^{256 + 64} \rightarrow \{0,1\}^{512}$
+	\item фиксированная перестановка $\pi  : \{0,1\}^{512} \rightarrow \{0,1\}^{512} $
+\end{enumerate}
+
+\vspace{30pt}
+
+Алгоритм:
+\begin{enumerate}
+	\item for  $j  =  0 \text{ to } L-1 $ 
+	 \item $\quad h_j = \texttt{pad}(s, j) $
+	 \item $\quad r_j = \pi(h_j) \oplus h_j$
+	\item Выход $(r_0, \ldots r_{L-1})$
+\end{enumerate}
+%Nonce -- the third parameter of $\mathsf{pad}(s, j, 0)$ is used to convert a PRG into a PRF (useful for encryption of multiple messages).
+%\vfill
+%\small
+%{\color{gray}\textbf{picture is taken from D.Boneh, V.Shoup A Graduate Course in Applied Cryptography}} 
+\end{frame}
+
+\begin{frame}{(Частично) Взломанные PRG}
+\LARGE
+\begin{enumerate}
+	\itemsep1.5em 
+	\item {\color{Orange}\textbf{Линейный конгруэнтный метод}} 
+	\begin{itemize}
+		\LARGE
+				\itemsep5pt  
+		\item использовался в glibc, Microsoft Visual Basic, Java
+		\item notorious for RANDU
+		\item \textbf{не является криптографическим PRG!}
+	\end{itemize}
+
+	\item {\color{Orange}\textbf{RC4}} 
+	\begin{itemize}
+		\LARGE
+		\itemsep5pt 
+		\item предложен Р.Ривестом в 1987
+		\item использовался TLS, 802.11b WEP
+		\item \textbf{не является криптографическим PRG!}
+	\end{itemize}
+
+	\item {\color{Orange}\textbf{Регистр сдвига с линейной обратной связью }}
+	\begin{itemize}
+			\LARGE
+			\itemsep5pt
+		\item использовался для защиты данных DVD дисков
+		\item пример: Trivium (eStream)
+	\end{itemize} 
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Приложение: Подбрасывание монетки по телефону}
+\LARGE
+Задача:  выяснить результат подбрасывания монетки
+\begin{center}
+	\begin{tabular}{c c c c c}
+		 \multicolumn{5}{c}{$G: \{0,1\}^{\ell} \rightarrow \{0,1\}^{L}$ -- PRG}\\[10pt]
+		& Боб  & & Алиса &  \\
+		 & \multirow{5}{*}{\includegraphics[scale=0.20]{Bob}} & &
+		\multirow{5}{*}{\includegraphics[scale=0.20]{Alice}} &  \\
+		&  &  & & $r \leftarrow \{0,1\}^{L}$  \\
+		&  & $\xleftarrow{r}$ & &  \\
+		$b \in \{0,1\}$&  & & &  \\
+		$s \in \{0,1\}^{\ell}$&  & & &  \\[35pt]
+		\multicolumn{5}{l}{$\mathsf{commit}(b, r, s)  = 
+			\begin{cases}
+			G(s), & b = 0\\
+			G(s) \oplus r, & b=1
+			\end{cases}
+			$}  \\
+		&  & $\xrightarrow{\mathsf{commit}(b, r, s)} $ & &  \\
+	\end{tabular}
+\end{center}
+
+\end{frame}
+
+\end{document}

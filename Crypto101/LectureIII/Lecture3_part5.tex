@@ -1,0 +1,311 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+
+
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+
+\title{Лекция №3 \\[10pt]
+	Часть 5. Атака на выбранный открытый текст. Безопасность режима CRT}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+\newcommand{\AxisRotator}[1][rotate=0]{%
+	\tikz [x=0.45cm,y=1.2cm,line width=.2ex,-stealth,#1] \draw[color=Orange] (0,0) arc (-150:150:2 and 1);%
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}{Атака на режим шифрования EBC}
+	\begin{figure}
+		\includegraphics[scale=0.15]{EBC}
+	\end{figure}
+
+\Large
+{\color{Orange} Задача атакующего $\adv$:} отличить $C = (c_i)_i = \Enc(k, M)$ от \\[3pt] $C' = (c_i')_i = \Enc(k, M')$ для $M = (m_i)_i$, $M' = (m_i')_i$.  \\[10pt]
+
+{\color{Orange} $\adv$ выбирает:} $M = (m_1, m_1, \ldots)$ и $M' = (m_1', m_2', \ldots)$, $m_1' \neq m_2'$. \\[10pt]
+
+Тогда $C = (c_1, c_1, \ldots ) = \Enc(M)$, $C' = (c_1', c_2', \ldots ) = \Enc(M)$ \\[10pt]
+
+\centering
+{\color{Orange} Детерминированный шифр не является безопасным !}
+
+\end{frame}
+
+\begin{frame}{Атака на выбранный открытые текст/ Chosen Plaintext Attack(CPA)}
+\large
+\begin{center}
+
+			\begin{tabular}{c c c}
+				{\color{Orange} Челленджер $\mathcal{C}$ } & & {\color{Orange} Атакующий $\mathcal{A}$ }\\ [5pt]
+				$k \leftarrow \KeyGen(1^\lambda)$ & $\xrightarrow{\quad \Huge \lambda \quad}$  &\\[5pt]
+				$b \xleftarrow{\$} \{0,1\}  $& &\\ [5pt]
+				& $\xleftarrow{\; \Huge m_{0, i}, m_{1, i}  \;}$  &$m_{0, i}, m_{1,i} \leftarrow \mesS $\\ [5pt]
+				
+				$c_i \leftarrow \Enc(k, m_{b, i})$ &  &\\ [5pt]
+				& $\xrightarrow{\quad c_i \quad}$ & \\ [5pt]
+				& $\xleftarrow{\quad \hat{b} \quad}$ & \\ [5pt]
+			\end{tabular}
+			\begin{tikzpicture}[overlay]
+			\draw[fill=none, draw=white, opacity=0.5] (-8.3,-2.3) rectangle (-5.0,2.7); 
+			\draw[fill=none, draw=white, opacity=0.5] (-3.0,-2.3) rectangle (0.0,2.7); 
+			\node at (-3.8, -0.1) {\AxisRotator};
+			\end{tikzpicture}
+\end{center}
+
+		\vspace{5pt}
+		$\mathtt{W_{\Pi, \adv}}$ -- событие $b == \hat{b}$. \\ [4pt]
+		$\mathtt{CPAAdv} = \abs{\Pr[\mathtt{W_{\Pi, \adv}}] - \frac{1}{2}}$ --выигрыш  $\adv$. \\ [4pt]
+		\color{Orange} Шифр-схема $\Pi$ CPA безопасна, если для любого ppt $\adv:$  $\mathtt{CPAAdv} = \negl(\lambda).$
+\end{frame}
+
+
+
+\begin{frame}{Режим счётчика или CTR}
+\Large
+%\centering
+$B: \keyS \times \mathcal{X} \rightarrow \mathcal{Y}$ --- псевдослучайная функция, $\mathcal{Y} = \{0,1\}^n = \mesS$.
+\begin{columns}
+	\begin{column}{0.4\textwidth}
+		\begin{figure}
+			\hspace{-4em}
+			\includegraphics[scale=0.2]{CTR}
+		\end{figure}
+	\end{column}
+	\begin{column}{0.4\textwidth}
+	
+	\end{column}
+	\end{columns}
+
+
+
+
+\end{frame}
+
+
+
+\begin{frame}{CPA безопасность режима CTR}
+\LARGE
+
+{\color{Orange} Теорема.} Если $B: \keyS \times \mathcal{X} \rightarrow \mathcal{Y} $ -- {\color{Orange} безопасная псевдослучайная функция} и $|\mathcal{X}|$ -- суперполиномиально, то режим шифрования CTR для $B$ --  {\color{Orange} CPA-безопасный} режим.\\[10pt]
+
+
+\textit{Для любого ppt $\adv$, атакующего CPA-стойкость CTR, найдется ppt $\mathcal{B}$, атакующий стойкость $B$}. \\[10pt]
+
+
+
+\end{frame}
+
+\begin{frame}{CPA безопасность режима CTR}
+\Large
+	\textit{Для любого ppt $\adv$, атакующего CPA-стойкость CTR, найдется ppt $\mathcal{B}$, атакующий стойкость псевдослучайой функции $B$}. \\[20pt]
+	
+	
+	\Large
+	\begin{tabular}{c c c c c}
+		{\color{Orange}  $\mathcal{C} $ (PRF) } & &  {\color{Orange}  $\mathcal{B}$ (PRF) } & & {\color{Orange}  $ \mathcal{A}$ (CPA)}  \\ [5pt]
+		$b \xleftarrow{\$} \{0,1\}  $ &  & $b' \xleftarrow{\$} \{0,1\}  $ & & \\[3pt]
+		$f \xleftarrow{\$} \mathcal{F}[\mathcal{X}, \mathcal{X}]$& &	$x_i \xleftarrow{\$} \mathcal{X}$		& $\xleftarrow{\; m_{0,i}, m_{1,i} \;}$   &\\ 
+		либо & &	&   &\\ 
+		$f = F(k, \cdot)$& &	$m_{b_i} = (m_{b'_i}^{1}, \ldots m_{b_i}^{\ell} )$	&   &\\ 
+		& &	$x_{i, j} = x_i \oplus j $	&   &\\
+		&$\xleftarrow{\; x_{i,j} \;}$  & & &\\ 
+		& $\xrightarrow{f(x_{i,j})}$&  $c_{i,j} = m_{b'_i}^{j}  \oplus f(x_{i,j})$& $\xrightarrow{\; \; c_i \; \;}$ &\\ 
+		 & &	&  $\xleftarrow{\; \; \hat{b} \; \; }$ &\\ 
+	\end{tabular}
+	\begin{tikzpicture}[overlay]
+	\draw[fill=none, draw=white, opacity=0.5] (-12.2,-2.5) rectangle (-9.1,3.0); 
+	\draw[fill=none, draw=white, opacity=0.5] (-7.9,-2.5) rectangle (-4.0,3.0); 
+	\draw[fill=none, draw=white, opacity=0.5] (-2.3,-2.5) rectangle (0.0,3.0); 
+	\end{tikzpicture}
+\end{frame}
+
+
+
+\end{document}

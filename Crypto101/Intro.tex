@@ -1,0 +1,304 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+%\renewtheorem{theorem}{Теорема}
+%\renewtheorem{lemma}{Лемма}
+%\renewtheorem{definition}{Определение}
+%\renewtheorem{corollary}{Следствие}
+%\renewtheorem{fact}{Факт}
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+\definecolor{darkslateblue}{RGB}{72,61,139}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+\def\darktheme{}
+\ifdefined\darktheme
+	\setbeamercolor{background canvas}{bg=CharCoalDark}
+	\setbeamerfont{title}{series=\bfseries}
+	\setbeamercolor{title}{fg=Orange}
+	\setbeamercolor{section in toc}{fg=white}
+	\setbeamercolor{frametitle}{fg=Orange}
+	\setbeamercolor{normal text}{fg=white}
+	%\setbeamercolor{normal text}{fontsize=12pt}
+	\setbeamercolor{itemize item}{fg=Orange}
+	\setbeamercolor{itemize item item}{fg=Orange}
+	\setbeamercolor{enumerate item}{fg=Orange}
+	\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+	\setbeamerfont{block title}{series=\bfseries}
+	
+	\setbeamertemplate{itemize item}[circle]
+	%\setbeamertemplate{itemize subitem}[$\checkmark$]
+	\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+	\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+\else
+	\setbeamercolor{background canvas}{bg=white}
+	\setbeamerfont{title}{series=\bfseries}
+	\setbeamercolor{title}{fg=darkslateblue}
+	\setbeamercolor{section in toc}{fg=black}
+	\setbeamercolor{frametitle}{fg=darkslateblue}
+	\setbeamercolor{normal text}{fg=black}
+	%\setbeamercolor{normal text}{fontsize=9pt}
+	\setbeamercolor{itemize item}{fg=darkslateblue}
+	\setbeamercolor{itemize item item}{fg=darkslateblue}
+	\setbeamercolor{enumerate item}{fg=darkslateblue}
+	\setbeamercolor{block title}{bg=darkslateblue,fg=white}
+	\setbeamerfont{block title}{series=\bfseries}
+	
+	\setbeamertemplate{itemize item}[circle]
+	%\setbeamertemplate{itemize subitem}[$\checkmark$]
+	\setbeamertemplate{itemize subitem}{\color{blue}\Large$\textbullet$}
+	\setbeamertemplate{itemize subitem}{\color{blue} \tiny $\blacksquare$}
+
+\fi
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+\title{Лекция №1 \\[10pt]
+		Часть 1. О курсе}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}{Структура курса}
+
+\Large
+{\color{Orange} I. Симметрическая криптография} \\[10pt]
+\begin{itemize}
+	\item Псевдослучайные генераторы
+	\item Блок-шифры
+	\item Коды аутентификации сообщений 
+	\item Хэш-функции
+	\item Шифрование  с аутентификацией
+\end{itemize}
+
+\vspace{20pt}
+{\color{Orange} II. Асимметрическая криптография}
+
+\begin{itemize}
+	\item Обмен ключами
+	\item Цифровые подписи
+	\item Асимметрическое шифрование
+	\item Протоколы
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Чего не будет}
+
+\Large
+
+Мы {\color{Orange} не} будем говорить о
+
+\begin{itemize}
+	\itemsep 8pt
+	\item блокчейнах
+	\item программировании / реверс инжиниринге
+	\item хакерстве
+	\item квантовой и пост-квантовой криптографии
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Литература}
+\Large
+\begin{columns}[T]
+	\begin{column}{0.5\textwidth}
+		\includegraphics[scale=0.25]{katz_lindel_book}
+	\end{column}
+	\begin{column}{0.55\textwidth}
+	\vspace{40pt}
+	A Graduate Course in Applied Cryptography \\[5pt]
+	Dan Boneh, Victor Shoup \\[5pt]
+	\url{https://toc.cryptobook.us/book.pdf}
+	\end{column}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}{Комментарии}
+
+\Large
+\begin{itemize}
+	\itemsep 8pt
+	\item Подразумеваем знания элементарных алгоритмов, тер. вера, линейной алгебры
+	\item Теоремы и доказательства в курсе будут строгими
+	\item Будет много англоязычных слов!
+	\item  Опечатки неизбежны
+	\item Комментарии/замечания/пожелания/недовольства можно отправить по почте
+	\[
+	\text{elenakirshanova [at] gmail [dot] com}
+	\]
+\end{itemize}
+
+\end{frame}
+
+
+
+
+\end{document}

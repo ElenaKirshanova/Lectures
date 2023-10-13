@@ -1,0 +1,585 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+
+
+
+
+
+%\newcommand\strikeout[2][]{%
+%	\begin{tabular}[b]{@{}c@{}} 
+%		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+%		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+%\end{tabular}}
+
+
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+%\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+%{rgb(0cm)=(1,1,1);
+%	rgb(0.7cm)=(1,1,1);
+%	rgb(0.719cm)=(1,1,1);
+%	rgb(0.72cm)=(0.975,0,0);
+%	rgb(0.9cm)=(1,1,1)}
+%
+%\usepackage[absolute,overlay]{textpos} %to clip to a corner
+%\newcommand\FrameText[1]{%
+%	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+%		\raggedright #1\hspace{.5em}
+%\end{textblock*}}
+
+%\makeatletter
+%\let\save@measuring@true\measuring@true
+%\def\measuring@true{%
+%	\save@measuring@true
+%	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+%	\def\beamer@sortzeroread##1<##2>{}%
+%	\def\beamer@finalnospec{}%
+%}
+%\makeatother
+
+
+\title{Лекция №3 \\[10pt]
+	Часть 1. Блочный шифр.}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+
+\begin{frame}{Блок-шифры: мотивация}
+\LARGE 
+	Симметричные шифр-схемы могут быть основаны на
+	
+	\begin{enumerate}
+		\itemsep 10pt
+		\item Потоковом шифре 
+		\item Блочном  шифре
+	\end{enumerate}
+
+	\vspace{20pt}
+	Блочные шифры лежат в основе {\color{Orange} шифрования с аутентификацией.}
+\end{frame}
+
+
+\begin{frame}{Блок-шифр: определение}
+\LARGE
+
+		{\color{Orange}\textbf{Блок-шифр}} -- это {\color{Orange} детерминированный} шифр $(\KeyGen, \Enc, \Dec)$ с  $\keyS, \mathcal{X}:=\mesS = \cipS, $ и эффективной функцией
+		\[
+			\Enc = f(k, \cdot): \mathcal{X} \rightarrow \mathcal{X}.
+		\]
+		
+При этом выполняется
+\begin{itemize}
+	\item корректность $\implies f(k, \cdot)$ -- биекция для всех $k \in \keyS$ \\
+	\item $|\mathcal{X}| < \infty$. \\
+\end{itemize}
+
+\vspace{20pt}
+
+То есть, $f(k, \cdot)$ -- перестановка на $\mathcal{X}$. \\[10pt]
+
+
+\end{frame}
+
+\begin{frame}{Шифрование блока}
+	\begin{tikzpicture}
+	%\draw[-stealth, thick] (-1.8,-1.0) -- (-1.0,-1.0) node[above,midway]{\Huge $b$};
+	\draw[fill=CharCoalDark, draw=white, opacity=0.5] (-1.0,0.0) rectangle (2.0,1.0)  node[color=white, opacity=1,align=center, pos=0.5]{
+		\LARGE  {Откр. текст}  
+	} node[above, midway, yshift=17pt]{\Large $n$ бит};
+	\draw[-stealth, thick] (2.0,0.5) -- (3.0,0.5);
+
+	\draw[fill=CharCoalDark, draw=white, opacity=0.5] (3.0,0.0) rectangle (5.0,1.0)  node[color=white, opacity=1,align=center, pos=0.5]{
+		\LARGE  {$f$}  
+	};
+	\draw[-stealth, thick] (5.0,0.5) -- (6.0,0.5);
+	
+	\draw[fill=CharCoalDark, draw=white, opacity=0.5] (2.5,2.2) rectangle (5.5,3.0)  node[color=white, opacity=1,align=center, pos=0.5]{
+		\LARGE  {Ключ}  
+	} node[above, midway, yshift=12pt]{\Large $k$ бит};
+
+	\draw[-stealth, thick] (4.0,2.2) -- (4.0,1.0);
+	
+	\draw[fill=CharCoalDark, draw=white, opacity=0.5] (6.0,0.0) rectangle (9.0,1.0)  node[color=white, opacity=1,align=center, pos=0.5]{
+		\LARGE  {Шифр-текст}  
+	} node[above, midway, yshift=17pt]{\Large $n$ бит};
+	\end{tikzpicture}
+	
+	\vspace{20pt}
+	\LARGE
+	Примеры:\\
+	\begin{itemize}
+		\item AES: $n = 128$, $k = 128, 192, 256$
+		\item ГОСТ 34.12-2018: $n=128$, $k=256$ (Кузнечик)
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Безопасность блочного шифра $\Pi = (\KeyGen, \Enc = f, \Dec = f^{-1})$}
+\Large
+ 
+		$f(k, \cdot): \mathcal{X} \rightarrow \mathcal{X}$ должна быть вычислительно неотличима от случайной перестановки на $\mathcal{X}$. \\[5pt]
+		
+		$S_{\mathcal{X}}$ -- множество всех перестановок на ${\mathcal{X}}$.
+	
+	\vspace{15pt}
+
+	
+		\begin{columns}
+		\begin{column}{0.5\textwidth}
+			{\color{Orange}\textbf{Эксперимент 0}} \\[10pt]
+			\begin{tabular}{c c c}
+				{\color{Orange} $\mathcal{C}$ } & &  {\color{Orange}  $\mathcal{A}$ } \\ [5pt]
+				$	k \xleftarrow{\$} \mathcal{K}$ &  &  \\
+				$	f \leftarrow \Enc(k, \cdot)$  & & \\
+				& $\xleftarrow{\; x_i \in \mathcal{X} \; }$ & \\
+				& $\xrightarrow{\; f(k, x_i) \; }$ & \\
+				& $\xleftarrow{\; \hat{b} \; }$ & \\
+			\end{tabular}
+			\begin{tikzpicture}[overlay]
+			\draw[fill=none, draw=white, opacity=0.5] (-5.3,-2.0) rectangle (-2.5,2.0); 
+			\draw[fill=none, draw=white, opacity=0.5] (-1.2,-2.0) rectangle (-0.2,2.0); 
+			\end{tikzpicture}
+		\end{column}
+		\begin{column}{0.5\textwidth}
+			{\color{Orange}\textbf{Эксперимент 1}}\\[10pt]
+			\begin{tabular}{c c c}
+				{\color{Orange} $\mathcal{C}$ } & &  {\color{Orange}  $\mathcal{A}$ } \\ [5pt]
+				&  &  \\
+				$	f \xleftarrow{\$}  S_{\mathcal{X}}$  & $\xrightarrow{\; r \; }$ & \\
+					& $\xleftarrow{\; x_i \in \mathcal{X} \; }$ & \\
+				& $\xrightarrow{\; f(k, x_i) \; }$ & \\
+				& $\xleftarrow{\; \hat{b} \; }$ & \\
+			\end{tabular}
+			\begin{tikzpicture}[overlay]
+			\draw[fill=none, draw=white, opacity=0.5] (-4.8,-2.) rectangle (-2.5,2.0); 
+			\draw[fill=none, draw=white, opacity=0.5] (-1.2,-2.0) rectangle (-0.2,2.0); 
+			\end{tikzpicture}
+			
+		\end{column}
+	\end{columns}
+	 
+	 \vspace{15pt}
+	 \large 
+	
+	 Выигрыш $\mathcal{A}$ $:	\mathsf{BlockAdv} \left[  \mathcal{A}, \Pi\right ] = |\Pr[b == \hat{b}] - 1/2|$. \\[6pt]
+	 Блок-шифр $\Pi$ {\color{Orange}\textbf{безопасный}}, если $	\mathsf{BlockAdv} = \negl(\cdot)$ для всех ppt $\mathcal{A}$.
+\end{frame}
+
+\begin{frame}{Немного истории}
+\Large
+\begin{itemize}
+	
+	\itemsep1em
+	\item {\color{Orange}\textbf{70'е}:} IBM опубликовывает шифр Lucifer. $k=128, n = 128$ 
+	\item {\color{Orange}\textbf{'76}:} DES -- стандарт $k=56, n = 64$
+	\item {\color{Orange}\textbf{'98}:} 3DES -- стандарт  $k=168, n = 64$
+	\item {\color{Orange}\textbf{'00}:} конкурс AES побеждает Rejndael $k=\{128, 192, 256\}, n = 128$
+\end{itemize}
+
+\vspace{10pt}
+Российские стандарты:\\
+
+\begin{itemize}
+	
+	\itemsep1em
+	\item {\color{Orange}\textbf{'89}:} ГОСТ 28147-89 $k=256, n = 64$ 
+	\item {\color{Orange}\textbf{'15 }:} ГОСТ Р 34.12-2015/2018, RFC 7801 $k=256, n = 128$ 
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Блок-шифры итеративны}
+
+
+\end{frame}
+
+\begin{frame}{Две основные парадигмы в дизайне блочных шифров}
+
+\begin{itemize}
+	\itemsep 2em
+	\LARGE
+	\item Сеть Фейстеля (создатель: Horst Feistel)
+	\\[5pt]
+	
+	\Large
+	Примеры: DES, ГОСТ 28147-89
+	\LARGE
+	\item Substitution-Permutation Network (SPN) \\ Подстановочно-перестановочная сеть  \\[5pt]
+	\Large
+	Примеры: AES, ГОСТ 34.12-2018
+	
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Шифр Фейстеля}
+\Large
+	\vspace{-90pt}
+	Сесть Фейстеля предлагает общий метод построения перестановки из \emph{любой} функции\\[10pt]
+	Дано \hspace{40pt} $f(k, \cdot): \{0,1\}^n \rightarrow \{0,1\}^n$ \\[7pt]
+	построить обратимую $F(k, \cdot):\{0,1\}^{2n} \rightarrow \{0,1\}^{2n}$ \\
+
+%
+%	\pause
+%	
+%	{\color{Orange}\textbf{Security (informal) :}} if $f: \keyS \times \{0,1\}^n \rightarrow \{0,1\}$ ``looks like'' a random function, then 3-Round Feistel $F: \keyS^3 \times \{0,1\}^{2n} \rightarrow \{0,1\}^{2n}$ is a pseudorandom permutation. 
+\end{frame}
+
+
+\begin{frame}{Пример: Раундовая функция $f$ в ГОСТе'89}
+\centering
+\tikzmark{start}
+\includegraphics[height=0.83\textheight]{GostRound}
+\tikzmark{end} 
+
+\vfill
+\small
+{\color{gray} {.tex код avanzi-tikz-defs.tex }} 
+\end{frame}
+
+\begin{frame}{Что такое S-бокс?}
+	\LARGE
+	\[
+		S:= \{0,1\}^n \rightarrow \{0,1\}^m - \text{ таблица подстановки}
+	\]
+
+	\begin{itemize}
+		\item Реализована таблицей поиска (Loopup table)
+		\item В одном блочном шифры может быть использовано несколько S-боксов
+		\item S-боксов должен быть стойким к  линейным и дифференциальным атакам
+		\item S-бокс не должен содержать фиксированных точек: \\ $S(x) \neq x $, $S(x) \neq  \bar{x} \; \forall x$
+		\item S-бокс не должен быть линейной или аффинной булевой \\ функцией
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Пример: S-боксы в ГОСТе'89}
+	\Large
+	\[
+	S:= \{0,1\}^4 \rightarrow \{0,1\}^4
+	\]
+	
+	\begin{figure}
+		\includegraphics[width=0.77\textwidth]{Sbox_GOST}
+			\hspace{5em}
+	\end{figure}
+\vfill
+\small
+{\color{gray} {Wikipedia, \url{https://ru.wikipedia.org/wiki/\%D0\%93\%D0\%9E\%D0\%A1\%D0\%A2_28147-89}}} 
+\end{frame}
+
+
+
+\begin{frame}{Подстановочно-перестановочная сеть(SPN)}
+\centering
+\tikzmark{start}
+\includegraphics[height=\textheight, angle=90, origin=c]{SPN}
+\tikzmark{end} 
+
+\vfill
+\small
+{\color{gray} {.tex код crypto.symbols}} 
+
+\end{frame}
+
+\begin{frame}{AES:  SPN шифр}
+\Large 
+\begin{itemize}
+	\itemsep 10pt
+	\item стандартизирован в 2001 году (FIPS PUB 197: Advanced Encryption Standard (AES), ISO/IEC 18033-3: Block ciphers)
+	\item Длина блока $n = 128 $ бит, длины ключей $k = \{128, 192, 256 \}$
+	\item Количество раундов: 10 ($k = 128$), 12 ($k=192$), 14 ($k=256$)
+	\item 128 бит организованы в матрицу $4 \times 4$ байт
+	\[
+	\begin{pmatrix}
+	b_0 & b_4 & b_8 & b_{12} \\
+	b_1 & b_5 & b_9 & b_{13} \\
+	b_2 & b_6 & b_{10} & b_{14} \\
+	b_3 & b_7 & b_{11} & b_{15}  \\
+	\end{pmatrix}
+	\]
+\end{itemize}
+%	\begin{figure}
+%		\includegraphics[width=1.1\textwidth]{AES_128}
+%	\end{figure}
+	
+%	\Large 
+%	\[
+%		\Pi_{\text{AES}}  = \{0,1\}^{128} \rightarrow \{0,1\}^{128} - \text{ invertible permutation }
+%	\]
+%	\vfill
+%	\small
+%	{\color{gray}\textbf{picture is taken from D.Boneh, V.Shoup A Graduate Course in Applied Cryptography}} 
+\end{frame}
+
+
+\begin{frame}{Перестановка $f_{\text{AES}}$}
+\Large
+Перестановка $f_{\text{AES}}$ состоит из трёх обратимых операций: \\[5pt]
+\begin{enumerate}
+	\itemsep10pt
+	\item $\mathtt{SubBytes}$ (единственная нелинейная операция)
+	\[
+	S: \{0,1\}^8 \rightarrow \{0,1\}^n - \text{S-бокс }
+	\]
+	\item  $\mathtt{ShiftRows}$
+	\[
+	\begin{pmatrix}
+	b_0 & b_4 & b_8 & b_{12} \\
+	b_1 & b_5 & b_9 & b_{13} \\
+	b_2 & b_6 & b_{10} & b_{14} \\
+	b_3 & b_7 & b_{11} & b_{15}  \\
+	\end{pmatrix}
+	\rightarrow
+	\begin{pmatrix}
+	b_0 & b_4 & b_8 & b_{12} \\
+	b_5 & b_9 & b_{13} & b_1 \\
+	b_{10} & b_{14} & b_{2} & b_{6} \\
+	b_{15} & b_{3} & b_{7} & b_{11}  \\
+	\end{pmatrix}
+	\]
+	
+	\item  $\mathtt{MixColumns}$ -- столбцы перемешиваются по определённому \\ правилу (см. \url{en.wikipedia.org/wiki/Advanced_Encryption_Standard})
+
+%	\[
+%		\begin{pmatrix}
+%		 \\
+%		 b^{\text{new}}_j \\
+%		\\
+%		\end{pmatrix}
+%		= 
+%		\begin{pmatrix} 
+%		2 & 3 & 1 & 1 \\
+%		1 & 2 & 3 & 1 \\
+%		1 & 1 & 2 & 3 \\
+%		3 & 1 & 1 & 2 
+%		\end{pmatrix}
+%		\cdot
+%		\begin{pmatrix}
+%		\\
+%		b_j \\
+%		\\
+%		\end{pmatrix}
+%	\]
+	
+\end{enumerate}
+
+\vspace{20pt}
+
+Принцип: минимизировать успешность известных атак.	
+
+\end{frame}
+
+\begin{frame}{Расширение ключа в AES}
+	\Large
+	Задача: расширить ключ $k  \in \{0,1\}^{128}$ до 10 раундовых ключей $k_i \in \{0,1\}^{128}$
+	
+	\vspace{20pt}
+	
+	\LARGE
+	\begin{itemize}
+		\itemsep 10pt
+		\item $k_0 = k = (w_{0,0}, w_{0,1}, w_{0,2}, w_{0,3})$, $w_{0,1} \in \{0,1\}^{32}$
+		
+		\item $k_i = (w_{i,0}, w_{i,1}, w_{i,2}, w_{i,3})$, где
+		\begin{align*}
+			w_{i,0} &= w_{i-1, 0} \oplus g_i(w_{i-1, 3}) \\	
+			w_{i,1} &= w_{i-1, 1} \oplus w_{i, 0} \\
+			w_{i,2} &= w_{i-1, 2} \oplus w_{i, 1} \\
+			w_{i,3} &= w_{i-1, 3} \oplus w_{i, 2} \\
+		\end{align*}
+		$g_i : \{0,1\}^{32} \rightarrow \{0,1\}^{32}  $ -- функция, состоящая из сдвигов, \\ подстановки $\mathtt{SubBytes}$ и $\mathtt{XOR}$ с раундовыми константами $c_i$.
+	\end{itemize}
+\end{frame}
+
+%\begin{frame}{Attacks on block ciphers}
+%
+%\Large
+%{\color{Orange}\textbf{Exhaustive search}}  for block cipher key. \\[5pt]
+%	
+%	For DES/AES/GOST: \textbf{two} plaintext/ciphertext pairs $(m_1, c_1 = \Enc(k, m_1)), (m_2, c_2=\Enc(k,m_2))$ \\ determine $k$ with sufficiently high probability \\[10pt]
+%	
+%	
+%{\color{Orange}\textbf{Example}}  : For DES find $k \in \{0,1\}^{56}$	s.t.\ $c_i = \Enc(m_i, k)$. \\[10pt]
+%
+%Cryptanalytic efforts: \\
+%\begin{itemize}
+%	\item {\color{Orange}\textbf{In '99}} ~22h on  DeepCrack + distributed.net (a bit expensive hardware)\\
+%	\item {\color{Orange}\textbf{In '07}}~13 days COPACOBANA (cheaper)
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}{Advanced attacks on block ciphers}
+%\LARGE
+%\begin{itemize}
+%	\itemsep 1em
+%	\item Design attacks: linear \& differential cryptnalalysis 
+%	
+%	Target:  find a linear relation in bit positions
+%	
+%	\begin{align*}
+%	& \Pr \left[ m[S_0] \oplus \Enc(k, m)[S_1 ] = k[S_2]  \right]  \geq 1/2 + \varepsilon  \\
+%	& S_i \subset \{0,\ldots, n-1\} \quad \forall k \text { and random } m
+%	\end{align*}
+%	\pause
+%	
+%	\item Side-channel attacks:
+%	\Large{measure {\color{Orange}\textbf{time}} or {\color{Orange}\textbf{power}} needed for  $\Enc, \Dec$ } \pause
+%	\LARGE
+%	\item Fault-injection attacks: 
+%	\Large cause the hardware to introduce errors at runtime (heat, EM interference)
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}{Take-home message}
+%\Huge
+%
+%\begin{itemize}
+%	\itemsep 2em
+%	\item {\color{Orange}\textbf{DON'T}} design {\color{Orange}\textbf{YOUR OWN}} block-cipher 
+%	\item {\color{Orange}\textbf{TRY NOT TO}}  implement cryptoprimitives yourself if good implementations exist
+%	\item Choose key-sizes wisely 
+%\end{itemize}
+%\end{frame}
+%
+%
+%\begin{frame}{Further reading}
+%	\begin{figure}
+%		\includegraphics[height=0.7\textheight]{Book_cover}
+%	\end{figure}
+%\end{frame}
+
+\end{document}

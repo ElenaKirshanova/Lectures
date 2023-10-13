@@ -1,0 +1,282 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{stackengine}
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+%\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+
+%\institute{ENS Lyon}
+\title{Лекция №7 \\[10pt]
+	Часть 2. Крэш-курс по конечным полям.}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+
+
+\begin{frame}{Модульная арифметика}
+	\Large 
+	{\color{Orange} Возьмем $p$ -- большое простое число ($\sim$\ 2000 бит)}
+	\begin{itemize}
+		\item $\Zp = \left\{ 0, 1, \ldots, p-1 \right\}$ -- конечное поле
+		\item умножение/сложение в $\Zp$ производится по модулю $p$, т.е.\ для $x, y \in \Zp$
+	\begin{align*}
+			x+y \bmod p &= \rem(x+y, p) \\
+			x\cdot y \bmod p &= \rem(x\cdot y, p)
+	\end{align*}
+	{\hspace{90pt} \large $\rem $ -- остаток от целочисл.\ деления}\\[10pt]
+	\pause
+	
+	Пример: $p  = 7, \Zp = \{0, 1, 2, 3, 4, 5, 6\}$
+	\begin{align*}
+	5+6 \bmod p &= \rem(11, 7) = 4 \\
+	3\cdot 3  \bmod p &= \rem(9, 7) = 2
+	\end{align*}
+	\pause
+	\item Для ненулевого $x \in \Zp$, $\exists x^{-1} \in \Zp$: $x \cdot x^{-1} = 1 \bmod p$\\
+	Пример.:  $1^{-1} = 1$, $2^{-1} = 4$, $3^{-1} = 5$,  $4^{-1} = 2$, $5^{-1} = 3$, $6^{-1} = 6$ в $\Z_7$
+	\item Множество обратимых элементов $\Zp^{\ast} = \Zp \setminus \{0\}$
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Структура $\Zp^\ast$ }
+\Large
+\begin{itemize}
+	\itemsep 10pt
+	\item {\color{Orange} Теорма Ферма:} $g^{p-1} = 1 \bmod p \; \; \forall 0 \neq g \in \Zp$\\[5pt]
+	Пример.: $2^6 = 64 = 1 \bmod 7$
+	\item $\Zp^\ast$ --  {\color{Orange} циклическая группа}, т.e., \\
+	$\exists g \in \Zp$ s.t.\ $\Zp^\ast = \{1 = g^0, g^1, g^2, \ldots, g^{p-2}\}$ \\[5pt]
+	Пример: $\Z_7^\ast = \{1, 3, 3^2 = 2, 3^3 = 6, 3^4 = 4, 3^5 = 5\}$ 
+
+	\item Не каждый элемент является образующим  $\Zp$, но мы знаем, как его эффективно отыскать
+
+	\item {\color{Orange} Порядок} $g \in \Zp$, $\ord(g)$ -- {\color{Orange} наименьшее} положительное $a$ т.ч.\ $g^a = 1$ \\[5pt]
+	Для любого образующего $g$, $\ord(g) = p-1$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Вычисления в $\Zp$ }
+	\large
+	Эффективность арифметики в $\Zp$ измеряется в $n = \lceil \log p \rceil$
+	\begin{itemize}
+		\itemsep 5pt
+		\item Сложение: $\bigO(n)$ битовых операций
+		\item Умножение: $\bigO(n^2)$ (или $\bigO(n^{1.7})$) битовых операций
+		\item Нахождение обратного: $\bigO(n^2)$ битовых операций
+		\pause
+		\item Возведение в степень, $x^r$:  $\bigO(\log r)$ умножений в $\Zp$ (быстрое возведение в степень)\\
+		\begin{itemize}
+			\Large
+			\item $y \leftarrow g$, $z \leftarrow 1$
+			\item \texttt{for $i$ in $[0, n]$:}
+			\item \hspace{10pt}  \texttt{if $r[i]==1$ :} $z \leftarrow z \cdot y$
+			\item \hspace{10pt}  $y \leftarrow y^2$
+			\item \texttt{return} $z$
+		\end{itemize}
+		\pause 
+		Пример: вычислим $g^r$ для $r = 23 = (10111)_2$. I.e., $g^{23} = g^{16+4+2+1}$. \\
+		\[
+			g^1 \rightarrow g^{1+2} \rightarrow g^{1+2+4} \rightarrow  g^{1+2+4} \rightarrow g^{1+2+4+16} 
+		\]
+	
+	\end{itemize}
+
+\vspace{15pt}
+\centering
+\Large
+Эти операции {\color{Orange} {эффективны}} в $\Zp$
+\end{frame}
+
+
+
+\end{document}

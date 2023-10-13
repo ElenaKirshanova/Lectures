@@ -1,0 +1,357 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{stackengine}
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+%\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+
+\title{Лекция №6 \\[10pt]
+	Часть 2. Шифрование с аутентификацией.  Конструкции. }
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+
+\newcommand{\AxisRotator}[1][rotate=0]{%
+	\tikz [x=0.5cm,y=1.9cm,line width=.2ex,-stealth,#1] \draw[color=Orange] (0,0) arc (-150:150:2 and 1);%
+}
+
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}{Атака на выбранный шифр-текст}
+	\Large 
+	 В реальных протоколах атакующий может получить доступ к (частичной) функции {\color{Orange}  дешифрования}.  \\[10pt]
+	 
+	 Пример: атакующий может знать ответ на вопрос ``корректно ли сформирован шифр-текст'' (атака Bleichenbacher на RSA) \\[10pt]
+	 
+	 Симметрическое шифрование ``из коробки'' (CBC, CTR)  {\color{Orange}  не являются}  стойкими к таким атакам.  {\color{Orange} Причина:} измененный шифр-текст является  {\color{Orange}  корректным } шифр-текстом. \\[10pt]
+	 
+	 \centering
+	 
+	 {\color{Orange} Решение: } шифрование с аутентификацией
+	 
+	 
+\end{frame}
+
+
+
+\begin{frame}{Шифрование с аутентификацией стойко к CCA атаке на выбранный шифр-текст}
+	\large
+	\begin{center}
+		
+		\begin{tabular}{c c c}
+			{\color{Orange} Челленджер $\mathcal{C}$ } & & {\color{Orange} Атакующий $\mathcal{A}$ }\\ [5pt]
+			$k \leftarrow \KeyGen(1^\lambda)$ & $\xrightarrow{\quad \Huge \lambda \quad}$  &\\[5pt]
+			$b \xleftarrow{\$} \{0,1\}  $& &\\ [5pt]
+			& $\xleftarrow{\; \Huge m_{0, i}, m_{1, i}  \;}$  &$m_{0, i}, m_{1,i} \leftarrow \mesS $\\ [2pt]
+			
+			$c_i \leftarrow \Enc(k, m_{b, i})$ &  &\\ [2pt]
+			$C = C \cup \{c_i\} $ & $\xrightarrow{\quad c_i \quad}$  &\\ [8pt]
+			
+			& $\xleftarrow{\; c_j \notin C   \;}$  &\\ [5pt]
+			$\hat{m_j} \leftarrow \Dec(k, c_{j})$  &  $\xrightarrow{\quad c_i \quad}$ & \\[2pt]
+			& $\xleftarrow{\quad \hat{b} \quad}$ & \\ [5pt]
+		\end{tabular}
+		\begin{tikzpicture}[overlay]
+		\draw[fill=none, draw=white, opacity=0.5] (-8.3,-2.5) rectangle (-5.0,3.2); 
+		\draw[fill=none, draw=white, opacity=0.5] (-3.0,-2.5) rectangle (0.0,3.2); 
+		\node at (-3.8, -0.1) {\AxisRotator};
+		\end{tikzpicture}
+	\end{center}
+	
+	 {\color{Orange} Теорема:} 
+	 \[
+	 \begin{rcases*}
+	 1. \text{\;  CPA безопасная схема} \quad \\
+	 2. \text{\; целостность шифр-текста}  \quad
+	 \end{rcases*} \implies \text{\; CCA безопасная схема}
+	 \]
+	 
+\end{frame}
+
+\begin{frame}{Целостность шифр-текста}
+\Large 
+
+	\begin{center}
+	$\Pi = (\KeyGen, \Enc, \Dec)$ -- шифрование с аутентификацией.
+	
+	\vspace{20pt}
+	
+	\begin{tabular}{c c c}
+		{\color{Orange} Челленджер $\mathcal{C}$ } & & {\color{Orange} Атакующий $\mathcal{A}$ }\\ [5pt]
+		$k \leftarrow \KeyGen(1^\lambda)$ & &\\[5pt]
+		& $\xleftarrow{\; \Huge m_{i}  \;}$  &$m_{i}\leftarrow \mesS $\\ [2pt]
+		
+		$c_i \leftarrow \Enc(k, m_{i})$ & $\xrightarrow{\; c_i \;}$ & $C = C \cup \{c_i\}$\\ [2pt]
+		
+		& $\xleftarrow{\; \hat{c} \notin C   \;}$  &\\ [5pt]
+	\end{tabular}
+	\begin{tikzpicture}[overlay]
+	\draw[fill=none, draw=white, opacity=0.5] (-7.5,-1.5) rectangle (-4.2,2.0); 
+	\draw[fill=none, draw=white, opacity=0.5] (-3.0,-1.5) rectangle (0.0,2.0); 
+	\end{tikzpicture}
+\end{center}
+
+
+\vspace{15pt}
+
+Выигрыш $\mathcal{A}$ -- событие $\Dec(\hat{c})$ возвращает не $\bot$.
+
+
+
+\end{frame}
+
+\begin{frame}{Конструкции шифрований с аутентификацией}
+\Large 
+\centering
+{\color{Orange} AE = Безопасное шифрование + Криптографический MAC} \\[10pt]
+
+Два ключа: Ключ шифрования $k_E$, ключ MACa $K_M$ \\
+ 
+\begin{center}
+	Две основные парадигмы:
+\end{center}
+\vspace{10pt}
+
+\begin{columns}
+	\begin{column}{0.5\linewidth}
+	{\color{Orange} I. Encrypt-then-MAC}
+	\begin{enumerate}
+		\item $c = \Enc(k_E, m)$
+		\item $t = \MAC(k_M, c)$
+		\item return $(c,t)$
+	\end{enumerate}
+Пример: IPSec 
+	\end{column} 
+	\begin{column}{0.5\linewidth}
+	 {\color{Orange} II. MAC-then-Encrypt}
+		\begin{enumerate}
+			\item $t = \MAC(k_M, n) $
+			\item $c = \Enc(k_E, m||t)$
+			\item return $c$
+		\end{enumerate}
+		Пример: SSL 
+\end{column}
+\end{columns}
+
+\vspace{10pt}
+
+\pause
+\begin{itemize}
+	\item Encrypt-then-MAC всегда даёт AE
+	\item MAC-then-Encrypt даёт AE, если в $\Enc$ используются режимы \\ шифрования CTR/CBC
+	\item Другие комбинации $\MAC$ / $\Enc$ обычно не дают безопасное AE
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{AE стандарты}
+\LARGE
+\begin{enumerate}
+	\itemsep 10 pt
+	\item \textbf{GCM (Galois Counter Mode)}. {\Large {\color{Orange}Encrypt-then-MAC}  \\
+		Шифрование: CTR mode + быстрый Mac (Carter-Wegman Mac).  \\
+		Применение: TLS \\
+		Преимущество: скорость
+	 }
+ \pause
+ 	\item \textbf{CCM}.  {\Large {\color{Orange}MAC-then-Encrypt}  \\
+ 		Шифрование: CBC MAC (AES)+ CTR mode (AES)  \\
+ 		Применение: 802.11i \\
+ 		Преимущество: компактный код
+ 	}
+ \pause
+ 	\item \textbf{ChaCha20-Poly1305.} {\Large {\color{Orange} Encrypt-then-MAC}  \\
+ 		Шифрование: ChaCha20 (Enc) + Poly1305 MAC \\
+ 		Применение: TLS \\
+ 		Преимущество: скорость
+ 	}
+\end{enumerate}
+\end{frame}
+\end{document}

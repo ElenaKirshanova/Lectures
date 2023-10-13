@@ -1,0 +1,349 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{stackengine}
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+%\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+
+%\institute{ENS Lyon}
+\title{Лекция №7 \\[10pt]
+	Часть 3. Задача Диффи-Хэллмана. Протокол Диффи-Хэллмана}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+
+
+\begin{frame}{Трудные (сегодня) задачи в $\Zp$}
+	\large
+	\begin{enumerate}
+		\itemsep 10pt
+		\item {\color{Orange}{Задача дискретного логарифма} (dlog):} \\[3pt]
+			Для $g$ -- образующего $\Zp^\ast$ и $x \in \Zp^\ast$, найти $r$ т.ч.\ $g^r = x \bmod p$ \\[5pt]
+			Пример: Для $\langle 3 \rangle =  \Z_7^\ast$ и $5$ найти $r = 5$ ($3^5 = 5$).
+
+		\item  {\color{Orange}{Задача Diffie-Hellman (вычислительная версия)} (CDH):} \\[3pt]
+			Для $g$ -- образующего $\Zp^\ast$,  $x = g^r \in \Zp^\ast$, $y = g^t \in \Zp^\ast$ найти $z = g^{r\cdot t} \bmod p$. \\[5pt]
+			Пример: Для $\langle 3 \rangle  = \Z_7^\ast$ и $x = 2, y = 6 $ найти $z = 3^5 = 5 \bmod p$.
+			
+		\item {\color{Orange}{Задача принятия решения  Diffie-Hellman} (DDH):} \\
+		Для $g$ -- образующего $\Zp^\ast$, $a, b, c \xleftarrow{\$} \Zp^\ast$, отличить тройки
+		\[
+			(g^a, g^b, g^{ab}) \quad \quad (g^a, g^b, g^c)
+		\]
+		%\pause
+		%\item If one can solve dlog, one can also solve CDH
+		%\item The other direction is not known in general
+		
+		
+		%\item {\color{Orange}{The hardness of both problems depend on the choice of $p$!} Not every prime gives a hard instance of dlog/CDH. }
+	\end{enumerate}
+\Large
+\centering
+\pause
+\vspace{20pt}
+{\color{Orange}
+	DDH $\leq$ CDH $\leq$ DLOG \\[5pt]
+}
+A $\leq$ B = ``решение для $B$ дает решение для $A$'' \\[5pt]
+
+В общем случае редукции в обратную сторону не известны.
+\end{frame}
+
+\begin{frame}{Сложность задач DLOG/CHD/DDH?}
+	\Large 
+	Лучший из известных на сегодня алгоритмов для вычисления DLOG в $\Zp^\ast$ для $n=\lceil\log p\rceil$: {\color{Orange}General Number Field Sieve}  работает за суб-экспоненциальное время  {\Huge \color{Orange}\[e^{n^{1/3}}\]}
+
+	Для уровня безопасности {\color{Orange} $\lambda=128$} бит, необходимо взять
+	\[
+		n \approx {\color{Orange}3072} \text{ бит}
+	\]
+	%\vspace{10pt}
+	
+	Вместо группы $\Zp^\star$ на практике используется группа рациональных \\ точек эллиптической кривой. \\[5pt]
+	{\color{Orange}Преимущество:}  известны лишь {\color{Orange} экспоненциальные} (от порядка \\ группы) алгоритмы для задачи dlog.
+\end{frame}
+
+\begin{frame}{Обмен ключами Диффи-Хэллмана}
+\Large
+\begin{center}
+%Зафиксируем большое простое $p$, и $\langle g \rangle = \Zp^\ast$
+$\mathtt{GenParam} \rightarrow (g, p)$, где $p$ -- большое простое число и$\langle g \rangle = \Zp^\ast$
+\large 
+	\begin{center}
+		\begin{tabular}{l c c c l}
+			& Алиса  & & Боб &  \\
+			& \multirow{5}{*}{\includegraphics[scale=0.15]{Alice}} & & 
+			\multirow{5}{*}{\includegraphics[scale=0.15]{Bob}} &    \\
+			\pause
+			$a \leftarrow \{2, \ldots, p-2 \}$ & & &  &  $b \leftarrow \{2, \ldots, p-2 \}$ \\
+			\pause
+			$k_\text{A} = g^a \bmod p$ & & $\xrightarrow{ \hspace{10pt } \Huge k_\text{A} \hspace{10pt } }$  &  & $k_\text{B} = g^b \bmod p$ \\
+			\pause
+		& & $\xleftarrow{ \hspace{10pt } \Huge k_\text{B} \hspace{10pt } }$  &  & \\
+		\pause
+		$k_\text{AB} =   k_\text{B}^a$ & &  &  & $k_\text{AB} =   k_\text{A}^b$ 
+		\end{tabular}
+	\end{center}
+\vspace{15pt}
+{\color{Orange}$k_\text{AB}$} -- общий ключ \\[10pt]
+\end{center}
+{\color{Orange}Корректность:} $k_\text{B}^a = (g^b)^a = g^{ab} = (g^a)^b=  k_\text{A}^b$.\\[5pt]
+
+{\color{Orange}Безопасность (неформально): } атакующий видит траскрипт $g^a, g^b$. \\
+Для того, чтобы различить $g^{ab}$ от случайного элемента $\Zp^\ast$, он \\ должен решить  задачу  {\color{Orange}DHH.}
+\end{frame}
+
+\begin{frame}{Безопасность протокола Диффи-Хэллмана}
+\Large
+\vspace{-35pt}
+
+{\color{Orange} Теорема.} Протокол Диффи-Хэллмана безопасен относительно пассивного атакующего под предположением сложности задачи {\color{Orange}DHH.}
+
+\vspace{15pt}
+
+\begin{center}
+
+	\begin{tabular}{c c c}
+	{\color{Orange} Челленджер $\mathcal{C}$ } & & {\color{Orange} Атакующий $\mathcal{A}$ }\\ [5pt]
+	$\mathtt{trans}  = (g^a, g^b), k_0 = g^{ab}$ & &\\ [2pt]
+	$k_1 = g^c \rightarrow \Zp^\ast$ &  &\\ 
+	$b \xleftarrow{\$} \{0,1\}  $&$\xrightarrow{(k_b, \mathtt{trans} )}$  &\\ 
+	& $\xleftarrow{\quad \hat{b} \quad}$ & \\ [5pt]
+\end{tabular}
+\begin{tikzpicture}[overlay]
+\draw[fill=none, draw=white, opacity=0.5] (-10.0,-2.) rectangle (-5.0,2.0); 
+\draw[fill=none, draw=white, opacity=0.5] (-3.0,-2.) rectangle (0.0,2.0); 
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}{Активная атака ``человек по середине'' (Man-in-the-middle attack)}
+\Large
+Протокол Диффи-Хэллмана в ``чистом виде'' подвержен {\color{Orange} активным} атакам.
+
+
+\large
+\begin{center}
+	\begin{tabular}{l c c c c c l}
+		& Alice  & & Eve & & Bob &  \\
+		& \multirow{5}{*}{\includegraphics[scale=0.10]{Alice}} & & 
+		\multirow{5}{*}{\includegraphics[scale=0.10]{Eve}} & &
+		\multirow{5}{*}{\includegraphics[scale=0.10]{Bob}} &    \\
+		
+		$k_\text{A} = g^a \bmod p$ & & $\xrightarrow{ \hspace{5pt } \Huge k_\text{A} \hspace{5pt } }$  &  & $\xrightarrow{ \hspace{5pt } \Huge g^{a'} \hspace{5pt} }$ &  &$k_\text{B} = g^b \bmod p$ \\
+		
+		 & & $\xleftarrow{ \hspace{5pt } \Huge g^{b'} \hspace{5pt } }$  &  & $\xleftarrow{ \hspace{5pt } \Huge k_\text{B} \hspace{5pt} }$ &  &\\[20pt]
+		 
+		 &\Huge  $g^{ab'}$ & \multicolumn{3}{c} {\Huge $g^{ab'}$, $g^{a'b}$} & \Huge $g^{a'b}$ &\\
+		\end{tabular}
+\end{center}
+\centering
+\vfill
+Фикс: использовать (ассиметрическую) аутентификацию.  \\ См. следующую лекцию
+\end{frame}
+
+\begin{frame}{Протокол Диффи-Хэллмана на практике}
+\Large
+\begin{itemize}
+	\itemsep 10pt
+	\item Атака ``человек по середине'' предотвращается с помощью цифровой подписи
+	\item В реальных приложениях протокол ДХ вместо группы $\Zp^*$ использует группу рац, точек эллиптической кривой. Соответствующая задача:  {\color{Orange}{EDDH.}} 
+	\item Построить подходящую группу для задач DLOG, CDH, DDH {\color{Orange}{нетривиальна!}}  Не придумывайте свою, используйте стандарты.
+	\item См. \url{https://safecurves.cr.yp.to/} для выбора хорошей кривой
+	\item ГОСТа для протокола обмена ключами нет, есть RFC \url{https://www.ietf.org/rfc/rfc5246.txt} и рекомендации.
+\end{itemize}
+
+\end{frame}
+
+
+
+\end{document}

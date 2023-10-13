@@ -1,0 +1,448 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[normalem]{ulem} %to strike out text
+\usepackage{cancel}
+%\usepackage{stackengine}
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+%\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+
+\newcommand{\AxisRotator}[1][rotate=0]{%
+	\tikz [x=0.4cm,y=1.0cm,line width=.2ex,-stealth,#1] \draw[color=Orange] (0,0) arc (-150:150:2 and 1);%
+}
+
+\title{Лекция №8 \\[10pt]
+	Часть 3. Подпись Шнорра }
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}{Подпись Шнорра}
+	\Large
+	\begin{itemize}
+		\itemsep 10pt
+		\item основана на задаче дискретного логарифма в $\Z_p$
+		\item более компактные ключи и подписи, чем в RSA
+		\item лежит в основе стандартов ECDSA, ГОСТ Р 34.10-2012
+		\item конструкция подписи Шнорра строится на безопасной схеме идентификации
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Парадигмы }
+	\LARGE
+	
+	\begin{itemize}
+		\itemsep 10pt
+		\item {\color{Orange} Hash-and-Sign.} Пример: RSA \\[5pt]
+			\begin{itemize}
+				\itemsep 5pt
+				\Large
+				\item $\Pi = (\KeyGen, \Sign, \Ver)$ -- схема подписи
+				\item $\Hash$ -- криптографическая хэш-функция
+				\item Подпись для сообщение $m$:  $\Sign(\Hash(m))$ 
+			\end{itemize}
+		\item {\color{Orange} Эвристика Фиат-Шамира. } Пример: подпись Шнорра
+			\[
+		\hspace{-40pt}	\text{Док-во с нулевым разглашением}  + { \Hash  случайный оракул } \implies \text{ Схема подписи}
+			\]
+			\item {\color{Orange} Подписи на хэш-функциях.} Пример: дерево Меркля.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Доказательство с нулевым разглашением о знании dlog}
+\Large
+%\vspace{10pt}
+\begin{center}
+	Пусть $g$ -- образующий $\Z_p^\ast$ \\[3pt]
+	{\color{Orange} Цель:} $\mathcal{P}$ должен доказать $\mathcal{V}$, что он знает $x$ (= dlog $g^x$), не выдавая значение $x$.\\[20pt] 
+	
+	\begin{tabular}{c c c}
+		{\color{Orange} Доказывающий $\mathcal{P}$ } & & {\color{Orange} Проверяющий $\mathcal{V}$ }\\ [5pt]
+		$x, g^x$ & & $g^x$\\ [2pt]
+		$k\xleftarrow{\$} \Z_p^\ast$& $\xrightarrow{\; g^k \;} $  &\\ 
+		$\sigma =  \Sign(m, \sk)$ &$\xleftarrow{ \; c \; }$  &$c\xleftarrow{\$} \Z_p^\ast$\\[3pt]
+		& $\xrightarrow{k+x\cdot c} $& \\ [5pt]
+		& & $g^{k+x\cdot c}  == (g^{k}) (g^{x})^c$\\ [5pt]
+	\end{tabular}
+	\begin{tikzpicture}[overlay]
+	\draw[fill=none, draw=white, opacity=0.5] (-9.0,-2.0) rectangle (-5.3,2.5); 
+	\draw[fill=none, draw=white, opacity=0.5] (-3.8,-2.) rectangle (0.0,2.5); 
+	%\node at (-3.8, 0.3) {\AxisRotator};
+	\end{tikzpicture}
+\end{center}
+
+
+\end{frame}
+
+
+\begin{frame}{Подпись Шнорра: конструкция}
+\Large 
+ Пусть $g$ -- образующий $\Z_p^\ast$ \\[3pt]
+$\Hash: \{0,1\}^\ast \rightarrow \Z_p^\ast$ -- криптографическая хэш-функция
+\vspace{10pt}
+\begin{columns}[T]
+	\begin{column}{0.45\textwidth}
+		{\color{Orange} I. $\mathsf{\KeyGen}(1^\lambda):$}
+		\begin{enumerate}
+			\itemsep4pt
+			\item $\sk = x \xleftarrow{\$} \Z_p^\ast$
+			\item $\vk = g^x$
+		\end{enumerate}
+		\vspace{10pt}
+		{\color{Orange} II. $\mathsf{Sign}(\sk, m):$}
+		\begin{enumerate}
+			\itemsep4pt
+			\item $ k \xleftarrow{\$} \Z_p^\ast$
+			\item $r = g^k$ \\
+			\item $c = \Hash(\vk, r, m)$
+			\item $\mathtt{return} \; \sigma = (k+ cx, c)$
+		\end{enumerate}
+	\end{column}
+	\begin{column}{0.45\textwidth}
+		{\color{Orange} III. $\mathsf{Ver}(\vk, m, \sigma = (s, c)):$}
+		\begin{enumerate}
+			\itemsep4pt
+			\item $r' = g^s /\vk^c $
+			\item $\mathtt{return}(r'==\Hash(\vk, r', m))$ \\
+		\end{enumerate}
+	\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Подпись Шнорра: безопасность (скетч)}
+\Large
+\vspace{-5pt}
+{\color{Orange}  Теорема:} Подпись  Шнорра  безопасна в  модели {\color{Orange} UF-CMA}, при условии {\color{Orange} сложности задачи dlog} и $\Hash$ -- {\color{Orange}  случайный оракул.} \\[10pt]
+
+
+\begin{center}
+	\begin{tabular}{c c c}
+		{\color{Orange} Челленджер $\mathcal{C}$ } & & {\color{Orange} Атакующий $\mathcal{A}$ }\\ [5pt]
+		$(\vk, \sk)\leftarrow \mathsf{\KeyGen(1^\lambda)}$ & & \\[2pt]
+		\pause
+		{\color{Orange}$\vk = g^x$ }& $\xrightarrow{\vk }$ &   \\ [4pt]
+		$\sigma ( s = k+cx , c)\leftarrow \mathsf{\Sign}$ & $\xleftarrow{m} $  & \\[2pt] 
+		{\color{Orange}$s, c \xleftarrow{\$} \Z_p^\ast $}& & \\
+		\pause
+		{\color{Orange}$\Hash(\vk, g^s / \vk^c, m) =: c$}&$\xrightarrow{\sigma = (s,c) }$ & \\
+		\pause
+		&  $\xleftarrow{(m_1 , \sigma_1 = (s_1, c_1)) }$ & \\ [5pt]
+	\end{tabular}
+	%\begin{tikzpicture}[overlay]
+	%\draw[fill=none, draw=white, opacity=0.5] (-9.5,-2.0) rectangle (-4.7,2.0); 
+	%\draw[fill=none, draw=white, opacity=0.5] (-3.2,-2.) rectangle (0.0,2.0); 
+	%\end{tikzpicture}
+	
+	\pause
+	 $\Ver(m_1, \sigma_1, \vk) = \mathsf{accept} \implies$ $\adv$ должен был запросить \\ $\Hash(\vk, g^{s_1}/ \vk^{c_1}, m_1)$. Иначе $\adv$ смог обратить $\Hash$.
+\end{center}
+
+\end{frame}
+
+
+\begin{frame}{Подпись Шнорра: безопасность (скетч)}
+\Large
+\vspace{-5pt}
+{\color{Orange}  Теорема:} Подпись  Шнорра  безопасна в  модели {\color{Orange} UF-CMA}, при условии {\color{Orange} сложности задачи dlog} и $\Hash$ -- {\color{Orange}  случайный оракул.} \\[10pt]
+
+
+\begin{center}
+	\begin{tabular}{c c c}
+		{\color{Orange} Челленджер $\mathcal{C}$ } & & {\color{Orange} Атакующий $\mathcal{A}$ }\\ [5pt]
+		$(\vk, \sk)\leftarrow \mathsf{\KeyGen(1^\lambda)}$ & & \\[2pt]
+		{\color{Orange}$\vk = g^x$ }& $\xrightarrow{\vk }$ &   \\ [4pt]
+		$\sigma ( s = k+cx , c)\leftarrow \mathsf{\Sign}$ & $\xleftarrow{m} $  & \\[2pt] 
+		{\color{Orange}$s, c \xleftarrow{\$} \Z_p^\ast $}& & \\
+		{\color{Orange}$\Hash(\vk, g^s / \vk^c, m) =: c$}&$\xrightarrow{\sigma = (s,c) }$ & \\
+		&  $\xleftarrow{(m_1 , \sigma_1 = (s_1, c_1)) }$ & \\ [5pt]
+		\multicolumn{3}{c}{{\color{Orange} \hspace{20pt} RESTART (a.k.a. Rewinding)}} \\[5pt]
+		& $\xleftarrow{(m_2 , \sigma_2) }$ & \\ [5pt]
+	\end{tabular}
+	%\begin{tikzpicture}[overlay]
+	%\draw[fill=none, draw=white, opacity=0.5] (-9.5,-2.0) rectangle (-4.7,2.0); 
+	%\draw[fill=none, draw=white, opacity=0.5] (-3.2,-2.) rectangle (0.0,2.0); 
+	%\end{tikzpicture}
+\end{center}
+
+
+\end{frame}
+
+%\begin{frame}{Подпись Шнорра: безопасность}
+%\Large
+%
+%{\color{Orange}  Теорема:} Схема подписи  Шнорра  безопасна в  модели {\color{Orange} UF-CMA}, если {\color{Orange}  предположение сложности задачи dlog корректно} и $\Hash$ является \\ {\color{Orange}  случайным оракулом.} \\[10pt]
+%
+%
+%\vfill
+%\LARGE
+%{\color{Orange} Случайное значение $k \xleftarrow{\$} \Z_p^\ast$ в алгоритме $\mathsf{Sign}(\sk, m)$ обязано быть выбрано заново для нового $m$.}
+
+%
+%\begin{center}
+%	\begin{tabular}{c c c}
+%		{\color{Orange} Челленджер $\mathcal{C}$ } & & {\color{Orange} Атакующий $\mathcal{A}$ }\\ [5pt]
+%		$\vk = g^x$ & $\xrightarrow{\vk }$& \\ [2pt]
+%		& $\xleftarrow{m} $  &\\ 
+%		&$\xrightarrow{\sigma }$  & \\
+%		& $\xleftarrow{(m' , \sigma' ) }$ & \\ [5pt]
+%	\end{tabular}
+%	\begin{tikzpicture}[overlay]
+%	\draw[fill=none, draw=white, opacity=0.5] (-9.5,-2.0) rectangle (-4.7,2.0); 
+%	\draw[fill=none, draw=white, opacity=0.5] (-3.2,-2.) rectangle (0.0,2.0); 
+%	\end{tikzpicture}
+%\end{center}
+
+
+%\end{frame}
+
+
+%
+%\begin{frame}{Usages of signatures schemes}
+%	\Large
+%	Practical signature schemes 
+%	\begin{enumerate}
+%		\itemsep 10pt
+%		\item RSA \\
+%		long keys, signatures; fast verification
+%		\item ECDSA, GOST\\
+%		short keys, signatures; slower verification
+%	\end{enumerate}
+%\vspace{10pt}
+%RSA is good for {\color{Orange} Certificates}, ECDSA/GOST are good for e-mails. \\[10pt]
+%
+%Certificates  bind a public key to an identity.
+%\end{frame}
+%
+%\begin{frame}{Certificates and PKI}
+%\begin{center}
+%	\begin{tabular}{l c c c l}
+%		& \Large Alice & &\Large Certificate Authority (CA)&  \\ 
+%		&  $\pk_{\texttt{A}}$  & & $\vk_{\texttt{CA}}$, $\sk_{\texttt{CA}}$ & \\
+%		& \multirow{5}{*}{\includegraphics[scale=0.15]{Alice}} & & &  \\  \pause
+%		& & $\xrightarrow[\texttt{id, email, } \pk_{\texttt{A}}]{\text {Certificate Signing Request}}$ & & \\  \pause
+%		& & & Certifying Alice’s identity & \\
+%		& & & Creating a certificate $\texttt{cert}$& \\
+%		& & & Signing $\texttt{cert}$& \\
+%		& & $\xleftarrow{\LARGE \texttt{cert}, \; \sigma = \Sign(\sk_{\texttt{CA}}, \texttt{cert})}$ & & \\  \pause
+%	\end{tabular}
+%\end{center}
+%
+%\vspace{15pt}
+%\Large
+%Anyone, who needs to communicate securely with Alice, first runs $\Ver(\vk_{\texttt{CA}} \texttt{cert},\sigma )$. If verification passes, $\pk_{\texttt{A}}$ can be used to communicate with Alice.\\[10pt]
+%
+%Example: X.509 certificate
+%\end{frame}
+%
+%\begin{frame}{Certificate chains}
+%	\Large
+%	\begin{center}
+%	
+%	\begin{align*}
+%			&{\LARGE \text{Root CAs } \quad \quad\xrightarrow{\hspace{2em}} \quad \quad \text{Intermediate CA}} \\
+%			&\text{certifies Interm.\ CAs}  \hspace{46pt} \text{certifies clients} 
+%	\end{align*}
+%	\end{center}
+%	\vspace{20pt}
+%	There are currently thousands of intermediate CAs operating on the Internet \\[10pt]
+%	To avoid malicious CAs: {\color{Orange} certificate pinning:} \\[7pt]
+%	\begin{enumerate}
+%		\item Every browser maintains a pinning database: \\
+%		($\texttt{domain}$, $\texttt{hash}_0$, $\texttt{hash}_1, \ldots$ )
+%		\item The data for each record is provided by the domain owner
+%		\item 	When the browser connects to a domain, domain sends its certificate chain $\texttt{cert}_0, 
+%		\texttt{cert}_1, \ldots$
+%		\item The browser computes $\Hash(\texttt{cert}_i)$ and verifies against $\texttt{hash}_i$. 
+%	\end{enumerate}
+%	
+%\end{frame}
+
+
+\end{document}

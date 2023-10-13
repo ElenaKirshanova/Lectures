@@ -1,0 +1,312 @@
+\documentclass[usenames,dvipsnames,8pt,aspectratio=169]{beamer}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{mathtools}
+\usepackage{etex} %for Windows
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+%\usepackage{microtype}			% Better interword spacing and additional kerning.
+\usepackage{ellipsis}			% Adjusted space with \dots between two words.
+\usepackage{graphicx}
+\usepackage{pstricks}
+
+\usepackage{xcolor}
+
+
+\usepackage{changepage}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage[]{algorithm2e}
+%\usepackage{algorithmic}
+
+%\usepackage{tcolorbox}
+
+
+\usepackage{caption}
+\usepackage{subcaption}
+%\usepackage{stackengine}
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark,calc}
+\usetikzlibrary{positioning, backgrounds}
+\usetikzlibrary{arrows, chains, matrix, scopes, patterns, shapes, fit}
+\usetikzlibrary{mindmap,trees,shadows}
+\usetikzlibrary{decorations.pathreplacing}
+%\usetikzlibrary{crypto.symbols}
+
+\usepackage{pgfplots}
+
+\pgfmathdeclarefunction{gauss}{2}{%
+	\pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+
+\newcommand\strikeout[2][]{%
+	\begin{tabular}[b]{@{}c@{}} 
+		\makebox(0,0)[cb]{{#1}} \\[-0.2\normalbaselineskip]
+		\rlap{\color{Orange}\rule[0.5ex]{\widthof{#2}}{1.5pt}}#2
+\end{tabular}}
+
+\addtobeamertemplate{footline}{%
+	\setlength\unitlength{1ex}%
+	\begin{picture}(0,0) 
+	% \put{} defines the position of the frame
+	\put(155,0){\makebox(0,0)[bl]{
+			%\includegraphics[scale=0.65]{white_square}
+			%\includegraphics[scale=0.65]{dark_square}
+			\includegraphics[scale=0.65]{grey_circle}
+	}}%
+	\end{picture}%
+}{}
+
+\newcommand\Fontvi{\fontsize{11}{13.2}\selectfont}
+
+\usepackage{listings} % for C++ code
+
+\usepackage{braket}
+%\usepackage[braket, qm]{qcircuit}
+
+
+
+\usepackage[T1]{fontenc}
+%\usepackage[sfdefault,scaled=.85]{FiraSans}
+%\usepackage{newtxsf}
+%\usepackage[nomap]{FiraMono}
+
+
+
+
+
+\usefonttheme[onlymath]{serif}
+\renewcommand\sfdefault{cmbr}
+
+\renewcommand{\bfdefault}{sb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+\definecolor{Orange}{RGB}{255, 165,0}
+\definecolor{DarkOrange}{RGB}{255, 165,0}
+\definecolor{LightSalmon}{RGB}{255, 160, 122}
+\definecolor{LeafGreen}{RGB}{34, 139,  34}
+\definecolor{Coral}{RGB}{255, 127, 80}
+\definecolor{DarkTurquoise}{RGB}{0, 206, 209}
+
+%\newtheorem{defRus}{Определение}
+%\newtheorem{thmRus}{Теорема}
+%s\newtheorem{corRus}{Следствие}
+
+
+\setbeamercolor{background canvas}{bg=CharCoalDark}
+
+\setbeamerfont{title}{series=\bfseries}
+\setbeamercolor{title}{fg=Orange}
+\setbeamercolor{section in toc}{fg=white}
+\setbeamercolor{frametitle}{fg=Orange}
+\setbeamercolor{normal text}{fg=white}
+%\setbeamercolor{normal text}{fontsize=12pt}
+\setbeamercolor{itemize item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{enumerate item item}{fg=Orange}
+\setbeamercolor{itemize item item}{fg=Orange}
+\setbeamercolor{enumerate item}{fg=Orange}
+\setbeamercolor{block title}{bg=DarkOrange,fg=white}
+\setbeamerfont{block title}{series=\bfseries}
+
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{eumerate subitem}{\color{Orange}[$\checkmark$]}
+\setbeamertemplate{itemize subitem}{\color{Orange}\Large$\textbullet$}
+\setbeamertemplate{itemize subitem}{\color{Orange} \tiny $\blacksquare$}
+
+% footnote without a marker
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\footnoterule{}
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}%
+
+\newcommand\Item[1][]{%
+	\ifx\relax#1\relax  \item \else \item[#1] \fi
+	\abovedisplayskip=0pt\abovedisplayshortskip=0pt~\vspace*{-\baselineskip}}
+
+\pgfdeclareradialshading{ring}{\pgfpoint{0cm}{0cm}}%
+{rgb(0cm)=(1,1,1);
+	rgb(0.7cm)=(1,1,1);
+	rgb(0.719cm)=(1,1,1);
+	rgb(0.72cm)=(0.975,0,0);
+	rgb(0.9cm)=(1,1,1)}
+
+\usepackage[absolute,overlay]{textpos} %to clip to a corner
+\newcommand\FrameText[1]{%
+	\begin{textblock*}{\paperwidth}(\textwidth-35pt, 10 pt)
+		\raggedright #1\hspace{.5em}
+\end{textblock*}}
+
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+	\save@measuring@true
+	\def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+	\def\beamer@sortzeroread##1<##2>{}%
+	\def\beamer@finalnospec{}%
+}
+\makeatother
+
+\AtBeginSection[]
+{
+	\begin{frame}<beamer>
+		\frametitle{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+
+%\institute{ENS Lyon}
+\title{Лекция №7 \\[10pt]
+	Часть 4. PAKE. Парольный обмен ключами с аутентификацией}
+
+\date{ Елена Киршанова \\  \textbf{Курс ``Основы криптографии''} \\  }
+
+
+
+
+\setbeamertemplate{navigation symbols}{} %removes navigation
+
+% proper highlightling of a code-snippet
+\lstset{language=C++,
+	keywordstyle=\color{magenta},
+	stringstyle=\color{Goldenrod},
+	commentstyle=\color{gray},
+	breaklines=false,
+	%morecomment=[l][\color{magenta}]{\#}
+}
+
+%\setlength{\parskip}{8pt}
+\input{header} %all defs
+\begin{document}
+	
+\begin{frame}
+	\titlepage
+\end{frame}
+
+
+
+\begin{frame}{Password Authenticated Key Exchange (PAKE): мотивация}
+	\Large
+	\begin{itemize}
+		\itemsep 10pt
+		\item Классический Диффи-Хэллмана (ДХ) протокол уязвим к активной атаке
+		\item Безопасная реализация ДХ подразумевает аутентифицированный канал 
+		\item Аутентификация:  либо { \color{Orange}доверенная сторона}, либо  {\color{Orange} парольные решения }
+	\end{itemize}
+%\centering 
+
+\vspace{20pt}
+
+{\color{Orange} Сценарий}: две стороны, сервер и клиент, знают пароль $pwd$ \\[10pt]
+{\color{Orange} Задача}: обезопасить клиента от атакующего, представляющегося \\ сервером. 
+\end{frame}
+
+\begin{frame}{Упрощенная версия $\text{PAKE}_0$}
+\vspace{-20pt}
+	\Large
+	\begin{center}
+		%Зафиксируем большое простое $p$, и $\langle g \rangle = \Zp^\ast$
+		$\Hash$-- криптографическая хэш-функция. $R, S$--множество нонсов \\[5pt]
+		$\mathtt{id}_{A}$ -- идентификатор Алисы, $\mathtt{id}_{B}$ -- идентификатор Боба\\[10pt]
+		
+		\large 
+		\begin{center}
+			\begin{tabular}{l c c c l}
+				& Алиса (клиент)  & & Боб (сервер) &  \\
+				& \multirow{5}{*}{\includegraphics[scale=0.15]{Alice}} & {\huge $pwd$} &  \hspace{-20pt}
+				\multirow{5}{*}{\includegraphics[scale=0.15]{Bob}} &    \\[10pt]
+				$r \xleftarrow{\$} R$ & & {\huge $\xrightarrow{\quad r \quad }$}&  & \\
+				 & &  {\huge $\xleftarrow{\quad s \quad }$}&  & \hspace{-30pt} $s \xleftarrow{\$} S$ \\
+				${\color{Orange}k} =\Hash(\mathtt{id}_{A}, \mathtt{id}_{B}, r, s, pwd) $ & &  &  & \hspace{-30pt} ${\color{Orange}k} =\Hash(\mathtt{id}_{A}, \mathtt{id}_{B}, r, s, pwd) $ \\
+				\end{tabular}
+		\end{center}
+		\vspace{15pt}
+		{\color{Orange}$k$} -- общий ключ \\[10pt]
+	\end{center}
+
+	{\color{Orange}Проблема: } Если $pwd$ легко угадывается, пассивный злоумышленник  \\ может легко провести атаку перебором на {\color{Orange}$k$}
+
+\end{frame}
+\begin{frame}{Упрощенная версия $\text{PAKE}_1$}
+\Large
+\vspace{-20pt}
+\begin{center}
+	$\Hash$-- криптографическая хэш-функция \\[2pt]
+	$\mathtt{id}_{A}$ -- идентификатор Алисы, $\mathtt{id}_{B}$ -- идентификатор Боба\\[2pt]
+	$\mathtt{GenParam} \rightarrow (g, p)$, где $p$ -- большое простое число и$\langle g \rangle = \Zp^\ast$
+	\large 
+	\begin{center}
+		\begin{tabular}{l c c c l}
+			& Алиса (клиент)  & & Боб (сервер) &  \\
+			& \multirow{2}{*}{\includegraphics[scale=0.15]{Alice}} & {\huge $pwd$} &  \hspace{-20pt}
+			\multirow{2}{*}{\includegraphics[scale=0.15]{Bob}} &    \\[10pt]
+			$ a \leftarrow \{2, \ldots, p-2 \}$ & & {\Huge $\xrightarrow{\quad u  \quad }$}&  &\hspace{-30pt} $b \leftarrow \{2, \ldots, p-2 \}$ \\
+			\huge $w = v^a$& &  {\Huge $\xleftarrow{\quad v  \quad }$}&  & \hspace{-30pt}\huge $v = u^b$ \\[20pt]
+			\multicolumn{5}{c}{ \LARGE ${\color{Orange}k} =\Hash(\mathtt{id}_{A}, \mathtt{id}_{B}, u, v, w, pwd) $}   \\
+		\end{tabular}
+	\end{center}
+	%\vspace{15pt}
+\end{center}
+	$\text{PAKE}_1$ безопасен относительно {\color{Orange} пассивных} злоумышленников  при \\ условии сложности задачи CDH. \\[5pt]
+	$\text{PAKE}_1$  небезопасен относительно {\color{Orange}активного} атакующего, выдающего \\ себя за сервер
+\end{frame}
+
+
+\begin{frame}{ Версия $\text{PAKE}_2$}
+\Large
+\vspace{-20pt}
+\begin{center}
+	$\Hash$-- криптографическая хэш-функция  \\[3pt]
+	$\mathtt{id}_{A}$ -- идентификатор Алисы, $\mathtt{id}_{B}$ -- идентификатор Боба\\[3pt]
+	Зафиксируем большое простое $p$, и $\langle g \rangle = \Zp^\ast$, $\color{Orange} \alpha, \beta \in \Zp^\ast $\\
+	\large 
+	\begin{center}
+		\begin{tabular}{l c c c l}
+			& Алиса (клиент)  & & Боб (сервер) &  \\
+			& \multirow{2}{*}{\includegraphics[scale=0.15]{Alice}} & { ${\color{Orange}pwd} \in \Zp^\ast $} &  \hspace{-20pt}
+			\multirow{2}{*}{\includegraphics[scale=0.15]{Bob}} &    \\[10pt]
+			$ a \leftarrow \{2, \ldots, p-2 \}$ & & &  &\hspace{-30pt} $b \leftarrow \{2, \ldots, p-2 \}$ \\[3pt]
+			\huge ${\color{Orange} u = g^a \cdot \alpha^{pwd}} $ & & {\Huge $\xrightarrow{\quad u \quad }$}& & \hspace{-30pt}  \huge ${\color{Orange} v = g^b \cdot \beta^{pwd}} $ \\[3pt]
+			\huge $ {\color{Orange}w = (v/\beta^{pwd})^a}$& &  {\Huge $\xleftarrow{\quad v \quad }$}&  & \huge \hspace{-30pt} ${\color{Orange}w = (u/\alpha^{pwd})^b}$ \\[17pt]
+			\multicolumn{5}{c}{ \LARGE ${\color{Orange}k} =\Hash(\mathtt{id}_{A}, \mathtt{id}_{B}, u, v, w, pwd) $}   \\
+		\end{tabular}
+	\end{center}
+	%
+\end{center}
+
+\vspace{20pt}
+
+$\text{PAKE}_2$ безопасен относительно {\color{Orange} активных} злоумышленников \\ при условии сложности задачи CDH \\
+
+
+\end{frame}
+
+\begin{frame}{PAKE на практике}
+	\Large
+	\begin{itemize}
+		\itemsep 10pt
+			\item Пароли на сервере хранятся в виде $g^{\Hash(\text{salt}, pwd)}$ (атакующий, получив это значение, не может эффективно вычислить $pwd$)
+			\item Популярный пример PAKE: Secure Remote Password (SRP) (iCloud Key Vault)
+			\item Другой пример: OPAQUE \url{https://tools.ietf.org/html/draft-krawczyk-cfrg-opaque-00} -- криптографический стойкий и эффективный PAKE
+	\end{itemize}
+\end{frame}
+
+
+\end{document}

@@ -1,0 +1,74 @@
+\documentclass{standalone}
+
+\input ./avanzi-tikz-defs.tex
+
+\RequirePackage{fullpage}
+\RequirePackage{ifthen}
+\RequirePackage{amssymb}
+
+\definecolor{CharCoalDark}{RGB}{13, 16, 19}
+
+\begin{document}
+\begin{tikzpicture}
+
+  \newcount\q
+  \newcount\t
+  \newcount\s
+  \newcount\u
+
+  %% Define all nodes for the eight s-boxes, 4 above (inputs) and 4 below (outputs)
+  %% also one further layer above the inputs, one under the outputs
+
+  \foreach \i in {0,...,7} {
+
+    \node[rectangle, draw=white, thick, minimum width=6.95mm,  minimum height=8mm, xshift=\i*8mm] (S\i) {{\color{white}$S_{\i}$}}; 
+
+    \foreach \m in {0,...,3}  {
+      \node[bit,yshift=0.2mm,right=2*\m mm +0.3mm of S\i.north west, color=white] (S\i in\m) {};
+      \node[bit,above=4mm of S\i in\m, color=white] (S\i intop\m) {};
+    }
+
+    \foreach \m in {0,...,3}  {
+      \node[bit,yshift=-0.2mm,right=2*\m mm +0.3mm of S\i.south west, color=white] (S\i out\m) {};
+      \node[bit,below=4mm of S\i out\m, color=white] (S\i outbot\m) {};
+    }
+  }
+
+  %% the vertical connectnections
+
+  \foreach \i in {0,...,7} {
+
+    \foreach \m in {0,...,3}  {
+      \draw[-,very thin,color=white] (S\i intop\m) -- (S\i in\m);
+      \draw[-,very thin,color=white] (S\i out\m) -- (S\i outbot\m);
+    }
+  }
+
+  %% the "crossbars" collecting or spreading all bits in order
+
+  \draw[-,thin,color=white] (S0intop0.north)  -- (S7intop3.north);
+  \draw[-,thin,color=white] (S0outbot0.south) -- (S7outbot3.south);
+
+  %% define entry and exit points for the expansion and sbox layers
+
+  \node[coordinate] (entrySlayer) at ($ (S0intop0.north) ! 0.5 ! (S7intop3.north) $) {};
+  \node[coordinate] (exitSlayer) at ($ (S0outbot0.south) ! 0.5 ! (S7outbot3.south) $) {};
+
+  \node[PLUS, draw=white, above = 6mm of entrySlayer, color=white, fill=CharCoalDark] (PK) {};
+  \node[function, below = 6mm of exitSlayer, color=white] (ROT) {{\color{white}$\lll_{11}$}};
+
+  \node[above = 6mm of PK] (in) {{\color{white}$R_i$}};
+  \node[below = 6mm of ROT] (out) {{\color{white}XOR to $L_i$}};
+  
+  %% remaining connectnections
+
+  \node[right = 18mm of PK,color=white] (key) {{\color{white}$k_i$}};
+	\draw[arrow,color=white] (in) -- (PK);
+  \draw[arrow,color=white] (key) -- (PK);
+
+ \draw[connect,color=white] (PK) -- (entrySlayer);
+  \draw[arrow,color=white] (exitSlayer) -- (ROT);
+  \draw[arrow,color=white] (ROT) -- (out);
+
+\end{tikzpicture}
+\end{document}
