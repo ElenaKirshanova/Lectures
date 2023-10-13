@@ -1,0 +1,260 @@
+% ==================================================================
+% Definitions for this paper
+% ==================================================================
+\mathchardef\hyphen="2D
+
+\usepackage{multirow}
+\usepackage{multicol} % For multiple coloumn environments
+%\usepackage{stmaryrd} % For set brackets
+% \setlength{\columnsep}{15pt} % Defining the coloumn seperation
+% \setlength{\columnseprule}{1pt} % Place a line between coloumns
+% \newcommand{\tab}{\hspace*{2em}}
+
+%subscripts
+
+\newcommand*\SmallTextScript[2]{{\mathchoice{\displaystyle #2}
+		{\textstyle #2}%dito
+		{\scalebox{#1}{\ensuremath{\scriptstyle #2}}}%
+		{\scalebox{#1}{\ensuremath{\scriptscriptstyle #2}}}%
+}}
+
+
+% ADVERSARIES AND SUCH
+\newcommand*{\poly}{\ensuremath{\mathrm{poly}}}
+\newcommand*{\eps}{\ensuremath{\varepsilon}}
+\newcommand*{\alg}{\ensuremath{\mathcal{A}}}
+
+% GROUPS/DISTRIBUTIONS/SETS/LISTS
+\newcommand{\N}{{{\mathbb N}}}
+\newcommand{\Z}{{{\mathbb Z}}}
+\newcommand*{\IZ}{\ensuremath{\mathbb{Z}}}
+\newcommand*{\IN}{\ensuremath{\mathbb{N}}}
+\newcommand*{\IQ}{\ensuremath{\mathbb{Q}}}
+\newcommand{\R}{{{\mathbb R}}}
+\newcommand*{\IR}{{{\mathbb R}}}
+\newcommand{\Zp}{\Z_p} % Integers modulo p
+\newcommand{\Zq}{\Z_qs} % Integers modulo q
+\newcommand{\ZN}{\Z_N} % Integers modulo N
+\newcommand{\F}{\ensuremath{\mathbb{F}}}
+\newcommand{\CC}{\ensuremath{\mathbb{C}}}
+
+\newcommand{\ord}{\ensuremath{\mathrm{ord}}}
+
+\newcommand{\GF}{\ensuremath{\mathbb{F}_2}}
+\newcommand{\GFn}{\ensuremath{\mathbb{F}^n_2}}
+
+%%% ALGORITHMS/PROCEDURES %%%
+\newcommand{\Dec}{\textsf{Dec}}
+\newcommand{\Enc}{\textsf{Enc}}
+\newcommand{\KeyGen}{\textsf{KeyGen}}
+\newcommand{\Gen}{\textsf{Gen}}
+\newcommand{\MAC}{\textsf{MAC}}
+\newcommand{\Sign}{\textsf{Sign}}
+\newcommand{\Ver}{\textsf{Ver}}
+\newcommand{\sk}{\textsf{sk}}
+\newcommand{\pk}{\textsf{pk}}
+\newcommand{\vk}{\textsf{vk}}
+\newcommand{\mesS}{\ensuremath{\mathcal{M}}}
+\newcommand{\keyS}{\ensuremath{\mathcal{K}}}
+\newcommand{\cipS}{\ensuremath{\mathcal{C}}}
+\newcommand{\tagS}{\ensuremath{\mathcal{T}}}
+\newcommand{\nonceS}{\ensuremath{\mathcal{N}}}
+\newcommand{\mactag}{\textsf{tag}}
+\newcommand{\Hash}{\ensuremath{\mathcal{H}}}
+\newcommand{\EID}{\ensuremath{\mathtt{EphID}}}
+
+\newcommand{\rem}{\ensuremath{\mathrm{rem}}}
+
+\newcommand{\adv}{\ensuremath{\mathcal{A}}}
+
+\newcommand{\LWE}{\mathsf{LWE}}
+\newcommand{\DCP}{\mathsf{DCP}}
+\newcommand{\EDCP}{\mathsf{EDCP}}
+\newcommand{\UEDCP}{\mathsf{U \text{-} EDCP}}
+\newcommand{\GEDCP}{\mathsf{G \text{-} EDCP}}
+
+
+
+%% Landau and proba
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand*{\OLandau}{\bigO}
+\newcommand*{\WLandau}{\Omega}
+\newcommand*{\xOLandau}{\widetilde{\OLandau}}
+\newcommand*{\xWLandau}{\widetilde{\WLandau}}
+\newcommand*{\TLandau}{\Theta}
+\newcommand*{\xTLandau}{\widetilde{\TLandau}}
+\newcommand{\smallo}{o} %technically, an omicron
+\newcommand{\wLandau}{\omega}
+\newcommand{\negl}{\mathrm{negl}}
+\newcommand*\PROB\Pr 
+\DeclareMathOperator*{\EXPECT}{\mathbb{E}}
+\DeclareMathOperator*{\VARIANCE}{\mathbb{V}}
+\DeclareMathOperator*{\LOGBIAS}{\mathbb{LB}}
+
+\newcommand{\supp}{\ensuremath{\mathsf{sup}}}
+\newcommand{\Distr}{\ensuremath{\mathcal{D}}}
+
+% Lattices
+
+% \newcommand{\coset}{\Lambda} % Lambda Lattice
+% \newcommand{\cosetPerp}{\Lambda^{\bot}} % Lambda_Perp Lattice
+% \newcommand{\gadget}{\textbf{G}} %Gaget matrix
+% \newcommand{\mes}{\textbf{m}} %message vector
+% \newcommand{\AMat}{\textbf{A}} %A matrices
+% \newcommand{\BMat}{\textbf{B}} %B matrices
+% \newcommand{\RMat}{\textbf{R}} %R matrices
+% \newcommand{\HMat}{\textbf{H}} %H matrices
+% \newcommand{\XMat}{\textbf{X}} %H matrices
+% \newcommand{\mbar}{\bar{m}} %mBar dimension
+% % \newcommand{\gauss}{\mathcal{D}} % gaussian distribution
+% \newcommand{\Id}{\textbf{I}} % Identity matrix
+% \newcommand{\er}{\textbf{e}} % gaussian distr. vectors
+% % \newcommand{\cipher}{\textit{c}} % ciphertext
+% \newcommand{\Olwe}{\mathcal{O}_{\textsf{LWE}}} %LWE oracle
+% \newcommand{\OSample}{\mathcal{O}_{Sample}} %LWE oracle
+% \newcommand{\SigmaB}{\boldsymbol{\Sigma}} %semi-deifinite matrix Sigma%
+% % \newcommand{\mods}{\text{ mod}}
+
+
+%Vectors and Matrices
+
+\newcommand{\AMat}{\mathbf{A}} %A matrices
+\newcommand{\BMat}{\mathbf{B}} %B matrices
+\newcommand{\DMat}{\mathbf{D}} %Diagonal
+
+
+\newcommand{\HMat}{\ensuremath{\mathbf{H}}}
+\newcommand{\QMat}{\ensuremath{\mathbf{Q}}}
+\newcommand{\Id}{\ensuremath{\mathbf{I}}}
+\newcommand{\ZeroM}{\textbf{0}} % Zero matrix
+
+\newcommand{\avec}{\ensuremath{\mathbf{a}}}
+\newcommand{\bvec}{\ensuremath{\mathbf{b}}}
+\newcommand{\cvec}{\ensuremath{\mathbf{c}}}
+\newcommand{\evec}{\ensuremath{\mathbf{e}}}
+\newcommand{\rvec}{\ensuremath{\mathbf{r}}}
+\newcommand{\svec}{\ensuremath{\mathbf{s}}}
+\newcommand{\tvec}{\ensuremath{\mathbf{t}}}
+\newcommand{\vvec}{\ensuremath{\mathbf{v}}}
+\newcommand{\zvec}{\ensuremath{\mathbf{z}}}
+\newcommand{\xvec}{\ensuremath{\mathbf{x}}}
+\newcommand{\yvec}{\ensuremath{\mathbf{y}}}
+\newcommand{\uvec}{\ensuremath{\mathbf{u}}}
+\newcommand{\zerovec}{\ensuremath{\mathbf{0}}}
+
+\newcommand{\nth}{^{\mathrm{th}}}
+\newcommand{\nd}{^{\mathrm{nd}}}
+
+\newcommand{\RepMMT}{\ensuremath{\mathcal{R}_{\protect\SmallTextScript{0.70}{\texttt{MMT}}}}}
+\newcommand{\RepBJMM}{\ensuremath{\mathcal{R}_{\protect\SmallTextScript{0.70}{\texttt{BJMM}}}}}
+\newcommand{\XOR}{\ensuremath{\mathtt{3XOR}}}
+
+
+% % % % % \newcommand{\mb}[1]{\mathbf{#1}} % does not compile otherwise
+%%% Removed by Gotti; this is just asking to screw up with packages that (properly) define \mb (mathbold)
+
+% \newcommand{\bL}{\|\bvec_1\|} % b1 length that appears way too often
+% \newcommand{\dL}{\|\dvec_1\|} % b1 length that appears way too oftend
+
+%Norms and Scalar products
+
+\newcommand*\abs[1]{\left\lvert#1\right\rvert}
+\newcommand*\norm[1]{\left\lVert#1\right\rVert}
+\newcommand*\normalabs[1]{\lvert#1\rvert} 
+\newcommand*\normalnorm[1]{\lVert#1\rVert}
+\newcommand*\bignorm[1]{\bigl\lVert#1\bigr\rVert}
+\newcommand*\bigabs[1]{\bigl\lvert#1\bigr\rvert}
+\newcommand*\Bigabs[1]{\Bigl\lvert#1\Bigr\rvert}
+\newcommand*{\ScProd}[2]{\ensuremath{\langle#1\mathbin{,}#2\rangle}} %Scalar Product
+% \newcommand*{\ScProd}[2]{\ensuremath{\langle#1 \:{,}\:#2\rangle}} %Scalar Product
+\newcommand*{\bigScProd}[2]{\ensuremath{\bigl\langle#1\mathbin{,}#2\bigr\rangle}} %Scalar Product
+\newcommand*{\BigScProd}[2]{\ensuremath{\Bigl\langle#1\mathbin{,}#2\Bigr\rangle}} %Scalar Product
+\newcommand{\dist}{\ensuremath{\text{dist}}}
+
+
+%Some other math operators
+
+\DeclareMathOperator{\Span}{Span} %span of vectors
+\DeclareMathOperator{\vol}{\mathrm{vol}} %volume
+\DeclareMathOperator{\LW}{LambertW} %Lambert W function
+\DeclareMathOperator{\SD}{SD}
+\DeclareMathOperator{\gradient}{grad}
+\DeclareMathOperator{\TRACE}{Tr}
+\newcommand*{\dDR}{\mathrm{d}} %de-Rham-Differential (the d in dx, dy, dz and so on)
+
+
+%Lists
+\renewcommand{\L}{\ensuremath{\mathcal{L}}}
+
+\renewcommand{\P}{\ensuremath{\mathcal{P}}}
+
+\newcommand*{\Lout}{\ensuremath{\L_{\mkern-0.5mu\protect\SmallTextScript{0.85}{\textup{out}}}}}
+\newcommand*{\Sout}{\ensuremath{S_{\mkern-0.5mu\protect\SmallTextScript{0.85}{\textup{out}}}}}
+\newcommand{\wt}{\ensuremath{\mathit{wt}}}
+
+
+\newcommand*{\softO}{\widetilde{\bigO}}
+
+\newcommand{\const}{\mathsf{c}} 
+
+
+\newcommand{\transpose}{\mkern0.7mu^{\mathsf{ t}}}
+
+%proper overline reduced by 1.5mu
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+
+\DeclareMathOperator{\erf}{erf} %error function
+\DeclareMathOperator{\erfc}{erfc} %complementary error function
+\newcommand{\Er}{\ensuremath{\mathrm{Er}}} %complementary error function
+%ordinal numbers
+
+
+% LATTICES
+
+\newcommand{\Lat}{\ensuremath{\mathcal{L}}}
+\newcommand*{\Sphere}[1]{\ensuremath{\mathsf{S}^{#1}}}
+%\DeclareMathOperator{\Conf}{Conf}
+\newcommand{\Conf}{\mathcal{C}}
+
+%Thick line for table
+\setlength{\doublerulesep}{0pt}
+\newcommand{\thickline}{\hline\hline\hline}
+
+
+%circled text
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+    \node[shape=circle,draw,inner sep=0.3 pt] (char) {\scriptsize #1};}}
+
+
+%Fix Algorithmicx package
+\def\NoNumber#1{{\def\alglinenumber##1{}\State #1}\addtocounter{ALG@line}{-1}}
+
+
+%Proper limit with the subscript underneath
+% \newcommand{\Lim}[1]{\raisebox{0.5ex}{\scalebox{0.8}{$\displaystyle \lim_{#1}\;$}}}
+
+
+%TIKZ dense dotted pattern
+
+\pgfdeclarepatternformonly{my dots}{\pgfqpoint{-1pt}{-1pt}}{\pgfqpoint{2.0pt}{2.0pt}}{\pgfqpoint{2pt}{2pt}}%
+{
+	\pgfpathcircle{\pgfqpoint{0pt}{0pt}}{.35pt}
+	\pgfpathcircle{\pgfqpoint{1pt}{1pt}}{.35pt}
+	\pgfusepath{fill}
+}
+
+
+\tikzset{
+	master/.style={
+		execute at end picture={
+			\coordinate (lower right) at (current bounding box.south east);
+			\coordinate (upper left) at (current bounding box.north west);
+		}
+	},
+	slave/.style={
+		execute at end picture={
+			\pgfresetboundingbox
+			\path  (lower right)rectangle (upper left) ;
+		}
+	}
+}
