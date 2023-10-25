@@ -1,0 +1,324 @@
+% !TeX spellcheck = ru_RU-Russian
+% !TeX program = xelatex
+% !BIB TS-program = biber
+
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{cmap}
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+\usepackage{pgfplots, subfigure}
+\usepackage{extarrows}
+
+\usepackage[backend=biber,firstinits=true,hyperref=true,style=numeric-comp]{biblatex}
+
+\usepackage{../beamerthemeec2020}
+{\footnotesize\bibliography{../biblio}}
+
+\title{Эллиптические кривые}
+\subtitle{Лекция 7. Алгоритм факторизации на эллиптических кривых}
+\author{Семён Новосёлов}
+\institute{БФУ им. И. Канта}
+\date{2023}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Факторизация}
+	По заданному большому числу~$N$ найти его множители.
+
+	\vspace{1em}
+
+	\begin{itemize}
+		\item Безопасность криптосистемы RSA строится на сложности факторизации числа $N = p \cdot q$.
+		\vspace{0.5em}
+		\item Факторизация чисел требуется и в других приложениях: например, при нахождении порядка элемента группы.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Алгоритм ECM\footnote{Elliptic curve factorization method}}
+	\begin{itemize}
+		\item предложен Ленстрой в 1987 г.
+		\item наиболее эффективен для нахождения малых множителей числа $N$
+		\item используется для отсечения малых делителей перед запуском более эффективных для больших чисел алгоритмов факторизации (решето числового поля)
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Факторизация в Sage и Pari/GP}
+	
+	По-умолчанию Sage вызывает методы из Pari/GP.
+	\vspace{1em}
+
+	Факторизация выполняется в несколько этапов:
+	\vspace{0.5em}
+	\begin{enumerate}
+		\item \structure{(поиск малых делителей)}\\запускаются по очереди:
+		\begin{itemize}
+			\item $\rho$-метод Полларда
+			\item метод квадратичных форм Шенкса
+			\item алгоритм $ECM$
+		\end{itemize}
+		\vspace{0.5em}
+		\item  \structure{(поиск больших делителей)}
+		\begin{itemize}
+			\item метод квадратичного решета (MPQS)
+		\end{itemize} 
+	\end{enumerate}
+	
+	\vspace{3em}
+	\begin{small}
+		\structure{Замечание:} самый лучший алгоритм факторизации -- NFS не реализован, но он работает быстрее только для больших чисел $> 2^{300}$. Для таких чисел лучше использовать спец. пакеты -- CADO-NFS и др.
+	\end{small}
+\end{frame}
+
+\begin{frame}{$(p-1)$-метод Полларда}
+    Алгоритм ЕCM -- обобщение метода $(p-1)$-метода факторизации Полларда\footnote{не путать с $\rho$-методом Полларда}.
+
+    \vspace{1em}
+    \begin{block}{Малая теорема Ферма}
+        $p$ -- простое, $a \in \mathbb{Z}$ и $p \nmid a$ \MyImplies $a^{p-1} \equiv 1 \pmod{p}$.
+    \end{block}    
+\end{frame}
+
+\begin{frame}%{$(p-1)$-метод Полларда}
+Пусть $N = p q$, где $p, q$ "--- простые и
+\begin{itemize}
+  \item $p-1$ факторизуется на \structure{малые} простые\\
+  \item $q-1$ \structure{не} факторизуется на \structure{малые} простые
+\end{itemize}
+
+\vspace{1em}
+Точнее:\\
+$p-1 = \prod p_i^{e_i},\ p_i \leq B_1, p_i^{e_i} \leq B_2$, т.~е. $p-1$ явл-ся \structure{$B_1$-гладким}.
+
+\vspace{1em}
+Число -- \structure{$B$-гладкое}, если все его простые множители~$\leq B$.
+
+
+\vspace{1em}
+\structure{Идея метода:}
+\begin{itemize}
+    \item (из теор. Ферма): $\forall a \in \mathbb{Z}_N^\times$ и $\forall k = l (p-1)$:
+    \[
+    a^k = (a^l)^{p-1} \equiv 1\ mod\ p
+    \]
+    %\item $a^k \not\equiv 1\ mod\ q$ \structure{$\implies$} $GCD(N, a^k - 1) = p$
+    \item $a^k \not\equiv 1\ mod\ q$ \structure{$\implies$} $\gcd(N, a^k - 1) = p$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Алгоритм}
+\structure{Вход:} $N = p \cdot q$ и границы $B_1, B_2$.\\
+\structure{Выход:} $p,q = \frac{N}{p}$, или <<делители не найдены>>.
+    \begin{enumerate}
+        \item $
+        a\mathop  \leftarrow \mathbb{Z}_N^\times$
+        \item \structure{for} всех простых ${p_i} \leqslant {B_1}$:
+        
+        \quad $a \leftarrow a^{p_i^{e_i}}\bmod N$, где $e_i$ -- макс.: $p_i^{e_i} \leqslant {B_2}$.
+        
+        \item \structure{if} $\gcd (a-1, N) \not  \in \left\{ {1,N} \right\}$
+        
+        \quad \structure{return} $\gcd (a-1, N), \frac{N}{\gcd (a-1, N)}$. 
+        
+        \structure{else:}
+        
+        \quad \structure{return} <<делители не найдены>>.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Корректность}
+\begin{block}{Лемма}
+    Пусть $N = p \cdot q$, $B_1,B_2 \in \mathbb{N}$, т.ч. $(p- 1)$ -- $B_i$-гладкое и 
+    
+    $p - 1 = \prod p_i^{e_i}$, $p_i^{e_i} \leqslant B_2$. A $(q-1)$ — не $B_i$-гладкое. 
+    
+    Тогда алгоритм $(p-1)$ Полларда находит $p$ за время $O( B_1 \lg^3 N)$ с вероятностью $1  - \frac{1}{B_1}$.
+\end{block}
+\vspace{1em}
+
+\ProofBegin
+Положим $k = \prod\limits_{p_i \leq  B_1}{p_i^{e_i}}$.
+\begin{itemize}
+	\item $k$ -- кратно $p-1$ \MyImplies $a^k \equiv 1 \bmod{p}$
+	\item $(q-1)$ -- не $B_1$-гладкое \MyImplies $\exists r$ -- простое, $r > B_1$ т.ч. $r \mid q-1$.
+\end{itemize}
+В случае~$r \mid \operatorname{ord}_{\mathbb{Z}_q^\times}(a)$:
+\begin{itemize}
+	\item имеем~$\operatorname{ord}_{\mathbb{Z}_q^\times}(a) \nmid k$,
+	поэтому $a^k \not\equiv 1 \bmod{q}$.
+	\item $\gcd(a^k - 1, N) = p$, т.к.~$a^k \equiv 1 \bmod{p}$ и~$a^k \not\equiv 1 \bmod{q}$.
+\end{itemize}
+	
+
+Так как $\operatorname{ord}_{\mathbb{Z}_q^\times}(a)$ -- целое число, то вероятность того, что $\operatorname{ord}_{\mathbb{Z}_q^\times}(a) \nmid k$ равна $1 -\frac{1}{k} = 1 - \frac{1}{B_1}$. 
+\ProofEnd
+\end{frame}
+
+\begin{frame}{Сложность}
+Существует не более $B_1$ простых $p_i$, таких что $p_i < B_1$ (точнее: $\exists \sim \dfrac{B_1}{\lg ( B_1 )}$ по теореме о распределении простых чисел.)
+\begin{itemize}
+    \item Шаг 2: $O( \lg^3 N )$
+    \item Шаг 3: $O( \lg^2 N )$
+\end{itemize}
+\structure{Итого:} $O( B_1 \cdot \lg^3 N)$.
+\end{frame}
+
+\begin{frame}
+\structure{Замечание.} Вероятность успеха и сложность алгоритма зависят от $|\mathbb{Z}_p^\times| = p - 1:$ \\
+\begin{itemize}
+    \item $\frac{p - 1}{2}$ -- простое \structure{$\Rightarrow$} $ {B_1} \approx p$ \structure{$\Rightarrow$} сложность $O( p \cdot \lg^3 N )$ -- не лучше простого перебора.
+\end{itemize}
+
+\vspace{1em}
+
+\structure{Решение:} использовать эллиптические кривые, т.к.  $\# E( \mathbb{Z}_p ) \in [ p + 1 - 2\sqrt p ,\;p + 1 + 2\sqrt p ]$, и в этом интервале $\exists$ много гладких чисел. 
+\end{frame}
+
+\begin{frame}{Метод факторизации на эллиптических кривых (ECM)}
+\[E: y^2 = x^3 + a x + b \bmod N\]
+\begin{itemize}
+    \item $E(\mathbb{Z}_N) \simeq E(\mathbb{Z}_p) \times E(\mathbb{Z}_q)$.
+    \item Т.к. кольцо $\mathbb{Z}_N$ содержит делители $0$ групповой закон корректно определять в проективных координатах.
+\end{itemize}
+\vspace{1em}
+\structure{Идея алгоритма:} использовать ошибки <<деление на $0$>> для нахождения множителей $N$ при работе в аффинных координатах.
+\end{frame}
+
+\begin{frame}{Нахождение множителя из группового закона}
+    %\subsubsection{Закон "+"\ на $E( \mathbb{Z}_N )$:}
+    \structure{Вход:} $P, Q \in E( \mathbb{Z}_N ) - \{\mathcal{O}\}$
+    
+    \structure{Выход:} либо $P + Q = ( x_3,y_3 )$, либо $d \mid N$. 
+    
+    \begin{enumerate}
+        \item \structure{if} $x_1 \equiv x_2\bmod N$ и $y_1 =  - y_2\bmod N$
+        
+        \quad \structure{return} $\mathcal{O}$
+        
+        \item $d = \gcd(x_1 - x_2, N)$
+
+        \quad \structure{if} $d\not  \in \left\{1,N\right\}$: \structure{return} $d$
+        
+        \item \structure{if} $x_1 \equiv x_2\bmod N$
+        
+        \quad $d = \gcd (y_1 + y_2,\;N)$
+        
+        \quad \structure{if} $d > 1$: \structure{return} $d$
+        
+        \item 
+        $
+        \alpha =
+        \begin{cases}
+             \frac{y_2 - y_1}{x_2 - x_1},& x_1 \ne x_2 \\
+            \frac{3x_1^2 + a}{y_1 + y_2},& x_1 = x_2.
+        \end{cases}
+        $\\
+        $
+        \beta  = y_1 - \alpha x_1
+        $
+        
+        \item $x_3 = \alpha ^2 - x_1 - x_2\bmod N$
+        
+        $x_3 =  - ( \alpha x_3 + \beta  )\bmod N$
+        
+        \structure{return} $( x_3, y_3 )$
+        
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Алгоритм факторизации ЕСМ}
+\structure{Вход:} $N = p \cdot q$, границы ${B_1}, {B_2}$
+
+\structure{Выход:} $p, q$ или <<делители не найдены>>
+
+\begin{enumerate}
+    \item Выбрать $( a,x,y ) \leftarrow \mathbb{Z}_N \times \mathbb{Z}_N \times \mathbb{Z}_N$,
+    \quad $b = y^2 - x^3 - ax\bmod N$ %// Таким образом, мы выбираем точку с координатами $(x,y)$ на кривой $y^2 = x^3 + ax + b$.
+    \item \structure{if} $\gcd ( 4a^3 + 27 b^2,\;N) = \left\{ \begin{gathered}
+        1,\quad {\text{положим}}\quad P = (x,y) \hfill \\
+        N,\quad {\text{идем на шаг 1}} \hfill \\
+        {\text{иное}}{\text{, вернуть }}p,q \hfill \\ 
+    \end{gathered}  \right.$
+    
+    \item \structure{for} всех простых $p_i < B_1$ и $e_i: p_i^{e_i} < {B_2}$:\\
+    \quad $
+    P = [p_i^{e_i}] P{\text{ на }} E: y^2=x^3+a x + b
+    $\\
+    \quad при ошибке <<деление на $0$>> вернуть делитель $N$.
+    \item перейти к Шагу 1 или вернуть <<делитель не найден>>. 
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Корректность}
+\begin{block}{Лемма}
+Пусть $N = p \cdot q$, $E( \mathbb{Z}_N )$ -- эллиптическая кривая, т. ч. $| E( \mathbb{F}_p )|$ -- $B_1$-гладкое и $|E( \mathbb{F}_q )|$ -- не $B_1$-гладкое. Тогда алгоритм ЕСМ возвращает $p,q$ за время $O( B_1 \lg^3 N )$ с вероятностью $ \geqslant 1 - \frac{1}{B_1}$.
+\end{block}
+\end{frame}
+
+\begin{frame}
+\ProofBegin
+Пусть $k = \prod\limits_{p_i \leq B_1} p_i^{e_i}$.
+
+\vspace{0.5em}
+Т.~к. $\#E(\mathbb{F}_q)$ -- не $B_1$-гладкое, то $\exists r > B_1$ т.~ч. $r \mid \#E(\mathbb{F}_q)$.
+
+Имеем: $r \mid \operatorname{ord}_{E(\mathbb{F}_q)}(P)$ \MyImplies $k \cdot P \neq \mathcal{O}$ на $E(\mathbb{F}_q)$.
+\vspace{0.5em}
+
+С другой стороны: $\#E(\mathbb{F}_p) \mid k$ \MyImplies $k \cdot P = \mathcal{O}$ на~$E(\mathbb{F}_p)$.
+
+Вычисляем $k \cdot P$ на $E(\mathbb{Z}_N)$ \MyImplies получаем $P' + Q' = \mathcal{O}$ на $E(\mathbb{F}_p)$ и $P' + Q' \neq \mathcal{O}$ на $E(\mathbb{F}_q)$ \MyImplies Алгоритм вернёт~$(p, q)$.
+
+\vspace{0.5em}
+Сложность и вероятность: аналогично $(p-1)$ методу Полларда. 
+\ProofEnd
+\end{frame}
+
+\begin{frame}
+\structure{Замечание.} Баланс выбора $B_1$:
+\begin{itemize}
+	\item $B_1$ нужно брать больше, чтобы увеличивать вероятность, что~$E(\mathbb{F}_p)$ -- $B_1$-гладкое (и можно применять лемму).
+    \item малое $B_1$ \structure{$\Rightarrow$} быстрый алгоритм, малая вероятность успеха 
+    \item большое $B_1$ \structure{$\Rightarrow$} медленный алгоритм, большая вероятность успеха. 
+\end{itemize}
+
+\structure{Оптимально:} ${B_1} \approx {L_p}[ \frac{1}{2},\;\frac{1}{\sqrt 2 }] = e^{\frac{1}{\sqrt 2 }(\log p)^\frac{1}{2}(\log\log p)^\frac{1}{2}}$  \structure{$\Rightarrow$} время работы алгоритма: ${L_p}[ \frac{1}{2},\;\frac{1}{\sqrt 2 }]$ в предположении о гладкости чисел в интервале 
+$[ {p + 1 - 2\sqrt p ,\;p + 1 + 2\sqrt p } ]$.
+\begin{itemize}
+    \item ЕСМ -- лучший на сегодня алгоритм для нахождения делителей $< 100$ бит.
+\end{itemize} 
+\end{frame}
+
+%\begin{frame}{Преимущества и недостатки метода ECM}
+%    \begin{itemize}
+%        \item[+]
+%        \item[--]
+%    \end{itemize}
+%\end{frame}
+
+\begin{frame}{Литература}
+    %\nocite{Menezes1993}
+    \nocite{Lenstra1987}
+    \nocite{Blake1999}
+    \nocite{CohenFrey+2005}
+    \nocite{Washington2008}
+    \printbibliography
+
+    \begin{center}
+        \begin{tcolorbox}[enhanced,hbox,colback=block-green-color-bg,colframe=subsection-color!120,title=Контакты,center title]
+            \begin{varwidth}{\textwidth}
+                \begin{center}
+                    \href{mailto:snovoselov@kantiana.ru}{snovoselov@kantiana.ru}
+                \end{center}
+            \end{varwidth}
+        \end{tcolorbox}	
+    \end{center}
+\end{frame}
+
+\end{document}
