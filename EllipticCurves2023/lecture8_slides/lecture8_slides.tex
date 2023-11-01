@@ -184,13 +184,26 @@ $p-1 = 2^k \cdot q$, $q$ -- нечётное\\
 \end{frame}
 
 \begin{frame}
-\begin{block}{Теорема (Критерий простоты)}
-    \label{t3}
-    Пусть $n \in \mathbb{Z}$, $A, B \in \mathbb{Z}/n\mathbb{Z}$ т.ч. $2,3 \nmid n$ и $\gcd(4A^3 + 27B^2, n) =1$. Пусть $L \neq \infty$ на $E_{A,B}(\mathbb{Z}/n\mathbb{Z})$. Тогда:
-    \begin{center}
-        $\exists$ простое $q > (n^{1/4} + 1)^2$, т.ч. $qL = \infty$ \structure{$\implies$} $n$ -- простое.
-    \end{center} 
-\end{block}
+   \begin{center}
+	\begin{tcolorbox}[enhanced,hbox,colback=title-and-section-color!5,colframe=title-and-section-color!120,title= Теорема (Критерий простоты),center title]
+		\begin{varwidth}{\textwidth}
+			\label{t3}
+			Положим:
+			\begin{itemize}
+				\item $n \in \mathbb{Z}$, $A, B \in \mathbb{Z}/n\mathbb{Z}$
+				\item $2,3 \nmid n$, $\gcd(4A^3 + 27B^2, n)=1$
+				\item $L \in E_{A,B}(\mathbb{Z}/n\mathbb{Z})$, $L\neq \infty$
+			\end{itemize}
+			 \vspace{0.5em}
+			 Тогда:
+			 
+			 \vspace{0.1em}
+			%\begin{center}
+				$\exists$ простое $q > (n^{1/4} + 1)^2$, т.ч. $qL = \infty$ \structure{$\implies$} $n$ -- простое.
+			%\end{center}
+		\end{varwidth}
+	\end{tcolorbox}	
+\end{center}
 \end{frame}
 
 \begin{frame}
@@ -210,8 +223,8 @@ $p-1 = 2^k \cdot q$, $q$ -- нечётное\\
 \begin{frame}{II. Алгоритм: тест на простоту}
     \structure{Вкратце:} 
     \begin{itemize}
-    	\item сведём доказательство простоты $p$ к доказательству простоты $q \leq \frac{p}{2} + o(p)$
-    	\item рекурсивно применим алгоритм для $p = q$, пока не получим достаточно малое значение $q$ -- такое, что \structure{детерминированные} тесты будут эффективны.
+    	\item доказательство простоты $p$ сводим к доказательству простоты~$q \leq \frac{p}{2} + o(p)$
+    	\item рекурсивно применяем алгоритм для $p = q$, пока не получим достаточно малое значение $q$ -- такое, что \structure{детерминированные} тесты будут эффективны.
     \end{itemize}
     
     \vspace{0.5em}
