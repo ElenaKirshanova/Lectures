@@ -12,6 +12,9 @@
 \usepackage{pgfplots, subfigure}
 \usepackage{extarrows}
 \usepackage{tikz-cd}
+\usepackage{makecell}
+\usepackage{quiver}
+\usetikzlibrary{babel}
 
 \usepackage[backend=biber,firstinits=true,hyperref=true,style=numeric-comp]{biblatex}
 
@@ -27,6 +30,9 @@
 \begin{document}
 
 \frame{\titlepage}
+
+\newcommand{\UserA}{{\structure{{\Large\faUserSecret}}}}
+\newcommand{\UserB}{{\structure{{\Large\faCat}}}}
 
 \begin{frame}{Мотивация}
 	
@@ -50,7 +56,7 @@
 \end{enumerate}
 \end{frame}
 
-\begin{frame}{I. Изогении}
+\begin{frame}{Изогении}
 Пусть $E_1, E_2$ -- эллиптические кривые.
 
 \begin{itemize}
@@ -260,17 +266,27 @@ b' = b - 7 \sum_{Q \in G \setminus \{\mathcal{O}\}} \left(
 			\end{varwidth}
 		\end{tcolorbox}	
 	\end{center}
+При известном ядре~$G$ задача решается за полиномиальное время (если~$\#G$ -- гладкое).
+
+\vspace{0.5em}
+Суперсингулярные кривые:
 \begin{itemize}
-	\item При известном ядре~$G$ задача решается за полиномиальное время (если~$\#G$ -- гладкое).
-	\item Для суперсингулярных кривых наилучший алгоритм поиска -- на основе парадокса дней рождений.
-	\item Сложность $\mathcal{O}(p^6)$ в квантовом случае и классическом -- $\mathcal{O}(p^4)$
-	\item Для обычных кривых есть квантовый субэкспоненциальный алгоритм.
+	\item наилучший алгоритм -- поиск на основе парадокса дней рождений
+	\item сложность: $\mathcal{O}(p^6)$ (квант. алг.) и $\mathcal{O}(p^4)$ (класс. алг.)
+\end{itemize}
+
+\vspace{0.5em}
+Обычные кривые: 
+\begin{itemize}
+	\item квантовый субэкспоненциальный алгоритм
 \end{itemize}
 \end{frame}
 
-\begin{frame}{SIKE}
+\begin{frame}{SIKE/SIDH}
 	\begin{itemize}
-		\item В криптосистеме SIKE для оптимизации добавили дополнительную информацию об изогениях -- значения секретной изогении в точках кручения.
+		\item Был одним из кандидатов на стандартизацию NIST
+		\item Microsoft объявляла награду за взлом на \$50,000 USD
+		\item Для оптимизации в схему добавили дополнительную информацию об изогениях -- значения секретной изогении в точках кручения.
 		\item Что и привело в итоге к взлому данной системы.
 	\end{itemize}
 \end{frame}
@@ -292,23 +308,38 @@ b' = b - 7 \sum_{Q \in G \setminus \{\mathcal{O}\}} \left(
 	\end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{2. SIDH (Supersingular Isogeny Diffie-Hellman)}
+\begin{frame}[fragile]{SIDH (Supersingular Isogeny Diffie-Hellman)}
 	\[
 	\begin{tikzcd}
-		&\arrow{ld}[swap]{\phi_{A}} E  \arrow{rd}{\phi_{B}} & \\
-		E/\left<P\right>\arrow{rd}[swap]{\phi'_{A}}  &  & \arrow{ld}{\phi'_{B}}  E/\left< Q \right> \\
-		& E/\left< P, Q \right> &\\
+		%	\text{\UserA} & & \text{\UserB} \\
+		\text{\UserA} &\arrow{ld}[swap]{\phi_{A}} E  \arrow{rd}{\phi_{B}} & \text{\UserB} \\
+		%E/\left<P\right>\arrow{rd}[swap]{\phi'_{A}}  & & \arrow{ld}{\phi'_{B}}  E/\left< Q \right> \\
+		E/\left<P\right> &
+		\arrow[yshift=-0.7ex]{r}{E/\left<P\right>}
+		\arrow[yshift=0.7ex]{l}{E/\left<Q\right>}
+		& E/\left<Q\right>\\
 	\end{tikzcd}
 	\]
-	Краткое описание:
+	\vspace{-0.5em}
+	\structure{Краткое описание:}
+	\vspace{0.5em}
 	\begin{enumerate}
 		\item Публичные параметры: $E$ -- суперсингулярная кривая.
-		\item \structure{{\Large\faUserSecret}} выбирает секретное ядро $\left<P\right>$, строит изогению и отсылает \structure{{\Large\faCat}} кривую
+		\item \UserA~выбирает секретное ядро $\left<P\right>$, строит изогению
+		и отсылает \UserB~кривую
 		$E/\left<P\right>$
-		\item \structure{{\Large\faCat}} выбирает своё секретное ядро $\left<Q\right>$, строит изогению и отсылает \structure{{\Large\faUserSecret}} кривую
+		\item \UserB~выбирает своё секретное ядро $\left<Q\right>$, строит изогению
+		и отсылает \UserA~кривую
 		$E/\left<Q\right>$
-		\item Общий секретный ключ: $E/\left<P,Q\right> = (E/\left<P\right>)/\phi_A(Q) = (E/\left<Q\right>)/\phi_B(P)$
+		\item Общий секретный ключ: $E/\left<P+Q\right> = (E/\left<P\right>)/\phi_A(Q) = (E/\left<Q\right>)/\phi_B(P)$
 	\end{enumerate}
+\end{frame}
+
+\begin{frame}
+	\structure{Проблема:} как посчитать~$\phi_A(Q)$ и $\phi_B(P)$?
+	\vspace{1em}
+	
+	В SIDH для обхода данной проблемы публикуются значения секретных изогений в образующих групп кручения.
 \end{frame}
 
 \begin{frame}{Детальное описание}
@@ -359,105 +390,124 @@ b' = b - 7 \sum_{Q \in G \setminus \{\mathcal{O}\}} \left(
 \end{enumerate}
 \end{frame}
 
-\begin{frame}{Атака Castryck-Decru}
-\begin{enumerate}
-	\item Castryck, Decru - An efficient key recovery attack on SIDH
-	\item Maino, Martindale - An attack on SIDH with arbitrary starting curve
-	\item Robert - Breaking SIDH in polynomial time
-\end{enumerate}
-Данные статьи -- предварительные версии статей и нечитаемы.
+\begin{frame}{Атака Кастрика-Декру}
+	\begin{enumerate}
+		\item[\structure{{\faScroll}}] Castryck, Decru - An efficient key recovery attack on SIDH. 2022
+		\vspace{0.5em}
+		\item[\structure{{\faScroll}}] Maino, Martindale - An attack on SIDH with arbitrary starting curve. 2022
+		\vspace{0.5em}
+		
+		\item[\structure{{\faScroll}}] Robert - Breaking SIDH in polynomial time. 2022
+	\end{enumerate}
+
 \vspace*{1em}
 
 Выступление Castryck на ANTS XV:
-\url{https://www.youtube.com/watch?v=_eNv7An3Qj0}
+
+\begin{enumerate}
+	\item [\structure{{\faYoutube}}] \url{https://www.youtube.com/watch?v=_eNv7An3Qj0}
+\end{enumerate}
 \end{frame}
 
 \begin{frame}{Восстановление ключа}
-Пусть~$B = \left< [m_b] P_B + [n_B] Q_B \right>$.
-
-\vspace*{1em}
-
-\structure{Задача восстановления ключа:}
-\begin{center}
-$E, E/B$, $\phi_B(P_A)$, $\phi_B(Q_A)$ \structure{$\Longrightarrow$} $\phi_B$
-\end{center}
-\begin{itemize}
-	\item
-	Атака Decru-Castryck использует группу
+	Пусть~$G_B = \left<[m_B] P_B + [n_B] Q_B \right>$ -- секретное ядро~\UserB.
+	
+	\vspace*{1em}
+	
+	\structure{Задача восстановления ключа:}
+	\begin{center}
+		$E, E/G_B$, $\phi_B(P_A)$, $\phi_B(Q_A)$ \structure{$\Longrightarrow$} $\phi_B$
+	\end{center}
+	Более того:
+	$\phi_B = \phi_{e_B} \circ \ldots \circ \phi_2 \circ \phi_1$, где~$\deg\phi_i = \ell_B$.
 	\[
-	\left< (P_A, \phi_B(P_A)), (Q_A, \phi_B(Q_A)) \right> \subseteq E \times E/B
+	E \xrightarrow{\phi_1} E_1  \xrightarrow{\phi_2} E_2 \xrightarrow{\phi_3} \ldots \xrightarrow{\phi_{e_B}} E/G_B
 	\]
-	и соответствующую этой группе фактор-изогению из $E \times E/B$ (используя аналогии формул Велу для размерности~$2$).
-	\item В большинстве случаев фактор-изогения будет вести в якобиан кривой рода~$2$.
-	\item В редких случаях -- в произведение эллиптических кривых.
-	\item Детектирование последнего редкого случая позволяет выявить правильное направление движения при поиске пути в графе изогений.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Детектирование разложимого случая}
-Тройка~$(\phi, G_1, G_2)$ -- ``алмазная'' изогенная конфигурация степени~$N$, если:
-\begin{enumerate}
-	\item $\phi: E \rightarrow E'$ -- изогения
-	\item $G_1, G_2 \subseteq \ker{\phi}$
-	\item $\deg{\phi} = \#G_1 \cdot \#G_2$, $N = \#G_1  + \#G_2$, $G_1 \cap G_2 = \{ 0 \}$
-\end{enumerate}
-\vspace*{1em}
-
-\structure{Теорема Кани (неформально).}
-$(N,N)$-подгруппа $E \times E'$ разложимая \structure{$\iff$} она получена из некоторой ``алмазной'' изогенной конфигурации степени~$N$.
-\end{frame}
-
-\begin{frame}{Атака}
-	Изогения $\phi_B: E \rightarrow E/B$ степени~$3^{e_B}$ восстанавливается методом поиска алмазной конфигурации степени~$2^{{e_A}}$.
 	
 	\begin{itemize}
-		\item строится изогения~$\gamma: E \rightarrow C$ степени~$2^{{e_A}} - 3^{{e_B}}$, т.ч. $(\phi_B \circ \widehat{\gamma}, \ker{\widehat{\gamma}}, \gamma(B))$ -- алмазная конфигурация степени~$2^{e_A}$
-		\item $P_C = \gamma(P_A), Q_C = \gamma(Q_A)$
-		\item по теореме Кани подгруппа $\left< (P_C, \phi_B(P_A)), (Q_C, \phi_B(Q_A)) \right> \subseteq C \times E/B$ -- разложимая
+		\item в схемах на изогениях предполагается, что нельзя восстановить сначала~$\phi_1$, затем~$\phi_2$ и т.д.
+		\item всего существует $\ell_B^2$ вариантов выбора~$\phi_i$ и перебор ``в лоб'' неэффективен.
+		\item Кастрик и Декру предложили эффективный критерий для определения правильного варианта для~$\phi_i$.
 	\end{itemize}
-\vspace{1em}
-	\structure{Основная идея:} Если бы точки~$\phi_B(P_A)$ и~$\phi_B(Q_A)$ не были бы образами точек относительно (какой-либо) изогении степени~$3^{e_B}$, то с большой вероятностью группа не была бы разложимой
 \end{frame}
 
-%\begin{frame}
-%\[
-%E \times E/B \rightarrow J_{C_1} \rightarrow \ldots \rightarrow J_{C_r} \rightarrow E' \times E''
-%\]
-%\begin{itemize}
-%	\item $\rightarrow$ -- изогении с ядром $\mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$
-%\end{itemize}
-%\end{frame}
-
-\begin{frame}{}
-Имеем~$\phi_B = \phi_1 \circ \phi_2 \circ \ldots \circ \phi_{e_B}$, где~$\phi_i$ изогении степени~$3$.
-\[
-E \xrightarrow{\phi_1} E_1  \xrightarrow{\phi_2} E_2 \xrightarrow{\phi_3} \ldots \xrightarrow{\phi_{e_B}} E/B
-\]
-
-Будем восстанавливать изогению~$\phi_B$ по шагам.
-
-\begin{enumerate}
-	\item Выбираем изогению~$\phi_1': E \rightarrow E_1'$ 
+\begin{frame}{Склейка эллиптических кривых}
+	Пусть~$E$ и $F$ -- две (суперсингулярные) эллиптические кривые. Тогда:
+	\begin{itemize}
+		\item $E \times F$ -- абелева поверхность ($\dim = 2$)
+		\item для подгруппы $H \subseteq E \times F$ можно определить фактор-поверхность~$A' = (E \times F)/H$ по аналогам формул Велу.
+	\end{itemize}
 	
-	(т.к. $\deg \phi_1' = 3$, таких изогений немного)
-	\item Строим~$\gamma: E_1' \rightarrow C$ степени~$2^{e_A} - 3^{e_B-1}$
+	Может быть два случая:
+	\begin{enumerate}
+		\item $A' \simeq \operatorname{Jac}_C$ с вероятностью~$\approx 1 - 1/p$\\($H$ -- \structure{неразложимая})
+		\item $A' \simeq E' \times F'$ с вероятностью~$\approx 1/p$ \\ ($H$ -- \structure{разложимая})
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Атака}
+	Рассмотрим процесс восстановления~$\phi_1$.%, остальные~$\phi_i$ восстанавливаются аналогично.
 	
-	($\gamma$ можно построить используя эндоморфизмы кривой малой степени)
-	\item $P_1' = \phi_1'(P_A)$, $Q_1' = \phi_1'(Q_A)$
-	\item $P_C = \gamma(P_1')$, $Q_C = \gamma(Q_1')$
-	\item Проверяем, что подгруппа \[(P_C, \phi_B(P_A)), (Q_C, \phi_B(Q_A)) \subseteq C \times E/B\] разложимая
-	\item Если разложимая, то~$\phi_1 = \phi_1'$ и~$E_1' = E_1$
-\end{enumerate}
+	\[\begin{tikzcd}[column sep=scriptsize]
+		E & {E_1} & {E_2} & {E_3} & {...} & {E/G_B} \\
+		C & {E_1^?}
+		\arrow["{\phi_1}", from=1-1, to=1-2]
+		\arrow["{\phi_2}", from=1-2, to=1-3]
+		\arrow["{\phi_3}", from=1-3, to=1-4]
+		\arrow[from=1-4, to=1-5]
+		\arrow["{\phi_{e_B}}", from=1-5, to=1-6]
+		\arrow["\gamma"', from=2-2, to=2-1]
+		\arrow["{\phi_1^?}", dashed, from=1-1, to=2-2]
+		\arrow[dashed, from=2-2, to=1-6]
+	\end{tikzcd}\]
+	
+	\vspace{1em}
+	\begin{enumerate}
+		\item Выбрать $\phi_1^{?}: E \rightarrow E_1^{?}$ -- один из $\ell_B^2$ вариантов для~$\phi_1$
+		\item Построить (любую) вспомогательную изогению~$\gamma: E_1^{?} \rightarrow C$ степени~$\ell_{A}^{e_{A}} - \ell_{B}^{e_{B}-1}$
+		\item $P_C = \gamma(\phi_1^{?}(P_A))$, $Q_C = \gamma(\phi_1^{?}(Q_A))$
+		\item Если подгруппа $H = \left< (P_C, \phi_B(P_A)), (Q_C, \phi_B(Q_A))  \right> \subseteq C \times E/G_B$ -- разложима, то $\phi_1^{?} = \phi_1, E_1^{?} = E_1$
+		\item В противном случае выбрать другую~$\phi_1^{?}$
+	\end{enumerate}
+\end{frame}
+
+
+\begin{frame}[fragile]{Атака}
+	Рассмотрим процесс восстановления~$\phi_1$.%, остальные~$\phi_i$ восстанавливаются аналогично.
+	
+	\[\begin{tikzcd}[column sep=scriptsize]
+		E & {E_1} & {E_2} & {E_3} & {...} & {E/G_B} \\
+		C & {E_1^?}
+		\arrow["{\phi_1}", from=1-1, to=1-2]
+		\arrow["{\phi_2}", from=1-2, to=1-3]
+		\arrow["{\phi_3}", from=1-3, to=1-4]
+		\arrow[from=1-4, to=1-5]
+		\arrow["{\phi_{e_B}}", from=1-5, to=1-6]
+		\arrow["\gamma"', from=2-2, to=2-1]
+		\arrow["{\phi_1^?}", dashed, from=1-1, to=2-2]
+		\arrow[dashed, from=2-2, to=1-6]
+	\end{tikzcd}\]
+	
+	\vspace{1em}
+	\structure{Откуда это взялось?}
+	\begin{itemize}
+		\item Подгонка под условия теоремы Кани'97 с классификацией разложимых подгрупп.
+		\item При $\phi_1^? = \phi_1$ всегда выполняется теорема Кани и группа~$H$ разложима
+		\item При $\phi_1^? \neq \phi_1$ группа будет неразложима с вероятностью~$\approx (1-1/p)$  
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{Схемы стойкие к атаке}
-	Схемы не использующие точки кручения.
+	\structure{Замечание:} если $\phi_B(P_A)$ и $\phi_B(Q_A)$ неизвестны (общая задача поиска изогении), то атака не работает.
+	
+	\vspace{1em}
+	Схемы не использующие точки кручения:
 	\vspace*{1em}
 	
-	CSIDH, SeaSign, OSIDH, weakSIDH PoK, CSI-FiSh
+	CSIDH, OSIDH, weakSIDH PoK, SeaSign, SQISign, CSI-FiSh
 	\vspace*{1em}
 	\begin{itemize}
-		\item \href{https://issikebrokenyet.github.io/}{issikebrokenyet.github.io}
+		\item[\structure{{\faGlobe}}] \href{https://issikebrokenyet.github.io/}{issikebrokenyet.github.io}
 	\end{itemize}
 \end{frame}
 
@@ -473,10 +523,22 @@ E \xrightarrow{\phi_1} E_1  \xrightarrow{\phi_2} E_2 \xrightarrow{\phi_3} \ldots
 	%\nocite{Galbraith2012}
 	%\nocite{DeFeo2018}
 	%\nocite{Costello2019}
-	\nocite{SIKE}
+	%\nocite{SIKE}
 	%\nocite{SafeCurves}
-    \nocite{CastryckDecru2022}
-	\printbibliography
+    %\nocite{CastryckDecru2022}
+	%\printbibliography
+	\begin{itemize}
+		\item[\structure{{\faScroll}}] Castryck W., Decru T. An efficient key recovery attack
+		on SIDH. 2022.
+		\vspace{0.5em}
+		
+		\item[\structure{{\faGlobe}}] SIKE – Supersingular Isogeny Key Encapsulation. 2020. \url{https://sike.org/}
+		\vspace{0.5em}
+		
+		\item[\structure{{\faYoutube}}]
+		Выступление Castryck на ANTS XV:
+		\url{https://www.youtube.com/watch?v=_eNv7An3Qj0}
+	\end{itemize}
 
     \begin{center}
         \begin{tcolorbox}[enhanced,hbox,colback=block-green-color-bg,colframe=subsection-color!120,title=Контакты,center title]
