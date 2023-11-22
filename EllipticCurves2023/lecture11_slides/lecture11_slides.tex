@@ -1,0 +1,186 @@
+% !TeX program = xelatex
+% !BIB TS-program = biber
+
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+\usepackage{pgfplots, subfigure}
+\usepackage{extarrows}
+\usepackage{tikz-cd}
+\usepackage{makecell}
+\usepackage{quiver}
+\usetikzlibrary{babel}
+
+\usepackage[backend=biber,firstinits=true,hyperref=true,style=numeric-comp]{biblatex}
+
+\usepackage{../beamerthemeec2020}
+{\footnotesize\bibliography{../biblio}}
+
+\title{Эллиптические кривые}
+\subtitle{Лекция 11. Изогении II}
+\author{Семён Новосёлов}
+\institute{БФУ им. И. Канта}
+\date{2023}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\newcommand{\UserA}{{\structure{{\Large\faUserSecret}}}}
+\newcommand{\UserB}{{\structure{{\Large\faCat}}}}
+
+\begin{frame}{Схемы стойкие к атаке Кастрика-Декру}
+
+Обмен ключами:
+\begin{itemize}
+	\item CSIDH, \sout{SIKE}, CRS, OSIDH
+\end{itemize}
+\vspace{0.5em}
+
+Подписи:
+\begin{itemize}
+	\item SQISign, weakSIDH
+\end{itemize}
+
+\vspace{0.5em}
+\begin{itemize}
+	\item[\structure{{\faGlobe}}] \href{https://issikebrokenyet.github.io/}{issikebrokenyet.github.io}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Соответствие Дойринга}
+Эквивалентность изогениями эллиптических кривых и идеалами кольца эндоморфизмов.
+\end{frame}
+
+\begin{frame}{CSIDH}
+	\structure{Публичные параметры схемы:}
+	\begin{itemize}
+		\item простое $p=4\cdot \ell_1 \cdots \ell_n - 1$, где $\ell_1, \ldots, \ell_n$ -- малые простые.
+		\item Суперсингулярная эллиптическая кривая $E_0: y^2=x^3+x$ над полем $\mathbb{F}_p$.
+		\item $\mathfrak{l}_i=(\ell_i, \pi_p-1)$, $\mathfrak{l}_i^{-1}=(\ell_i, \pi_p+1)$ -- идеалы $\mathbb{Z}[\pi_p]$
+		\item $m$ -- наименьшее положительное целое, такое, что $2m+1 \geq \sqrt[n]{\# \operatorname{Cl}(\mathbb{Z}[\pi_p])}$.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\structure{Схема обмена ключами}
+	
+	\vspace{1em}
+	Пользователь \UserA:
+	%\begin{itemize}
+	%    \item  
+	\begin{enumerate}
+		\item выбирает секретный вектор $(e_1, \ldots, e_n) \in \lbrace -m,\ldots ,m \rbrace ^n$
+		\item определяет класс идеала $[\mathfrak{a}]=[\mathfrak{l}_1^{e_1}\cdots \mathfrak{l}_n^{e_n}]\in \operatorname{Cl}(\mathbb{Z}[\pi_p])$%, где
+		\item вычисляет свой открытый ключ $E_A = [\mathfrak{a}]*E_0$
+	\end{enumerate}
+	
+	\vspace{1em}
+	Пользователь \UserB:
+	
+	\begin{enumerate}
+		\item выбирает секретный вектор $(f_1,\ldots ,f_n) \in \lbrace -m,\ldots ,m \rbrace ^n$
+		\item определяет класс идеала $[\mathfrak{b}]=[\mathfrak{l}_1^{f_1}\cdots \mathfrak{l}_n^{f_n}]\in \operatorname{Cl}(\mathbb{Z}[\pi_p])$
+		\item вычисляет свой открытый ключ $E_B = [\mathfrak{b}]*E_0$
+	\end{enumerate}
+	
+	\vspace{1em}
+	\structure{Общий ключ:} $E_{AB} = [\mathfrak{a}] * E_B = [\mathfrak{b}] * E_A = [\mathfrak{a}\mathfrak{b}] * E_0$
+\end{frame}
+
+\begin{frame}[fragile]{CSIDH}
+	\[
+	\begin{tikzcd}
+		\text{\UserA} &\arrow{ld}[swap]{\phi_{A}} E  \arrow{rd}{\phi_{B}} & \text{\UserB} \\
+		\left[\mathfrak{a}\right] * E  = E_A&
+		\arrow[yshift=-0.7ex]{r}{E_A}
+		\arrow[yshift=0.7ex]{l}{E_B}
+		& E_B = \left[\mathfrak{b}\right] * E\\
+	\end{tikzcd}
+	\]
+	\vspace{-0.5em}
+	\structure{Общий ключ:} $E_{AB} = [\mathfrak{a}] * E_B = [\mathfrak{b}] * E_A = [\mathfrak{a}\mathfrak{b}] * E_0$
+	\vspace{0.5em}
+	\begin{itemize}
+		\item для формирования ключа требуется коммутативность
+		\item из-за этого доступны квантовые субэксп. атаки
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Размеры ключей}
+	%65 ms, субэкспоненциальная квантовая атака, сложность $L_p(1/2)$ https://www.maths.ox.ac.uk/system/files/attachments/CSIDH.pdf
+	
+	\begin{table}[h]
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|}
+				\hline
+				Схема & \thead{Уровень\\ стойкости} &
+				\thead{Открытый\\ключ}
+				& \thead{Закрытый\\ключ} & \thead{Общий\\ключ} \\
+				\hline
+				CRS%~\cite{DeFeoKiefferSmith2018}
+				& 128/56 & 64 & 8 & 64  \\
+				\hline
+				OSIDH% \cite{ColoKohel2020}
+				& 128/128 & 36 & 31 & 36 \\
+				\hline
+				CSIDH-512 & 128/62 & 64 & 32 & 64 \\
+				\hline
+			\end{tabular}
+		\end{center}
+		\caption{Размеры ключей (в байтах) для актуальных схем обмена ключами на изогениях.}
+		\label{Table1}
+	\end{table}
+	
+	\begin{itemize}
+		\item CRS/CSIDH: субэкспоненциальные квантовые атаки
+		\item OSIDH: экспоненциальные квантовые атаки
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Литература}
+	%\nocite{Menezes1993}
+	%\nocite{Lenstra1987}
+	%\nocite{Blake1999}
+	%\nocite{CohenFrey+2005}
+	%\nocite{Washington2008}
+	%\nocite{GoldwasserKilian1999}
+	%\nocite{CohenLenstra1984}
+	%\nocite{JaoDeFeo2011}
+	%\nocite{Galbraith2012}
+	%\nocite{DeFeo2018}
+	%\nocite{Costello2019}
+	%\nocite{SIKE}
+	%\nocite{SafeCurves}
+    %\nocite{CastryckDecru2022}
+	%\printbibliography
+	\begin{itemize}
+		\item[\structure{{\faScroll}}] Castryck W., Decru T. An efficient key recovery attack
+		on SIDH. 2022.
+		\vspace{0.5em}
+		
+		\item[\structure{{\faGlobe}}] SIKE – Supersingular Isogeny Key Encapsulation. 2020. \url{https://sike.org/}
+		\vspace{0.5em}
+		
+		\item[\structure{{\faYoutube}}]
+		Выступление Castryck на ANTS XV:
+		\url{https://www.youtube.com/watch?v=_eNv7An3Qj0}
+	\end{itemize}
+
+    \begin{center}
+        \begin{tcolorbox}[enhanced,hbox,colback=block-green-color-bg,colframe=subsection-color!120,title=Контакты,center title]
+            \begin{varwidth}{\textwidth}
+                \begin{center}
+                    \href{mailto:snovoselov@kantiana.ru}{snovoselov@kantiana.ru}
+                \end{center}
+            \end{varwidth}
+        \end{tcolorbox}
+    \end{center}\end{frame}
+
+\end{document}
