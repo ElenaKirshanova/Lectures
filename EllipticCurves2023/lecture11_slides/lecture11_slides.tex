@@ -34,7 +34,7 @@
 \newcommand{\UserA}{{\structure{{\Large\faUserSecret}}}}
 \newcommand{\UserB}{{\structure{{\Large\faCat}}}}
 
-\begin{frame}{Схемы стойкие к атаке Кастрика-Декру}
+\begin{frame}{Актуальные схемы на изогениях}
 
 Обмен ключами:
 \begin{itemize}
@@ -53,8 +53,194 @@
 \end{itemize}
 \end{frame}
 
+\begin{frame}{Схема CSIDH}	
+	Предложена Castryck, Lange, Martindale, Panny и  Renes.
+	\vspace{0.5em}
+
+	\begin{itemize}
+		\item Основана на действии групп.
+		\item Сложность классической атаки: $\mathcal{O}(p^{1/4})$
+		\item Сложность квантовой атаки: $L(1/2)$
+	\end{itemize}
+	
+	\vspace{1em}
+	\begin{scriptsize}
+		\begin{itemize}
+			\item[\structure{\faBook}] CSIDH: An Efficient Post-Quantum Commutative Group Action. ASIACRYPT 2018
+			\item[\structure{\faGlobe}] \url{https://csidh.isogeny.org/}
+		\end{itemize}
+	\end{scriptsize}
+\end{frame}
+
+\begin{frame}{Схемы на действиях групп}
+Схема CSIDH и многие другие схемы строятся на принципе действия группы на множество.
+\vspace{0.5em}
+    \begin{tcolorbox}[colframe=title-and-section-color!120, colback=title-and-section-color!5, title=Определение, center title]
+				Пусть $G$ -- группа, $X$ -- множество. Тогда~$G$ \structure{действует} на $X$, если:
+	\begin{enumerate}
+		\item $\exists$ отображение~$*: G \times X \rightarrow X$
+		\item $\forall g_1, g_2 \in G$ и $x \in X$:
+		\[g_1 * (g_2 * x) = (g_1 g_2) * x\]
+	\end{enumerate}
+	\end{tcolorbox}
+
+	Требования для построения криптосистем:
+	\begin{itemize}
+		\item восстановление $g$ по известному~$g * x$ должно быть сложной задачей (обобщение задачи~\structure{DLOG})
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Протокол Диффи-Хеллмана на действиях групп}
+	\[
+	\begin{tikzcd}
+		%	\text{\UserA} & & \text{\UserB} \\
+		\text{\UserA} &\arrow{ld}[swap]{a} x  \arrow{rd}{b} & \text{\UserB} \\
+		a * x &
+		\arrow[yshift=-0.7ex]{r}{b * x}
+		\arrow[yshift=0.7ex]{l}{a * x}
+		& b * x\\
+	\end{tikzcd}
+	\]
+	%\vspace{-0.5em}
+	\begin{itemize}
+		\item $x \in X$ -- публичный параметр
+		\item $a,b \in G$ -- секретные ключи абонентов
+		\item общий секретный ключ:
+		\[(a b) * x = a * (b * x) = b * (a * x)\]
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Пример. Классическая схема на ЭК}
+	\begin{columns}
+		\begin{column}{0.45\textwidth}
+			\[
+			\begin{tikzcd}
+				%	\text{\UserA} & & \text{\UserB} \\
+				\text{\UserA} &\arrow{ld}[swap]{a} x  \arrow{rd}{b} & \text{\UserB} \\
+				a * x &
+				\arrow[yshift=-0.7ex]{r}{b * x}
+				\arrow[yshift=0.7ex]{l}{a * x}
+				& b * x\\
+			\end{tikzcd}
+			\]
+		\end{column}
+		\begin{column}{0.1\textwidth}
+			\structure{$\Rightarrow$}
+		\end{column}
+		\begin{column}{0.45\textwidth}
+				\[
+			\begin{tikzcd}
+				%	\text{\UserA} & & \text{\UserB} \\
+				\text{\UserA} &\arrow{ld}[swap]{a} P \arrow{rd}{b} & \text{\UserB} \\
+				\left[a\right] P &
+				\arrow[yshift=-0.7ex]{r}{\left[a\right] P}
+				\arrow[yshift=0.7ex]{l}{\left[b\right] P}
+				& \left[ b \right] x\\
+			\end{tikzcd}
+			\]
+		\end{column}
+	\end{columns}
+	\vspace{-0.5em}
+	\begin{itemize}
+		\item $X = E(\mathbb{F}_p), x = P \in E(\mathbb{F}_p)$
+		\item $G = \mathbb{Z}_r^\times$, где~$r = \#\left<P\right>$
+		\item $a, b \in \mathbb{Z}_r^\times$
+		\item $*$ -- скалярное умножение точки на число
+	\end{itemize}
+	
+	\vspace{0.5em}
+	Аналогично описывается схема Диффи-Хеллмана на конечных полях.
+\end{frame}
+
+\begin{frame}[fragile]{Постквантовая схема CSIDH}
+	\[
+	\begin{tikzcd}
+		%	\text{\UserA} & & \text{\UserB} \\
+		\text{\UserA} &\arrow{ld}[swap]{a} x  \arrow{rd}{b} & \text{\UserB} \\
+		a * x &
+		\arrow[yshift=-0.7ex]{r}{b * x}
+		\arrow[yshift=0.7ex]{l}{a * x}
+		& b * x\\
+	\end{tikzcd}
+	\]
+	\vspace{-1.5em}
+
+	\structure{Идейно:}\\
+	\vspace{0.2em}
+	$X = SS_p$
+	\begin{itemize}
+		\item 
+		множество суперсингулярных кривых над~$\mathbb{F}_p$
+	\end{itemize}
+	$G$ = ``изогении с точностью до эндоморфизмов''
+	\begin{itemize}
+		\item эндоморфизмы образуют петли и циклы в графе изогений, поэтому изогении можно редуцировать $\bmod \operatorname{End}(E)$
+	\end{itemize}	
+	
+	$*$: действие изогении на кривую
+	\begin{itemize}
+		\item формулы Велу + соотношение Дойринга для связи эндоморфизмов с изогениями
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Постквантовая схема CSIDH}
+	\[
+	\begin{tikzcd}
+		\text{\UserA} &\arrow{ld}[swap]{\phi_{A}} E  \arrow{rd}{\phi_{B}} & \text{\UserB} \\
+		\left[\mathfrak{a}\right] * E  = E_A&
+		\arrow[yshift=-0.7ex]{r}{E_A}
+		\arrow[yshift=0.7ex]{l}{E_B}
+		& E_B = \left[\mathfrak{b}\right] * E\\
+	\end{tikzcd}
+	\]
+	\vspace{-0.5em}
+	\structure{Общий ключ:} $E_{AB} = [\mathfrak{a}] * E_B = [\mathfrak{b}] * E_A = [\mathfrak{a}\mathfrak{b}] * E_0$
+	\vspace{0.5em}
+	\begin{itemize}
+		\item для формирования ключа требуется коммутативность
+		\item из-за этого доступны квантовые субэксп. атаки
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Кольца эндоморфизмов эллиптических кривых}
+Кольцо эндоморфизмов~$\operatorname{End}(E)$ эллиптической кривой~$E$ над конечным полем~$\mathbb{F}_q$ изоморфно\footnote{\scriptsize Deuring M. Die Typen der Multiplikatorenringe elliptischer Funktionenkörper. 1941}:
+\begin{itemize}
+	\item порядку в квадратичном мнимом поле (\structure{обычные кривые})
+	\item максимальному порядку в алгебре кватернионов (\structure{суперсингулярные кривые})
+\end{itemize}
+
+\vspace{0.5em}
+Порядок -- конечно порожденное над~$\mathbb{Z}$ подкольцо (кольца целых в первом случае или алгебры кватернионов во втором).
+
+\vspace{0.5em}
+Т.е. подкольцо~$\mathcal{O}$ вида $\mathcal{O} = \omega_1 \mathbb{Z} \times \ldots \times \omega_k \mathbb{Z}$ для некоторых $\omega_i$ из базового кольца.
+\end{frame}
+
 \begin{frame}{Соответствие Дойринга}
-Эквивалентность изогениями эллиптических кривых и идеалами кольца эндоморфизмов.
+Эквивалентность между изогениями эллиптических кривых и идеалами кольца эндоморфизмов.
+
+\vspace{0.5em}
+
+Идеалы по определению замкнуты относительно умножения на элементы кольца (эндоморфизмы).
+\begin{itemize}
+	\item реализация идеи ``работы с изогениями с точностью до эндоморфизма''
+	\item главные идеалы соответствуют эндоморфизмам
+	\item группа классов~$\operatorname{CL}_\mathcal{O}$: фактор-группа группы идеалов по главным идеалам (эндоморфизмам) 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Соответствие Дойринга в явном виде}
+Пусть $\mathfrak{a}$ -- идеал порядка~$\mathcal{O}$, который изоморфен кольцу эндоморфизмов кривой~$E$ или его подкольцу. Определим \structure{$\mathfrak{a}$-кручение} как
+\[
+E[\mathfrak{a}] = \left\{P \in E(\mathbb{F}_q): \alpha(P) = P_\infty~\forall \alpha \in I \right\}.
+\]
+Тогда идеалу~$\mathfrak{a}$ сопоставим изогению  $\phi_\mathfrak{a}$ с ядром $E[\mathfrak{a}]$.
+\vspace{0.5em}
+
+В обратную сторону: пусть $\phi$-изогения, тогда соответствующий ей идеал равен
+\[
+\mathfrak{a}_\phi = \left\{ \alpha \in \mathcal{O}: \alpha(P) = 0 ~\forall P \in \ker(\phi) \right\}.
+\]
 \end{frame}
 
 \begin{frame}{CSIDH}
@@ -93,26 +279,6 @@
 	\structure{Общий ключ:} $E_{AB} = [\mathfrak{a}] * E_B = [\mathfrak{b}] * E_A = [\mathfrak{a}\mathfrak{b}] * E_0$
 \end{frame}
 
-\begin{frame}[fragile]{CSIDH}
-	\[
-	\begin{tikzcd}
-		\text{\UserA} &\arrow{ld}[swap]{\phi_{A}} E  \arrow{rd}{\phi_{B}} & \text{\UserB} \\
-		\left[\mathfrak{a}\right] * E  = E_A&
-		\arrow[yshift=-0.7ex]{r}{E_A}
-		\arrow[yshift=0.7ex]{l}{E_B}
-		& E_B = \left[\mathfrak{b}\right] * E\\
-	\end{tikzcd}
-	\]
-	\vspace{-0.5em}
-	\structure{Общий ключ:} $E_{AB} = [\mathfrak{a}] * E_B = [\mathfrak{b}] * E_A = [\mathfrak{a}\mathfrak{b}] * E_0$
-	\vspace{0.5em}
-	\begin{itemize}
-		\item для формирования ключа требуется коммутативность
-		\item из-за этого доступны квантовые субэксп. атаки
-	\end{itemize}
-
-\end{frame}
-
 \begin{frame}{Размеры ключей}
 	%65 ms, субэкспоненциальная квантовая атака, сложность $L_p(1/2)$ https://www.maths.ox.ac.uk/system/files/attachments/CSIDH.pdf
 	
@@ -145,6 +311,16 @@
 \end{frame}
 
 \begin{frame}{Литература}
+	\begin{scriptsize}
+			\begin{itemize}
+			\item[\structure{{\faScroll}}] Castryck, Lange, Martindale, Panny,  Renes.
+			
+			CSIDH: An Efficient Post-Quantum Commutative Group Action. ASIACRYPT 2018
+			\url{https://csidh.isogeny.org/}
+			
+			\item[\structure{{\faScroll}}] Deuring M. Die Typen der Multiplikatorenringe elliptischer Funktionenkörper. 1941
+		\end{itemize}
+	\end{scriptsize}
 	%\nocite{Menezes1993}
 	%\nocite{Lenstra1987}
 	%\nocite{Blake1999}
@@ -160,18 +336,6 @@
 	%\nocite{SafeCurves}
     %\nocite{CastryckDecru2022}
 	%\printbibliography
-	\begin{itemize}
-		\item[\structure{{\faScroll}}] Castryck W., Decru T. An efficient key recovery attack
-		on SIDH. 2022.
-		\vspace{0.5em}
-		
-		\item[\structure{{\faGlobe}}] SIKE – Supersingular Isogeny Key Encapsulation. 2020. \url{https://sike.org/}
-		\vspace{0.5em}
-		
-		\item[\structure{{\faYoutube}}]
-		Выступление Castryck на ANTS XV:
-		\url{https://www.youtube.com/watch?v=_eNv7An3Qj0}
-	\end{itemize}
 
     \begin{center}
         \begin{tcolorbox}[enhanced,hbox,colback=block-green-color-bg,colframe=subsection-color!120,title=Контакты,center title]
