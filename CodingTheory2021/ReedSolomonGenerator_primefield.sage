@@ -14,7 +14,7 @@ while True:
 		break
 	else:
 		a+=1
-	print('a:', a)
+	#print('a:', a)
 
 print('generator:', a)
 
@@ -227,17 +227,17 @@ e = gen_error(2, d, S)
 print('e = ', e)
 y = c + e
 print('y = ', y)
-y = (4, 1, 5, 1, 10, 1, 6, 1, 3, 6)
+#y = (4, 1, 5, 1, 10, 1, 6, 1, 3, 6)
 
-decP = PetersonDecode(k, S, y, ff)
-print('decP:', decP)
+#decP = PetersonDecode(k, S, y, ff)
+#print('decP:', decP)
 
 
 #m = [2*a+1, 2]
 #c = encode(m, S)
 #print('c = ', c)
-"""
-y = (a, 2*a + 2, 2*a + 2, 0, 2, a, 2, 2*a + 1)
+
+#y = (a, 2*a + 2, 2*a + 2, 0, 2, a, 2, 2*a + 1)
 #print('y = ', y)
 
 
@@ -245,4 +245,3 @@ y = (a, 2*a + 2, 2*a + 2, 0, 2, a, 2, 2*a + 1)
 decWB = WB_decode(k, S, y, ff)
 print('dec:', decWB, decWB.coefficients())
 print(encode(decWB.coefficients(), S))
-"""

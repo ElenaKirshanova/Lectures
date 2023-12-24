@@ -1,0 +1,47 @@
+def hamming1511_enc(l):
+  l.insert(0,0)
+  l.insert(1,0)
+  l.insert(2,0)
+  l.insert(4,0)
+  l.insert(8,0)
+  j=0
+  for i in range(len(l)):
+      if i % 2 == 1:
+          j+=l[i]
+  if j % 2 == 1:
+      l[1]=1
+  j=0
+  for i in range(len(l)):
+      if i==2 or i==6 or i==10 or i==14 or i==3 or i==7 or i==11 or i==15:
+          j+=l[i]
+  if j % 2 == 1:
+      l[2]=1
+  j=0
+  for i in range(len(l)):
+      if i==4 or i==5 or i==6 or i==7 or i==12 or i==13 or i==14 or i==15:
+          j+=l[i]
+  if j % 2 == 1:
+      l[4]=1
+  j=0
+  for i in range(len(l)):
+      if i==8 or i==9 or i==10 or i==11 or i==12 or i==13 or i==14 or i==15:
+          j+=l[i]
+  if j % 2 == 1:
+      l[8]=1
+  j=0
+  for i in range(len(l)):
+      j+=l[i]
+  if l[1]==1 and l[2]==1:
+      l[0]=1
+  if l[1]==1 and l[4]==1:
+      l[0]=1
+  if l[1]==1 and l[8]==1:
+      l[0]=1
+  if l[2]==1 and l[4]==1:
+      l[0]=1
+  if l[2]==1 and l[8]==1:
+      l[0]=1
+  if l[4]==1 and l[8]==1:
+      l[0]=1
+  return(l)
+hamming1511_enc([0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0])

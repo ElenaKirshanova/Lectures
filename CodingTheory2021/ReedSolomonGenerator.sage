@@ -24,6 +24,7 @@ for i,x in enumerate(ff):
 		S[i] = x
 
 S = [1, a, a^2, a + 1, a^2 + a, a^2 + a + 1, a^2 + 1]
+S0 = [0, 1, a, a^2, a + 1, a^2 + a, a^2 + a + 1, a^2 + 1]
 
 print('Reed-Solomon code with params [', (p**n - 1), k, d,']')
 print('evaluation set S = ', S)
@@ -42,7 +43,7 @@ def gen_message(k, S):
 	nelements = len(S)
 	for i in range(k):
 		rand_index = ZZ.random_element(0,nelements)
-		m_coeffs[i] = S[i]
+		m_coeffs[i] = S[rand_index]
 	return m_coeffs
 
 def eval_poly(f, y):
@@ -85,7 +86,7 @@ def WB_decode(k, S, y, ff):
 	deg_E = floor((n - k + 1)/2)
 	deg_N = deg_E + k - 1
 
-	print('degs:', deg_E, deg_N)
+	#print('degs:', deg_E, deg_N)
 
 	A = []
 	for i in range(len(S)):
@@ -101,9 +102,9 @@ def WB_decode(k, S, y, ff):
 	#print('AMat2', AMat2)
 
 	target_vec = vector([-y[i]*(S[i]**deg_E) for i in range(n)])
-	print('target_vec:', target_vec)
+	#print('target_vec:', target_vec)
 	sol = AMat.solve_right(target_vec)
-	print('sol:', sol)
+	#print('sol:', sol)
 
 	R.<x> = PolynomialRing(ff, 'x')
 	epoly = sum([ sol[i]*x**i  for i in range(deg_E)])
@@ -114,11 +115,11 @@ def WB_decode(k, S, y, ff):
 	print(R( [sol[i] for i in range(deg_E,deg_E+deg_N+1)] ))
 	#f = npoly / epoly
 	f, r = npoly.quo_rem(epoly)
-	print(f,r)
-	print(npoly//epoly)
-	print('epoly:', epoly)
-	print('npoly:', npoly)
-	print('f:', f, 'r:', r)
+	#print(f,r)
+	#print(npoly//epoly)
+	#print('epoly:', epoly)
+	#print('npoly:', npoly)
+	#print('f:', f, 'r:', r)
 	flist = list(R(f))
 	#print('y:', y)
 	#c = vector([eval_poly(flist,S[i]) for i in range(len(S))])
@@ -141,11 +142,11 @@ def PetersonDecode(k, S, y, ff):
 
 	deg_E = floor((n - k + 1)/2)
 	deg_G = deg_E-1
-	print('deg_E:', deg_E, 'deg_G:', deg_G)
+	#print('deg_E:', deg_E, 'deg_G:', deg_G)
 
 	Hmat = gen_h(k, S, ff)
 	syndrom = Hmat*vector(y)
-	print('syndrom:', syndrom)
+	#print('syndrom:', syndrom)
 
 	AMat = matrix(ff, deg_E+deg_G, n - k - 1)
 	for i in range(deg_E):
@@ -153,60 +154,60 @@ def PetersonDecode(k, S, y, ff):
 	for i in range(deg_G):
 		AMat[i+deg_E,i] = - 1
 
-	print('AMat:')
-	print(AMat)
+	#print('AMat:')
+	#print(AMat)
 
 	target_vec = vector(ff, -syndrom[1:])
-	print('target_vec:', target_vec)
+	#print('target_vec:', target_vec)
 	sol = AMat.solve_left(target_vec)
 
 	evec = [1]+list(sol[:deg_E])
 	gammavec = sol[deg_E:]
 
-	print('evec:', evec, 'gammavec:', gammavec)
+	#print('evec:', evec, 'gammavec:', gammavec)
 
 	R.<x> = PolynomialRing(ff, 'x')
 	epoly = sum([evec[i]*x^i for i in range(len(evec))])
-	print('epoly:', epoly, epoly.factor())
+	#print('epoly:', epoly, epoly.factor())
 
 	#find roots
-	for root in S:
-		if(eval_poly(evec, root) == 0):
-			print('root:', root)
+	#for root in S:
+	#	if(eval_poly(evec, root) == 0):
+	#		#print('root:', root)
 
 	return 1
 
 
+with open('ReedSolomon_WB_solutions.txt', 'w') as f:
+	for i in range(20):
+		m = gen_message(k, S0)
+		f.write('--------------- Student Name ---------------------'+"\n")
+		f.write('m =' + str(m)+'\n')
+		#print('m = ', m)
+		##m = [a+1, 0, a]
+		c = encode(m, S)
+		f.write('c ='+str(c)+'\n')
+		#print('c = ', c)
+		e = gen_error(2, d, S)
+		f.write('e ='+str(e)+'\n')
+		#print('e = ', e)
+		y = c + e
+		f.write('y ='+str(y)+'\n')
+		#print('y = ', y)
 
+		decWB = WB_decode(k, S, y, ff)
+		f.write('dec:'+ str(decWB)+'\n')
+		f.write('encode back:' + str(encode(decWB, S))+'\n')
+		f.write('error :' + str(vector(y)-vector(encode(decWB, S)))+'\n')
+		#print('dec:', decWB)
+		#print('encode back:', encode(decWB, S) )
+		#print('error:', vector(y)-vector(encode(decWB, S)))
 
-#m = gen_message(k, S)
-#print('m = ', m)
-##m = [a+1, 0, a]
-#c = encode(m, S)
-#print('c = ', c)
-#e = gen_error(2, d, S)
-#print('e = ', e)
-#y = c + e
-#print('y = ', y)
+#H = gen_h(k, S, ff)
+#print(H*vector(ff, [a^2 + 1, 1, a^2, 0, 1, 0, a^2 + 1]))
 
+#print('--------------------------------------------')
 
-#m = [a^2, a+1, a]
-#c = encode(m, S)
-#print('c = ', c)
-
-y = [a^2 + 1, a + 1, a^2 + 1, 0, 1, 0, a^2 + 1]
-print('y = ', y)
-
-decWB = WB_decode(k, S, y, ff)
-print('dec:', decWB)
-print('encode back:', encode(decWB, S) )
-print('error:', vector(y)-vector(encode(decWB, S)))
-
-H = gen_h(k, S, ff)
-print(H*vector(ff, [a^2 + 1, 1, a^2, 0, 1, 0, a^2 + 1]))
-
-print('--------------------------------------------')
-
-decP = PetersonDecode(k, S, y, ff)
-print('decP:', decP)
-print(encode(decP.coefficients(), S))
+#decP = PetersonDecode(k, S, y, ff)
+#print('decP:', decP)
+#print(encode(decP.coefficients(), S))

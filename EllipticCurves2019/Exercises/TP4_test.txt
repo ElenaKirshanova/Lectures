@@ -1,0 +1,12 @@
+
+Проверять работу своей функции orderBSGS() с помощью встроенной функции order():
+
+sage: q = Primes().next(1000000001)
+sage: a = ZZ.random_element(1,q-1)
+sage: b = ZZ.random_element(1,q-1)
+sage: E = EllipticCurve(F, [a, b])
+sage: orderBSGS(a,b,q)
+999996048
+sage: E.order()
+999996048
+sage: 

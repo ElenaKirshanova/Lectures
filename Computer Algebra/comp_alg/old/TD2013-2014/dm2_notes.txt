@@ -1,0 +1,30 @@
+A L'HEURE
+Ledent Jeremy  4/5 
+Pellet-Mary Alice 4.75/5
+Paris Gabriela 3.5/5
+Roziere Baptiste 3/5
+Talon Alexandre 4/5
+Pradic Pierre 5/5
+Grospellier Antoine 3/5
+Nava Saucedo Diego 1.5/5
+Rouhling Damien 4.75/5
+Macherel Pierre 2.5/5
+Pirot Francois 1/5
+
+EN RETARD
+Bauer Balthazar 1.5/5
+Gal Louis 1.5/5
+Mouhartem Fabrice 4/5
+Cordonnier Guillaume 1.5/5
+Teshome Amir 2.5/5
+
+
+Comments
+En vrai, on peut faire Pade / reconstruction rationnelle en M(n)log(n) au lieu de n^2,
+using fast GCD
+Lack of details leads to mistakes (especially in complexity..)
+it's not the reader who is supposed to interpolate your arguments/justifications
+some of you just stay on the surface, without wanting to enter into the details ==> also stay far from a thorough understanding...
+some of you assume the matrix is unimodular......
+most have avoided the solution with cauchy interpolation
+name the fast algos you use... name any algo as soon as it's nontrivial

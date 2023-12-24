@@ -1,0 +1,2 @@
+1. Extended Hamming code
+2. double error-correcting code (roth)

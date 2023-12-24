@@ -1,0 +1,49 @@
+def hamming1511_enc(m):
+    index = [0,1,2,4,8]
+    code = m.copy()
+    for i in index:
+        code.insert(i,0)
+    for i in index:
+        if (i == 0):
+            for j in range(len(code)):
+                code[i]+=code[j]
+                code[i]%=2
+        elif (i == 1):
+            for j in [3,5,7,9,11,13,15]:
+                code[i]+=code[j]
+                code[i]%=2
+        elif (i == 2):
+            for j in [3,6,7,10,11,14,15]:
+                code[i]+=code[j]
+                code[i]%=2
+        elif (i == 4):
+            for j in [5,6,7,12,13,14,15]:
+                code[i]+=code[j]
+                code[i]%=2
+        else:
+            for j in [9,10,11,12,13,14,15]:
+                code[i]+=code[j]
+                code[i]%=2
+    return code
+    
+def hamming1511_dec(y):
+    index = [8,4,2,1,0]
+    copy = y.copy()
+    for i in index:
+        copy.pop(i)
+    copy = hamming1511_enc(copy)
+    error = 0            
+    for i in index:
+        if(y[i]!=copy[i]):
+            error+=i
+    copy[error] = (copy[error] + 1)%2
+
+    for i in index:
+        copy.pop(i)
+    return copy,error
+    
+"""
+if __name__ == '__main__':
+	import doctest
+	doctest.testmod()
+"""
