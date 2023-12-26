@@ -55,60 +55,61 @@ print('S:', S)
 Bcoeffs = k #number of coeffs in B
 Ccoeffs = 2*(k-1)+1  #number of coeffs in C
 
-with open('RS_list_decoding_solutions.txt', 'w') as f:
-	for j in range(20):
-		f.write('--------------- Student Name ---------------------'+"\n")
-		m = gen_message(k,S)
-		c = encode(m, S)
-		e = gen_error(nerrors,n)
-		y = c+e
+#with open('RS_list_decoding_solutions.txt', 'w') as f:
+for j in range(1):
+	#f.write('--------------- Student Name ---------------------'+"\n")
+	#m = gen_message(k,S)
+	#c = encode(m, S)
+	#e = gen_error(nerrors,n)
+	#y = c+e
 
-		#print('m = ', m)
-		#print('c = ', c)
-		#print('e = ', e)
-		f.write('m = '+str(m)+"\n")
-		f.write('c = '+str(c)+"\n")
-		f.write('e = '+str(e)+"\n")
-		f.write('y = '+str(y)+"\n")
+	#print('m = ', m)
+	#print('c = ', c)
+	#print('e = ', e)
+	#f.write('m = '+str(m)+"\n")
+	#f.write('c = '+str(c)+"\n")
+	#f.write('e = '+str(e)+"\n")
+	#f.write('y = '+str(y)+"\n")
+	y = vector(F, [1,1,5,3,3,2])
 
-		assert(n>= 3*k-1)
+	assert(n>= 3*k-1)
 
-		Qmat = matrix(F, n, 3*k-1)
-		bvec = vector(F, n)
+	Qmat = matrix(F, n, 3*k-1)
+	bvec = vector(F, n)
 
-		for neq in range(3*k-1):
-			#coeffs of the polynom B
-			for i in range(Bcoeffs):
-				Qmat[neq, i] = (-(S[neq])^i)*y[neq]
-			#coeffs of the polynom C
-			for j in range(Ccoeffs):
-				Qmat[neq, Bcoeffs+j] = (S[neq])^j
-			bvec[neq] = -(y[neq]*y[neq])
+	for neq in range(3*k-1):
+		#coeffs of the polynom B
+		for i in range(Bcoeffs):
+			Qmat[neq, i] = (-(S[neq])^i)*y[neq]
+		#coeffs of the polynom C
+		for j in range(Ccoeffs):
+			Qmat[neq, Bcoeffs+j] = (S[neq])^j
+		bvec[neq] = -(y[neq]*y[neq])
 
-		#print(Qmat)
-		f.write('Qmat = '+str(Qmat)+"\n")
-		#print(bvec)
-		f.write('bvec = '+str(bvec)+"\n")
+	print(Qmat)
+	#f.write('Qmat = '+str(Qmat)+"\n")
+	print(bvec)
+	#f.write('bvec = '+str(bvec)+"\n")
 
-		#print(rank(Qmat))
-		sol = Qmat.solve_right(bvec) # Qmat * sol = bvec mod p
-		#print(sol)
-		f.write('sol = '+str(sol)+"\n")
+	#print(rank(Qmat))
+	sol = Qmat.solve_right(bvec) # Qmat * sol = bvec mod p
+	print(sol)
+	#f.write('sol = '+str(sol)+"\n")
 
-		Blist = list(sol[:k])
-		Clist = list(sol[k:])
+	Blist = list(sol[:k])
+	Clist = list(sol[k:])
 
-		Fx = PolynomialRing(F, 'x')
-		Bpoly = Fx(Blist)
-		Cpoly = Fx(Clist)
+	Fx = PolynomialRing(F, 'x')
+	Bpoly = Fx(Blist)
+	Cpoly = Fx(Clist)
 
-		x,y = PolynomialRing(F, 2, ['x','y']).gens()
+	x,y = PolynomialRing(F, 2, ['x','y']).gens()
 
-		fpoly = y*y - y*Bpoly + Cpoly
-		#print(fpoly)
-		f.write('fpoly = '+str(fpoly)+"\n")
-		#print(fpoly.factor())
-		f.write('fpoly.factor() = '+str(fpoly.factor())+"\n")
+	fpoly = y*y - y*Bpoly + Cpoly
+	print(fpoly)
+	#f.write('fpoly = '+str(fpoly)+"\n")
+	print(fpoly.factor())
+	#f.write('fpoly.factor() = '+str(fpoly.factor())+"\n")
 """
 
 
