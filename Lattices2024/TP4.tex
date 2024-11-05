@@ -1,0 +1,224 @@
+% !TeX encoding = UTF-8
+\documentclass[11pt]{exam}
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+
+
+\usepackage[margin=0.73in]{geometry}
+%\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{amscd,amsmath,amsthm}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+
+\usepackage{algorithmicx, enumitem, algpseudocode, algorithm, caption}
+\usepackage{tikz}
+\usetikzlibrary{automata}
+
+\usepackage{textcomp}
+
+\usepackage{kbordermatrix} % to label matrix rows and columns
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}
+
+\newtheorem{theorem}{Теорерма}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{definition}[theorem]{Определение}
+\newtheorem{claim}[theorem]{Утверждение}
+\newtheorem{fact}[theorem]{Факт}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+
+\newcommand{\nc}{\newcommand}
+\nc{\eps}{\varepsilon}
+\nc{\RR}{{{\mathbb R}}}
+\nc{\CC}{{{\mathbb C}}}
+\nc{\FF}{{{\mathbb F}}}
+\nc{\NN}{{{\mathbb N}}}
+\nc{\ZZ}{{{\mathbb Z}}}
+\nc{\PP}{{{\mathbb P}}}
+\nc{\QQ}{{{\mathbb Q}}}
+\nc{\UU}{{{\mathbb U}}}
+\nc{\OO}{{{\mathbb O}}}
+\nc{\EE}{{{\mathbb E}}}
+
+\newcommand{\bigO}{\mathcal{O}}
+
+\newcommand{\val}{\operatorname{val}}
+
+\newcommand{\wt}{\ensuremath{\mathit{wt}}}
+\newcommand{\Id}{\ensuremath{I}}
+\newcommand{\transpose}{\mkern0.7mu^{\mathsf{ t}}}
+\newcommand*{\ScProd}[2]{\ensuremath{\langle#1\mathbin{,}#2\rangle}} %Scalar Product
+\newcommand*\abs[1]{\left\lvert#1\right\rvert}
+\newcommand*\norm[1]{\left\lVert#1\right\rVert}
+
+\newcommand{\bigzero}{\mbox{\normalfont\Large\bfseries 0}}
+\newcommand{\rvline}{\hspace*{-\arraycolsep}\vline\hspace*{-\arraycolsep}}
+
+\pretolerance=1000
+
+\let\vec\mathbf
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT STARTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tikz}
+\usetikzlibrary{automata}
+\DeclareMathOperator{\Vol}{Vol}
+
+\begin{document}
+	{\noindent
+		\textsc{БФУ им. И. Канта -- Криптография на решётках}
+		\hfill {Е. Киршанова // 2024}
+\hrule
+\begin{center}
+	{\LARGE
+			Лабораторная работа № 4 \\[5pt]
+			\textbf{
+			Криптоанализ схемы шифрования Kyber
+				} \\[10pt]
+	 	{Дедлайн: 20.05.2024} 
+ 	} 
+\end{center}
+\hrule \vspace{5mm}
+	
+	\thispagestyle{empty}
+	
+	\vspace{0.2cm}
+	
+	\section{LWE и решетки}
+	
+	Рассмотрим классическую задачу LWE: по заданным $(A, \vec b = A\vec s + \vec s) \in \ZZ_q^{m \times n} \times \ZZ_q^m$, найти $\vec s \in \ZZ_q^n$ (или $\vec e \in \ZZ_q^m$), где оба вектора $\vec s, \vec e$ ограничены по евклидовой длине. Задача напрямую связана с задачей BDD на решетках конструкции-A, то есть на решетках вида 
+	\[\mathcal{L}(A) = \{ \vec x \in \ZZ^m, \exists   \vec c \in \ZZ^n  \; : \; \vec x = A \vec c \bmod q \}.\] 
+	Вторая компонента выборки LWE -- вектор $\vec b$ -- отстает от вектора $A \vec s$ решетки $\mathcal{L}(A)$ на $\| \vec e\|$. Заметим, что $\| \vec e\| \le \lambda_1(\mathcal{L}(A) ) \approx \sqrt{m}q^{1-n/m}$ (подумайте, откуда взялась последняя аппроксимация), отсюда получаем BDD инстанцию.
+	
+	\section{Эффективная версия криптосистемы Регёва}
+	Основная операция в классической криптосистеме Регёва и некоторых её модификаций -- это умножение матрицы на вектор. Например, для получения публичного ключа, публичная матрица $A \in \ZZ_q^{m\times n}$ умножается на секретный вектор $\vec s$ и к результату добавляется шум. В генерации шифр-текста также используется произведение матрицы $A$ на короткие вектора.  Таким образом, в криптосистемах на классическом LWE ключ занимает порядка $\mathcal{O}(n\cdot m \log q)$ бит, а умножение матрицы на вектор занимает квадратичное от $n$ время. На практике для безопасных параметров такой размер ключа и такие временные затраты неэффективны. Поэтому в 2015 году Stehl\'e-Langlois~\cite{LS} предложили задачу Module-LWE. Идея -- заменить кольцо $\ZZ_q$ на кольцо многочленов $\mathcal{R}_q = \ZZ_q[x]/(x^n+1)$. Обычно $n$ выбирается степенью двойки, и тогда такое кольцо является фактор-кольцом кольца целых циклотомического поля $\QQ(x)/(x^n+1)$. 
+	
+	Под $\vec x \in \mathcal{R}_q^k$ для целого $k \geq 1$ будем понимать вектор $\vec x$, координаты которого -- многочлены из  $\mathcal{R}_q$.
+	Задача Module-LWE формулируется следующим образом:
+
+	\begin{definition}[Module-LWE]
+		По заданным двойкам $(\vec a_1, \langle \vec a_1, \vec s \rangle + \vec e_1), \ldots, (\vec a_m, \langle \vec a_m, \vec s \rangle + \vec e_m) $, где
+		\begin{itemize}
+			\item $m$ произвольное целое
+			\item $\vec s \in \mathcal{R}_q^k$ взято либо случайно равномерно, либо из Гауссового распределения (по-коэффициентно)
+			\item $\vec a_i \in \mathcal{R}_q^k$ взяты из случайного равномерного распределения (по-коэффициентно из $\ZZ_q$)
+			\item коэффициенты $\vec e_i$ взяты из Гауссового распределения,
+		\end{itemize}
+	следует найти $\vec s$.
+	\end{definition}
+
+	Задачу Module-LWE теперь можно рассматриваться как задачу BDD над модулем
+	
+	\[
+		M = \{  \vec x \in \mathcal{R}^m, \exists \vec c \in \mathcal{R}^k \; : \; \vec x = A \vec c \bmod~q \}, \quad	\text{ где }  \mathcal{R} = \ZZ[x]/(x^n+1). 
+	\]
+	На практике такие модули дают, во-первых, уменьшение размера ключа, а во-вторых, ускорение в генерации ключей и шифр-текстов: умножение многочленов эффективнее (при помощи преобразования Фурье и подобных трюков) умножения векторов.
+	
+	
+	
+	Заметим, что многочленам из $\mathcal{R}_q$ можно уникальным образом сопоставить вектора из $\ZZ_q^n$: 
+	\[
+		a_0 + a_1 x + \ldots a_{n-1} x^{n-1} \mapsto (a_0, a_1, \ldots, a_{n-1}),
+	\]
+	а значит, и Module-LWE можно рассматривать как задачу нахождения ближайшего вектора над $\ZZ^{k\cdot n}$. Имея в виду такое отображение, мы будем обозначать вектора, состоящие  только из одного многочлена, жирным шрифтом, понимая, что они могут быть рассмотрены как вектора над $\ZZ$.
+	
+	Для примера рассмотрим $k=1$ (такая версия Module-LWE называется Ring-LWE и исторически была предложена до Module-LWE~\cite{LPR10,SS09}). Имеем выборку $(\vec a, \vec b = \vec a \vec s + \vec e \bmod~q)$. Для фиксированного многочлена $\vec a \in \ZZ[x]/(x^n+1)$, умножение на этот многочлен можно описать умножением матрицы $\mathsf{Rot}(a)$ на вектор-коэффициентов второго множителя, где
+	\[
+		\mathsf{Rot}(\vec a) = [x^{j-1} a \bmod~(x^n+1)]_{0 \leq j \leq n-1}  = 
+		\begin{pmatrix}
+			a_0 & a_1 & \ldots & a_{n-1} \\
+			-a_{n-1} & a_0 & \ldots & a_{n-2} \\
+			\vdots & \vdots & \ddots & \vdots \\
+			-a_1 & -a_2 & \ldots & a_0 \\
+		\end{pmatrix}, 
+	\]
+	а результат умножения $\vec a \vec y$ для произвольного $\vec y \in \ZZ[x]/(x^n+1)$ есть многочлен, составленный из коэффициентов $\mathsf{Rot}(\vec a) (y_0, \ldots, y_{n-1})$ (можете проверить на примере). Матрицы $\mathsf{Rot}(a)$, составленные таким образом, называются анти-циркулянтными.  Таким образом, Module-LWE выборка $(\vec a, \vec b)$ может быть описана как пара
+		\[
+			(	\mathsf{Rot}(\vec a) , \mathsf{Rot}(\vec a) \cdot (s_0, \ldots, s_{n-1}) +  (e_0, \ldots, e_{n-1}) ) \in \ZZ_q^{n \times n} \times \ZZ_q^n.
+		\]
+	  Заметим, что лишь одна пара многочленов $(\vec a, \vec b)$ генерирует $n$ сэмплов классического LWE. 
+	  
+	  Для $k>1$, module-LWE описывается матрицей из $\ZZ_q^{nk}$, на главной диагонали которой стоят блоки $\mathsf{Rot}(a_i)$, например:
+	\[
+	\begin{pmatrix}
+		\begin{matrix}
+			\mathsf{Rot}(\vec a_1)
+		\end{matrix}
+		& \rvline & \bigzero \\
+		\hline
+		\bigzero & \rvline &
+		\begin{matrix}
+			\mathsf{Rot}(\vec a_2)
+		\end{matrix}
+	\end{pmatrix} \in \ZZ_q^{2n \times 2n}.
+	\]
+	
+	\section{Kyber}
+	
+	Криптосистема Kyber~\cite{Kyber} -- это версия криптосистемы Регёва, перенесенная на Module-LWE. В качестве публичного ключа генерируются $A \in \mathcal{R}_q^{k \times k}, \vec t = A \vec s + \vec e \in  \mathcal{R}_q^k$. Шифр-текст вычисляется аналогично классической криптосистеме, где вместо малых векторов над $\ZZ_q^n$ или $\ZZ_q^m$, генерируются вектора многочленов с малыми коэффициентами. В итоге, шифр-текст есть пара $(\vec c_1, \vec c_2) \in \mathcal{R}_q^k \times  \mathcal{R}_q$.
+	
+	
+	
+	\section{Задание}
+	
+	Публичные чалленджи, посвященные криптосистеме Kyber, предложены Рурским Университетом г. Бохум и доступны по адресу~\url{https://bochum-challeng.es/challenges/kyber}. 	Чалленджи отсортированы по сложности (см.\ ``bit complexity''). Задача лабораторной состоит в решении простых чалленждей (для них достаточно запуска BKZ редукции с алгоритмом Enumeration, как реализовано в fpylll), а именно задач битовой сложности 16.\footnote{Группа, решившая чаллендж с битовой сложностью 32 и выше (Kyber-192-k12 и выше), получает Отлично автоматом по курсу.}  Для решения одного чалленджа необходимо:
+	\begin{enumerate}
+		\item скачать файл формата .py одного из параметров. В нём вы увидите среди прочих параметры $n, k, q$, публичную матрицу $A \in \mathcal{R}_q^{k \times k}$ (записанную как трехмерный массив -- матрица, состоящая из многочленов), открытая компонента ключа $\vec t \in \mathcal{R}_q^k$, и множество шифр-текстов: каждый шифр-текст -- это массив, состоящий из двух элементов: $\vec c_1 \in \mathcal{R}_q^{k}$ (поэтому $\vec c_1$ -- это двумерных массив из $k$ векторов длины $n$), и $\vec c_2 \in \mathcal{R}_q$ (одномерный массив из $n$ элементов). 
+		\item Получить из $A, \vec t$ секретный ключ $\vec s$, решая задачу BDD. Вы можете использовать метод редукции BDD к uSVP, описанный в лекции 8 \url{https://crypto-kantiana.com/elena.kirshanova/teaching/lattices_2024/Lecture8.pdf}. \footnote{при составлении базиса решетки не забудьте $q$-арные вектора!}
+		\item Получив секретный ключ, вам необходимо дешифровать все шифр-тексты для данного чалленджа. Если вы преобразуете полученные сообщения в текст (кодировка UTF-8), у вас должен получится связных английский текст.
+	\end{enumerate}
+	
+	
+	\begin{thebibliography}{9}
+		\bibitem{LS} 
+		Adeline Langlois and Damien Stehl\'e.
+		\textit{Worst-Case to Average-Case Reductions for Module Lattices} 
+		\url{https://eprint.iacr.org/2012/090}
+		
+		\bibitem{LPR10}
+		Vadim Lyubashevsky, Chris Peikert, and Oded Regev. 
+		\textit{On Ideal Lattices and Learning with Errors Over Rings}
+		\url{https://eprint.iacr.org/2012/230.pdf}
+		
+		\bibitem{SS09}
+		Damien Stehlé and Ron Steinfeld.
+		\textit{Making NTRUEncrypt and NTRUSign as Secure as Standard Worst-Case Problems over Ideal Lattices}
+		\url{https://eprint.iacr.org/2013/004}
+		
+		\bibitem{Kyber}
+		Joppe W. Bos, L\'eo Ducas, Eike Kiltz, Tancr\'ede Lepoint, Vadim Lyubashevsky, John M. Schanck, Peter Schwabe, Gregor Seiler, and Damien
+		Steh\'e. 
+		\textit{CRYSTALS - Kyber: A CCA-secure module-lattice-based KEM}
+		\url{https://eprint.iacr.org/2017/634.pdf}
+		
+		
+		
+	\end{thebibliography}	
+		
+\end{document}
