@@ -1,0 +1,293 @@
+% !TeX spellcheck = ru_RU-Russian
+% !TeX program = xelatex
+% !BIB TS-program = biber
+
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+\usepackage{pgfplots, subfigure}
+\usepackage{extarrows}
+
+\usepackage[backend=biber,firstinits=true,hyperref=true,style=numeric-comp]{biblatex}
+
+\usepackage{../beamerthemeec2020}
+{\footnotesize\bibliography{../biblio}}
+
+\title{Эллиптические кривые}
+\subtitle{Лекция 5. Алгоритмы подсчета $\mathbb{F}_q$-рациональных точек кривой. Часть I}
+\author{Семён Новосёлов}
+\institute{БФУ им. И. Канта}
+\date{2024}
+
+\begin{document}
+
+\frame{\titlepage}
+
+%\begin{frame}{Мотивация}
+%    \begin{enumerate}
+%        \item Для криптографических целей необходимо уметь считать число точек за время полиномиальное время от $\log{q}$.
+%    \end{enumerate}
+%\end{frame}
+\begin{frame}{Мотивация}
+    Криптография на \structure{DLOG} в группе $G$:
+    \begin{center}
+    (почти) простое $\#G$ \structure{$\implies$} стойкость к атаке Полига-Хелмана\footnote{вкратце: сведение задачи к подгруппам}
+ 
+    \vspace{1em}
+    \structure{$\Downarrow$}
+    \end{center}
+    
+    Нужно уметь генерировать кривые с (почти) простым числом точек.
+\end{frame}
+
+\begin{frame}
+	\structure{Задачи:}
+	\begin{enumerate}
+		%\item для криптографических целей: простой метод генерации кривой по сравнению CM-методом
+		\item подобрать кривую с \structure{заданным} (простым) числом точек над полем $\mathbb{F}_q$ \structure{$\implies$} $CM$-метод
+		\vspace{0.5em}
+		\item подобрать кривую с простым числом точек над полем $\mathbb{F}_q$:
+		\begin{itemize}
+			\item выбирать случайную кривую и считать число точек пока не получится простое число точек
+			\item ожидаемое число попыток: $O(\log{|G|})$ (следует из теоремы о распределении простых чисел)
+		\end{itemize}
+	\end{enumerate}
+	\vspace{0.5em}
+	$CM$-метод даёт лучшие кривые, но при этом существенно сложнее.
+\end{frame}
+
+\begin{frame}{Эндоморфизм Фробениуса}
+Алгоритмы подсчёта точек базируются на свойствах эндоморфизма:
+
+\begin{equation*}
+    \begin{split}
+        \varphi_q: \overline{\mathbb{F}}_q &\rightarrow \overline{\mathbb{F}}_q \\
+                 x & \mapsto x^q
+    \end{split}
+\end{equation*}
+\begin{enumerate}
+    \item $(x_1 + x_2)^q = x_1^q + x_2^q$
+    \item $x^q = x, \forall x \in {\mathbb{F}_q}$
+\end{enumerate}
+
+\vspace{0.5em}
+
+\structure{Действие $\varphi_q$} на точки из $E(\overline{\mathbb{F}}_q)$:
+\[
+\varphi_q(x, y) = (x^q, y^q), \varphi_q(\mathcal{O}) = \mathcal{O}.
+\]
+\end{frame}
+
+\begin{frame}{}%{Предварительные сведения}
+$E$ -- кривая над ${\mathbb{F}_q}, (x, y) \in E(\overline{\mathbb{F}}_q)$.
+\vspace{1em}
+
+\structure{Свойства $\varphi_q$}:
+\begin{enumerate}
+    \item ${\varphi _q}(x,y) \in E( \overline{\mathbb{F}}_q )$
+    \begin{itemize}
+        \item[$\triangleleft$]
+        $(y^2)^q = (x^3 + ax + b)^q \Leftrightarrow$
+        \item[] $(y^q)^2 = (x^q)^3 + a x^q + b \Leftrightarrow (x^q, y^q) \in E ( \overline{\mathbb{F}}_q )$
+        \structure{$\triangleright$}
+    \end{itemize}
+    \vspace{0.5em}
+    
+    \item $(x,y) \in E(\mathbb{F}_q) \Leftrightarrow \varphi_q(x,y) = (x,y)$
+        \begin{itemize}
+            \item[$\triangleleft$] $x \in \mathbb{F}_q \Leftrightarrow \varphi_q(x) = x$ \structure{$\triangleright$}
+        \end{itemize}    
+    
+    \vspace{0.5em}
+    \item $\mathop{\ker}(\varphi^n_q - 1) = E(\mathbb{F}_{q^n})$ \\
+    %Отображение $( x, y ) \mapsto ( x^q, y^q ) - ( {x,y} )$, где «$-$» это вычитание на $E$.
+     
+     \vspace{0.5em}
+    \item $\# E( \mathbb{F}_{q^n} ) = \deg ( \varphi_q^n - 1 )$
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Граница Хассе-Вейля} 
+\begin{block}{Теорема} Для любой кривой $E/\mathbb{F}_q$ выполняется:
+%(Описывает границы $\# E( {{\mathbb{F}_q}} )$)
+%Пусть $E$ -- кривая над ${\mathbb{F}_q}$. Тогда справедливо
+\[
+| {q + 1 - \# E( {{\mathbb{F}_q}} )} | \leqslant 2\sqrt q 
+\]
+\end{block}
+\structure{$\triangleleft$}
+Выводится из свойств (1)--(4) для ${\varphi _q}$ (см. [Washington,~\S~4.2]). 
+\structure{$\triangleright$}
+
+\vspace{1em}
+
+\structure{След эндоморфизма Фробениуса:}
+\[t  = q + 1 - \# E( {{\mathbb{F}_q}} ) = q + 1 - \deg ( {\varphi_q - 1} )\]
+
+\begin{itemize}
+    \item Асимптотически: $\# E(\mathbb{F}_q) \sim O(q)$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Характеристический многочлен эндоморфизма Фробениуса}
+\begin{block}{Теорема}
+$E$ -- эллиптическая кривая над $\mathbb{F}_q$ и $t = q + 1 - \# E(\mathbb{F}_q)$. Тогда 
+\[
+\varphi _q^2 - t \varphi _q + q = 0
+\]
+как эндоморфизм на $E$ и $t$ определено уникально. Другими словами $\forall ( {x,y} ) \in E( \overline{\mathbb{F}}_q ):$
+\begin{equation*}
+(x^{q^2}, y^{q^2}) - t (x^q, y^q) + q(x,y) = \mathcal{O}.
+\end{equation*}
+\end{block}
+\end{frame}
+
+\begin{frame}{Кривые в подполе}
+Кривая $E$ задана над $\mathbb{F}_q$ \structure{$\implies$} можем выразить $\# E(\mathbb{F}_{q^n})$ через $\# E( \mathbb{F}_q )$.
+
+\begin{block}{Теорема}
+Пусть $\# E( {{\mathbb{F}_q}} ) = q + 1 - t$. Запишем {\footnotesize $X^2 - t X + q = (X - \alpha)(X - \beta)$}. Тогда: 
+$$
+\# E(\mathbb{F}_{q^n}) = {q^n} + 1 - ( \alpha^n+ \beta ^n )\quad \forall n \geqslant 1.
+$$
+\end{block}
+
+\begin{block}{Лемма}
+Пусть $t_n = \alpha^n + \beta^n$. Тогда $t_0 = 2, t_1 = t$ и $t_{n+1} = t t_n - q t_{n-1}$ для всех $n \geq 1$.
+\end{block}
+
+\begin{itemize}
+    \item Т.о., если известно $\#E(\mathbb{F}_q)$, то $\#E(\mathbb{F}_{q^n})$ находится за время $O(n)$ операций в $\mathbb{Z}$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Подсчёт точек на основе символа Лежандра}{Экспоненциальные алгоритмы подсчёта точек}
+\begin{block}{Лемма}
+Для $E: y^2 = x^3 + ax + b$ над $\mathbb{F}_q$ имеем:
+\[
+\# E(\mathbb{F}_q) = q + 1 + \sum\limits_{x \in \mathbb{F}_q} {\left(\frac{x^3 + ax + b}{\mathbb{F}_q} \right)}.
+\]
+\end{block}
+
+\begin{itemize}
+    \item Сложность: $O(q \operatorname{polylog}{q})$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Алгоритм Baby Step-Giant Step (BSGS)}{Экспоненциальные алгоритмы подсчёта точек}
+\structure{Идея:} Пусть $N = \#E(\mathbb{F}_q)$ -- неизвестно. По теореме Лагранжа: $[N] P = \mathcal{O}, \forall P$.
+
+\vspace{0.em}
+Т.к. $q + 1 - 2 \sqrt{q} \leq N \leq q + 1 + 2 \sqrt{q}$ \structure{$\implies$} можем перебирать все $N$ проверяя условие $[N] P = \mathcal{O}$.
+
+\begin{itemize}
+    \item Наивный метод (brute force): $O(\sqrt{q})$.
+    \item Алгоритм поиска коллизий/циклов (BSGS): $O(\sqrt[4]{q})$.
+    \begin{itemize}
+    	\item Основан на парадоксе дней рождений.
+    	%p(n,d) = 1-e^(-n^2/d), d - число дней, 
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Алгоритм (BSGS). Нахождение порядка точки}
+\structure{Вход:} $P \in E(\mathbb{F}_q)$.
+
+\structure{Выход:} $ord(P)$.
+\begin{enumerate}
+    \item $Q = (q+1) P$.
+    \item Выбрать $m > \sqrt[4]{q}$, вычислить и сохранить в списке $L$ все пары $(j, [j] P)$ для $j = 0, \ldots, m$. \hfill{\structure{\textit{(baby steps)}}}
+    \item \label{bsgs:order:step:giant}
+    Вычислять точки $Q + k (2m P)$ для $k = -m, -(m-1), \ldots, m$ пока в $L$ не найдётся точка $\pm [j] P$ т.ч. $Q + k(2m P) = \pm [j] P$ \hfill{\structure{\textit{(giant steps)}}}
+    \item Имеем $[q + 1 + 2 m k \mp j] P = \mathcal{O}$.\\$M = q + 1 + 2 m k \mp j$.
+    \item \label{bsgs:order:step:factor} Найдём $p_1, \ldots, p_r$ -- различные простые делители $M$.
+    \item Если $[M/p_i] P = \mathcal{O}$ для нек. $i$, то $M = M/p_i$ и перейти к шагу \ref{bsgs:order:step:factor}.
+    \item Вернуть $M$.
+\end{enumerate}
+\end{frame}
+
+%\begin{frame}{Алгоритм (BSGS). Нахождение порядка точки}{Корректность}
+%Всегда ли найдётся коллизия на шаге \ref{bsgs:order:step:giant}?
+%\begin{block}{Лемма}
+%Пусть $x$ -- целое, т.ч. $|x| \leq 2 m^2$. Тогда $\exists x_0,x_1$ т.ч. $-m < x_0 \leq m$, $-m \leq x_1 \leq m$ и $x = x_0 + 2 m x_1$.
+%\end{block}
+%\begin{itemize}
+%    \item (Разбиение элемента $x$ на $2m$ старших бит и ($\lg{x} - 2m$) младших)
+%\end{itemize}
+%\end{frame}
+
+\begin{frame}{Алгоритм (BSGS). Нахождение порядка точки}{Анализ сложности}
+\structure{Шаг~1.} (быстрое умножение) $O(\log{q})$ сложений на кривой \structure{$\implies$} %$O(\log\operatorname{polylog}{q})$
+$\widetilde{O}(\log^2{q})$
+бит. операций
+
+\structure{Шаг~2.} $\widetilde{O}(m) = \widetilde{O}(q^{1/4})$ -- время, $O(q^{1/4})$ -- память.
+
+\structure{Шаг~\ref{bsgs:order:step:giant}.} $\widetilde{O}(2m) = \widetilde{O}(q^{1/4})$ -- ожидаемое количество переборов $k$.
+
+\structure{Шаг~4.} Элементарные операции в $\mathbb{Z}$.
+
+\structure{Шаг~5.} $L_q(1/3, c) = exp(c (\log{q})^{1/3} (\log{\log{q}})^{2/3} )$.
+
+\structure{Шаг~6.} $O(\log{M}) = O(\log{q})$ сложений на кривой.
+
+\structure{Итого}: самый затратный шаг $3$: $\widetilde{O}(q^{1/4})$.
+
+\begin{block}{Замечания}
+    \begin{enumerate}
+        \item Для оптимизации памяти достаточно хранить только координату $x$.
+        \item С помощью $\rho$-метода Полларда можно реализовать алгоритм, использующий только $\operatorname{polylog}{q}$ памяти.
+    \end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{frame}{Алгоритм (BSGS). Нахождение $\#E(\mathbb{F}_q)$}
+    \structure{Вход:} $E/\mathbb{F}_q$.
+    
+    \structure{Выход:} $\#E(\mathbb{F}_q)$.
+    \begin{enumerate}
+        \item $L = 1$.
+        \item Выбрать случайную точку $P \in E(\mathbb{F}_q)$.
+        \item $r = ord(P)$.
+        \item $L = \operatorname{lcm}(L, r)$.
+        \item Если $L$ делит только одно целое $N$ т.ч. $q + 1 - 2\sqrt{q} \leq N \leq q + 1 + 2\sqrt{q}$, то вернуть $N$. В противном случае -- перейти к шагу $2$.
+    \end{enumerate}
+\end{frame}
+
+
+%\begin{frame}{}
+%TODO: Полиномиальные алгоритмы подсчёта точек
+%TODO: оператор Картье
+%    content...
+%\end{frame}
+
+\begin{frame}{Литература}
+    %\nocite{Menezes1993}
+    %\nocite{Blake1999}
+    \nocite{CohenFrey+2005}
+    \nocite{Washington2008}
+    \printbibliography
+    
+    \begin{center}
+        \begin{tcolorbox}[enhanced,hbox,colback=block-green-color-bg,colframe=subsection-color!120,title=Контакты,center title]
+            \begin{varwidth}{\textwidth}
+                \begin{center}
+                    \href{mailto:snovoselov@kantiana.ru}{snovoselov@kantiana.ru}
+                \end{center}
+            \end{varwidth}
+        \end{tcolorbox}	
+    \end{center}
+
+\structure{Страница курса:}\\
+{\footnotesize
+    \href{https://crypto-kantiana.com/semyon.novoselov/teaching/elliptic_curves_2024}{crypto-kantiana.com/semyon.novoselov/teaching/elliptic\_curves\_2024}
+}
+\end{frame}
+
+\end{document}

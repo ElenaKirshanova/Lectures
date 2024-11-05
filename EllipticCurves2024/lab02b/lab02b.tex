@@ -1,0 +1,127 @@
+\documentclass[11pt]{exam}
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+
+
+\usepackage[margin=0.73in]{geometry}
+%\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{amscd,amsmath,amsthm}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+
+\usepackage{algorithmicx, enumitem, algpseudocode, algorithm, caption}
+\usepackage{tikz}
+\usetikzlibrary{automata}
+
+%%%%%%%%%%%%%%%%%%%%%
+% Handling comments and versions %%%
+%%%%%%%%%%%%%%%%%%%%%
+
+%\renewcommand{\comment}[1]{\texttt{[#1]}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{proposition}[theorem]{Proposition}
+
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+
+\newcommand{\nc}{\newcommand}
+\nc{\eps}{\varepsilon}
+\nc{\RR}{{{\mathbb R}}}
+\nc{\CC}{{{\mathbb C}}}
+\nc{\FF}{{{\mathbb F}}}
+\nc{\NN}{{{\mathbb N}}}
+\nc{\ZZ}{{{\mathbb Z}}}
+\nc{\PP}{{{\mathbb P}}}
+\nc{\QQ}{{{\mathbb Q}}}
+\nc{\UU}{{{\mathbb U}}}
+\nc{\OO}{{{\mathbb O}}}
+\nc{\EE}{{{\mathbb E}}}
+
+\newcommand{\val}{\operatorname{val}}
+\newcommand{\wt}{\ensuremath{\mathit{wt}}}
+\newcommand{\Id}{\ensuremath{I}}
+\newcommand{\transpose}{\mkern0.7mu^{\mathsf{ t}}}
+\newcommand*{\ScProd}[2]{\ensuremath{\langle#1\mathbin{,}#2\rangle}} %Scalar Product
+\renewcommand{\char}{\ensuremath{\mathsf{char}}}
+
+\DeclareMathOperator{\Vol}{Vol}
+
+%\pretolerance=1000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT STARTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}	
+	{\noindent
+		\textsc{БФУ им. И. Канта -- Компьютерный практикум по криптографии на эллиптических кривых }\\[5pt]
+		Преподаватель {С. Новоселов}   \hfill{Осень 2024\\}
+	\hrule
+	\begin{center}
+		{\LARGE\textbf{
+				Лабораторная работа № 2b \\[5pt]
+		}} 
+			Опубликована \textbf{27.09.2024} \\[5pt] 
+			Дедлайн \textbf{24.10.2024}
+		
+	\end{center}
+	\hrule \vspace{5mm}
+	
+	\thispagestyle{empty}
+	
+	Разработать программу в системе компьютерной алгебры Sage для выработки общего ключа~$sk$ с удалённым сервером и обмена сообщениями зашифрованными симметричным шифром на ключе~$sk$.
+
+	\begin{enumerate}
+		\item Сервер доступен по адресу:\\
+		\texttt{tasks.crypto-kantiana.com}\\
+		порт: 10781
+		
+		\item Сообщения шифровать с помощью шифра Camellia в режиме OFB с начальным вектором (iv), полученным от сервера.
+		
+		\item Для работы с симметричной криптографией рекомендуется использовать модуль \texttt{cryptography} для Python 3. Если он не установлен, то установить с помощью команды:\\
+		\texttt{pip install cryptography}
+		
+		\item В качестве общего секретного ключа использовать координату $x$ точки, переведенную в байтовую строку кодом:\\
+		\texttt{int(x).to\_bytes(len(p.binary())/8, "big")}
+		
+		\item Все байтовые строки, передаваемые по сети должны кодироваться/декодироваться с помощью base64.
+	\end{enumerate}
+
+\section*{Требования к сдаче}
+    \begin{itemize}
+        \item При выработке общего ключа со своей стороны, использовать разработанные при выполнении предыдущих лабораторных методы (сложение точек, скалярное умножение и т.д.). Использование встроенных методов Sage для этой цели \textbf{не допускается}.
+        \item Исходный код должен содержать комментарии к каждой из функций с описанием входных и выходных параметров
+        \item Студент должен понимать, что он написал, зачем, а также ответить на теоретические вопросы.
+    \end{itemize}
+\end{document}

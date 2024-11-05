@@ -1,0 +1,157 @@
+\ProvidesPackage{beamerthemeec2020}
+
+\RequirePackage{tikz}
+\usetikzlibrary{arrows,decorations.pathmorphing,backgrounds,calc}
+\RequirePackage{lmodern}
+\RequirePackage{textcomp}
+\RequirePackage{amsmath,amssymb}
+\usepackage{biblatex}
+\usepackage{xcolor}
+
+\usepackage{cmap}
+\usepackage{euler}
+\usepackage{fontspec}
+%\usepackage{fontawesome}
+\usepackage{fontawesome5}
+\usepackage{ulem}
+
+\newfontfamily\faExt[Path="../fonts/",
+Extension = .otf,
+UprightFont = *-Regular-400,
+BoldFont  = *-Solid-900
+]{FontAwesome6-Free}
+\newcommand{\faExtCheese}{\faExt \symbol{"F7EF}}
+
+\usepackage{ragged2e}
+\usepackage{hyphenat}
+
+\setmainfont{Roboto}
+\setsansfont{Roboto}
+\setmonofont{Roboto Mono}
+\usefonttheme{professionalfonts}
+
+%\renewcommand\rmdefault{qtm}
+%\renewcommand\sfdefault{qhv}
+%\renewcommand\ttdefault{qcr}
+%\renewcommand\ttdefault{lmvtt}
+
+% multicols
+\usepackage{multicol}
+\setlength{\columnsep}{80pt}
+
+% captions
+\usepackage[justification=justified,listformat=simple,format=plain,labelformat=simple]{caption}
+
+\usepackage{url}
+\usepackage[most]{tcolorbox}
+\usepackage{varwidth}
+\usepackage{tabularx}
+
+\definecolor{text-color}{RGB}{0,0,0} %%% text color
+\definecolor{subsection-color}{RGB}{40, 166, 103} %%% subsection color
+\definecolor{title-and-section-color}{RGB}{61, 147, 221} %%% title and section color
+\definecolor{bg-color}{RGB}{254, 255, 244} %%% background color
+\definecolor{struct-color}{RGB}{224, 62, 73} %%% structure
+
+\definecolor{color-cont-bg}{RGB}{204, 239, 171}
+\definecolor{block-green-color-bg}{RGB}{204, 239, 171}
+
+\definecolor{plot-red-color}{RGB}{224, 62, 73}
+\definecolor{plot-green-color}{RGB}{77, 158, 99}
+\definecolor{plot-blue-color}{RGB}{61, 147, 221}
+
+\definecolor{box-red-color}{RGB}{224, 62, 73}
+\definecolor{box-green-color}{RGB}{77, 158, 99}
+\definecolor{box-blue-color}{RGB}{61, 147, 221}
+
+\setbeamercolor{structure}{fg=struct-color}
+\setbeamercolor{titlelike}{fg=title-and-section-color}
+\setbeamercolor{frametitle}{fg=title-and-section-color}
+\setbeamercolor{colorbar}{fg=text-color,bg=subsection-color}
+\setbeamercolor{normal text}{fg=text-color}
+
+\beamertemplatesolidbackgroundcolor{bg-color}
+
+%set the fonts
+\setbeamerfont{section in head/foot}{series=\bfseries}
+\setbeamerfont{block title}{series=\bfseries}
+\setbeamerfont{block alerted title}{series=\bfseries}
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamerfont{frametitle}{size=\Large}
+\setbeamerfont{caption}{size=\normalsize}
+\setbeamerfont{caption name}{size=\normalsize}
+\setbeamerfont{structure}{series=\bfseries}
+
+%set some beamer theme options
+\setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]
+\setbeamertemplate{sections/subsections in toc}[square]
+\setbeamertemplate{items}[circle]
+\setbeamertemplate{blocks}[width=0.0]
+\beamertemplatenavigationsymbolsempty
+
+%set bibliography style
+%\setbeamertemplate{bibliography item}{\faBook}
+
+%\setbeamertemplate{bibliography item}{%
+%    \ifboolexpr{ test {\ifentrytype{book}} or test {\ifentrytype{mvbook}}
+%        or test {\ifentrytype{collection}} or test {\ifentrytype{mvcollection}}
+%        or test {\ifentrytype{reference}} or test {\ifentrytype{mvreference}} }
+%    {\setbeamertemplate{bibliography item}[book]}
+%    {\ifentrytype{online}
+%        {\setbeamertemplate{bibliography item}[online]}
+%        {\setbeamertemplate{bibliography item}[article]}}%
+%    \usebeamertemplate{bibliography item}}
+
+\setbeamertemplate{bibliography item}{%
+    \ifentrytype{book}
+    {\setbeamertemplate{bibliography item}{\faBook}
+    }
+    {\ifentrytype{online}
+        {\setbeamertemplate{bibliography item}{\faGlobe}
+        }
+        {\setbeamertemplate{bibliography item}[article]
+        }
+        }%
+    \usebeamertemplate{bibliography item}
+}
+
+\defbibenvironment{bibliography}
+{\list{}
+    {\settowidth{\labelwidth}{\usebeamertemplate{bibliography item}}%
+        \setlength{\leftmargin}{\labelwidth}%
+        \setlength{\labelsep}{\biblabelsep}%
+        \addtolength{\leftmargin}{\labelsep}%
+        \setlength{\itemsep}{\bibitemsep}%
+        \setlength{\parsep}{\bibparsep}}}
+{\endlist}
+{\item}
+
+
+\setbeamercolor{bibliography item}{fg=struct-color,bg=bg-color}
+\setbeamercolor{bibliography entry author}{fg=text-color,bg=bg-color}
+\setbeamercolor{bibliography entry note}{fg=text-color,bg=bg-color}
+\setbeamerfont{bibliography item}{size=\footnotesize}
+\setbeamerfont{bibliography entry author}{size=\footnotesize}
+
+\titlegraphic{
+    %\flushright \includegraphics[height=1cm]{../ikbfu-logo.png}
+\begin{figure}[h]
+    \centering
+    \begin{minipage}{.5\textwidth}
+        \centering
+        \includegraphics[width=0.3\textwidth]{../lab_logo_v6_ba.png}
+    \end{minipage}%
+    \begin{minipage}{.5\textwidth}
+        \centering
+        \includegraphics[width=0.5\linewidth]{../ikbfu-logo.png}
+    \end{minipage}
+\end{figure}
+
+}
+
+\newcommand{\ProofBegin}{ \structure{$\triangleleft$} }
+\newcommand{\ProofEnd}{ \structure{$\triangleright$} }
+\newcommand{\MyImplies}{ \structure{$\implies$} }
+
+\uselanguage{russian}
+\languagepath{russian}
