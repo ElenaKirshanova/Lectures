@@ -79,6 +79,7 @@
 \newcommand{\Id}{\ensuremath{I}}
 \newcommand{\transpose}{\mkern0.7mu^{\mathsf{ t}}}
 \newcommand*{\ScProd}[2]{\ensuremath{\langle#1\mathbin{,}#2\rangle}} %Scalar Product
+\newcommand*\norm[1]{\left\lVert#1\right\rVert}
 
 \pretolerance=1000
 
@@ -94,11 +95,11 @@
 \begin{document}
 	{\noindent
 		\textsc{БФУ им. И. Канта -- Криптография на решётках}
-		\hfill {Е. Киршанова // 2024\\}
+		\hfill {Е. Киршанова // 2023\\}
 	\hrule
 	\begin{center}
 		{\Large\textbf{
-				\textsc{Практика № 1}  \\[5pt]  К сдаче: 19.01
+				\textsc{Практика № 5} \\[5pt] {25.03.24}
 		} }
 	\end{center}
 	\hrule \vspace{5mm}
@@ -106,17 +107,27 @@
 	\thispagestyle{empty}
 	
 	\vspace{0.2cm}
-	\section{Пример и контрпример решёток}
+	\section{Лемма из лекции}
+		Докажите, что
 		\begin{enumerate}
-			\item Покажите, что $a \ZZ + b\ZZ$ -- решётка для любых $a,b\in \QQ$
-			\item Покажите, что $\ZZ + \sqrt{2}\ZZ$ не является решёткой
+			\item Если $h(x)  =f(x+v)$, то 
+			\[
+				\hat{h}(y) = \hat{f}(y) \cdot e^{2\pi i \ScProd{v}{y}} \quad \forall v \in \RR^n.
+			\]
+			\item Если $h(x) = f(x) e^{2\pi i \ScProd{v}{x}}$, то 
+			\[
+				\hat{h}(y) = \hat{f}(y - v).
+			\]
 		\end{enumerate}
 		
-	\section{Лемма из лекции}
-		Докажите утверждение: для $B \in \RR^{n \times d}, B' \in \RR^{n \times d'}$
-	\[
-		L(B) = L(B') \impliedby d = d', \text{ и } \exists U \in \text{GL}_d(\ZZ) \; : \; B = B' U.
-		\]
 		
+	\section{Следствие из лекции}
+	Докажите, что 
+	\[
+	f(L) = \det(\hat{L}) \hat{f}(\hat{L}).
+	\]
+	Подсказка: сведите к PSF для $\ZZ^n$, рассматривая коэффициенты векторов решетки при произвольном базисе $B$, рассмотрите $h(x) = f(Bx)$.
+		
+	
 		
 \end{document}

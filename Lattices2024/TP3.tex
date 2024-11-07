@@ -1,0 +1,227 @@
+\documentclass[11pt]{exam}
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+
+
+\usepackage[margin=0.73in]{geometry}
+%\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{amscd,amsmath,amsthm}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+
+\usepackage{algorithmicx, enumitem, algpseudocode, algorithm, caption}
+\usepackage{tikz}
+\usetikzlibrary{automata}
+
+\usepackage{textcomp}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}
+
+\newtheorem{theorem}{Теорерма}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{definition}[theorem]{Определение}
+\newtheorem{claim}[theorem]{Утверждение}
+\newtheorem{fact}[theorem]{Факт}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+
+\newcommand{\nc}{\newcommand}
+\nc{\eps}{\varepsilon}
+\nc{\RR}{{{\mathbb R}}}
+\nc{\CC}{{{\mathbb C}}}
+\nc{\FF}{{{\mathbb F}}}
+\nc{\NN}{{{\mathbb N}}}
+\nc{\ZZ}{{{\mathbb Z}}}
+\nc{\PP}{{{\mathbb P}}}
+\nc{\QQ}{{{\mathbb Q}}}
+\nc{\UU}{{{\mathbb U}}}
+\nc{\OO}{{{\mathbb O}}}
+\nc{\EE}{{{\mathbb E}}}
+
+\newcommand{\bigO}{\mathcal{O}}
+
+\newcommand{\val}{\operatorname{val}}
+
+\newcommand{\wt}{\ensuremath{\mathit{wt}}}
+\newcommand{\Id}{\ensuremath{I}}
+\newcommand{\transpose}{\mkern0.7mu^{\mathsf{ t}}}
+\newcommand*{\ScProd}[2]{\ensuremath{\langle#1\mathbin{,}#2\rangle}} %Scalar Product
+\newcommand*\abs[1]{\left\lvert#1\right\rvert}
+\newcommand*\norm[1]{\left\lVert#1\right\rVert}
+
+\newcommand{\zvec}{\ensuremath{\mathbf{z}}}
+
+\pretolerance=1000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT STARTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tikz}
+\usetikzlibrary{automata}
+\DeclareMathOperator{\Vol}{Vol}
+
+\begin{document}
+	{\noindent
+		\textsc{БФУ им. И. Канта -- Криптография на решётках}
+		\hfill {Е. Киршанова // 2024\\}
+\hrule
+\begin{center}
+	{\LARGE
+			Лабораторная работа № 2 \\[5pt]
+			\textbf{Факторизация на решётках} \\[10pt]
+	 	{Дедлайн: 17.03.2024} 
+ 	} 
+\end{center}
+\hrule \vspace{5mm}
+	
+	\thispagestyle{empty}
+	
+	\vspace{0.2cm}
+	\section{Алгоритм факторизации Шнорра}
+	
+	Лабораторная работа вдохновлена недавнем пре-принтом К.П. Шнорра~\cite{Schnorr21}, вызвавший большой резонанс~\cite{twitter1,twitter2,stackexchange}. В частности, аннотация статьи утверждает, что ``This [атака] destroys the RSA cryptosystem.'' Суть этой лабораторной - попытаться факторизовать RSA модуль с помощью решёток. 
+	
+	Алгоритм имеет длинную историю~\cite{leogit}, мы будем придерживаться описания из~\cite{vera10}
+	
+	В основе алгоритма (как и для продвинутых алгоритмов Number Field Sieive), лежит идея поиска пар $(x,y)$, удовлетворяющих 
+	\begin{align} \label{eq:congruence}
+	x^2 \equiv y^2 \bmod N.
+	\end{align}
+	\noindent Если $x \neq \pm y \bmod N$, то вычисление $\gcd(N, x+y)$ даст нетривиальный делитель $N$. Метод Шнорра ищет такие пары с доп. условие гладкости.
+	
+	Число называется \emph{$B$-гладким}, если все его простые делители меньше $B$. Обозначим $p_i$--$i$-ое простое число и зафиксируем некоторое целое $d>1$. Основная вычислительная задача алгоритма Шнорра состоит в поиске четверок $(u,v,k,\gamma)$, таких что 1. $u,v, k$--$p_d$-гладкие; 2. $\gamma \geq 1$ -- целое; 3. выполняется Диофантово уравнение
+	\[
+		u = v + kN^\gamma.
+	\]
+	\noindent Эти четверки будут находится с помощью коротких векторов решетки специального вида. А именно, рассмотри решетку, порожденную столбцами матрицы $A$:
+	\[
+	A = \begin{pmatrix}
+	\ln p_1 & 0 & \ldots & 0  & 0 \\
+	0 & \ln p_2 & \ldots & 0  & 0\\
+	\vdots & \vdots & \ddots & \vdots & \vdots\\
+	0 & 0 & \ldots & \ln p_d & 0 \\
+	C \ln p_1 & C \ln p_2 & \ldots & C \ln p_d & C \ln N
+	\end{pmatrix} \in \ZZ^{d+1 \times d+1},
+	\] 
+	\noindent где $C$--некая (достаточно большая) константа. Для вектора $\zvec \in \ZZ^{d+1}$, справедливо
+	\[
+		A\zvec = \begin{pmatrix}
+		z_1 \ln p_1 \\
+		\vdots \\
+		z_d \ln p_d \\
+		C (\sum_i z_i \ln p_i + z_{d+1} \ln N).
+		\end{pmatrix}
+	\]
+	Если мы будем ассоциировать с вектором $\zvec$, элементы $u, k, \gamma$ следующим образом
+	\[
+		 u = \prod_{z_i > 0} p_i^{z_i}, \quad k = \prod_{z_i < 0} p_i^{-z_i} \quad \text{ и } \quad \gamma = \abs{z_{d+1}},
+	\] 	
+	то 
+	\[
+		\norm{A\zvec}_1 = \sum_i^{d} \abs{z_i} \ln p_i  + C \abs{\sum_i^{d} z_i \ln p_1 - \abs{z_{d+1}} \ln N},
+	\]
+	и
+	\[
+	\norm{A\zvec}_1 = \ln u + \ln k  + C \abs{\ln u  - \ln(k N^\gamma)}.
+	\]
+	
+	Отсюда, если $\norm{A\zvec}_1$ -- мала, то можно доказать следующее утверждение (см.~\cite{vera10} для доказательства):
+	
+	Если $\norm{A\zvec}_1 \leq 2C + 2 \sigma \ln p_d - \gamma \ln N$, то $\abs{u - kN^\gamma} < p_d^\sigma$.
+	
+	Делаем вывод: чтобы найти четверку $(u,v,k,\gamma)$, необходимо найти короткий вектор в решетке, порожденной  столбцами $A$. 
+	Как найти из такой четверки $(x,y)$, удовлетворяющие~\ref{eq:congruence}?
+	
+	Найдем $d+1$ четверок  $(u,v,k,\gamma)$.  Для каждой такой четверки положим $a_{i,j} = z_j$ для $z_j >0$ (те $z_j$, что участвуют в записи $u_i$), а за $b_{i,j}$ обозначим степени в разложении $v_i = u_i - k_iN^\gamma_i = \prod_i p_i^{b_i,j}$ (для $i \leq d+1$). Обозначим далее вектора $\mathbf{a}_i = (a_{i,1}, \ldots, a_{i,d})$, $\mathbf{b}_i = (b_{i,1}, \ldots, b_{i,d})$. Всего имеем $(d+1)$ таких векторов, которые будем записывать в матрицу $M \in\ZZ^{d \times d+1}$ по столбцам.
+	
+	Для всякого вектора $\mathbf{c} \in \{0,1\}^{d+1}$, удовлетворяющего
+	\[
+		\mathbf{c}  \cdot M \equiv 0 \bmod 2, 
+	\]
+	положим
+	\[
+	 	x = \prod_{j=1}^d p_j^{\sum_{i=1}^{d+1} c_i (a_{i,j}+b_{i,j})/2} \bmod N \quad \quad	y = \prod_{j=1}^d p_j^{\sum_{i=1}^{d+1} c_i a_{i,j} } \bmod N.
+	\]
+ 	Если $x \neq \pm y \bmod N$, вычислим нетривиальный делитель $N$ как $\gcd(N, x+y)$.
+ 	
+	\subsection{Предложение Шнорра 2021}
+	Алгоритм, описанный выше, требует поиска нескольких (минимум $d+1$) коротких векторов для решетки, порожденной матрицей $A$. Для этого, например, можно использовать алгоритм просеивания, возвращающий (почти) все короткие вектора решетки~\cite{g6k} (см \textsf{examples/all\_short\_vectors.py}).
+	
+	Шнорр в~\cite{Schnorr21} предлагает рандомизировать $A$ следующим образом. Выбираем случайную перестановку $f:[1,d] \rightarrow [1,d] $ и строим $A'$
+	\[
+	A' = 
+	\begin{pmatrix}
+		N f(1) & 0 &  \ldots & 0 & 0 \\
+		0 & N f(2) & \ldots & 0 & 0 \\
+		\vdots & \vdots & \ddots & \vdots & 0 \\
+		0 & 0 & \vdots & N f(n)  & 0 \\
+		C N \ln p_1 &C  N \ln p_2 & \ldots & C N \ln p_d & CN \ln NД,
+	\end{pmatrix}
+	\]
+	для какого-то (большого) $C$. Найдя короткий вектора этой решетки $A\zvec$, ``уберем'' скаляр $C$, положив $\zvec' = \zvec / C$. Представим
+	\[
+		u = \prod_{i: \zvec'_i >0} p_i^{\zvec'_i} \quad \quad k = \prod_{i: \zvec'_i <0} p_i^{-\zvec'_i}.
+	\] 
+	Из найденных значений $(u,v)$ строим $(x,y)$ аналогично процедуре выше, \emph{если} $(u - kN)$ --- $p_d-$гладкое число.
+
+
+	
+	
+	\subsection{Задание}
+	
+	Используя \textbf{любой} из подходов и их улучшений (смотрим ссылки), факторизовать 30-битный RSA-модуль $N$ (то есть $N = pq$, где $p \neq q$ -- простые числа по $\approx$15 бит каждое).
+	
+	\textbf{Бонус.} Команде\footnote{Команда состоит из 1-2 человек},  успешно факторизовавшей 80-битный RSA-модуль $N$ алгоритмом Шнорра, положен +1 балл на экзамене.
+	
+	\begin{thebibliography}{9}
+		\bibitem{Schnorr21}
+		Claus Peter Schnor.
+		\textit{Fast Factoring Integers by SVP Algorithms}. \url{https://eprint.iacr.org/2021/232.pdf}		
+		
+		\bibitem{twitter1}
+		\url{https://twitter.com/inf\_0\_/status/1367376526300172288}
+		
+		\bibitem{twitter2}
+		\url{https://twitter.com/kennyog/status/1367132559117848583}
+	
+		\bibitem{stackexchange}
+		\url{https://crypto.stackexchange.com/questions/88582/does-schnorrs-2021-factoring-method-show-that-the-rsa-cryptosystem-is-not-secur/88647#88647}
+		
+		\bibitem{leogit}
+		\url{https://github.com/lducas/SchnorrGate}
+		
+		\bibitem{vera10}
+		Antonio Vera.
+		\textit{A note on integer factorization using lattices}
+		\url{https://arxiv.org/pdf/1003.5461.pdf}
+		
+		\bibitem{g6k}
+		\url{https://github.com/fplll/g6k}
+	\end{thebibliography}	
+		
+\end{document}

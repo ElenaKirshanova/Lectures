@@ -98,7 +98,7 @@
 	\hrule
 	\begin{center}
 		{\Large\textbf{
-				\textsc{Практика № 1}  \\[5pt]  К сдаче: 19.01
+				\textsc{Практика № 4} \\[5pt] {19.03.24}
 		} }
 	\end{center}
 	\hrule \vspace{5mm}
@@ -106,17 +106,18 @@
 	\thispagestyle{empty}
 	
 	\vspace{0.2cm}
-	\section{Пример и контрпример решёток}
+	\section{Свойства дуальной решетки}
+	Докажите следующие свойства дуальных решеток
 		\begin{enumerate}
-			\item Покажите, что $a \ZZ + b\ZZ$ -- решётка для любых $a,b\in \QQ$
-			\item Покажите, что $\ZZ + \sqrt{2}\ZZ$ не является решёткой
+			\item Пусть $B$ -- базис $L$. Тогда $\hat{B} = B\cdot (B^t B)^{-1}$ -- базис $\hat{L}$.
+			\item $\hat{\hat{L}} = L$
+			\item $\det(\hat{L}) = \frac{1}{\det L}$
+			\item Для $L_1, L_2 \subseteq \ZZ^n$, справедливо $\widehat{L_1+L_2} = \widehat{L_1} \cap \widehat{L_2} $ 
+			%\item Для квадратной $B = QR$, справедливо $\hat{B}J = QJ (JR^{-1}J)$, где $J-$ матрица с единицами на побочной диагонали
+
 		\end{enumerate}
 		
-	\section{Лемма из лекции}
-		Докажите утверждение: для $B \in \RR^{n \times d}, B' \in \RR^{n \times d'}$
-	\[
-		L(B) = L(B') \impliedby d = d', \text{ и } \exists U \in \text{GL}_d(\ZZ) \; : \; B = B' U.
-		\]
+
 		
 		
 \end{document}
