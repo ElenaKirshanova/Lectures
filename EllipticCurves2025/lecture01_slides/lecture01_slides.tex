@@ -193,13 +193,17 @@
     \[
     \Delta = -d_2^2d_8 - 8d_4^3-27d_6^2+9d_2d_4d_6.
     \]
+    
+    \ProofBegin
+    применение общей теории\footnote{Gelfand I.M., Kapranov M.M., Zelevinsky A.V. - Discriminants, Resultants, and Multidimensional Determinants (1994)} к уравнению Вейерштрасса
+    \ProofEnd
 \end{frame}
 
 
 \begin{frame}{Классификация уравнений Вейерштрасса}
     \begin{tcolorbox}[colframe=title-and-section-color!120, colback=title-and-section-color!5, title=Теорема \text{[Silverman, Thm. 1.4]}, center title]
         \begin{enumerate}
-            \item $\Delta \neq 0 \iff$ кривая гладкая ($\implies$ задаёт эллиптическую кривую) 
+            \item $\Delta \neq 0 \iff$ кривая гладкая ($\implies$ эллиптическая) 
             \item $\Delta = 0, c_4 \neq 0 \iff$ кривая обладает узлом (node) 
             \item $\Delta = c_4 = 0 \iff$ кривая обладает точкой перегиба (cusp)
         \end{enumerate}
@@ -279,6 +283,14 @@
             \end{tikzpicture}
         \end{figure}
     \end{block}
+\end{frame}
+
+\begin{frame}{Эллиптическая кривая над конечным полем}
+	\begin{block}{$y^2 = x^3 - x$ над $\mathbb{F}_{197}$}
+		\begin{center}
+			\includegraphics[scale=0.25]{../images/ec_plot_over_Fp}	
+		\end{center}
+	\end{block}
 \end{frame}
 
 \begin{frame}{Изоморфизмы эллиптических кривых}
