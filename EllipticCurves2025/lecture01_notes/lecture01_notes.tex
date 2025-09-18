@@ -3,7 +3,8 @@
 %---enable russian----
 
 \usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
+%\usepackage[russian]{babel}
+\usepackage[english,main=russian]{babel}
 
 
 
@@ -26,6 +27,10 @@
 \usetikzlibrary{chains, matrix, positioning, scopes, patterns, shapes}
 \usepackage{pgfplots, subfigure}
 \usetikzlibrary{automata}
+
+\usepackage[backend=biber,firstinits=true,hyperref=true,style=numeric-comp]{biblatex}
+
+\bibliography{../biblio}
 
 %%%%%%%%%%%%%%%%%%%%%
 % Handling comments and versions %%%
@@ -220,7 +225,9 @@
 \Delta = -d_2^2d_8 - 8d_4^3-27d_6^2+9d_2d_4d_6.
 \]
 
-\begin{theorem}[Silverman, Th.~1.4]
+Данные формулы можно получить применив общую теорию дискриминантов~\cite[Ch.~13]{GelfandKapranovZelevinsky1994} к уравнению Вейерштрасса. 
+
+\begin{theorem}[\cite{Silverman2009}, Prop.~1.4]
 ~
 \begin{enumerate}
 	\item $\Delta \neq 0 \iff$ кривая гладкая ($\implies$ задаёт эллиптическую кривую) 
@@ -379,22 +386,18 @@ a_1 \neq 0 \implies (x, y) \mapsto (x+a_2, y)
 \[
 j(E) = \frac{c_4^3}{\Delta}
 \] или для краткой формы  $j(E) = -1728 \frac{4a^3}{\Delta}$.
-\begin{center}
-%	\begin{tcolorbox}[enhanced,hbox,colback=title-and-section-color!5,colframe=title-and-section-color!120,title=Теорема,center title]
 \begin{theorem}
 	$E_1 \simeq E_2$ над $\overline{K} \iff j(E_1)=j(E_2)$.
 \end{theorem}
-%	\end{tcolorbox}	
-\end{center}
-Определение изоморфности кривых над полем $K$: проверка условий теоремы. Если выполняется -- составление и решение системы уравнений используя \eqref{eq:isom}.
+Теорема даёт необходимые условия изоморфности, но не достаточности, так как кривые могут быть изоморфны над алгебраическим замыканием поля, но неизоморфными над базовым полем.
 
-\subsection{Литература}
-	\begin{enumerate}
-		\item Washington L.C. "Elliptic curves number theory and cryptography"%. 2ed (2008)
-		\item Menezes A. "Elliptic curve public key cryptosystems"
-		\item Hankerson D., Menezes A., Vanstone S. "Guide to elliptic curve cryptography"
-		\item Blake I., Seroussi G., Smart N. "Elliptic Curves in Cryptography"
-		\item Silverman J.H. "The Arithmetic of Elliptic Curves"%, 2ed (2009)
-	\end{enumerate}
+Таким образом определение изоморфности кривых над полем $K$ состоит в проверке условий теоремы, а затем, если условия теоремы выполняются, то составлении и решении системы уравнений, используя \eqref{eq:isom}.
+
+\nocite{Blake1999}
+\nocite{Washington2008}
+\nocite{Menezes1993}
+\nocite{HankersonMenezesVanstone2006}
+\nocite{Silverman2009}
+\printbibliography
 
 \end{document}
