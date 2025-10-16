@@ -1,0 +1,266 @@
+% !TeX program = xelatex
+
+\documentclass[11pt]{exam}
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc}
+%\usepackage[russian]{babel}
+\usepackage[english,main=russian]{babel}
+
+
+\usepackage{cmap}
+\usepackage{fontspec}
+\usepackage{ulem}
+
+\setmainfont{Roboto}
+\setsansfont{Roboto}
+\setmonofont{Roboto Mono}
+
+
+\usepackage[margin=0.73in]{geometry}
+%\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{amscd,amsmath,amsthm}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+
+\usepackage{algorithmicx, enumitem, algpseudocode, algorithm, caption}
+\usepackage{tikz}
+\usetikzlibrary{arrows,decorations.pathmorphing,backgrounds,calc}
+\usetikzlibrary{chains, matrix, positioning, scopes, patterns, shapes}
+\usepackage{pgfplots, subfigure}
+\usetikzlibrary{automata}
+
+\usepackage{fontawesome5}
+
+
+\usepackage[most]{tcolorbox}
+\usepackage{varwidth}
+
+\usepackage[backend=biber,firstinits=true,hyperref=true,style=numeric-comp]{biblatex}
+
+\definecolor{text-color}{RGB}{0,0,0} %%% text color
+\definecolor{subsection-color}{RGB}{40, 166, 103} %%% subsection color
+\definecolor{title-and-section-color}{RGB}{61, 147, 221} %%% title and section color
+\definecolor{bg-color}{RGB}{254, 255, 244} %%% background color
+\definecolor{struct-color}{RGB}{224, 62, 73} %%% structure
+
+\definecolor{color-cont-bg}{RGB}{204, 239, 171}
+\definecolor{block-green-color-bg}{RGB}{204, 239, 171}
+
+\definecolor{plot-red-color}{RGB}{224, 62, 73}
+\definecolor{plot-green-color}{RGB}{77, 158, 99}
+\definecolor{plot-blue-color}{RGB}{61, 147, 221}
+
+\definecolor{box-red-color}{RGB}{224, 62, 73}
+\definecolor{box-green-color}{RGB}{77, 158, 99}
+\definecolor{box-blue-color}{RGB}{61, 147, 221}
+
+\bibliography{../biblio}
+
+%%%%%%%%%%%%%%%%%%%%%
+% Handling comments and versions %%%
+%%%%%%%%%%%%%%%%%%%%%
+
+%\renewcommand{\comment}[1]{\texttt{[#1]}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{proposition}[theorem]{Proposition}
+
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+
+\newcommand{\nc}{\newcommand}
+\nc{\eps}{\varepsilon}
+\nc{\RR}{{{\mathbb R}}}
+\nc{\CC}{{{\mathbb C}}}
+\nc{\FF}{{{\mathbb F}}}
+\nc{\NN}{{{\mathbb N}}}
+\nc{\ZZ}{{{\mathbb Z}}}
+\nc{\PP}{{{\mathbb P}}}
+\nc{\QQ}{{{\mathbb Q}}}
+\nc{\UU}{{{\mathbb U}}}
+\nc{\OO}{{{\mathbb O}}}
+\nc{\EE}{{{\mathbb E}}}
+
+\newcommand{\val}{\operatorname{val}}
+\newcommand{\wt}{\ensuremath{\mathit{wt}}}
+\newcommand{\Id}{\ensuremath{I}}
+\newcommand{\transpose}{\mkern0.7mu^{\mathsf{ t}}}
+\newcommand*{\ScProd}[2]{\ensuremath{\langle#1\mathbin{,}#2\rangle}} %Scalar Product
+\renewcommand{\char}{\ensuremath{\mathsf{char}}}
+
+\DeclareMathOperator{\Vol}{Vol}
+
+\newcommand*{\structure}[1]{\textcolor{struct-color}{#1}}
+
+%\pretolerance=1000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT STARTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+{\noindent
+\textsc{БФУ им. И. Канта -- Компьютерный практикум по криптографии на эллиптических кривых }\\[5pt]
+Преподаватель {С. Новоселов}   \hfill{Осень 2025\\}
+\hrule
+\begin{center}
+	{\LARGE\textbf{
+			Лекция 8. Тест на простоту на эллиптических кривых \\[5pt]
+		}}
+
+\end{center}
+\hrule \vspace{5mm}
+
+\thispagestyle{empty}
+
+Тесты на простоту используются в криптографии для генерации простых чисел как, например, в криптосистеме RSA. Кроме того, генерация групп с простым порядком для криптосистем основанных на сложности решения дискретного логарифма также требует проверки порядка группы на простоту. Тест на простоту на эллиптических кривых был предложен  Шафи Гольдвассер и Джо Килианом~\cite{GoldwasserKilian1999} в 1986 году и является на сегодняшний день самым быстрым алгоритмов доказательства простоты числа.
+
+\section{Тест на простоту Миллера-Рабина}
+Тест Миллера-Рабина основан на следующей теореме.
+
+\begin{center}
+	\begin{tcolorbox}[enhanced,hbox,colback=title-and-section-color!5,colframe=title-and-section-color!120,title=Малая теорема Ферма,center title]
+		\begin{varwidth}{\textwidth}
+			\begin{center}
+				$p$ -- простое, $p \nmid a$ \structure{$\implies$} $a^{p-1} - 1 \equiv 0 \pmod{p}$.
+			\end{center}
+		\end{varwidth}
+	\end{tcolorbox}
+\end{center}
+
+Число~$p-1$ можно записать как $p-1 = 2^k \cdot q$, где~$q$ -- нечётное. Значит $a^{p-1} - 1$ можно представить в виде:
+\begin{equation*}
+	\begin{split}
+		a^{p-1} - 1 & = (a^{2^{k-1} \cdot q} - 1) \cdot (a^{2^{k-1} \cdot q} + 1) = \\&= (a^q - 1) (a^{2^{k-1} \cdot q} + 1) \cdot \ldots \cdot (a^{2 \cdot q} + 1) \cdot (a^q + 1)
+	\end{split}
+\end{equation*}
+Следовательно, если~$p$ -- простое, то по малой теореме Ферма $p$ делит один из множителей~$a^{p-1} - 1$, т.е. выполняется одно из условий:
+\begin{equation}
+	\label{Miller-Rabin_conditions}
+	a^q \equiv 1, a^{2^{k-1} \cdot q} \equiv -1, \ldots, a^{q} \equiv -1.
+\end{equation}
+С другой стороны, если~$p$ -- не простое, то существует~$a$ такое, что все сравнения~\eqref{Miller-Rabin_conditions} не выполняются. Число $a$ т.ч. $a^q \not\equiv 1, a^{2^{k-1} \cdot q} \not\equiv -1, \ldots, a^{q} \not\equiv -1$ называется \structure{свидетелем}, что $n$ -- составное.
+
+\structure{Идея} алгоритма Миллера-Рабина для проверки $n$ на простоту заключается в поиске таких свидетелей среди случайных чисел. Если среди достаточно большого случайных чисел~$a$ такого свидетеля не нашлось, то с большой вероятностью число простое.
+
+\begin{algorithm}
+	\caption{Алгоритм Миллера-Рабина}\label{alg:miller-rabin}
+	\begin{algorithmic}
+		\Require $n, a\in \mathbb{Z}$
+		\Ensure «составное» или «возможно простое»
+		\State$n-1 = 2^kq,\ q$ -- нечётное
+		\State $a = a^q\bmod n$
+		\If{$a \equiv 1\bmod n$}
+		\Return <<возможно простое>>
+		\EndIf
+		\For{$i = 0, \ldots, k-1$}
+		\If{$a \equiv -1 \bmod{n}$}
+		\Return <<возможно простое>>
+		\EndIf
+		\State $a = a^2 \bmod{n}$
+		\EndFor
+		\Return <<составное>>
+	\end{algorithmic}
+\end{algorithm}
+
+Более точно, алгоритм выполняется $K$ раз для случайных~$a \in [2, n-2]$. Вероятность ошибки, при которой число~$p$ -- не простое, равна~$2^{-2 K}$. Время работы алгоритма: $\mathcal{O}(K \log^3{n})$.
+
+Алгоритм можно сделать \structure{детерминированным} (предполагая GRH) перебрав все $a ≤ 2 \ln^2 n$. Сложность в этом случае будет равна~$\mathcal{O}(\log n)$. Для маленьких $n$ достаточно перебрать только небольшое количество чисел~$a$. Например, для $n \leq 2^{64}$ достаточно проверить $a = 2$, $3$, $5$, $7$, $11$, $13$, $17$, $19$, $23$, $29$, $31$ и $37$.
+
+\section{Тест на простоту на эллиптических кривых}
+\structure{Задача:} по данному (большому) числу $p$ определить, является ли $p$ простым числом и, если да, вывести доказательство (\structure{сертификат}) простоты $p$.
+
+Идея алгоритма Гольдвассер-Килиана состоит в заменене группы $\mathbb{Z}_n^\times$ как в алгоритме Миллера-Рабина или тесте
+Поклингтона-Леммера на $E(\mathbb{Z}_n)$.
+
+Число точек на эллиптической кривой при такой замене ведёт себя как случайное число из интервала Хассе-Вейля. Более точно, имеет место следующая теорема, доказанная Ленстрой в 1987 году.
+\begin{center}
+	\begin{tcolorbox}[enhanced,hbox,colback=title-and-section-color!5,colframe=title-and-section-color!120,title= Теорема о распределении порядков случайных ЭК,center title]
+		\begin{varwidth}{\textwidth}
+			\begin{center}
+				Пусть $p>5$ -- простое, $S \subseteq [ p+1-\lfloor\sqrt{p}\rfloor, p+1+\lfloor\sqrt{p}\rfloor ]$ и $A, B \leftarrow \mathbb{F}_p$. Тогда $\exists\ c$ -- константа, т.ч.
+				\[
+				\Pr\left[\#E_{A,B}(\mathbb{F}_p) \in S \right] > \frac{c}{\log p} \cdot \frac{|S|-2}{2\lfloor\sqrt{p}\rfloor + 1},
+				\]
+				где $\#E_{A,B}(\mathbb{F}_p)$ -- число точек на $E_{A,B}: y = x^3 + Ax+B$.
+			\end{center}
+		\end{varwidth}
+	\end{tcolorbox}	
+\end{center}
+
+Имея точку $L \in E(\mathbb{Z}_n)$, можно с помощью перейти к $L_p = L \bmod{p} \in E(\mathbb{Z}_p)$ с сохранением групповой операции. Более точно имеет место следующая лемма. 
+\begin{lemma}
+\label{lemma:points_En_to_Ep}
+Пусть $n \in \mathbb{Z},\ 2,3\nmid \ n; p>3$ -- простой делитель $n$ и $4A^3 + 27B^2 \not\equiv 0\bmod p$.
+\begin{itemize}
+	\item Для любого $x \in \mathbb{Z}/n\mathbb{Z}$ пусть $x_p := x\bmod p$.
+	\item Для любой точки $L = (x,y) \in E_{A,B}( \mathbb{Z}/n\mathbb{Z})$ пусть $L_p = (x_p, y_p) \in E_{A,B}(\mathbb{F}_p)$.  %$\infty_p = \infty_x \in E_{A, B}(\mathbb{Z}/n\mathbb{Z})$.
+\end{itemize}  
+
+Тогда $\forall L, M \in E_{A,B}(\mathbb{Z}/n\mathbb{Z})$, если $L+M$ определено, то $(L+M)_p = L_p+M_p$.
+\end{lemma}
+
+Для доказательства простоты числа мы будем рекурсивно применять следующий критерий простоты.
+
+   \begin{center}
+	\begin{tcolorbox}[enhanced,hbox,colback=title-and-section-color!5,colframe=title-and-section-color!120,title= Теорема (Критерий простоты),center title]
+		\begin{varwidth}{\textwidth}
+			\label{t3}
+			Положим:
+			\begin{itemize}
+				\item $n \in \mathbb{Z}$, $A, B \in \mathbb{Z}/n\mathbb{Z}$
+				\item $2,3 \nmid n$, $\gcd(4A^3 + 27B^2, n)=1$
+				\item $L \in E_{A,B}(\mathbb{Z}/n\mathbb{Z})$, $L\neq \infty$
+			\end{itemize}
+			\vspace{0.5em}
+			Тогда:
+			
+			\vspace{0.1em}
+			%\begin{center}
+			$\exists$ простое $q > (n^{1/4} + 1)^2$, т.ч. $qL = \infty$ \structure{$\implies$} $n$ -- простое.
+			%\end{center}
+		\end{varwidth}
+	\end{tcolorbox}
+\end{center}
+\structure{$\triangleleft$}
+От противного: пусть $n$ -- составное \structure{$\Rightarrow$} $\exists p > 3$, т.ч. $p \mid n$, $p$ -- простое. Т.к. $p$ -- простое, то~$p \leq \sqrt{n}$. Заметим что $\gcd(4A^3 + 27B^2, p) \neq 0 \bmod p$, иначе получается противоречие с условием $\gcd(4A^3 + 27B^2, n) = 1$. По Лемме~\ref{lemma:points_En_to_Ep} имеем $L_p \in E_{A,B}(\mathbb{F}_p)$ и $q\cdot L_p = (qL)_p = \infty_p = \infty$ \structure{$\Rightarrow$} $\operatorname{ord}(L_p) \mid q$ \structure{$\Rightarrow$} $\operatorname{ord}(L_p) = q$, т.к. $q$ -- простое. По условию теоремы~$(n^{1/4} + 1)^2 < q = \operatorname{ord}(L_p) \leq \#E_{A,B}(\mathbb{F}_p) < (\sqrt{p} + 1)^2$. Следовательно, $p > \sqrt{n}$. Это противоречие, значит, $n$ -- простое.
+\structure{$\triangleright$}
+
+$\ldots \ldots \ldots$
+
+\nocite{Blake1999}
+\nocite{Washington2008}
+\nocite{Menezes1993}
+\nocite{HankersonMenezesVanstone2006}
+\nocite{Silverman2009}
+\printbibliography
+
+\end{document}

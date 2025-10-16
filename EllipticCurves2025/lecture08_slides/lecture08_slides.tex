@@ -1,0 +1,371 @@
+% !TeX spellcheck = ru_RU-Russian
+% !TeX program = xelatex
+% !BIB TS-program = biber
+
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+\usepackage{pgfplots, subfigure}
+\usepackage{extarrows}
+
+\usepackage[backend=biber,firstinits=true,hyperref=true,style=numeric-comp]{biblatex}
+
+\usepackage{../beamerthemeec2020}
+{\footnotesize\bibliography{../biblio}}
+
+\title{Эллиптические кривые}
+\subtitle{Лекция 8. Тест на простоту на эллиптических кривых}
+\author{Семён Новосёлов}
+\institute{БФУ им. И. Канта}
+\date{2025}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Мотивация}
+	Тесты на простоту используются в криптографии для:
+	\vspace{0.5em}
+	\begin{itemize}
+	    \item генерации простых чисел, как в криптосистеме RSA
+	    \item генерации групп для криптосистем на DLOG (необходимы простые группы)
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{План}
+	\begin{enumerate}
+		\item Тест на простоту Миллера-Рабина
+		\item Доказательство простоты с помощью ЭК
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Тест на простоту Миллера-Рабина}%{Предварительные сведения}
+\begin{center}
+    \begin{tcolorbox}[enhanced,hbox,colback=title-and-section-color!5,colframe=title-and-section-color!120,title=Малая теорема Ферма,center title]
+        \begin{varwidth}{\textwidth}
+            \begin{center}
+            $p$ -- простое, $p \nmid a$ \structure{$\implies$} $a^{p-1} - 1 \equiv 0 \pmod{p}$. 
+            \end{center}
+        \end{varwidth}
+    \end{tcolorbox}	
+\end{center}
+\begin{center}
+$p-1 = 2^k \cdot q$, $q$ -- нечётное\\
+\structure{$\Downarrow$}\\
+\end{center}
+\begin{equation*}
+\begin{split}
+    a^{p-1} - 1 &= (a^{2^{k-1} \cdot q} - 1) \cdot (a^{2^{k-1} \cdot q} + 1) =\\&= (a^q - 1) (a^{2^{k-1} \cdot q} + 1) \cdot \ldots \cdot (a^{2 \cdot q} + 1) \cdot (a^q + 1)
+\end{split}
+\end{equation*}
+\begin{itemize}
+    \item $p$ -- простое \structure{$\implies$} $p$ делит один из множителей, т.е. выполняется одно из условий:
+    \begin{equation}
+        \label{Miller-Rabin_conditions}
+        a^q \equiv 1, a^{2^{k-1} \cdot q} \equiv -1, \ldots, a^{q} \equiv -1
+    \end{equation}
+    \item $p$ -- не простое \structure{$\implies$} $\exists a:$ все сравнения \eqref{Miller-Rabin_conditions} не выполняются
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+    \structure{Идея:} для проверки $n$ на простоту выбираем случайное число $a$, $\gcd(a,n)=1$ и проверяем \eqref{Miller-Rabin_conditions} по модулю $n$.
+    
+    \begin{itemize}
+        \item Число $a$ т.ч. $a^q \not\equiv 1, a^{2^{k-1} \cdot q} \not\equiv -1, \ldots, a^{q} \not\equiv -1$ называется \structure{свидетелем}, что $n$ -- составное.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Алгоритм Миллера-Рабина}
+    \structure{Вход:} $n, a$.\\
+    \structure{Выход:} <<составное>>~или <<возможно простое>>
+    \begin{enumerate}
+        \item $n-1 = 2^kq,\ q$ -- нечётное
+        \item $a = a^q\bmod n$
+        \item \structure{if} {$a \equiv 1\bmod n$}:\\
+        \quad \structure{return} <<возможно простое>>
+        \item \structure{for} {$i = 0 \ldots k-1$}
+        \item \quad \structure{if} $a\equiv -1\bmod n$ \\
+        \quad \quad \structure{return} <<возможно простое>>
+        \item \quad $a = a^2\bmod n$
+        \item \structure{return} <<составное>>
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    Для проверки на простоту:
+    \vspace{0.5em}
+    \begin{itemize}
+        \item алгоритм выполняется $K$ раз для случайных $a \in [2, n-2]$
+        \item время работы: $O(K \log^3{n})$
+        \item вероятность ошибки: $2^{-2 K}$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Тест Миллера}    
+	Алгоритм можно сделать \structure{детерминированным} (предполагая GRH) перебрав все $a \leq 2 \ln^2{n}$.
+	
+	\vspace{0.5em}
+
+	\begin{itemize}
+		\item Сложность: $\widetilde{O}(\log^4{n})$.
+		\item Для маленьких $n$ достаточно перебрать только небольшое кол-во $a$.
+		\item Например, для $n \leq 2^{64}$ достаточно проверить $a = 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31$ и $37$. 
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Тест на простоту на эллиптических кривых}
+\structure{Задача:} По данному (большому) числу $p$ определить, является ли $p$ простым числом и, если да, вывести доказательство (\structure{сертификат}) простоты $p$.
+
+\vspace*{0.5em}
+
+\begin{itemize}
+    \item самый быстрый\footnote{на практике, сложность в худшем случае не известна} на сегодняшний день алгоритм предложен Goldwasser-Killan в 1986
+    \item с улучшениями время работы $=$ $\operatorname{poly}\log p$, проверка сертификата простоты: $O(\log^4 p)$
+    %\item \structure{детерминированные} алгоритмы (Cohen-Lenstra'1984) работают за \structure{квази}-полиномиальные от $\log p$ время $(\log p)^{O(\log\log p)}$
+    %\structure{$\implies$} пригодны только для небольших чисел $p$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+\item \structure{детерминированные} алгоритмы (Cohen-Lenstra'1984) работают за \structure{квази}-полиномиальное\footnote{если не использовать эвристики, как в детерминированной версии Миллера-Рабина} от $\log p$ время $(\log p)^{O(\log\log p)}$
+
+\structure{$\implies$} пригодны только для небольших чисел $p$.
+\end{itemize}
+
+\vspace{1em}
+\structure{Идея} алгоритма Goldwasser-Killan: заменить группу $\mathbb{Z}_n^\times$ как в алгоритме Миллера-Рабина или тесте Поклингтона-Леммера на $E(\mathbb{Z}_n)$.
+\end{frame}
+
+\begin{frame}{I. Предварительные сведения}
+	\begin{center}
+		\begin{tcolorbox}[enhanced,hbox,colback=title-and-section-color!5,colframe=title-and-section-color!120,title= Теорема о распределении порядков случайных ЭК,center title]
+			\begin{varwidth}{\textwidth}
+				\begin{center}
+					Пусть $p>5$ -- простое, $S \subseteq [ p+1-\lfloor\sqrt{p}\rfloor, p+1+\lfloor\sqrt{p}\rfloor ]$ и $A, B \leftarrow \mathbb{F}_p$. Тогда $\exists\ c$ -- константа, т.ч.
+					\[
+					\Pr\left[\#E_{A,B}(\mathbb{F}_p) \in S \right] > \frac{c}{\log p} \cdot \frac{|S|-2}{2\lfloor\sqrt{p}\rfloor + 1},
+					\]
+					где $\#E_{A,B}(\mathbb{F}_p)$ -- число точек на $E_{A,B}: y = x^3 + Ax+B$.
+				\end{center}
+			\end{varwidth}
+		\end{tcolorbox}	
+	\end{center}
+
+    \structure{$\triangleleft$} \structure{Док-во:} Lenstra'1987 \structure{$\triangleright$}
+\end{frame}
+
+\begin{frame}
+	Неформальная интерпретация теоремы:
+	\vspace{0.5em}
+	\begin{itemize}
+		\item число точек $E_{A,B}$ ведёт себя как случайное число из интервала $\left[p+1-\lfloor\sqrt{p}\rfloor, p+1+\lfloor\sqrt{p}\rfloor \right]$
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}
+\begin{block}{Лемма}
+    Пусть $n \in \mathbb{Z},\ 2,3\nmid \ n; p>3$ -- простой делитель $n$ и $4A^3 + 27B^2 \not\equiv 0\bmod p$.
+    \begin{itemize}
+        \item Для любого $x \in \mathbb{Z}/n\mathbb{Z}$ пусть $x_p := x\bmod p$.
+        \item Для любой точки $L = (x,y) \in E_{A,B}( \mathbb{Z}/n\mathbb{Z})$ пусть $L_p = (x_p, y_p) \in E_{A,B}(\mathbb{F}_p)$.  %$\infty_p = \infty_x \in E_{A, B}(\mathbb{Z}/n\mathbb{Z})$.
+    \end{itemize}  
+    
+    Тогда $\forall L, M \in E_{A,B}(\mathbb{Z}/n\mathbb{Z})$, если $L+M$ определено, то $(L+M)_p = L_p+M_p$.
+\end{block}
+\end{frame}
+
+\begin{frame}
+   \begin{center}
+	\begin{tcolorbox}[enhanced,hbox,colback=title-and-section-color!5,colframe=title-and-section-color!120,title= Теорема (Критерий простоты),center title]
+		\begin{varwidth}{\textwidth}
+			\label{t3}
+			Положим:
+			\begin{itemize}
+				\item $n \in \mathbb{Z}$, $A, B \in \mathbb{Z}/n\mathbb{Z}$
+				\item $2,3 \nmid n$, $\gcd(4A^3 + 27B^2, n)=1$
+				\item $L \in E_{A,B}(\mathbb{Z}/n\mathbb{Z})$, $L\neq \infty$
+			\end{itemize}
+			 \vspace{0.5em}
+			 Тогда:
+			 
+			 \vspace{0.1em}
+			%\begin{center}
+				$\exists$ простое $q > (n^{1/4} + 1)^2$, т.ч. $qL = \infty$ \structure{$\implies$} $n$ -- простое.
+			%\end{center}
+		\end{varwidth}
+	\end{tcolorbox}	
+\end{center}
+\end{frame}
+
+\begin{frame}
+\structure{$\triangleleft$}
+От противного: пусть $n$ -- составное \structure{$\Rightarrow$} $\exists p > 3$, т.ч. $p \mid n$, $p$ -- простое. Т.к. $p$ -- простое, то~$p \leq \sqrt{n}$.
+\begin{itemize}
+    \item Заметим: $\gcd(4A^3 + 27B^2, p) \neq 0 \bmod p$.\\Иначе: противоречие с $\gcd(4A^3 + 27B^2, n) = 1$.
+    \item Тогда по Лемме имеем $L_p \in E_{A,B}(\mathbb{F}_p)$ и $q\cdot L_p = (qL)_p = \infty_p = \infty$ \structure{$\Rightarrow$} $\operatorname{ord}(L_p) \mid q$ \structure{$\Rightarrow$} $\operatorname{ord}(L_p) = q$, т.к. $q$ -- простое.
+    \item Имеем:
+
+    $(n^{1/4} + 1)^2 < q = \operatorname{ord}(L_p) \leq \#E_{A,B}(\mathbb{F}_p) < (\sqrt{p} + 1)^2$.
+    \item \structure{$\implies$} $p > \sqrt{n}$.
+    \item Это противоречие, значит, $n$ -- простое. \structure{$\triangleright$}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{II. Алгоритм: тест на простоту}
+    \structure{Вкратце:} 
+    \begin{itemize}
+    	\item доказательство простоты $p$ сводим к доказательству простоты~$q \leq \frac{p}{2} + o(p)$
+    	\item рекурсивно применяем алгоритм для $p = q$, пока не получим достаточно малое значение $q$ -- такое, что \structure{детерминированные} тесты будут эффективны.
+    \end{itemize}
+    
+    \vspace{0.5em}
+    
+    По критерию простоты задача сводится к построению для~$p$, кривой $E_{A,B}$ над $\mathbb{F}_p$ с точкой $L$ порядка $q \approx p/2$.
+\end{frame}
+
+\begin{frame}{Алгоритм 1. Gen\_curve}
+    \structure{Вход:} $p$\\
+    \structure{Выход:} $A,B,q$
+    \begin{enumerate}
+        \item $A, B \xleftarrow{\$} \mathbb{F}_p$, т.ч. $(4A^3 + 27B^2, p) = 1$ и $\#E(\mathbb{F}_p) \equiv 0 \pmod{2}$
+        \item $q = \#E_{A,B}(\mathbb{F}_p) / 2$\\
+        \structure{if} {$2\ |\ q$ или $3\ |\ q$}\\
+        \quad перейти к шагу 1  
+        \item Запустить вероятностный алгоритм проверки $q$ на простоту (Миллера—Рабина) на $O(\log p)$ шагов (т.е. чтобы вероятность ошибки была $\sim 2^{-\log p}$).
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Алгоритм 2. Find\_point}
+    \structure{Вход:} $p, q, A, B$.\\
+    \structure{Выход:} точка $L \in E(\mathbb{F}_p)$ порядка $q$.
+    \begin{enumerate}
+        \item $x \xleftarrow{\$} \mathbb{F}_p$ т.ч. $x^3+Ax+B$ -- квадрат в $\mathbb{F}_p$
+        \item $y \xleftarrow{\$} \left\{ \pm \sqrt{x^3 + Ax+B} \right\}, L:=(x,y)$
+        \item \structure{if} {$q \cdot L \neq \infty$}:\\
+        \quad перейти к шагу 1.
+        \item \structure{return} L
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Алгоритм 3. Prove\_prime}
+        \structure{Вход:} $p$, $LB$ -- число бит в числе такое, что детерминированные алгоритмы простоты эффективны для этого числа.\\
+        \structure{Выход:} сертификат простоты
+        
+        \begin{enumerate}
+            \item $i = 0, p_0 = p$
+            \item \structure{while} {$p_i > 2^{LB}$}:
+            \begin{enumerate}
+                \item[2.1] $(A_i, B_i), p_{i+1} \leftarrow \text{Gen\_curve}(p_i)$
+                \item[2.2] $L_i \leftarrow \text{Find\_point} (p_i, p_{i+1}, A, B)$
+                \item[2.3] $i := i+1$
+                \item[2.4] \structure{if} {$i \geq (\log p)^{\log\log p}$ или $2\ |\ p_i$ или $3\ |\ p_i$}\\
+                \quad перейти к шагу 1
+            \end{enumerate}
+            \item проверить $p_i$ на простоту детерминированным алгоритмом\\
+            \structure{if} {не доказано, что $p_i$ -- простое}:\\
+            \quad перейти к шагу 1
+            \item \structure{return} $C = ((A_0, B_0), L_0, p_1, ..., (A_{i-1}, B_{i-1}), L_{i-1}, p_{i-1})$
+        \end{enumerate}
+\end{frame}
+
+\begin{frame}{Корректность}
+\begin{itemize}
+    \item $p$ -- простое. Тогда выход $C$ — сертификат:  <<свидетельство>> простоты $p$. На шагах 2.1, 2.2 мы получаем кривую $E_{A_i, B_i}$  и точку $L_i$ порядка $p_{i+1}$, удовлетворяющие условиям Критерия простоты.
+    \item $p$ — составное. Тогда получим делители $p$ на шаге 3 (или раньше) алгоритма Find\_point(), аналогично алгоритму факторизации. 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Сложность}
+\begin{block}{Алг. 1. Gen\_curve}
+Самый затратный шаг -- вычисление $\#E_{A,B}(\mathbb{F}_p)$ \\\structure{$\implies$}
+алгоритм Схоофа-Элкиса-Аткина: $\widetilde{O}(\log^4 p)$.
+\end{block}
+\begin{block}{Алг. 2. Find\_point}
+Самые затратные шаги:
+
+Шаг 1: $x \xleftarrow{\$} \mathbb{F}_p$ -- кв. вычет с вероятностью~$O(1)$.
+
+Шаг 4: быстрое умножение на $q$:\\$\widetilde{O}(\log q \cdot \log p) = \widetilde{O}(\log^2 p)$ битовых операций.
+\end{block}
+
+\begin{block}{Алг. 3. Prove\_prime}
+На шаге 2, $p_i$ уменьшается на 2 \structure{$\implies$} $O(\log p)$ итераций.\\
+Доминирующий шаг: подсчёт точек в Gen\_curve \\
+\structure{$\implies$} общее время работы: $\widetilde{O}(\log^5 p)$
+
+Количество кривых $E_{A,B}$, не удовлетворяющих условиям шага 1 в Gen\_curve() $= O(\log^3 p)$ (эвристика)
+\end{block}
+\end{frame}
+
+\begin{frame}{Проверка сертификата. Алгоритм 4. Сheck\_prime}
+\structure{Вход:} $p_0, C =((A_0, B_0), L_0, p_1, ..., (A_{i-1}, B_{i-1}), L_{i-1}, p_{i-1})$\\
+\structure{Выход:} \{Reject, Accept\}
+\begin{enumerate}
+    \item \structure{for} $j = 0\ ...\ i-1$:
+    \begin{enumerate}
+        \item[(a)] assert $(2 \nmid p_j)$
+        \item[(b)] assert $(3 \nmid p_j)$
+        \item[(c)] assert $(gcd(4A^3_j + 27B_j^2, p_j) = 1)$
+        \item[(d)] assert $(p_{j+1} > (p_j^{1/4} + 1)^2)$
+        \item[(e)] assert $L_j \neq \infty$
+        \item[(f)] assert $p_{j+1}L_j = \infty$
+    \end{enumerate}
+    \item \structure{return} Accept
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Корректность}
+\begin{itemize}
+    \item Check\_prime() возвращает Accept \structure{$\Rightarrow$} $p_i$ -- простое \structure{$\Rightarrow$} $p_{i-1}$ -- простое по Критерию простоты (\structure{$\Rightarrow$} $\ldots$\structure{$\Rightarrow$} $p_0$ -- простое)
+    
+    \item Условия (a),(b) проверяются на шаге 2.4.  алгоритма 3. Prove\_prime
+    
+    \item (c) -- шаг 1 в Алг.1. Gen\_curve
+    
+    \item (d) -- Теорема Хассе-Вейля: $\#E_{A,B}(\mathbb{F}_{p_j}) \geq (\sqrt{p_j} - 1)^2$ \structure{$\Rightarrow$}
+    \[
+    p_{j+1} = \frac{\#E(\mathbb{F}_{p_j})}{2} \geq \frac{(\sqrt{p_j} - 1)^2}{2} > (p_j^{1/4} + 1)^2\; \quad \forall p_j > 37
+    \]
+    (для малых $p_j$ проверка на простоту тривиальна)
+    
+    \item (e), (f) проверяются в Find\_point, шаг 3.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Время работы}
+    \begin{itemize}
+        \item Проверка каждого $p_j: O(\log^3 p)$ — шаг (f) самый затратный.
+        \item Всего: $O(\log p)$ различных $p_j$ в сертификате $C \Rightarrow O(\log^4 p)$.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Литература}
+    %\nocite{Menezes1993}
+    \nocite{Lenstra1987}
+    %\nocite{Blake1999}
+    %\nocite{CohenFrey+2005}
+    \nocite{Washington2008}
+    \nocite{GoldwasserKilian1999}
+    \nocite{CohenLenstra1984}
+    \printbibliography
+
+    \begin{center}
+        \begin{tcolorbox}[enhanced,hbox,colback=block-green-color-bg,colframe=subsection-color!120,title=Контакты,center title]
+            \begin{varwidth}{\textwidth}
+                \begin{center}
+                    \href{mailto:snovoselov@kantiana.ru}{snovoselov@kantiana.ru}
+                \end{center}
+            \end{varwidth}
+        \end{tcolorbox}	
+    \end{center}
+\end{frame}
+
+\end{document}
