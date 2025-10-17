@@ -1,0 +1,136 @@
+% !TeX spellcheck = ru_RU-Russian
+\documentclass[11pt]{exam}
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage[margin=0.73in]{geometry}
+%\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{amscd,amsmath,amsthm}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
+\usepackage{cmap}
+
+\usepackage{algorithmicx, enumitem, algpseudocode, algorithm, caption}
+\usepackage{tikz}
+\usetikzlibrary{automata}
+
+\usepackage{textcomp}
+
+
+%%%%%%%%%%%%%%%%%%%%%
+% Handling comments and versions %%%
+%%%%%%%%%%%%%%%%%%%%%
+
+%\renewcommand{\comment}[1]{\texttt{[#1]}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{proposition}[theorem]{Proposition}
+
+
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+
+
+\newcommand{\nc}{\newcommand}
+\nc{\eps}{\varepsilon}
+\nc{\RR}{{{\mathbb R}}}
+\nc{\CC}{{{\mathbb C}}}
+\nc{\FF}{{{\mathbb F}}}
+\nc{\NN}{{{\mathbb N}}}
+\nc{\ZZ}{{{\mathbb Z}}}
+\nc{\PP}{{{\mathbb P}}}
+\nc{\QQ}{{{\mathbb Q}}}
+\nc{\UU}{{{\mathbb U}}}
+\nc{\OO}{{{\mathbb O}}}
+\nc{\EE}{{{\mathbb E}}}
+
+\newcommand{\val}{\operatorname{val}}
+\newcommand{\wt}{\ensuremath{\mathit{wt}}}
+\newcommand{\Id}{\ensuremath{I}}
+\newcommand{\transpose}{\mkern0.7mu^{\mathsf{ t}}}
+\newcommand*{\ScProd}[2]{\ensuremath{\langle#1\mathbin{,}#2\rangle}} %Scalar Product
+\renewcommand{\char}{\ensuremath{\mathsf{char}}}
+
+\DeclareMathOperator{\Vol}{Vol}
+
+%\pretolerance=1000
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% DOCUMENT STARTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}	
+	{\noindent
+		\textsc{БФУ им. И. Канта -- Компьютерный практикум по криптографии на эллиптических кривых }\\[5pt]
+		Преподаватель: {С. Новоселов}   \hfill{2023\\}
+	\hrule
+	\begin{center}
+		{\LARGE\textbf{
+				Лабораторная работа № 7 \\[5pt]
+		}} 
+			Опубликована \textbf{09.11.2023} \\[5pt] 
+			Дэдлайн \textbf{23.11.2023}
+		
+	\end{center}
+	\hrule \vspace{5mm}
+	
+	\thispagestyle{empty}
+	
+	Разработать программу в системе компьютерной алгебры Sage, реализующую функцию:
+    
+    %\begin{enumerate}
+        %\item
+        \texttt{Check\_curve($p, a, b, \lambda$)}, где $p$ -- простое, размер конечного поля; $a, b$ -- коэффициенты эллиптической кривой $E/\mathbb{F}_p: y^2 = x^3 + a x + b$ и  $\lambda$ -- уровень безопасности в битах. Возвращает $True$, если кривая проходит минимум следующие проверки:
+        \begin{enumerate}
+            \item на наличие подгруппы большого порядка (стойкость к атаке Полига-Хеллмана);
+            \item на неравенство характеристики порядку подгруппы;
+            \item на стойкость задачи дискретного логарифма в данной группе относительно $\rho$-метода Полларда;
+            \item на стойкость к атакам на спариваниях (подсчёт степени вложения);
+            \item кривая должна соответствовать минимальному уровню безопасности $\lambda$ относительно всех предыдущих пунктов.
+        \end{enumerate}
+    %\end{enumerate}
+    
+    Проверить отдельно кривые, рекомендованные КриптоПро\textsuperscript{TM}, \url{https://www.cryptopro.ru/sites/default/files/blog/cpecc12-tc26.pdf}. А именно, два набора параметров: \textsc{ id-tc26-gost-3410-12-512-paramSetA} и \textsc{id-tc26-gost-3410-12-512-paramSetB}.
+    
+    
+\normalsize
+\section*{Требования к сдаче}
+\begin{itemize}
+    \item Исходный код должен содержать комментарии к каждой из функций с описанием входных и выходных параметров
+    \item Лабораторную следует выполнять модификацией файла с тестами, заменяя строку
+    
+    "\texttt{\# your code here.}"
+    
+    на код, реализующий функцию.
+    \item Функции должны работать на всех примерах, что проверяется запуском команды:
+    \\\texttt{sage -t file\_with\_tests.sage}
+    \item Студент должен понимать, что он написал, зачем, а также ответить на теоретические вопросы.
+\end{itemize}
+\end{document}
