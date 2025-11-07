@@ -1,7 +1,7 @@
 # Проверять работу своей функции orderBSGS() с помощью встроенной функции order():
 
 def test_orderBSGS(i):
-  q = Primes().next(2^(24*i) + 1)
+  q = Primes().next(2^(20*i) + 1)
   a = ZZ.random_element(1,q-1)
   b = ZZ.random_element(1,q-1)
   F = GF(q)
