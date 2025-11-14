@@ -19,6 +19,8 @@
 \usepackage[backend=biber,firstinits=true,hyperref=true,style=numeric-comp]{biblatex}
 
 \usepackage{../beamerthemeec2020}
+\usepackage{mathtools}
+
 {\footnotesize\bibliography{../biblio}}
 
 \title{Эллиптические кривые}
@@ -30,9 +32,6 @@
 \begin{document}
 
 \frame{\titlepage}
-
-\newcommand{\UserA}{{\structure{{\Large\faUserSecret}}}}
-\newcommand{\UserB}{{\structure{{\Large\faCat}}}}
 
 \begin{frame}{Введение}
 	\structure{SQISign} (Short Quaternion and Isogeny Signature) -- схема подписи, построенная применением преобразования Фиата-Шамира к протоколу доказательства с нулевым разглашением ($\Sigma$-протоколу).
@@ -54,21 +53,110 @@
 	\end{scriptsize}
 \end{frame}
 
-\begin{frame}{$\Sigma$-протокол}
-	содержимое...
+\begin{frame}[fragile]{$\Sigma$-протокол}
+%Состоит из двух участников: \\доказывающий (\UserA) и проверяющий (\UserB).
+%\vspace{1em}
+%Позволяет \UserA~~доказать \UserB~~знание секрета без раскрытия самого секрета.
+Позволяет доказать знание секрета без раскрытия самого секрета.
+\vspace{1em}
+
+\begin{table}[]
+	\label{tab:my-table}
+	\begin{tabular}{ccc}
+		\UserA($sk,pk$) &  & \UserB($pk$) \\
+		 &  & \\
+		сген. обязательство $com$ & $\xrightarrow{com}$ & \ldots \\
+		%& $\xrightarrow{com}$   & \\
+		 &  & \\
+		\ldots & $\xleftarrow{chl}$ & сген. вызов $chl$ \\
+		%&  $\xleftarrow{chl}$ & \\
+		 &  & \\
+		сген. ответ $rsp$ & $\xlongrightarrow{rsp}$ & \ldots \\
+		%& $\xlongrightarrow{rsp}$   & \\
+		& & вернуть ``accept'' или ``reject''
+	\end{tabular}
+\end{table}
 \end{frame}
 
 \begin{frame}{Преобразование Фиата-Шамира}
-	содержимое...
+Позволяет построить цифровую подпись из любого $\Sigma$-протокола.
+\vspace{1em}
+
+\begin{itemize}
+	\item $m$ -- сообщение для подписи
+	\item при генерации $chl$ заменяем \UserB~на хэш-функцию:
+	\[
+	chl = hash(m || com)
+	\]
+	\item \structure{подпись} $s := (com, rsp)$
+	\item \structure{проверка}: вычисляем $chl = hash(m || com)$ и проверяем условие $\Sigma$-протокола
+\end{itemize}
+
 \end{frame}
 
-\begin{frame}{Пример. Подпись EdDSA}
-	содержимое...
+%\begin{frame}{Пример. Подпись EdDSA}
+%	содержимое...
+%\end{frame}
+
+\begin{frame}{Подпись SQISign. Параметры}
+	\begin{itemize}
+		\item $E_0$ -- (открытая) кривая с известным $End(E_0)$
+		\item $\phi_{sk}: E_0 \rightarrow E_{pk}$ -- случайная секретная изогения
+		\item $E_{pk}$ -- открытый ключ
+		\item $End(E_{pk})$ -- секретный ключ
+	\end{itemize}
+	
+	\vspace{1em}
+	\structure{Замечание:}
+	\begin{itemize}
+		\item зная $\phi: E_0 \rightarrow E$ можно вычислить $End(E)$ за полиномиальное время
+		\item зная $End(E_1)$ и $End(E_2)$ можно вычислить изогению $\phi: E_1 \rightarrow E_2$ за полиномиальное время
+	\end{itemize}
 \end{frame}
 
-\begin{frame}{Подпись SQISign}
-	содержимое...
+\begin{frame}{Подпись SQISign. $\Sigma$-протокол}
+\begin{columns}
+	\begin{column}{0.7\textwidth}
+		\begin{enumerate}
+			\item \UserA~генерирует секретную $\phi_{com}$,\\
+			отсылает $E_{com}$
+			\item \UserB~генерирует случ. $\phi_{chl}$,\\
+			отправляет $\phi_{chl}$
+			\item \UserA~вычисляет и отправляет~$\phi_{rsp}$
+			\item \UserB~проверяет, что $\phi_{rsp}$  -- изогения $E_{chl} \rightarrow E_{com}$
+		\end{enumerate}
+	\end{column}
+	\begin{column}{0.3\textwidth}
+		\input{../images/fig_sqisign}
+	\end{column}
+\end{columns}
+\pause
+\vspace{1em}
+\structure{Корректность:}
+\begin{itemize}
+	\item \UserA~знает $End(E_0)$ и $\phi_{com}$ \structure{$\implies$} вычисляет $End(E_{com})$
+	\item \UserA~знает $End(E_{pk})$ и $\phi_{chl}$ \structure{$\implies$} находит $End(E_{chl})$
+	\item \UserA~знает $End(E_{chl}), End(E_{com})$ \structure{$\implies$} вычисляет $\phi_{rsp}$
+\end{itemize}
 \end{frame}
+
+
+\begin{frame}{Подпись SQISign. Преобразование Фиата-Шамира}
+	\structure{Генерация $chl$}:
+		\[
+		chl = hash(j(E_{pk}) || j(E_{com}) || m),
+		\]$
+		\phi_{chl}$ строится детерминировано по $chl$.
+		\vspace{1em}
+		
+		\structure{Подпись:} $s := (E_{com}, \phi_{rsp})$
+		\vspace{1em}
+		
+		\structure{Проверка:} находим $\phi_{chl}$ и проверяем, что\\ $\phi_{rsp}$ -- изогения $E_{chl} \rightarrow E_{com}$.
+\end{frame}
+
+%\begin{frame}{Эндоморфизмы и изогении}
+%\end{frame}
 
 \begin{frame}{Размеры ключей/скорость}
 	\begin{table}[h]
@@ -85,10 +173,10 @@
 				SQISignHD %https://ia.cr/2023/436
 				& & & & \\
 				\hline
-				SQISignHD-West %https://eprint.iacr.org/2024/760.pdf
+				SQISign2D-West %https://eprint.iacr.org/2024/760.pdf
 				& & & & \\
 				\hline
-				SQISignHD-East %https://ia.cr/2024/771
+				SQISign2D-East %https://ia.cr/2024/771
 				& & & & \\
 				\hline
 				SQIPrime %https://ia.cr/2024/773
@@ -144,6 +232,13 @@
                 \end{center}
             \end{varwidth}
         \end{tcolorbox}
-    \end{center}\end{frame}
+    \end{center}
+\end{frame}
+
+%\begin{frame}{TODO}
+%	\begin{itemize}
+%		\item добавить определения всех обозначений
+%	\end{itemize}
+%\end{frame}
 
 \end{document}
