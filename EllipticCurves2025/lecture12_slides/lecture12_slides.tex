@@ -155,6 +155,40 @@
 		\structure{Проверка:} находим $\phi_{chl}$ и проверяем, что\\ $\phi_{rsp}$ -- изогения $E_{chl} \rightarrow E_{com}$.
 \end{frame}
 
+\begin{frame}{Представление изогений}
+	\begin{itemize}
+		\item $\phi_{chl}$, $\phi_{rsp}$ -- открыты
+		\item от представления зависит размер подписи и скорость проверки
+		%\item основная техническая сложность схемы 
+		\item представление изогений \structure{не должно} давать возможность вычислять эндоморфизмы:
+		\begin{itemize}
+			\item по одному эндоморфизму кривой $E$ можно вычислить $End(E)$ за полиномиальное время
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{SQISign. Оригинальная схема}
+	\begin{itemize}
+		\item изогении представляются в виде сжатых ядер цепочек изогений малой степени
+		\item $\phi_{rsp}$ вычисляется с помощью KLPT-алгоритма
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{SQISignHD}
+	\begin{itemize}
+		\item конструктивное применение атаки Кастрика-Декру
+		\item изогении представляются в компактном виде $(d, E_{aux}, \phi(P), \phi(Q))$
+		%\item $\phi_{rsp}$ вычисляется с помощью KLPT-алгоритма
+		\item проверке подписи выполняется Кастрика-Декру
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{SQIPrime}
+	\begin{itemize}
+		\item вместо композиций изогений малых степеней используются изогении большой степени и новый алгоритм для их вычисления \href{https://eprint.iacr.org/2023/1766}{Clapoti}
+	\end{itemize}
+\end{frame}
+
 %\begin{frame}{Эндоморфизмы и изогении}
 %\end{frame}
 
@@ -167,26 +201,38 @@
 				\thead{Открытый\\ключ}
 				& \thead{Закрытый\\ключ} & \thead{Подпись} \\
 				\hline
-				SQISign%https://eprint.iacr.org/2020/1240.pdf
-				& & & & \\
+				\href{https://eprint.iacr.org/2020/1240.pdf}{SQISign}
+				%SQISign https://eprint.iacr.org/2020/1240.pdf
+				 & NIST-1 & 64 & 16 & 204 \\
 				\hline
-				SQISignHD %https://ia.cr/2023/436
-				& & & & \\
+				\href{https://ia.cr/2023/436}{SQISignHD}
+				%SQISignHD https://ia.cr/2023/436
+				& NIST-1 & 64 & 16 & 109 \\
 				\hline
-				SQISign2D-West %https://eprint.iacr.org/2024/760.pdf
-				& & & & \\
+				\href{https://eprint.iacr.org/2024/760.pdf}{SQISign2D-West}
+				%SQISign2D-West %https://eprint.iacr.org/2024/760.pdf
+				&  NIST-1 & 65 & 353 & 148 \\
+				%\hline
+				%\href{https://ia.cr/2024/771}{SQISign2D-East}
+				%SQISign2D-East %https://ia.cr/2024/771
+				%& & & & \\
 				\hline
-				SQISign2D-East %https://ia.cr/2024/771
-				& & & & \\
-				\hline
-				SQIPrime %https://ia.cr/2024/773
-				& & & & \\
+				\href{https://ia.cr/2024/773}{SQIPrime}
+				%SQIPrime %https://ia.cr/2024/773
+				& NIST-1 & 191 & $\sim$ & 299 \\
 				\hline
 			\end{tabular}
 		\end{center}
 		\caption{Размеры ключей (в байтах) для схем подписи на изогениях.}
 		\label{Table1}
 	\end{table}
+\end{frame}
+
+\begin{frame}{Скорость работы}
+	\includegraphics[scale=0.15]{ecc2024-sqisign-perf}
+	\begin{itemize}
+		\item Источник: Benjamin Wesolowski, ECC2024
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{Литература}
