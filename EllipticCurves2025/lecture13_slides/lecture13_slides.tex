@@ -1,0 +1,234 @@
+% !TeX program = xelatex
+% !BIB TS-program = biber
+
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+\usepackage{pgfplots, subfigure}
+\usepackage{extarrows}
+\usepackage{tikz-cd}
+\usepackage{makecell}
+\usepackage{quiver}
+\usetikzlibrary{babel}
+
+\usepackage[backend=biber,firstinits=true,hyperref=true,style=numeric-comp]{biblatex}
+
+\usepackage{../beamerthemeec2020}
+\usepackage{mathtools}
+
+{\footnotesize\bibliography{../biblio}}
+
+\title{Эллиптические кривые}
+\subtitle{Лекция 13. Криптоанализ схем на изогениях}
+\author{Семён Новосёлов}
+\institute{БФУ им. И. Канта}
+\date{2025}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Граф изогений}
+	Граф с вершинами -- $j$-инвариантами эллиптических кривых и рёбрами -- изогениями.
+	\vspace{1em}
+	
+	\structure{Обозначение:} $X(K, \ell)$, где $K$ --  поле, $\ell$ -- степень изогении.
+\end{frame}
+
+\begin{frame}{Задача поиска изогении}
+	\begin{center}
+	\begin{tcolorbox}[enhanced,hbox,colback=title-and-section-color!5,colframe=title-and-section-color!120,title=Общая задача нахождения изогении,center title]
+		\begin{varwidth}{\textwidth}
+			\begin{center}
+				Даны две изогенные кривые~$E_1$ и $E_2$.
+				
+				Вычислить изогению между ними.
+			\end{center}
+		\end{varwidth}
+	\end{tcolorbox}	
+\end{center}
+	
+	\vspace{1em}
+	Теорема Тейта: $E_1 \sim E_2$ \structure{$\iff$} $\#E_1 = \#E_2$
+	
+	\structure{$\implies$} легко проверить существование изогении.
+\end{frame}
+
+
+\begin{frame}{Методы поиска изогений}
+	\begin{itemize}
+		\item на основе парадокса дней рождений
+		\item сведение задачи к вычислению $End(E)$
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Методы на основе парадокса дней рождений}
+\begin{itemize}
+	\item модификация алгоритмов BSGS/Полларда/vOW
+	\item исп. случайные блуждания в графе изогений
+\end{itemize}
+\vspace{1em}
+
+\structure{Сложность} для суперсингулярных кривых:
+\begin{itemize}
+	\item $\widetilde{\mathcal{O}}(p^{1/2})$ по времени/памяти в худшем случае или
+	\item $\widetilde{\mathcal{O}}(p^{3/4})$ по времени в среднем для алгоритма с малой памятью (vOW)
+\end{itemize}
+\vspace{1em}
+Число изогенных суперсингулярных кривых~$\approx \frac{p}{12}$.
+\end{frame}
+
+\begin{frame}{Как задавать случайные блуждания?}
+	\begin{itemize}
+		\item через ядра изогений -- подгруппы $E[\ell]$
+		\item через модулярные многочлены
+	\end{itemize}
+	\vspace{1em}
+
+	\structure{Модулярный многочлен} -- это многочлен $\Phi_\ell \in \mathbb{Z}[X,Y]$ т.ч. $\Phi_\ell(j(E_1), j(E_2)) = 0$ \structure{$\iff$} $\exists$ изогения степени $\ell$ между $E_1$ и $E_2$.
+	\vspace{0.5em}
+	
+	\structure{$\implies$} находясь в вершине~$j(E)$, находим корни $\Phi_\ell(j(E), Y)$ и берём случайный.
+\end{frame}
+
+\begin{frame}{Суперсингулярная задача поиска изогении}
+	Эллиптическая кривая $E/\mathbb{F}_{q}$, $q=p^n$ -- \structure{суперсингулярная}, если $p \mid t = \#E(\mathbb{F}_q) - q- 1$.
+	
+	\vspace{1em}
+
+	\structure{Факт:} $j(E) \in \mathbb{F}_{p^2}$ \hspace{8em} \textcolor{gray}{[Silverman, Th. 3.1.(a).iii]}
+	
+	\vspace{1em}
+	\structure{$\implies$} суперсингулярный граф изогений определён над $\mathbb{F}_{p^2}$
+	
+	\vspace{1em}
+	Также над $\mathbb{F}_{p^2}$ он связен для любой степени изогении $\ell$.
+\end{frame}
+
+\begin{frame}{Алгоритм Delfs-Galbraith}
+	Пусть $E_1$, $E_2$ определены над $\mathbb{F}_{p^2}$.
+	\vspace{1em}
+	
+	\structure{Идея:}
+	\begin{itemize}
+		\item найти изогении $\phi_1: E_1 \rightarrow E_1'/\mathbb{F}_p$ и $\phi_2: E_2 \rightarrow E_2'/\mathbb{F}_p$,
+		\item найти изогению $\phi': E_1' \rightarrow E_2'$ в графе изогений над $\mathbb{F}_p$
+		\item вернуть $\phi: E_1 \rightarrow E_2$ как $\phi = \widehat{\phi}_2 \circ \phi' \circ \phi_1$
+	\end{itemize}
+
+	%\vspace{1em}
+	%todo: добавить график
+\end{frame}
+
+\begin{frame}
+	Граф изогений $X(\mathbb{F}_p, \ell)$ меньше, чем $X(\mathbb{F}_{p^2}, \ell)$ -- состоит из $\widetilde{\mathcal{O}}(\sqrt{p})$ вершин, но он не связный и надо брать несколько $\ell$.
+	\\
+	\structure{$\implies$} сложность поиска $\phi'$ равна $\widetilde{\mathcal{O}}(p^\frac{1}{4})$
+	
+	\vspace{1em}
+	Общая \structure{сложность} алгоритма Delfs-Galbraith: $\widetilde{\mathcal{O}}(p^{1/2})$, доминирующие шаги -- нахождение $\phi_1, \phi_2$.
+\end{frame}
+
+%\begin{frame}{Модификации алгоритма Delfs-Galbraith}
+%	https://eprint.iacr.org/2021/1488
+%	посмотреть ещё цитирования, улучшения в константе только
+%\end{frame}
+
+
+%\begin{frame}{Предварительные сведения: Дуальная изогения}
+%	содержимое...
+%\end{frame}
+
+\begin{frame}{Сведение задачи к вычислению $End(E)$}
+	\begin{itemize}
+		\item Задачи поиска изогении и вычисления $End(E)$ эквивалентны \textcolor{gray}{[Wesolowski'21]} (одна за полиномиальное время сводится к другой).
+		\vspace{0.5em}
+		
+		\item Один эндоморфизм \structure{$\implies$} всё кольцо за полиномиальное время~\textcolor{gray}{[Page-Wesolowski'23]}
+		\vspace{0.5em}
+		
+		\item Детектирование эндоморфизмов малых степеней возможно с помощью нахождения классового многочлена Гильберта\\
+		\structure{$\implies$} алгоритм нахождения изогений~\textcolor{gray}{[Love-Boneh'19]}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Квантовые атаки -- сложность}
+	\begin{itemize}
+		\item суперсингулярные кривые: $\widetilde{\mathcal{O}}(p^{1/2})$ \structure{$\implies$} $\widetilde{\mathcal{O}}(p^{1/4})$
+		\vspace{0.5em}
+		\item обычных кривые: $L(1/2)$
+	\end{itemize}
+	%todo: описать принцип
+\end{frame}
+
+%\begin{frame}{Выводы}
+%	\begin{itemize}
+%		\item обычные кривые: сложность классическая/квантовая
+%		\item суперсингулярные кривые: сложность классическая/квантовая 
+%	\end{itemize}
+%\end{frame}
+
+\begin{frame}{Литература}
+%\begin{frame}
+	%\nocite{Menezes1993}
+	%\nocite{Lenstra1987}
+	%\nocite{Blake1999}
+	%\nocite{CohenFrey+2005}
+	%\nocite{Washington2008}
+	%\nocite{GoldwasserKilian1999}
+	%\nocite{CohenLenstra1984}
+	%\nocite{JaoDeFeo2011}
+	%\nocite{Galbraith2012}
+	%\nocite{DeFeo2018}
+	%\nocite{Costello2019}
+	%\nocite{SIKE}
+	%\nocite{SafeCurves}
+    %\nocite{CastryckDecru2022}
+	%\printbibliography
+	\begin{scriptsize}
+	\begin{itemize}
+		%\item[\structure{{\faScroll}}] Castryck W., Decru T. An efficient key recovery attack on SIDH. 2022.
+		%\vspace{0.5em}
+		\item[\structure{{\faBook}}] Silverman J.H. ``The Arithmetic of Elliptic Curves'', 2ed (2009)
+		\vspace{0.5em}
+
+		\item[\structure{{\faScroll}}] Delfs C., Galbraith S.D. ``Computing isogenies between supersingular elliptic curves over~$\mathbb{F}_p$''. 2016. DCC. \url{https://arxiv.org/pdf/1310.7789}
+		\vspace{0.5em}
+		
+		\item[\structure{{\faScroll}}] Wesolowski B. ``The supersingular isogeny path and endomorphism ring problems are equivalent'' (2021)
+		\url{https://ieeexplore.ieee.org/document/9719728}
+		\vspace{0.5em}
+		
+		\item[\structure{{\faScroll}}] Page A., Wesolowski B. ``The supersingular Endomorphism Ring and One Endomorphism problems are equivalent'' (2023)
+		\url{https://eprint.iacr.org/2023/1399}
+		
+		\item[\structure{\faScroll}] Love J., Boneh D. - Supersingular Curves With Small Non-integer Endomorphisms (2019)
+		\url{https://arxiv.org/pdf/1910.03180}
+
+		%\item[\structure{{\faGlobe}}] SQIsign: Algorithm specifications and supporting documentation. \url{https://sqisign.org/spec/sqisign-20250707.pdf}
+		%\vspace{0.5em}
+%
+%		\item[\structure{{\faYoutube}}]
+%		Выступление Castryck на ANTS XV:
+%		\url{https://www.youtube.com/watch?v=_eNv7An3Qj0}
+	\end{itemize}
+	\end{scriptsize}
+	
+
+    \begin{center}
+        \begin{tcolorbox}[enhanced,hbox,colback=block-green-color-bg,colframe=subsection-color!120,title=Контакты,center title]
+            \begin{varwidth}{\textwidth}
+                \begin{center}
+                    \href{mailto:snovoselov@kantiana.ru}{snovoselov@kantiana.ru}
+                \end{center}
+            \end{varwidth}
+        \end{tcolorbox}
+    \end{center}
+\end{frame}
+
+\end{document}
