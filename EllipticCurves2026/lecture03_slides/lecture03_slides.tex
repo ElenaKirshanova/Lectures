@@ -551,7 +551,7 @@ e_r: G_1 \times G_2 \mapsto G_T
 \structure{Общие параметры}
 \begin{itemize}
 	\item $P_1, P_2$ т.ч. $G_1 = \left<P_1\right>$ и $G_2 = \left<P_2\right>$
-	\item $H: \{0,1\}^* \rightarrow G_1$ -- хэш-функция
+	\item $H: \{0,1\}^* \rightarrow G_1$\\ (хэш-функция)
 \end{itemize}
 \vspace{1em}
 
@@ -572,16 +572,30 @@ e_r: G_1 \times G_2 \mapsto G_T
 
 \structure{Проверка}
 \begin{enumerate}
-	\item $ e_r($\structure{\faPaw}$, P_2) == H($\structure{\footnotesize\faEnvelope}$, Q)$?
+	\item $e_r(\text{\structure{\faPaw}}, P_2) == e_r(H(\text{\structure{\footnotesize\faEnvelope}}), Q)$?
 \end{enumerate}
+\vspace{1em}
+\ProofBegin
+$e_r(\text{\structure{\faPaw}}, P_2) = e_r(R, P_2)^a = e_r(H(\text{\structure{\footnotesize\faEnvelope}}), [a] P_2) = e_r(H(\text{\structure{\footnotesize\faEnvelope}}), Q)$
+\ProofEnd
+
 \end{column}
 \end{columns}
 \end{frame}
 
 
-%\begin{frame}{BLS в Ethereum}
-%	содержимое...
-%\end{frame}
+\begin{frame}{BLS в Ethereum}
+\begin{itemize}
+	\item В Ethereum каждые 12 секунд формируется новый блок из транзакций (напр., перевод средств)
+	\item Блок проверяется и подписывается тысячами валидаторов
+	\item Хранение тысяч подписей валидаторов $\text{\structure{\faPaw}}_1, \ldots, \text{\structure{\faPaw}}_m$ заняло бы много места в блокчейне
+	\item Поэтому подписи объединяются в одну (96-байт):
+	\[
+	\text{\structure{\faPaw}} = \text{\structure{\faPaw}}_1 + \ldots +  \text{\structure{\faPaw}}_m
+	\]
+	
+\end{itemize}
+\end{frame}
 
 \begin{frame}{Литература}
 \nocite{Menezes1993}\nocite{Blake1999}\nocite{Washington2008}
