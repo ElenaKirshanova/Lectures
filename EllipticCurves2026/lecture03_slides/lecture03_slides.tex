@@ -1,0 +1,607 @@
+% !TeX program = xelatex
+% !BIB TS-program = biber
+
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+%---tikz----
+\usepackage{tikz}
+\usetikzlibrary{arrows, chains, matrix, positioning, scopes, patterns, shapes}
+\usepackage{pgfplots, subfigure}
+\usepackage{extarrows}
+
+\usepackage[backend=biber,firstinits=true,hyperref=true,style=numeric-comp]{biblatex}
+
+\usepackage{../beamerthemeec2020}
+{\footnotesize\bibliography{../biblio}}
+
+\title{Эллиптические кривые}
+\subtitle{Лекция 3. Точки $n$-кручения}
+\author{Семён Новосёлов}
+\institute{БФУ им. И. Канта}
+\date{2026}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{План}
+	\begin{enumerate}
+		\item Группа точек $n$-кручения
+		\item Многочлены деления
+		\item Алгоритм вычисления группы $n$-кручения
+		\item Приложения в криптографии
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}
+	\begin{center}
+		\textcolor{title-and-section-color}{{\LARGE \textbf{I. Группа точек $n$-кручения}}}
+	\end{center}
+\end{frame}
+
+\begin{frame}{Точки $n$-кручения}
+Пусть $n > 1$, $E$ -- эллиптической кривая над полем $K$.
+\begin{itemize}
+    \item \structure{Порядок точки} $P \in E$, $\operatorname{ord} P$ -- минимальное $n \in \mathbb{N}$, т.ч.
+    \[
+    [n] P = \mathcal{O}
+    \]
+    \item \structure{Точки $n$-кручения} -- элементы множества:
+    \[
+    E[n] = \left\{ {\left. P \in E(\bar K)\right| [n]P = \mathcal{O}} \right\}
+    \]
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Случай $n=2$, $charK \ne 2$}
+\[
+E: {y^2} = f(x), ~ \deg f\left( x \right) = 3
+\]
+\structure{\[\Downarrow\]}
+\[
+y^2 = \left( {x - {e_1}} \right)\left( {x - {e_2}} \right)\left( {x - {e_3}} \right), e_i \in \overline{K}.
+\]
+\begin{center}
+$\forall P \in E$: $[2] P = \mathcal{O}$ \structure{$\Leftrightarrow$} касательная $\ell$ в $P$ -- вертикальная
+\end{center}
+\structure{\[\Downarrow\]}
+\[
+y = 0
+\]
+\structure{\[\Downarrow\]}
+\[
+E[2] = \left\{ \mathcal{O}, (e_1, 0), (e_2 ,0), (e_3,0) \right\} \simeq \mathbb{Z}_2 \oplus \mathbb{Z}_2.
+\]
+    
+\structure{Вывод}: нахождение точек $2$-кручения при $\operatorname{char}K \ne 2$ \structure{$\Leftrightarrow$} нахождение корней $f(x)$.
+\end{frame}
+
+\begin{frame}{Случай $n = 2$, $\operatorname{char} K = 2$}
+    %\structure{$charK = 2$}: $\exists\: 2\text{ вида кривой } E$
+%\begin{table}[]
+    \begin{tabular}{cc}
+        $E: {y^2} + xy = {x^3} + {a_2}{x^2} + {a_6}$ & $E:{y^2} + {a_3}y = x^3 + a_4 x + a_6$ \\
+        $(a_6 \ne 0)$ & $(a_3 \ne 0)$ \\
+        \structure{$ \Downarrow $} & \structure{$ \Downarrow $} \\
+        \multicolumn{2}{c}{
+            $P = (x,y)$, $[2] P =\mathcal{O}$ \structure{$\Rightarrow$} касательная к $P$ -- вертикаль \structure{$\Rightarrow$} $\frac{{dE}}{{dy}} = 0$
+        } \\
+        \structure{$ \Downarrow $} & \structure{$ \Downarrow $} \\
+        $2y - x = 0$ & $\frac{{dE}}{{dy}} = {a_3}$ \\
+        $x = 0$ (т.к. $2=0$) & ${a_3} \ne 0$ (иначе $E$ -- сингулярная) \\
+        \structure{$ \Downarrow $} & \structure{$ \Downarrow $} \\
+        ${y^2} = a_6$ & $E[2] = \left\{\mathcal{O}\right\}$ \\
+        $P = (0, \sqrt{a_6})$ & \\
+        $E[2] = \left\{ \mathcal{O}, (0, \sqrt a_6) \right\} \simeq \mathbb{Z}_2$ & \\
+    \end{tabular}
+%\end{table}
+\end{frame}
+
+\begin{frame}{Структура группы $2$-кручения}
+\begin{block}{Лемма 1}
+    Для эллиптической кривой $E$ над $K$ выполняется:
+    \begin{align*}
+        E[2] & \simeq \mathbb{Z}_2 \oplus \mathbb{Z}_2 & \text{при }\operatorname{char} K \ne 2 \\
+        E[2] & \simeq 0 \text{ или } E[2] \simeq \mathbb{Z}_2 & \text{ при } \operatorname{char} K = 2.
+    \end{align*}
+\end{block}
+\end{frame}
+
+\begin{frame}{Структура группы $n$-кручения}
+Можно показать%[Washington \S~3.1]
+, что:
+\begin{align*}
+    E[3] &\simeq \mathbb{Z}_3 \oplus \mathbb{Z}_3, & {\text{ при }}\operatorname{char} K \ne 3 \\
+    E[3] &\simeq 0 \text{ или } E[3] \simeq \mathbb{Z}_3, & {\text{ при }} \operatorname{char} K = 3
+\end{align*}
+
+В общем случае:
+
+\begin{block}{Теорема}
+    Пусть $E$ -- эллиптическая кривая над $K$ и $n \geqslant \mathbb{N}_+$. Тогда:
+    \begin{itemize}
+        \item $E[n] \simeq \mathbb{Z}_n \oplus \mathbb{Z}_n$, если $\operatorname{char} K \nmid n$ или $\operatorname{char} K = 0,$  
+        \item $E[n] \simeq \mathbb{Z}_{n'} \oplus \mathbb{Z}_{n'}$ или $E[n] \simeq {\mathbb{Z}_n} \oplus \mathbb{Z}_{n'}$ если $\operatorname{char} K = p > 0$, $p|n$
+        и $n = p^r \cdot n', p \nmid n'.$
+    \end{itemize}
+\end{block}
+\ProofBegin
+Док-во: [Washington \S~3.2].
+\ProofEnd
+\end{frame}
+
+\begin{frame}{Типы кривых}
+    Пусть эллиптическая кривая $E$ задана над $K$ и $\operatorname{char} K = p$. Тогда:
+    \begin{itemize}
+        \item $E[p] \simeq \mathbb{Z}_p$ $\Rightarrow$ кривая \structure{обычная}.
+        \item $E[p] \simeq 0$ $\Rightarrow$ кривая \structure{суперсингулярная}.
+        \begin{itemize}
+            \item[\faExclamationTriangle] Не путать с сингулярными кривыми.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+	\begin{center}
+		\textcolor{title-and-section-color}{{\LARGE \textbf{II. Многочлены деления}}}
+	\end{center}
+\end{frame}
+
+\begin{frame}{Многочлены деления. Мотивация}
+\structure{Применение}:
+\begin{itemize}
+    \item описывают отображение $n: P \mapsto [n] P$
+    \item используются в алгоритме подсчета точек кривой
+    \item используются в вычислениях изогений:\\
+    нахождения ядер изогений
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Многочлены деления. Определение}
+\[E: y^2 = x^3 + A x + B \]
+Многочлены деления ${\psi _m} \in \mathbb{Z}[ {x,y,A,B}]$ определяются рекуррентными соотношениями:
+\begin{align*}
+    {\psi _0} &= 0 \\
+    {\psi _1} &= 1 \\
+    {\psi _2} &= 2y \\
+    {\psi _3} &= 3{x^4} + 6A{x^2} + 12Bx - {A^2} \\
+    {\psi _4} &= 4{y}\left( {{x^6} + 5A{x^4} + 20B{x^3} - 5{A^2}{x^2} - 4ABx - 8{B^2} - {A^3}} \right) \\
+    {\psi _{2m + 1}} &= {\psi _{m + 2}}\psi _m^3 - {\psi _{m - 1}}\psi _{m + 1}^3, \quad m \geqslant 2 \\
+    {\psi _{2m}} &= {\left( {2y} \right)^{ - 1}} \cdot {\psi _m} \cdot \left( {{\psi _{m + 2}}\psi _{m - 1}^2 - {\psi _{m - 2}}\psi _{m + 1}^2} \right),\quad m \geqslant 3
+\end{align*}
+\structure{Получение}: из формул сложения и свойств $\wp$-функции Вейерштрасса (теория кривых над~$\mathbb{C}$).
+\end{frame}
+
+
+
+\begin{frame}{Многочлены деления. Свойства}
+%(док-во: Was. Lemma 3.3)
+\begin{enumerate}
+    \item 
+    ${\psi _n} \in \mathbb{Z}[x, y^2, A, B]$, если $n$ -- нечетное \\
+    ${\psi _n} \in 2y\mathbb{Z}[x, y^2, A, B]$, если $n$ -- четное. 
+    \item Определим
+    \begin{align*}
+        {\varphi _m} &= x \cdot \psi _m^2 - {\psi _{m + 1}}{\psi _{m - 1}} \\
+        {\omega _m} &= {\left( {4y} \right)^{ - 1}}\left( {{\psi _{m + 2}}\psi _{m - 1}^2 - {\psi _{m - 2}}\psi _{m + 1}^2} \right) \\
+        {\varphi _n} &\in \mathbb{Z}\left[ {x, {y^2},A,B} \right], \forall n \\
+        {\omega _n} &\in y\mathbb{Z}\;\left[ {x, {y^2},A,B} \right], n{\text{  --  нечетное}} \\
+        {\omega _n} &\in \mathbb{Z}\left[ {x, {y^2},A,B} \right],n{\text{ -- четное}}
+    \end{align*}
+    
+    
+    \item В многочленах ${\psi _n}$, ${\phi _n}$ можно сделать замену ${y^2} \mapsto {x^3} + Ax + B$. % и рассматривать их как многочлены от $x$ (в $\mathbb{Z}\left[ {x,A,B} \right]$).
+    Тогда 
+    \begin{align*}
+        {\varphi _n}\left( x \right) &= {x^{{n^2}}} + {\text{ мономы степени }} < {n^2} \\
+        \psi _n^2\left( x \right) &= {n^2}{x^{{n^2} - 1}} + {\text{ мономы степени }} < {n^2} - 1
+    \end{align*}
+\end{enumerate}
+\ProofBegin \structure{Док-во:} [Washington, Lemma 3.3] \ProofEnd
+\end{frame}
+
+\begin{frame}{Многочлены деления}
+\begin{block}{Теорема}
+    Пусть $E: {y^2} = {x^3} + Ax + B$, $P = \left( {x,y} \right) \in E$ и $n \in {\mathbb{N}_+ }$. Тогда
+    \[[n] P = \left( {\frac{{{\phi _n}\left( x \right)}}{{\psi _n^2\left( x \right)}},\;\frac{{{\omega _n}\left( x \right)}}{{{{\left( {{\psi _n}\left( {x,y} \right)} \right)}^3}}}} \right)
+    \]
+\end{block}
+
+\ProofBegin \structure{Док-во:} [Washington, \S9.5] \ProofEnd
+\vspace{1em}
+
+Таким образом, отображение (эндоморфизм) <<умножение на $n$>> задается рациональными функциями.
+\end{frame}
+
+
+\begin{frame}
+	\begin{center}
+		\textcolor{title-and-section-color}{{\LARGE \textbf{III. Алгоритм вычисления группы $n$-кручения}}}
+	\end{center}
+\end{frame}
+
+
+\begin{frame}{Поле определения $E[n]$}
+	$E$ -- эллиптическая кривая над полем $K = \mathbb{F}_q$, $\operatorname{char}{K} \ne 2,3$.
+	
+	\vspace{0.5em}
+	%\begin{itemize}
+	%\item 
+	\structure{Точки $n$-кручения:} $E[n] = \left\{ {P \in E\left( \bar{K} \right) : nP = \mathcal{O}} \right\}$.
+	
+	%    \structure{В случае $p \nmid n$:}
+	В случае $p \nmid n$:
+	\[
+	E\left[ n \right] \simeq \mathbb{Z}/n\mathbb{Z} \times \mathbb{Z}/n\mathbb{Z}
+	\]
+	\structure{
+		\[\Downarrow\]
+	}
+	\[
+	E\left[n\right] = \left\{ {\mathcal{O},\;\left( {{x_1},\;{y_1}} \right), ... \left( {{x_m},\;{y_m}} \right)} \right\},
+	\]
+	где $m=n^2-1$.
+	\structure{
+		\[\Downarrow\]
+	}
+	Поле, в котором лежит $E\left[ n \right]$ (расширение
+	$K$):
+	\[
+	K_{E,n} := K\left( {{x_1}, {y_1}, \ldots, x_m, y_m} \right)
+	\]
+	\[
+	\left[ K_{E,n} : K \right] = d < \infty 
+	\]
+	%\end{itemize}
+\end{frame}
+
+\begin{frame}{Мотивация}
+	\structure{Зачем нужно находить $E[n]$?}
+	\begin{enumerate}
+		\item нахождение точек из~$E[n]$ "--- часть полиномиальных (от~$\log{q}$) алгоритмов вычисления $\#E(\mathbb{F}_q)$.
+		\item $d = [K_{E,n} : K]$ -- степень вложения, $K_{E,n}$ -- поле определения спаривания Вейля $e_n: E[n] \times E[n] \mapsto \mu_r$.
+		\begin{center}
+			\structure{$\Downarrow$}
+		\end{center}
+		%\begin{itemize}
+		%\item
+		сложность \structure{DLOG} в $E(\mathbb{F}_q)$ \structure{$\rightleftarrows$} сложность \structure{DLOG} в $\mathbb{F}_{q^{d}}$
+		%\end{itemize}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Нахождение с помощью многочленов деления}
+	\structure{Как вычислить $E[n]$?}
+	\vspace{1em}
+	
+	Рассмотрим метод на основе факторизации многочленов деления:
+	
+	\begin{itemize}
+		\item $\psi_m \in \mathbb{Z}\left[x,y,A,B\right]$
+		\item $\varphi_m = x \cdot \psi_m^2 - \psi_{m + 1} \psi_{m - 1}$
+		
+		\item $\omega_m = \dfrac{1}{{4y}}\left( {{\psi_{m + 2}}\psi_{m - 1}^2 - {\psi_{m - 2}}\psi_{m + 1}^2} \right)$
+	\end{itemize}
+	Сложение точки $P$ с самой собой $n$ раз:
+	\begin{equation*}
+		[n] P = \left( {\frac{{{\varphi _n}(x)}}{{\psi _n^2(x)}},\;\frac{{{\omega _n}( x )}}{{\psi _n^3(x,y)}}} \right).
+	\end{equation*}
+\end{frame}
+
+\begin{frame}{Нахождение $E[n]$}
+	\begin{block}{Лемма}
+		Многочлены ${\varphi _n}$ и $\psi _n^2 \in K\left[ x \right]$ -- взаимно просты, если $\Delta (E) \ne 0$. Т.е. для $E$ -- эллиптической кривой, ${\phi _n}, \psi _n^2$ -- взаимно просты.
+	\end{block}
+	%\begin{lemma}
+	%Многочлены ${\varphi _n}$ и $\psi _n^2 \in K\left[ x \right]$ -- взаимно просты, если $\Delta (E) \ne 0$. Т.е. для $E$ -- эллиптической кривой, ${\phi _n}, \psi _n^2$ -- взаимно просты.
+	%\end{lemma}
+	\structure{$\triangleleft$} Доказательство: [Lang, II 2.3].\structure{$\triangleright$}
+	
+	\vspace{1em}
+	
+	\begin{block}{Следствие}
+		Пусть $P = (x,y) \in E(\bar{K})$. Тогда $[n] P = \mathcal{O} \Leftrightarrow \psi_n^2(x) = 0$.
+	\end{block}
+	%\begin{corollary}
+	%Пусть $P = (x,y) \in E(\bar{K})$. Тогда $[n] P = \mathcal{O} \Leftrightarrow \psi_n^2(x) = 0$.
+	%\end{corollary}
+\end{frame}
+
+\begin{frame}{Нахождение $E[n]$}
+	\begin{center}
+		$\psi_n^2(x) = {n^2}{x^{{n^2} - 1}} +  \ldots$ \hfill {\small(Washington, \S3.2)}
+	\end{center}
+	
+	Факторизуем $\psi_n$ в $\mathbb{F}_q[x]$.
+	\[\psi_n = f_1 \cdot \ldots \cdot f_r,\]
+	где $f_r$ -- неприводимые над $\mathbb{F}_q$.
+	\begin{block}{Замечание}
+		\begin{itemize}
+			\item все $f_i$ различны
+			\item в $E[n]$ всего ${n^2} - 1$ точек $\neq \mathcal{O}$
+			\item $\forall P_i \in E[n]$ имеем $-P_i \in E[n]$
+			\item $\deg {\psi _n}( x ) = \frac{{{n^2} - 1}}{2} \Rightarrow {\psi _n}( x )$ имеет $\frac{{{n^2} - 1}}{2}$ корней в $\overline{\mathbb{F}}_q$ и каждый корень кратности 1 (иначе мы имели бы меньше чем ${n^2} - 1$ точек $ \ne \mathcal{O}$ в $E[n]$). 
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\begin{frame}{Определение степени вложения $d$}
+	Определим $d = [K_{E,n} : K] \ne 0$ из разложения $\psi_n$ над $\mathbb{F}_q$: 
+	\[\psi_n = f_1 \cdot \ldots \cdot f_r\]
+	\begin{block}{Теорема}
+		Пусть $n$ -- простое $> 2$, $K = \mathbb{F}_q$, $n \ne \operatorname{char}(K)$,
+		$d_i = \deg {f_i}$,
+		$\ell = \mathrm{lcm}(d_1, \ldots, d_r)$.
+		Пусть $K'_{E,n} = K( {{x_1}, \ldots, {x_{{n^2} - 1}}})$, где ${x_i}$ -- $x$-координаты точек $n$-кручения. Тогда 
+		\[[ {K'_{E,n}:\:K} ] = \ell.
+		\]
+		Кроме того, $[ {{K_{E,n}}:\:K'_{E,n}} ] = 1$, либо $2$. То есть $d = \ell$ либо $2\ell$. 
+	\end{block}
+	
+	\structure{$\triangleleft$}
+	%\begin{itemize}
+	%\item
+	$\exists x_i$ т.ч. $y_i = \sqrt{x_i^3 + a x_i + b} \not\in K'_{E,n} = \mathbb{F}_{q^\ell}$ \structure{$\implies$} $d = 2 \ell$.
+	%\item
+	В противном случае: $d = \ell$.
+	%\end{itemize}
+	\structure{$\triangleright$}
+\end{frame}
+
+\begin{frame}{Обобщенный символ Лежандра}
+	\begin{block}{Определение}
+		$K = \mathbb{F}_q$, $x \in K$. Квадратичный характер $\left( \frac{ \cdot }{K} \right)$ -- это 
+		$$
+		\left( \frac{x}{K} \right ) =
+		\begin{cases}
+			1,& \exists y \in K:\:{y^2} = x \\
+			-1,& \nexists y \in K:\:{y^2} = x \\
+			0, & x = 0.
+		\end{cases}
+		$$
+	\end{block}
+	\begin{center}
+		\structure{$\Downarrow$}
+	\end{center}
+	чтобы определить $d = \ell$ или $d = 2\ell$, необходимо вычислить 
+	\[
+	\left(  {\frac{x_i^3 + a{x_i} + b}{\mathbb{F}_{q^\ell}}} \right ),
+	\]
+	$\forall x_i$ -- корней $\psi_n$. 
+\end{frame}
+
+\begin{frame}
+	\begin{block}{Лемма}
+		Если $K = \mathbb{F}_q$ и $d = [K_{E,n} : K]$, то $q^d \equiv 1 \bmod{n}$. В частности, $\operatorname{ord}(q,n) \mid d$.
+	\end{block}
+	%\begin{lemma}
+	%Если $K = \mathbb{F}_q$ и $d = [K_{E,n} : K]$, то $q^d \equiv 1 \bmod{n}$. В частности, $\operatorname{ord}(q,n) \mid d$.
+	%\end{lemma}
+	
+	\vspace*{1em}
+	\begin{block}{Замечание}
+		Так как $DLOG$ на $E(\mathbb{F}_q)$ сводится в $\mathbb{F}_{q^d}$ для проверки безопасности достаточно проверить, что $q^d \not\equiv 1 \bmod{n}$ для $d \leq 1000$ (требование ГОСТ и др.)
+	\end{block}
+\end{frame}
+
+\begin{frame}%{title}
+	\begin{block}{Лемма (van Tuyl)}
+		Пусть $f_i$~---~неприводимый многочлен в разложении ${\psi _n}$, т.ч. $2 d_i \nmid \ell$, $d_i = \deg f_i$. Положим
+		\[
+		{d^*} = \mathrm{lcm}( {\operatorname{ord} ( {q,n} ),\;{d_i}} ),
+		\]
+		\[
+		c = \left(\frac{x_i^3 + a x + b}{\mathbb{F}_{q^{d_i}}} \right),{\text{ где }} f_i( x_i ) = 0.
+		\]
+		Тогда
+		$$
+		d = 
+		\begin{cases}
+			\ell, &\text{ если } c=1 \text{ и } d^*| \ell  \\
+			2\ell & \text{ иначе. }
+		\end{cases}
+		$$
+	\end{block}
+	\begin{itemize}
+		\item Лемма позволяет рассмотреть лишь один $f_i$ (и его корень $x_i$) для определения $d$. 
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Алгоритм вычисления $d = [K_{E,n}:K]$}
+	\structure{Вход:} $ E/\mathbb{F}_q: y^2 = x^3 + a x + b$, $n \geqslant 3$ -- нечётное.
+	
+	\structure{Выход:} $d$ т.ч. $E[n] \subseteq E(\mathbb{F}_{q^d})$.
+	
+	\begin{enumerate}
+		\item Построить $\psi_n \in \mathbb{F}_q[x]$
+		\item Факторизовать $\psi_n = {f_1} \cdot \ldots \cdot {f_r}$
+		\item $\ell := \operatorname{lcm}(\deg{f_1}, \ldots, \deg{f_r})$
+		\item Выбрать $f_i$ т.ч. $2 \cdot \deg {f_i} \nmid \ell$
+		\item Вычислить $c = \left(\dfrac{x_i^3 + a {x_i} + b}{\mathbb{F}_{q^{d_i}}}\right)$, где $x_i$ -- корень $f_i$.
+		
+		\item if $c = - 1$:
+		
+		\quad return $d = 2\ell$
+		
+		\item ${d^*} = \operatorname{lcm}( \operatorname{ord} ({q,n}),{d_i})$
+		
+		if ${d^*} = \ell$ or $\ell = n \cdot {d^*}$:
+		
+		\quad return $d = \ell$
+		
+		return $d = 2\ell$ 
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{}
+	\begin{itemize}
+		\item Алгоритм может быть адаптирован для вычисления самой группы точек $n$-кручения $E[ n]$, если для ${x_i}$ -- корня ${f_i}$, вычислять соответствующие ${y_i}$
+		\item для $n = 2, E[n]$ вычисляется разложением многочлена ${x^3} + a x + b$ (см.  пред. лекцию)
+		\item для $n = 1, E[n] = \{ \mathcal{O} \}$. 
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Оценка сложности}
+	\begin{itemize}
+		\item Шаг $1$. $\deg \psi_n = \frac{n^2 - 1}{2}$. Грубо: $\operatorname{poly}(n)$. \\
+		\item Шаг $2$.
+		%Berlekamp-Zassenhaus: $O( (\deg \psi_n)^3 + (\deg \psi_n)^2 \cdot \operatorname{lg}(n^2) \cdot \operatorname{lg}q  )$.
+		%
+		Факторизация многочлена
+		\begin{equation}
+			\widetilde{O}((\deg{\psi_n})^2 \log^2{q}) 	
+			\tag{\text{MCA, Th. 14.14}}
+		\end{equation}
+		Шаг~$5$. Обобщённый символ Лежандра:
+		\begin{equation}
+			poly(n) 
+			\tag{\text{CF'05, Alg. 11.69}}
+		\end{equation}
+		\item Шаг $7$. Сводится к факторизации $n-1$. Время: $L_n(1/3)$.
+	\end{itemize}
+	\structure{Итого:}
+	%$\operatorname{poly}(n) + O(\operatorname{poly}(n) + \sqrt{q^{d_i}})$
+	$L_n({1/3}) \cdot\log^2{q}$ операций в $\mathbb{F}_q$.
+\end{frame}
+
+\begin{frame}
+	\begin{center}
+		\textcolor{title-and-section-color}{{\LARGE \textbf{IV. Приложения в криптографии}}}
+	\end{center}
+\end{frame}
+
+%\begin{frame}{Применение в криптографии}
+%    \begin{itemize}
+%        \item %Zcash, pairings, generation
+%        \item %подсчёт точек
+%    \end{itemize}
+%\end{frame}
+
+\begin{frame}{Билинейные отображения}
+Пусть $E$ -- эллиптическая кривая над полем $K$ и $n \in \mathbb{N}_{+}$ и $\mu_n = \{x \in \overline{K} | x^n = 1\}$ -- группа корней степени $n$ из единицы.
+    
+\begin{block}{Теорема (спаривание Вейля)}
+$\exists$ отображение
+$
+e_n: E[n] \times E[n] \rightarrow \mu_n
+$
+со свойствами:
+\begin{enumerate}
+\item $e_n(T,T) = 1$
+\item $e_n(T,S) = e_n(S,T)^{-1}$
+\item $e_n(S_1 + S_2, T) = e_n(S_1, T) e_n(S_2, T)$ \hfill \textit{(билинейность)} \\
+$e_n(S, T_1 + T_2) = e_n(S, T_1) e_n(S, T_2)$
+\item $e_n(S,T) = 1, \forall T \implies S = \mathcal{O}$ \hfill \textit{(невырожденность)}\\
+$e_n(S,T) = 1, \forall S \implies T = \mathcal{O}$
+\end{enumerate}
+\end{block}
+
+Другие билинейные отображения: спаривание Тейта, эта-спаривание.
+
+\vspace{1em}
+\structure{Вычисление:} алгоритм Миллера на базе быстрого алгоритма скалярного умножения.
+
+\end{frame}
+
+%\begin{frame}{Алгоритм Миллера}
+%%todo: алгоритм для построения функций спариваний
+%%todo: сравнить с алгоритмом быстрым умножением.
+%\end{frame}
+
+\begin{frame}{Билинейные отображения. Приложения}
+\structure{Степень вложения:} минимальное целое $k$ т.ч. {\small $E[n] \subseteq E(\mathbb{F}_{q^k})$}.
+
+\vspace{1em}
+
+\structure{Атака на DLOG:} $|\left<P\right>| = n$, $Q = [\ell] P$.
+    \begin{enumerate}
+        \item Выбрать случайную точку $R$.
+        \item $\alpha = e_n(P, R)$
+        \item $\beta  = e_n(Q, R)$ \hfill 
+        \begin{scriptsize}
+        $(\beta = e_n(\ell P, R) = e_n(P, R)^\ell = \alpha^\ell)$
+        \end{scriptsize}
+        \item $\ell = DLOG(\alpha, \beta)$ в $\mathbb{F}_{q^k}$
+    \end{enumerate}
+
+\vspace{1em}
+Конструктивное использование: ZCash, IBE, BLS, ``Pairing-based crypto''
+\end{frame}
+
+
+
+%\begin{frame}{Pairing-friendly curves}
+%\end{frame}
+
+%\begin{frame}{zkProofs}
+%\end{frame}
+
+\begin{frame}{Подпись BLS (Boneh-Lynn-Shacham)}
+%Boneh-Lynn-Shacham (BLS)
+\[
+e_r: G_1 \times G_2 \mapsto G_T
+\]
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\structure{Общие параметры}
+\begin{itemize}
+	\item $P_1, P_2$ т.ч. $G_1 = \left<P_1\right>$ и $G_2 = \left<P_2\right>$
+	\item $H: \{0,1\}^* \rightarrow G_1$ -- хэш-функция
+\end{itemize}
+\vspace{1em}
+
+\structure{Генерация ключей \structure{\faCat}}
+\begin{enumerate}
+	\item секретный ключ: $a \overset{\text{\tiny\structure{\faFish}}}{\in} [1, r]$
+	\item открытый ключ: $Q = [a] P_2$
+\end{enumerate}
+\end{column}
+\begin{column}{0.5\textwidth}
+\structure{Подпись сообщения \structure{\footnotesize\faEnvelope}}
+\begin{enumerate}
+	\item $R = H($\structure{\footnotesize\faEnvelope}$)$
+	\item \structure{\faPaw} = $[a] R$
+\end{enumerate}
+
+\vspace{1em}
+
+\structure{Проверка}
+\begin{enumerate}
+	\item $ e_r($\structure{\faPaw}$, P_2) == H($\structure{\footnotesize\faEnvelope}$, Q)$?
+\end{enumerate}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+%\begin{frame}{BLS в Ethereum}
+%	содержимое...
+%\end{frame}
+
+\begin{frame}{Литература}
+\nocite{Menezes1993}\nocite{Blake1999}\nocite{Washington2008}
+\renewcommand*{\bibfont}{\scriptsize}
+\printbibliography
+
+\begin{center}
+    \begin{tcolorbox}[enhanced,hbox,colback=block-green-color-bg,colframe=subsection-color!120,title=Контакты,center title]
+        \begin{varwidth}{\textwidth}
+            \begin{center}
+                \href{mailto:snovoselov@kantiana.ru}{snovoselov@kantiana.ru}
+            \end{center}
+        \end{varwidth}
+    \end{tcolorbox}	
+\end{center}
+
+\structure{Страница курса:}\\
+{\footnotesize
+    \href{https://crypto-kantiana.com/semyon.novoselov/teaching/elliptic_curves_2026}{crypto-kantiana.com/semyon.novoselov/teaching/elliptic\_curves\_2026}
+}
+\end{frame}
+
+\end{document}
